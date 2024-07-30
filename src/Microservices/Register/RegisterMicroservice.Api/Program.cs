@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RegisterMicroservice.Api.Database;
-using RegisterMicroservice.Api.Models.UserModels;
+using RegisterMicroservice.Api.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
