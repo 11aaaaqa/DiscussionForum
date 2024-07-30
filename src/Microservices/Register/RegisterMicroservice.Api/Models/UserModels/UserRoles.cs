@@ -1,4 +1,4 @@
-﻿namespace RegisterMicroservice.Api.Models
+﻿namespace RegisterMicroservice.Api.Models.UserModels
 {
     public static class UserRoles
     {
