@@ -8,5 +8,7 @@ namespace RegisterMicroservice.Api.Models
         public uint Posts { get; set; }
         public uint Answers { get; set; }
         public DateOnly RegisteredAt { get; set; }
+        public string? RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
     }
 }
