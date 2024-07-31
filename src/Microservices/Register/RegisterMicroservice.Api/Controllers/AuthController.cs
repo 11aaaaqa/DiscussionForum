@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using RegisterMicroservice.Api.DTOs;
+using RegisterMicroservice.Api.Models.Jwt;
 using RegisterMicroservice.Api.Models.UserModels;
+using RegisterMicroservice.Api.Services;
 
 namespace RegisterMicroservice.Api.Controllers
 {
@@ -13,27 +16,60 @@ namespace RegisterMicroservice.Api.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly ILogger<AuthController> logger;
-        private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration configuration;
+        private readonly ITokenService tokenService;
 
-        public AuthController(UserManager<User> userManager, ILogger<AuthController> logger, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthController(UserManager<User> userManager, ITokenService tokenService, ILogger<AuthController> logger, IConfiguration configuration)
         {
             this.userManager = userManager;
             this.logger = logger;
-            this.roleManager = roleManager;
             this.configuration = configuration;
-        }
-
-        [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> Register(RegisterDto model)
-        {
-            
+            this.tokenService = tokenService;
         }
 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login(LoginDto model)
+        {
+            var emailUser = await userManager.FindByEmailAsync(model.UserNameOrEmail);
+            var userNameUser = await userManager.FindByNameAsync(model.UserNameOrEmail);
+            var user = emailUser ?? userNameUser;
+
+            if (user == null || !await userManager.CheckPasswordAsync(user,model.Password))
+            {
+                return Unauthorized();
+            }
+
+            var userRoles = await userManager.GetRolesAsync(user);
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Email, user.Email)
+            };
+            foreach (var role in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var accessToken = tokenService.GenerateSuccessToken(claims);
+            var refreshToken = tokenService.GenerateRefreshToken();
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.MaxValue;
+
+            await userManager.UpdateAsync(user);
+
+            return Ok(new AuthenticatedResponse
+            {
+                RefreshToken = refreshToken,
+                Token = accessToken
+            });
+        }
+
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> Register(RegisterDto model)
         {
             
         }
