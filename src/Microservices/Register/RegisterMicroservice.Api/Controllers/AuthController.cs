@@ -32,7 +32,7 @@ namespace RegisterMicroservice.Api.Controllers
         public async Task<IActionResult> Login(LoginDto model)
         {
             var emailUser = await userManager.FindByEmailAsync(model.UserNameOrEmail);
-            var userNameUser = await userManager.FindByNameAsync(model.UserNameOrEmail.ToUpper());
+            var userNameUser = await userManager.FindByNameAsync(model.UserNameOrEmail);
             var user = emailUser ?? userNameUser;
 
             if (user == null || !await userManager.CheckPasswordAsync(user,model.Password))
@@ -52,7 +52,7 @@ namespace RegisterMicroservice.Api.Controllers
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            var accessToken = tokenService.GenerateAccessToken(claims);
+            var accessToken = tokenService.GenerateSuccessToken(claims);
             var refreshToken = tokenService.GenerateRefreshToken();
 
             user.RefreshToken = refreshToken;
@@ -71,7 +71,7 @@ namespace RegisterMicroservice.Api.Controllers
         [Route("register")]
         public async Task<IActionResult> Register(RegisterDto model)
         {
-           
+            
         }
     }
 }
