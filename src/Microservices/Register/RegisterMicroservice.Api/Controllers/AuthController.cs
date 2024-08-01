@@ -67,11 +67,11 @@ namespace RegisterMicroservice.Api.Controllers
             });
         }
 
-        [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> Register(RegisterDto model)
-        {
+        //[HttpPost]
+        //[Route("register")]
+        //public async Task<IActionResult> Register(RegisterDto model)
+        //{
            
-        }
+        //}
     }
 }
