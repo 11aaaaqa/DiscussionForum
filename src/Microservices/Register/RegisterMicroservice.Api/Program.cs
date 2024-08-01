@@ -12,7 +12,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(
     builder.Configuration["ConnectionStrings:DefaultConnection"]));
-builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentity<User, IdentityRole>(x =>
+    {
+        x.Password.RequireLowercase = false;
+        x.Password.RequireUppercase = false;
+        x.Password.RequireDigit = false;
+        x.Password.RequireNonAlphanumeric = false;
+        x.Password.RequiredLength = 8;
+    })
+    .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
