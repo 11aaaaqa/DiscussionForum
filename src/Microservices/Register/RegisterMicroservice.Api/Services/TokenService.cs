@@ -14,14 +14,14 @@ namespace RegisterMicroservice.Api.Services
         {
             this.configuration = configuration;
         }
-        public string GenerateSuccessToken(IEnumerable<Claim> claims)
+        public string GenerateAccessToken(IEnumerable<Claim> claims)
         {
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]));
             var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
             var tokenOptions = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(2),
+                expires: DateTime.UtcNow.AddMinutes(2),
                 signingCredentials: signinCredentials
             );
 
