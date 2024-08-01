@@ -70,19 +70,19 @@ namespace RegisterMicroservice.Api.Controllers
 
         //[HttpPost]
         //[Route("register")]
-        //public async Task<IActionResult> Register([FromBody]RegisterDto model)
+        //public async Task<IActionResult> Register([FromBody] RegisterDto model)
         //{
         //    var userExists = await userManager.FindByEmailAsync(model.Email);
         //    if (userExists != null)
         //    {
         //        return Conflict(new RegisterResponseModel
-        //            { Message = "User with current email already exists", Status = "Error" });
+        //        { Message = "User with current email already exists", Status = "Error" });
         //    }
 
         //    var userNameHold = await userManager.FindByNameAsync(model.UserName.ToUpper());
         //    if (userNameHold != null)
         //    {
-        //        return Conflict(new RegisterResponseModel { Message = "User with current username already exists"});
+        //        return Conflict(new RegisterResponseModel { Message = "User with current username already exists" });
         //    }
 
         //    var user = new User
@@ -107,7 +107,7 @@ namespace RegisterMicroservice.Api.Controllers
         //    var confirmationLink =
         //        Url.Action(nameof(ConfirmEmail), "Auth", new { token, email = user.Email }, Request.Scheme);
 
-        //    var message = new Message(new string[] { user.Email }, "Confirmation email link", confirmationLink, null);
+            
         //}
     }
 }
