@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using RegisterMicroservice.Api.DTOs;
 using RegisterMicroservice.Api.Models.Jwt;
+using RegisterMicroservice.Api.Models.Response;
 using RegisterMicroservice.Api.Models.UserModels;
 using RegisterMicroservice.Api.Services;
 
@@ -29,7 +30,7 @@ namespace RegisterMicroservice.Api.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login(LoginDto model)
+        public async Task<IActionResult> Login([FromBody]LoginDto model)
         {
             var emailUser = await userManager.FindByEmailAsync(model.UserNameOrEmail);
             var userNameUser = await userManager.FindByNameAsync(model.UserNameOrEmail.ToUpper());
@@ -69,9 +70,44 @@ namespace RegisterMicroservice.Api.Controllers
 
         //[HttpPost]
         //[Route("register")]
-        //public async Task<IActionResult> Register(RegisterDto model)
+        //public async Task<IActionResult> Register([FromBody]RegisterDto model)
         //{
-           
+        //    var userExists = await userManager.FindByEmailAsync(model.Email);
+        //    if (userExists != null)
+        //    {
+        //        return Conflict(new RegisterResponseModel
+        //            { Message = "User with current email already exists", Status = "Error" });
+        //    }
+
+        //    var userNameHold = await userManager.FindByNameAsync(model.UserName.ToUpper());
+        //    if (userNameHold != null)
+        //    {
+        //        return Conflict(new RegisterResponseModel { Message = "User with current username already exists"});
+        //    }
+
+        //    var user = new User
+        //    {
+        //        Id = Guid.NewGuid(),
+        //        Posts = 0,
+        //        Answers = 0,
+        //        RegisteredAt = DateOnly.FromDateTime(DateTime.UtcNow),
+        //        UserName = model.UserName,
+        //        Email = model.Email,
+        //        EmailConfirmed = false
+        //    };
+
+        //    var result = await userManager.CreateAsync(user, model.Password);
+
+        //    if (!result.Succeeded)
+        //    {
+        //        return BadRequest(new RegisterResponseModel { Message = "Something went wrong", Status = "Error" });
+        //    }
+
+        //    var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+        //    var confirmationLink =
+        //        Url.Action(nameof(ConfirmEmail), "Auth", new { token, email = user.Email }, Request.Scheme);
+
+        //    var message = new Message(new string[] { user.Email }, "Confirmation email link", confirmationLink, null);
         //}
     }
 }
