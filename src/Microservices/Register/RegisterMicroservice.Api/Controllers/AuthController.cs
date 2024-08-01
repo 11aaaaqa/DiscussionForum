@@ -106,7 +106,6 @@ namespace RegisterMicroservice.Api.Controllers
         //    var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
         //    var confirmationLink =
         //        Url.Action(nameof(ConfirmEmail), "Auth", new { token, email = user.Email }, Request.Scheme);
-
             
         //}
     }
