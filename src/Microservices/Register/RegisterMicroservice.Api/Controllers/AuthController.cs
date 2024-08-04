@@ -68,45 +68,45 @@ namespace RegisterMicroservice.Api.Controllers
             });
         }
 
-        //[HttpPost]
-        //[Route("register")]
-        //public async Task<IActionResult> Register([FromBody] RegisterDto model)
-        //{
-        //    var userExists = await userManager.FindByEmailAsync(model.Email);
-        //    if (userExists != null)
-        //    {
-        //        return Conflict(new RegisterResponseModel
-        //        { Message = "User with current email already exists", Status = "Error" });
-        //    }
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDto model)
+        {
+            var userExists = await userManager.FindByEmailAsync(model.Email);
+            if (userExists != null)
+            {
+                return Conflict(new RegisterResponseModel
+                { Message = "User with current email already exists", Status = "Error" });
+            }
 
-        //    var userNameHold = await userManager.FindByNameAsync(model.UserName.ToUpper());
-        //    if (userNameHold != null)
-        //    {
-        //        return Conflict(new RegisterResponseModel { Message = "User with current username already exists" });
-        //    }
+            var userNameHold = await userManager.FindByNameAsync(model.UserName.ToUpper());
+            if (userNameHold != null)
+            {
+                return Conflict(new RegisterResponseModel { Message = "User with current username already exists" });
+            }
 
-        //    var user = new User
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        Posts = 0,
-        //        Answers = 0,
-        //        RegisteredAt = DateOnly.FromDateTime(DateTime.UtcNow),
-        //        UserName = model.UserName,
-        //        Email = model.Email,
-        //        EmailConfirmed = false
-        //    };
+            var user = new User
+            {
+                Id = Guid.NewGuid(),
+                Posts = 0,
+                Answers = 0,
+                RegisteredAt = DateOnly.FromDateTime(DateTime.UtcNow),
+                UserName = model.UserName,
+                Email = model.Email,
+                EmailConfirmed = false
+            };
 
-        //    var result = await userManager.CreateAsync(user, model.Password);
+            var result = await userManager.CreateAsync(user, model.Password);
 
-        //    if (!result.Succeeded)
-        //    {
-        //        return BadRequest(new RegisterResponseModel { Message = "Something went wrong", Status = "Error" });
-        //    }
+            if (!result.Succeeded)
+            {
+                return BadRequest(new RegisterResponseModel { Message = "Something went wrong", Status = "Error" });
+            }
 
-        //    var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-        //    var confirmationLink =
-        //        Url.Action(nameof(ConfirmEmail), "Auth", new { token, email = user.Email }, Request.Scheme);
-            
-        //}
+            var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink =
+                Url.Action(nameof(ConfirmEmail), "Auth", new { token, email = user.Email }, Request.Scheme);
+
+        }
     }
 }
