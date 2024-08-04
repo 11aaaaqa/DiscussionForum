@@ -17,6 +17,10 @@ builder.Services.AddIdentity<User, IdentityRole>(x =>
     x.Password.RequireDigit = false;
     x.Password.RequireNonAlphanumeric = false;
     x.Password.RequiredLength = 8;
+
+    x.User.RequireUniqueEmail = true;
+
+    x.SignIn.RequireConfirmedEmail = true;
 })
     .AddEntityFrameworkStores<ApplicationDbContext>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
