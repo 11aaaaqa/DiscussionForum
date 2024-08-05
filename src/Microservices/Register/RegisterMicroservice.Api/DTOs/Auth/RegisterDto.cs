@@ -14,6 +14,7 @@ namespace RegisterMicroservice.Api.DTOs.Auth
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Поле \"Пароль\" обязательно")]
+        [StringLength(int.MaxValue, ErrorMessage = "Пароль должен содержать как минимум 8 символов", MinimumLength = 8)]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
         public string Password { get; set; }
