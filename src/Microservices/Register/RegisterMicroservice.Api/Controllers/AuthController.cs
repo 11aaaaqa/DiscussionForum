@@ -104,7 +104,7 @@ namespace RegisterMicroservice.Api.Controllers
 
             if (!result.Succeeded)
             {
-                return BadRequest(new RegisterResponseModel { Message = "Password must contain at least 8 characters", Status = "Error" });
+                return BadRequest(new RegisterResponseModel { Message = "Something went wrong", Status = "Error" });
             }
 
             var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
