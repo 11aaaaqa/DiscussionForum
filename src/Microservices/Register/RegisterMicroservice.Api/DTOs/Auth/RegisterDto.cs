@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RegisterMicroservice.Api.DTOs
+namespace RegisterMicroservice.Api.DTOs.Auth
 {
     public class RegisterDto
     {
