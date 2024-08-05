@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using MimeKit;
 using RegisterMicroservice.Api.DTOs;
 using RegisterMicroservice.Api.Models.Jwt;
 using RegisterMicroservice.Api.Models.Response;
@@ -19,13 +20,15 @@ namespace RegisterMicroservice.Api.Controllers
         private readonly ILogger<AuthController> logger;
         private readonly IConfiguration configuration;
         private readonly ITokenService tokenService;
+        private readonly IEmailSender emailSender;
 
-        public AuthController(UserManager<User> userManager, ITokenService tokenService, ILogger<AuthController> logger, IConfiguration configuration)
+        public AuthController(UserManager<User> userManager, ITokenService tokenService, ILogger<AuthController> logger, IConfiguration configuration, IEmailSender emailSender)
         {
             this.userManager = userManager;
             this.logger = logger;
             this.configuration = configuration;
             this.tokenService = tokenService;
+            this.emailSender = emailSender;
         }
 
         [HttpPost]
@@ -70,7 +73,7 @@ namespace RegisterMicroservice.Api.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto model)
+        public async Task<IActionResult> Register([FromBody] RegisterDto model, string callbackMethod, string callbackController)
         {
             var userExists = await userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
@@ -105,8 +108,11 @@ namespace RegisterMicroservice.Api.Controllers
 
             var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink =
-                Url.Action(nameof(ConfirmEmail), "Auth", new { token, email = user.Email }, Request.Scheme);
+                Url.Action(callbackMethod, callbackController, new { token, email = user.Email }, Request.Scheme);
+            await emailSender.SendEmailAsync(new MailboxAddress("", model.Email), "Подтвердите свою почту",
+                $"Подтвердите регистрацию, перейдя по ссылке: <a href='{confirmationLink}'>link</a>");
 
+            return Content("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
         }
     }
 }
