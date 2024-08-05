@@ -4,6 +4,6 @@ namespace RegisterMicroservice.Api.Services
 {
     public interface IEmailSender
     {
-        Task SendEmail(MailboxAddress to, string subject, string content);
+        Task SendEmailAsync(MailboxAddress to, string subject, string content);
     }
 }

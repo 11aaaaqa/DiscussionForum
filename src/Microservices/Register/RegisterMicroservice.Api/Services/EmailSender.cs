@@ -11,7 +11,7 @@ namespace RegisterMicroservice.Api.Services
         {
             this.config = config;
         }
-        public async Task SendEmail(MailboxAddress to, string subject, string content)
+        public async Task SendEmailAsync(MailboxAddress to, string subject, string content)
         {
             var emailMessage = new MimeMessage();
             emailMessage.From.Add(new MailboxAddress("Подтверждение почты", config["Email:From"]));
