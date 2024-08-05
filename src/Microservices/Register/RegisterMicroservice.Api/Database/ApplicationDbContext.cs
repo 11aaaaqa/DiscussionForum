@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RegisterMicroservice.Api.Models.UserModels;
 
 namespace RegisterMicroservice.Api.Database
 {
