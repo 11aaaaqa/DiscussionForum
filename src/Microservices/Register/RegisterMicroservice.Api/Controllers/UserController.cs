@@ -26,6 +26,7 @@ namespace RegisterMicroservice.Api.Controllers
         }
 
         [HttpPost]
+        [Route("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword([FromBody]ForgotPasswordDto model, string callbackController, string callbackMethod)
         {
             var user = await userManager.FindByEmailAsync(model.Email);
@@ -49,6 +50,7 @@ namespace RegisterMicroservice.Api.Controllers
         }
 
         [HttpPost]
+        [Route("ResetPassword")]
         public async Task<IActionResult> ResetPassword(ResetPasswordDto model)
         {
             var user = await userManager.FindByIdAsync(model.UserId);
