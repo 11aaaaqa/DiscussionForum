@@ -26,7 +26,7 @@ namespace RegisterMicroservice.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto model, string callbackController, string callbackMethod)
+        public async Task<IActionResult> ForgotPassword([FromBody]ForgotPasswordDto model, string callbackController, string callbackMethod)
         {
             var user = await userManager.FindByEmailAsync(model.Email);
             if (user == null)
@@ -46,6 +46,24 @@ namespace RegisterMicroservice.Api.Controllers
                 $"Для сброса пароля перейдите по <a href=\"{callbackUrl}\">ссылке</a>");
 
             return Content("Для сброса пароля проверьте электронную почту и перейдите по ссылке, указанной в письме");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto model)
+        {
+            var user = await userManager.FindByIdAsync(model.UserId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await userManager.ResetPasswordAsync(user, model.Token, model.Password);
+            if (!result.Succeeded)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }

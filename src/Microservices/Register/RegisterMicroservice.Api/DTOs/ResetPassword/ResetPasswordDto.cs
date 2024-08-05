@@ -16,7 +16,7 @@ namespace RegisterMicroservice.Api.DTOs.ResetPassword
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         public string PasswordConfirm { get; set; }
 
-        public string Email { get; set; }
+        public string UserId { get; set; }
         public string Token { get; set; }
     }
 }
