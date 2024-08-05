@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MimeKit;
 using RegisterMicroservice.Api.DTOs;
@@ -90,7 +91,7 @@ namespace RegisterMicroservice.Api.Controllers
 
             var user = new User
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid().ToString(),
                 Posts = 0,
                 Answers = 0,
                 RegisteredAt = DateOnly.FromDateTime(DateTime.UtcNow),
