@@ -110,9 +110,33 @@ namespace RegisterMicroservice.Api.Controllers
             var confirmationLink =
                 Url.Action(callbackMethod, callbackController, new { token, email = user.Email }, Request.Scheme);
             await emailSender.SendEmailAsync(new MailboxAddress("", model.Email), "Подтвердите свою почту",
-                $"Подтвердите регистрацию, перейдя по ссылке: <a href='{confirmationLink}'>link</a>");
+                $"Подтвердите регистрацию, перейдя по <a href=\"{confirmationLink}\">ссылке</a>");
 
             return Content("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
+        }
+
+        [HttpPost]
+        [Route("confirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (userId == null || token == null)
+            {
+                return BadRequest();
+            }
+
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await userManager.ConfirmEmailAsync(user, token);
+            if (!result.Succeeded)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }
