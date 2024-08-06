@@ -15,7 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Register", "Register", "{5F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegisterMicroservice.Api", "src\Microservices\Register\RegisterMicroservice.Api\RegisterMicroservice.Api.csproj", "{3D23A9EC-D92C-4E63-B931-1E86B28F745D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.MVC", "src\Web\Web.MVC\Web.MVC\Web.MVC.csproj", "{46031BFF-0812-4492-91A6-9DBC587F636A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.MVC", "src\Web\Web.MVC\Web.MVC\Web.MVC.csproj", "{46031BFF-0812-4492-91A6-9DBC587F636A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "src\Gateway\ApiGateway\ApiGateway.csproj", "{1E1DAB36-6000-4E0E-94C3-7990C1709F05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,10 @@ Global
 		{46031BFF-0812-4492-91A6-9DBC587F636A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46031BFF-0812-4492-91A6-9DBC587F636A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46031BFF-0812-4492-91A6-9DBC587F636A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E1DAB36-6000-4E0E-94C3-7990C1709F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E1DAB36-6000-4E0E-94C3-7990C1709F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E1DAB36-6000-4E0E-94C3-7990C1709F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E1DAB36-6000-4E0E-94C3-7990C1709F05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +48,7 @@ Global
 		{5F24400A-2620-4AF6-835B-755CED84A0E9} = {9D4EB9A7-E617-4195-BF0E-9CC2E9BA5866}
 		{3D23A9EC-D92C-4E63-B931-1E86B28F745D} = {5F24400A-2620-4AF6-835B-755CED84A0E9}
 		{46031BFF-0812-4492-91A6-9DBC587F636A} = {6095A85D-AB94-4438-9F35-62B54C2BC774}
+		{1E1DAB36-6000-4E0E-94C3-7990C1709F05} = {EB127177-4FBB-47AD-A78C-9961C6CCE463}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9F5758DC-BF57-41BA-9D49-8FD04B6D71B4}
