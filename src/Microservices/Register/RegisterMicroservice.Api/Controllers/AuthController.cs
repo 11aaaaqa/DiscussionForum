@@ -78,13 +78,13 @@ namespace RegisterMicroservice.Api.Controllers
             var userExists = await userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
             {
-                return Conflict("User with current username already exists");
+                return Conflict("Пользователь с такой почтой уже существует");
             }
 
             var userNameHold = await userManager.FindByNameAsync(model.UserName.ToUpper());
             if (userNameHold != null)
             {
-                return Conflict("User with current username already exists");
+                return Conflict("Пользователь с таким именем уже существует");
             }
 
             var user = new User
@@ -102,7 +102,7 @@ namespace RegisterMicroservice.Api.Controllers
 
             if (!result.Succeeded)
             {
-                return BadRequest("Something went wrong");
+                return BadRequest("Что-то пошло не так");
             }
 
             var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
