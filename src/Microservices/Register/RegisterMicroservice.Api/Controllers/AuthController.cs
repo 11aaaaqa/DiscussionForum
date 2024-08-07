@@ -113,7 +113,7 @@ namespace RegisterMicroservice.Api.Controllers
             await emailSender.SendEmailAsync(new MailboxAddress("", model.Email), "Подтвердите свою почту",
                 $"Подтвердите регистрацию, перейдя по <a href=\"{confirmationLink}\">ссылке</a>");
 
-            return Content("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
+            return Ok("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
         }
 
         [HttpPost]
