@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MimeKit;
 using RegisterMicroservice.Api.Models.Jwt;
-using RegisterMicroservice.Api.Models.Response;
 using RegisterMicroservice.Api.Models.UserModels;
 using RegisterMicroservice.Api.Services;
 using RegisterMicroserviceLib.DTOs.Auth;
