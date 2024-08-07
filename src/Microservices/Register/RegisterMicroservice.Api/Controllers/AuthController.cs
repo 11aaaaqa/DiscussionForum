@@ -86,7 +86,7 @@ namespace RegisterMicroservice.Api.Controllers
             var userNameHold = await userManager.FindByNameAsync(model.UserName.ToUpper());
             if (userNameHold != null)
             {
-                return Conflict(new RegisterResponseModel { Message = "User with current username already exists" });
+                return Conflict(new RegisterResponseModel { Message = "User with current username already exists", Status = "Error"});
             }
 
             var user = new User
