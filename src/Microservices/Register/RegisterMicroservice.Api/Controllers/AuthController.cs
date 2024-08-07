@@ -74,7 +74,7 @@ namespace RegisterMicroservice.Api.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto model, string callbackMethod, string callbackController)
+        public async Task<IActionResult> Register([FromBody] RegisterDto model, string confirmEmailMethod, string confirmEmailController)
         {
             var userExists = await userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
@@ -109,7 +109,7 @@ namespace RegisterMicroservice.Api.Controllers
 
             var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink =
-                Url.Action(callbackMethod, callbackController, new { token, email = user.Email }, Request.Scheme);
+                Url.Action(confirmEmailMethod, confirmEmailController, new { token, email = user.Email }, Request.Scheme);
             await emailSender.SendEmailAsync(new MailboxAddress("", model.Email), "Подтвердите свою почту",
                 $"Подтвердите регистрацию, перейдя по <a href=\"{confirmationLink}\">ссылке</a>");
 
