@@ -1,0 +1,27 @@
+﻿@model RegisterMicroserviceLib.DTOs.Auth.RegisterDto
+
+<h3>Зарегистрироваться</h3>
+<form method="post" asp-action="Register" asp-controller="Auth">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="Email"></label><br/>
+        <input asp-for="Email"/>
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="UserName"></label><br />
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div>
+        <label asp-for="Password"></label><br />
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <label asp-for="PasswordConfirm"></label><br />
+        <input asp-for="PasswordConfirm" />
+        <span asp-validation-for="PasswordConfirm"></span>
+    </div>
+    <input type="submit" value="зарегистрироваться"/>
+</form>
