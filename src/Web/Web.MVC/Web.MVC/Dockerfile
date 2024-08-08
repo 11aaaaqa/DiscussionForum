@@ -10,6 +10,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Web/Web.MVC/Web.MVC/Web.MVC.csproj", "src/Web/Web.MVC/Web.MVC/"]
+COPY ["src/BuildingBlocks/RegisterMicroserviceLib/RegisterMicroserviceLib.csproj", "src/BuildingBlocks/RegisterMicroserviceLib/"]
 RUN dotnet restore "./src/Web/Web.MVC/Web.MVC/./Web.MVC.csproj"
 COPY . .
 WORKDIR "/src/src/Web/Web.MVC/Web.MVC"

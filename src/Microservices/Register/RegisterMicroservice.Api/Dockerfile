@@ -10,6 +10,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Microservices/Register/RegisterMicroservice.Api/RegisterMicroservice.Api.csproj", "src/Microservices/Register/RegisterMicroservice.Api/"]
+COPY ["src/BuildingBlocks/RegisterMicroserviceLib/RegisterMicroserviceLib.csproj", "src/BuildingBlocks/RegisterMicroserviceLib/"]
 RUN dotnet restore "./src/Microservices/Register/RegisterMicroservice.Api/./RegisterMicroservice.Api.csproj"
 COPY . .
 WORKDIR "/src/src/Microservices/Register/RegisterMicroservice.Api"
