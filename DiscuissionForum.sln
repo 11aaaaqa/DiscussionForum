@@ -21,7 +21,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGateway", "src\Gateway\A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{707904AB-C3F4-43EE-AF35-8370DA270B13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegisterMicroserviceLib", "src\BuildingBlocks\RegisterMicroserviceLib\RegisterMicroserviceLib.csproj", "{25DF8CAD-3A9A-483D-8A93-A845F50BF47B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegisterMicroserviceLib", "src\BuildingBlocks\RegisterMicroserviceLib\RegisterMicroserviceLib.csproj", "{25DF8CAD-3A9A-483D-8A93-A845F50BF47B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{05CEB81F-287C-4B06-9CBA-DC81C20CC74F}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
