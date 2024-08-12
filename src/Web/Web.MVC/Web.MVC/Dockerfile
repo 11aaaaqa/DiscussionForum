@@ -6,17 +6,17 @@ EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
-WORKDIR /src/Web
-RUN mkdir Web.MVC
-WORKDIR /src/Web/Web.MVC
-COPY Web.MVC.csproj .
-RUN dotnet restore ./Web/Web.MVC.csproj
+WORKDIR /src
+COPY ["src/Web/Web.MVC/Web.MVC/Web.MVC.csproj", "src/Web/Web.MVC/Web.MVC/"]
+COPY ["src/BuildingBlocks/RegisterMicroserviceLib/RegisterMicroserviceLib.csproj", "src/BuildingBlocks/RegisterMicroserviceLib/"]
+RUN dotnet restore "./src/Web/Web.MVC/Web.MVC/./Web.MVC.csproj"
 COPY . .
-RUN dotnet build ./Web/Web.MVC.csproj -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/src/Web/Web.MVC/Web.MVC"
+RUN dotnet build "./Web.MVC.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish ./Web/Web.MVC.csproj -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Web.MVC.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
