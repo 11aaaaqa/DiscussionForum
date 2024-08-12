@@ -1,5 +1,3 @@
-*.sln
-
 **/.classpath
 **/.dockerignore
 **/.env
