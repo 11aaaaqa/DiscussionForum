@@ -30,7 +30,7 @@ namespace Web.MVC.Controllers
 
                 using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(
-                    $"https://localhost:7012/api/Auth/register?confirmEmailController=Auth&confirmEmailMethod={nameof(ConfirmEmail)}",
+                    $"https://localhost:8081/api/Auth/register?confirmEmailController=Auth&confirmEmailMethod={nameof(ConfirmEmail)}",
                     jsonContent);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
