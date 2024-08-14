@@ -6,17 +6,16 @@ EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
-WORKDIR /src/Gateway
-RUN mkdir ApiGateway
-WORKDIR /src/Gateway/ApiGateway
-COPY ApiGateway.csproj .
-RUN dotnet restore ./Gateway/ApiGateway.csproj
+WORKDIR /src
+COPY ["src/Gateway/ApiGateway/ApiGateway.csproj", "src/Gateway/ApiGateway/"]
+RUN dotnet restore "./src/Gateway/ApiGateway/./ApiGateway.csproj"
 COPY . .
-RUN dotnet build ./Gateway/ApiGateway.csproj -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/src/Gateway/ApiGateway"
+RUN dotnet build "./ApiGateway.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish ./Gateway/ApiGateway.csproj -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./ApiGateway.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
