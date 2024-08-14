@@ -75,15 +75,18 @@ namespace RegisterMicroservice.Api.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto model, string confirmEmailMethod, string confirmEmailController)
         {
+            logger.LogInformation("Register method start working");
             var userExists = await userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
             {
+                logger.LogError("User with current email already exists, end method");
                 return Conflict("Пользователь с такой почтой уже существует");
             }
 
             var userNameHold = await userManager.FindByNameAsync(model.UserName.ToUpper());
             if (userNameHold != null)
             {
+                logger.LogError("User with current username already exists, end method");
                 return Conflict("Пользователь с таким именем уже существует");
             }
 
@@ -102,6 +105,7 @@ namespace RegisterMicroservice.Api.Controllers
 
             if (!result.Succeeded)
             {
+                logger.LogCritical("User wasn't created, end method");
                 return BadRequest("Что-то пошло не так");
             }
 
@@ -111,6 +115,8 @@ namespace RegisterMicroservice.Api.Controllers
             await emailSender.SendEmailAsync(new MailboxAddress("", model.Email), "Подтвердите свою почту",
                 $"Подтвердите регистрацию, перейдя по <a href=\"{confirmationLink}\">ссылке</a>");
 
+            logger.LogInformation("Email was sent, register method ends working");
+
             return Ok("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
         }
 
@@ -118,22 +124,28 @@ namespace RegisterMicroservice.Api.Controllers
         [Route("confirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
+            logger.LogInformation("Confirm email method start working");
             if (userId == null || token == null)
             {
+                logger.LogError("User id or token is null, end method");
                 return BadRequest();
             }
 
             var user = await userManager.FindByIdAsync(userId);
             if (user == null)
             {
+                logger.LogError("User with current id doesn't exist, end method");
                 return BadRequest();
             }
 
             var result = await userManager.ConfirmEmailAsync(user, token);
             if (!result.Succeeded)
             {
+                logger.LogCritical("Email wasn't confirmed, end method");
                 return BadRequest();
             }
+
+            logger.LogInformation("Email is successfully confirmed, end method");
 
             return Ok();
         }
