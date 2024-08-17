@@ -3,6 +3,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient();
+
 builder.Services.AddCors();
 
 var app = builder.Build();
@@ -16,8 +17,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-app.UseCors(x => x.AllowAnyOrigin());
 
 app.UseAuthentication();
 app.UseAuthorization();
