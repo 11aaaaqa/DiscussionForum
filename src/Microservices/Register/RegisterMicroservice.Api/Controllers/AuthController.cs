@@ -73,7 +73,7 @@ namespace RegisterMicroservice.Api.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto model, string confirmEmailMethod, string confirmEmailController)
+        public async Task<IActionResult> Register([FromBody]RegisterDto model, [FromQuery] string confirmEmailMethod, [FromQuery] string confirmEmailController)
         {
             logger.LogInformation("Register method start working");
             var userExists = await userManager.FindByEmailAsync(model.Email);
