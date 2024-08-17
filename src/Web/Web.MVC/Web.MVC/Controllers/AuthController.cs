@@ -29,14 +29,13 @@ namespace Web.MVC.Controllers
             logger.LogInformation("Register method start working");
             if (ModelState.IsValid)
             {
-                using HttpClient client = httpClientFactory.CreateClient("SslCertificateBypassIfIsNotProduction");
-
+                using HttpClient client = httpClientFactory.CreateClient();
                 using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
 
                 logger.LogInformation("Http client was created and model was serialized");
-
+                
                 var response = await client.PostAsync(
-                    $"https://localhost:8081/api/Auth/register?confirmEmailController=Auth&confirmEmailMethod={nameof(ConfirmEmail)}",
+                    "http://register-microservice-api:8080/api/Auth/register?confirmEmailMethod=confirmEmail&confirmEmailController=Auth",
                     jsonContent);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -46,8 +45,9 @@ namespace Web.MVC.Controllers
                 }
                 else
                 {
-                    logger.LogError("Response hasn't success status code");
+                    logger.LogError("Response hasn't success status code, end method");
                     ModelState.AddModelError(string.Empty,response.ReasonPhrase ?? "Что-то пошло не так, попробуйте ещё раз");
+                    return View(model);
                 }
             }
             logger.LogError("Model state isn't valid, end method");
@@ -64,7 +64,7 @@ namespace Web.MVC.Controllers
 
             logger.LogInformation("Http client was created and model was serialized");
 
-            var response = await client.PostAsync("https://localhost:8081/api/Auth/confirmEmail", jsonContent);
+            var response = await client.PostAsync("http://register-microservice-api:8080/api/Auth/confirmEmail", jsonContent);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 logger.LogInformation("Response has success status code, end method");
