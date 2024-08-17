@@ -1,3 +1,5 @@
+version: '3.4'
+
 networks:
   database-network:
     driver: bridge
@@ -5,7 +7,7 @@ networks:
     driver: bridge
 services: 
     web-mvc:
-       container_name: web-mvc
+       image: ${DOCKER_REGISTRY-}webmvc
        build: 
          context: .
          dockerfile: src/Web/Web.MVC/Web.MVC/Dockerfile
@@ -18,30 +20,28 @@ services:
         - ASPNETCORE_Kestrel__Certificates__Default__Password=Shi8Gb6vPznq
         - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/httpscertificate.pfx
        networks: 
-         - "register-microservice-api-network"
+         - register-microservice-api-network
        depends_on:
-         - "register-microservice-api"
+         - register-microservice-api
        volumes:
          - ~/.aspnet/https:/https:ro
+
     register-microservice-api:
-      container_name: register-microservice-api
+      image: ${DOCKER_REGISTRY-}register-microservice-api
       build: 
         context: .
         dockerfile: src/Microservices/Register/RegisterMicroservice.Api/Dockerfile
       ports:
         - "2211:8080"
-        - "2212:8081"
       environment:
         - ASPNETCORE_ENVIRONMENT=Development
-        - ASPNETCORE_URLS=https://+:8081;http://+:8080
-        - ASPNETCORE_Kestrel__Certificates__Default__Password=Shi8Gb6vPznq
-        - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/httpscertificate.pfx
+        - ASPNETCORE_URLS=http://+:8080
       networks: 
         - database-network
+        - register-microservice-api-network
       depends_on:
         - postgres-db
-      volumes:
-        - ~/.aspnet/https:/https:ro
+
     postgres-db:
        container_name: postgres
        image: postgres:latest
