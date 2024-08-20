@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RegisterMicroserviceLib.DTOs.Auth
+namespace RegisterMicroservice.Api.DTOs.Auth
 {
     public class LoginDto
     {

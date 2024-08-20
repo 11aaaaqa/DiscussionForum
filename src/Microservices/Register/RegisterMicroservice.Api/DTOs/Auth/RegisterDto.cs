@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RegisterMicroserviceLib.DTOs.Auth
+namespace RegisterMicroservice.Api.DTOs.Auth
 {
     public class RegisterDto
     {
@@ -24,6 +24,9 @@ namespace RegisterMicroserviceLib.DTOs.Auth
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         [Display(Name = "Подтвердить пароль")]
         public string PasswordConfirm { get; set; }
+
+        [Required]
+        public ConfirmEmailMethodUri Uri { get; set; }
     }
 }
 

@@ -7,11 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MimeKit;
+using RegisterMicroservice.Api.DTOs.Auth;
 using RegisterMicroservice.Api.Models.Jwt;
 using RegisterMicroservice.Api.Models.UserModels;
 using RegisterMicroservice.Api.Services;
-using RegisterMicroserviceLib.DTOs.Auth;
-using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace RegisterMicroservice.Api.Controllers
 {
@@ -76,9 +75,10 @@ namespace RegisterMicroservice.Api.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody]RegisterDto model, [FromQuery] string confirmEmailMethod, [FromQuery] string confirmEmailController)
+        public async Task<IActionResult> Register([FromBody]RegisterDto model)
         {
             logger.LogInformation("Register method start working");
+
             var userExists = await userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
             {
@@ -113,11 +113,8 @@ namespace RegisterMicroservice.Api.Controllers
             }
 
             var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-
-            //var confirmationLink =
-            //    Url.Action(confirmEmailMethod, confirmEmailController, new { token = token, userId = user.Id }, Request.Scheme);
-
-            var confirmationLink = $"https://localhost:1213/{confirmEmailController}/{confirmEmailMethod}?token={token}&userId={user.Id}";
+            var confirmationLink =
+                $"{model.Uri.Protocol}://{model.Uri.DomainName}/{model.Uri.Controller}/{model.Uri.Action}?token={token}&userId={user.Id}";
 
             await emailSender.SendEmailAsync(new MailboxAddress("", model.Email), "Подтвердите свою почту",
                 $"Подтвердите регистрацию, перейдя по <a href=\"{confirmationLink}\">ссылке</a>");

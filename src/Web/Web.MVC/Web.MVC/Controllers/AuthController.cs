@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using RegisterMicroserviceLib.DTOs.Auth;
+using Web.MVC.DTOs.Auth;
 
 namespace Web.MVC.Controllers
 {
@@ -27,15 +27,25 @@ namespace Web.MVC.Controllers
         public async Task<IActionResult> Register(RegisterDto model)
         {
             logger.LogInformation("Register method start working");
+
             if (ModelState.IsValid)
             {
                 using HttpClient client = httpClientFactory.CreateClient();
+
+                model.Uri = new ConfirmEmailMethodUri
+                {
+                    Protocol = "https",
+                    DomainName = "localhost:1213",
+                    Controller = "Auth",
+                    Action = "ConfirmEmail"
+                };
+
                 using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
 
                 logger.LogInformation("Http client was created and model was serialized");
                 
                 var response = await client.PostAsync(
-                    "http://register-microservice-api:8080/api/Auth/register?confirmEmailMethod=ConfirmEmail&confirmEmailController=Auth",
+                    "http://register-microservice-api:8080/api/Auth/register",
                     jsonContent);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {

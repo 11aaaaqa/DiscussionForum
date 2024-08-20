@@ -10,8 +10,10 @@ using RegisterMicroservice.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(
+//    builder.Configuration["ConnectionStrings:DefaultConnection"]));
 builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(
-    builder.Configuration["ConnectionStrings:DefaultConnection"]));
+    "Server=host.docker.internal;Port=5432;User id=postgres;password=postgres;database=RegisterMicroservice"));
 builder.Services.AddIdentity<User, IdentityRole>(x =>
     {
         x.Password.RequireLowercase = false;
