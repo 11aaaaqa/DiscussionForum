@@ -10,11 +10,13 @@ namespace Web.MVC.Controllers
     {
         private readonly IHttpClientFactory httpClientFactory;
         private readonly ILogger<AuthController> logger;
+        private readonly IConfiguration configuration;
 
-        public AuthController(IHttpClientFactory httpClientFactory, ILogger<AuthController> logger)
+        public AuthController(IHttpClientFactory httpClientFactory, ILogger<AuthController> logger, IConfiguration configuration)
         {
             this.httpClientFactory = httpClientFactory;
             this.logger = logger;
+            this.configuration = configuration;
         }
 
         [HttpGet]
@@ -34,8 +36,8 @@ namespace Web.MVC.Controllers
 
                 model.Uri = new ConfirmEmailMethodUri
                 {
-                    Protocol = "https",
-                    DomainName = "localhost:1213",
+                    Protocol = configuration["Uri:Protocol"],
+                    DomainName = configuration["Uri:DomainName"],
                     Controller = "Auth",
                     Action = "ConfirmEmail"
                 };
