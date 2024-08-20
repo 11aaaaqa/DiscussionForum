@@ -1,4 +1,6 @@
-﻿using System.Security.Claims;
+﻿using System.Net;
+using System.Security.Claims;
+using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +11,7 @@ using RegisterMicroservice.Api.Models.Jwt;
 using RegisterMicroservice.Api.Models.UserModels;
 using RegisterMicroservice.Api.Services;
 using RegisterMicroserviceLib.DTOs.Auth;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace RegisterMicroservice.Api.Controllers
 {
@@ -110,8 +113,10 @@ namespace RegisterMicroservice.Api.Controllers
             }
 
             var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmationLink =
-                Url.Action(confirmEmailMethod, confirmEmailController, new { token, email = user.Email }, Request.Scheme);
+            //var confirmationLink =
+            //    Url.Action(confirmEmailMethod, confirmEmailController, new { token = token, userId = user.Id }, Request.Scheme);
+
+            var confirmationLink = $"https://localhost:1213/{confirmEmailController}/{confirmEmailMethod}?token={token}&userId={user.Id}";
             await emailSender.SendEmailAsync(new MailboxAddress("", model.Email), "Подтвердите свою почту",
                 $"Подтвердите регистрацию, перейдя по <a href=\"{confirmationLink}\">ссылке</a>");
 
@@ -120,7 +125,7 @@ namespace RegisterMicroservice.Api.Controllers
             return Ok("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("confirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
@@ -137,6 +142,8 @@ namespace RegisterMicroservice.Api.Controllers
                 logger.LogError("User with current id doesn't exist, end method");
                 return BadRequest();
             }
+
+            token = token.Replace(" ", "+");
 
             var result = await userManager.ConfirmEmailAsync(user, token);
             if (!result.Succeeded)
