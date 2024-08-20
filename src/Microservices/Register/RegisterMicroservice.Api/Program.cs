@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -10,10 +11,9 @@ using RegisterMicroservice.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(
-//    builder.Configuration["ConnectionStrings:DefaultConnection"]));
 builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(
-    "Server=host.docker.internal;Port=5432;User id=postgres;password=postgres;database=RegisterMicroservice"));
+    builder.Configuration["Database:ConnectionString"]));
+
 builder.Services.AddIdentity<User, IdentityRole>(x =>
     {
         x.Password.RequireLowercase = false;
