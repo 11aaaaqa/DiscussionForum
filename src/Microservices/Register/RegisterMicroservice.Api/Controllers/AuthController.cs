@@ -113,10 +113,12 @@ namespace RegisterMicroservice.Api.Controllers
             }
 
             var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
             //var confirmationLink =
             //    Url.Action(confirmEmailMethod, confirmEmailController, new { token = token, userId = user.Id }, Request.Scheme);
 
             var confirmationLink = $"https://localhost:1213/{confirmEmailController}/{confirmEmailMethod}?token={token}&userId={user.Id}";
+
             await emailSender.SendEmailAsync(new MailboxAddress("", model.Email), "Подтвердите свою почту",
                 $"Подтвердите регистрацию, перейдя по <a href=\"{confirmationLink}\">ссылке</a>");
 
