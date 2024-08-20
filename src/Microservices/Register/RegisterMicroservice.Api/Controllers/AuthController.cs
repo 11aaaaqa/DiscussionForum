@@ -20,15 +20,13 @@ namespace RegisterMicroservice.Api.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly ILogger<AuthController> logger;
-        private readonly IConfiguration configuration;
         private readonly ITokenService tokenService;
         private readonly IEmailSender emailSender;
 
-        public AuthController(UserManager<User> userManager, ITokenService tokenService, ILogger<AuthController> logger, IConfiguration configuration, IEmailSender emailSender)
+        public AuthController(UserManager<User> userManager, ITokenService tokenService, ILogger<AuthController> logger,IEmailSender emailSender)
         {
             this.userManager = userManager;
             this.logger = logger;
-            this.configuration = configuration;
             this.tokenService = tokenService;
             this.emailSender = emailSender;
         }

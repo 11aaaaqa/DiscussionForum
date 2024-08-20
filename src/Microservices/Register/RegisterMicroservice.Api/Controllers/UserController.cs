@@ -14,14 +14,12 @@ namespace RegisterMicroservice.Api.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly ILogger<AuthController> logger;
-        private readonly IConfiguration configuration;
         private readonly IEmailSender emailSender;
 
-        public UserController(UserManager<User> userManager, ILogger<AuthController> logger, IConfiguration configuration, IEmailSender emailSender)
+        public UserController(UserManager<User> userManager, ILogger<AuthController> logger, IEmailSender emailSender)
         {
             this.userManager = userManager;
             this.logger = logger;
-            this.configuration = configuration;
             this.emailSender = emailSender;
         }
 
