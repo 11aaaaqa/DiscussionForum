@@ -35,7 +35,7 @@ namespace Web.MVC.Controllers
                 logger.LogInformation("Http client was created and model was serialized");
                 
                 var response = await client.PostAsync(
-                    "http://register-microservice-api:8080/api/Auth/register?confirmEmailMethod=confirmEmail&confirmEmailController=Auth",
+                    "http://register-microservice-api:8080/api/Auth/register?confirmEmailMethod=ConfirmEmail&confirmEmailController=Auth",
                     jsonContent);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -43,14 +43,21 @@ namespace Web.MVC.Controllers
                     var content = await response.Content.ReadAsStringAsync();
                     ViewBag.ConfirmEmailString = content;
                 }
+                else if (response.StatusCode == HttpStatusCode.Conflict)
+                {
+                    logger.LogError("User already exists, end method");
+                    ModelState.AddModelError(string.Empty, "Такой пользователь уже существует");
+                }
                 else
                 {
                     logger.LogError("Response hasn't success status code, end method");
-                    ModelState.AddModelError(string.Empty,response.ReasonPhrase ?? "Что-то пошло не так, попробуйте ещё раз");
-                    return View(model);
+                    ModelState.AddModelError(string.Empty,"Что-то пошло не так, попробуйте ещё раз");
                 }
             }
-            logger.LogError("Model state isn't valid, end method");
+            else
+            {
+                logger.LogError("Model state isn't valid, end method");
+            }
             return View(model);
         }
 
@@ -58,13 +65,11 @@ namespace Web.MVC.Controllers
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
             logger.LogInformation("ConfirmEmail method start working");
-            using HttpClient client = httpClientFactory.CreateClient("SslCertificateBypassIfIsNotProduction");
-            using StringContent jsonContent = new StringContent(
-                JsonSerializer.Serialize(new { userId = userId, token = token }), Encoding.UTF8, "application/json");
+            using HttpClient client = httpClientFactory.CreateClient();
 
-            logger.LogInformation("Http client was created and model was serialized");
+            logger.LogInformation("Http client was created");
 
-            var response = await client.PostAsync("http://register-microservice-api:8080/api/Auth/confirmEmail", jsonContent);
+            var response = await client.GetAsync($"http://register-microservice-api:8080/api/Auth/confirmEmail?token={token}&userId={userId}");
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 logger.LogInformation("Response has success status code, end method");
@@ -73,7 +78,7 @@ namespace Web.MVC.Controllers
             else
             {
                 logger.LogError("Response hasn't success status code, end method");
-                return View("Error");
+                return View("ActionError");
             }
         }
     }
