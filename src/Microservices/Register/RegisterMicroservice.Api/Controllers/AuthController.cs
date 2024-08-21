@@ -48,8 +48,7 @@ namespace RegisterMicroservice.Api.Controllers
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Name, user.UserName)
             };
             foreach (var role in userRoles)
             {
