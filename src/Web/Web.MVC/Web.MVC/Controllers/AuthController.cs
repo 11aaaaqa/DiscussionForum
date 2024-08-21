@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text;
 using System.Text.Json;
+using GeneralClassesLib.ApiResponses;
 using Microsoft.AspNetCore.Mvc;
 using Web.MVC.DTOs.Auth;
 
@@ -92,6 +93,46 @@ namespace Web.MVC.Controllers
                 logger.LogError("Response hasn't success status code, end method");
                 return View("ActionError");
             }
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                using HttpClient httpclient = httpClientFactory.CreateClient();
+                using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+
+                var response = await httpclient.PostAsync("http://register-microservice-api:8080/api/Auth/login", jsonContent);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var content = await response.Content.ReadFromJsonAsync<AuthenticatedResponse>();
+
+                    return RedirectToAction("Index", "Home"); //todo: return url
+                }
+                else if(response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    logger.LogError("User with current password doesn't exist, end method");
+                    ModelState.AddModelError(string.Empty, "Пользователя с таким паролем не существует");
+                }
+                else
+                {
+                    logger.LogCritical("Something went wrong, user wasn't authenticated, end method");
+                    ModelState.AddModelError(string.Empty, "Что-то пошло не так, попробуйте ещё раз");
+                }
+            }
+            else
+            {
+                logger.LogError("Model wasn't valid, end method");
+            }
+            return View(model);
         }
     }
 }
