@@ -1,15 +1,9 @@
-﻿using System.Net;
-using System.Security.Claims;
-using System.Web;
+﻿using System.Security.Claims;
 using GeneralClassesLib.ApiResponses;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MimeKit;
 using RegisterMicroservice.Api.DTOs.Auth;
-using RegisterMicroservice.Api.Models.Jwt;
 using RegisterMicroservice.Api.Models.UserModels;
 using RegisterMicroservice.Api.Services;
 
@@ -127,11 +121,6 @@ namespace RegisterMicroservice.Api.Controllers
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
             logger.LogInformation("Confirm email method start working");
-            if (userId == null || token == null)
-            {
-                logger.LogError("User id or token is null, end method");
-                return BadRequest();
-            }
 
             var user = await userManager.FindByIdAsync(userId);
             if (user == null)
