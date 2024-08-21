@@ -26,11 +26,6 @@ namespace RegisterMicroservice.Api.Controllers
         [Route("refresh")]
         public async Task<IActionResult> Refresh(TokenApiModel tokenModel)
         {
-            if (tokenModel is null)
-            {
-                return BadRequest("Invalid request");
-            }
-
             string accessToken = tokenModel.AccessToken;
             string refreshToken = tokenModel.RefreshToken;
 
@@ -58,10 +53,8 @@ namespace RegisterMicroservice.Api.Controllers
 
         [HttpPost]
         [Route("revoke")]
-        public async Task<IActionResult> Revoke()
+        public async Task<IActionResult> Revoke(string userName)
         {
-            var userName = User.Identity.Name;
-
             var user = await userManager.FindByNameAsync(userName);
             if (user is null)
             {
