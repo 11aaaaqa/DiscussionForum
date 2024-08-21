@@ -53,10 +53,9 @@ namespace Web.MVC.Controllers
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     logger.LogInformation("Response has success status code");
-                    var content = await response.Content.ReadAsStringAsync();
-                    ViewBag.ConfirmEmailString = content; //todo: redirect to the page that says to confirm email
+                    return View("Confirmation");
                 }
-                else if (response.StatusCode == HttpStatusCode.Conflict)
+                if (response.StatusCode == HttpStatusCode.Conflict)
                 {
                     logger.LogError("User already exists, end method");
                     ModelState.AddModelError(string.Empty, "Такой пользователь уже существует");
@@ -128,7 +127,7 @@ namespace Web.MVC.Controllers
                         return LocalRedirect(returnUrl);
                     }
 
-                    return RedirectToAction("Index", "Home"); //todo: return url
+                    return RedirectToAction("Index", "Home");
                 }
                 if(response.StatusCode == HttpStatusCode.Unauthorized)
                 {
