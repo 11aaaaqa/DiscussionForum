@@ -3,6 +3,6 @@
 }
 
 <div class="text-center">
-    <a asp-controller="Auth" asp-action="Login">Войти</a>
+    <a asp-controller="Auth" asp-action="Login" asp-route-returnUrl="@Context.Request.Path">Войти</a>
     <a asp-controller="Auth" asp-action="Register">зарегистрироваться</a>
 </div>

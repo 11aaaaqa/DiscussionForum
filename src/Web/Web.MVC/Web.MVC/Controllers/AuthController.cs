@@ -54,7 +54,7 @@ namespace Web.MVC.Controllers
                 {
                     logger.LogInformation("Response has success status code");
                     var content = await response.Content.ReadAsStringAsync();
-                    ViewBag.ConfirmEmailString = content;
+                    ViewBag.ConfirmEmailString = content; //todo: redirect to the page that says to confirm email
                 }
                 else if (response.StatusCode == HttpStatusCode.Conflict)
                 {
@@ -102,7 +102,7 @@ namespace Web.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginDto model)
+        public async Task<IActionResult> Login(LoginDto model, string? returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -122,6 +122,11 @@ namespace Web.MVC.Controllers
                         SameSite = SameSiteMode.Strict,
                         Secure = true
                     });
+
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
 
                     return RedirectToAction("Index", "Home"); //todo: return url
                 }
