@@ -31,8 +31,8 @@ namespace RegisterMicroservice.Api.Controllers
                 return BadRequest("Invalid request");
             }
 
-            string? accessToken = tokenModel.AccessToken;
-            string? refreshToken = tokenModel.RefreshToken;
+            string accessToken = tokenModel.AccessToken;
+            string refreshToken = tokenModel.RefreshToken;
 
             var principal = tokenService.GetPrincipalFromExpiredToken(accessToken);
             var userName = principal.Identity.Name;
