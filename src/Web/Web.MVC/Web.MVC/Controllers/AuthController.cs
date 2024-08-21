@@ -115,9 +115,17 @@ namespace Web.MVC.Controllers
                 {
                     var content = await response.Content.ReadFromJsonAsync<AuthenticatedResponse>();
 
+                    Response.Cookies.Append("accessToken",content!.Token, new CookieOptions
+                    {
+                        Expires = DateTimeOffset.Now.AddMinutes(2),
+                        HttpOnly = true,
+                        SameSite = SameSiteMode.Strict,
+                        Secure = true
+                    });
+
                     return RedirectToAction("Index", "Home"); //todo: return url
                 }
-                else if(response.StatusCode == HttpStatusCode.Unauthorized)
+                if(response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     logger.LogError("User with current password doesn't exist, end method");
                     ModelState.AddModelError(string.Empty, "Пользователя с таким паролем не существует");
