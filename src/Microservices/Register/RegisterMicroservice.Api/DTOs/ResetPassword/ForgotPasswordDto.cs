@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RegisterMicroserviceLib.DTOs.ResetPassword
+namespace RegisterMicroservice.Api.DTOs.ResetPassword
 {
     public class ForgotPasswordDto
     {

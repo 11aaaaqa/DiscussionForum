@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MimeKit;
+using RegisterMicroservice.Api.DTOs.ResetPassword;
 using RegisterMicroservice.Api.Models.UserModels;
 using RegisterMicroservice.Api.Services;
-using RegisterMicroserviceLib.DTOs.ResetPassword;
 
 namespace RegisterMicroservice.Api.Controllers
 {
