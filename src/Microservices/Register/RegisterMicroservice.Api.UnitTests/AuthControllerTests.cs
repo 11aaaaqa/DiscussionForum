@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -68,6 +69,52 @@ namespace RegisterMicroservice.Api.UnitTests
 
             //assert
             Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task Register_ReturnsConflict()
+        {
+            //arrange
+            var userManagerMock = new Mock<UserManager<User>>(
+                new Mock<IUserStore<User>>().Object,
+                new Mock<IOptions<IdentityOptions>>().Object,
+                new Mock<IPasswordHasher<User>>().Object,
+                new IUserValidator<User>[0],
+                new IPasswordValidator<User>[0],
+                new Mock<ILookupNormalizer>().Object,
+                new Mock<IdentityErrorDescriber>().Object,
+                new Mock<IServiceProvider>().Object,
+                new Mock<ILogger<UserManager<User>>>().Object);
+            userManagerMock.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(IdentityResult.Failed(new IdentityError{
+                    Code = "",
+                    Description = ""
+                })));
+
+            var controller = new AuthController(userManagerMock.Object,
+                new Mock<ITokenService>().Object,
+                new Mock<ILogger<AuthController>>().Object,
+                new Mock<IEmailSender>().Object);
+
+            //act
+            var result = await controller.Register(new RegisterDto
+            {
+                Email = "test@test.test",
+                Password = "testPsw",
+                PasswordConfirm = "testPsw",
+                UserName = "testUN",
+                Uri = new ConfirmEmailMethodUri
+                {
+                    Action = "testAct",
+                    Controller = "testController",
+                    DomainName = "testDomain",
+                    Protocol = "testProtocol"
+                }
+            });
+
+            //assert
+
+            Assert.IsType<ConflictObjectResult>(result);
         }
     }
 }
