@@ -1,0 +1,79 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "RegisterMicroservice.Api";
+
+package user;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+service UserService{
+	rpc GetAllUsers(google.protobuf.Empty) returns (GetAllUsersResponse);
+	rpc GetUserById(GetUserByIdRequest) returns (UserResponse);
+	rpc GetUserByUserName(GetUserByUserNameRequest) returns (UserResponse);
+	rpc GetUserByEmail(GetUserByEmailRequest) returns (UserResponse);
+	rpc AddUser(AddUserRequest) returns (AddUserResponse);
+	rpc UpdateUser(UpdateUserRequest) returns (UserResponse);
+	rpc DeleteUserById(DeleteUserByIdRequest) returns (UserDeletedResponse);
+	rpc DeleteUserByEmail(DeleteUserByEmailRequest) returns (UserDeletedResponse);
+	rpc DeleteUserByUserName(DeleteUserByUserNameRequest) returns (UserDeletedResponse);
+}
+
+message UserResponse{
+	string Id = 1;
+	uint32 Posts = 2;
+	uint32 Answers = 3;
+	google.protobuf.Timestamp RegisteredAt = 4;
+	string RefreshToken = 5;
+	string UserName = 6;
+	string Email = 7;
+	bool EmailConfirmed = 8;
+}
+
+message UpdateUserRequest{
+	string Id = 1;
+	string UserName = 2;
+	string Email = 3;
+}
+
+message DeleteUserByEmailRequest{
+	string Email = 1;
+}
+
+message DeleteUserByUserNameRequest{
+	string UserName = 1;
+}
+
+message DeleteUserByIdRequest{
+	string Id = 1;
+}
+
+message UserDeletedResponse{
+	bool IsDeleted = 1;
+}
+
+message GetUserByIdRequest{
+	string Id = 1;
+}
+
+message GetUserByUserNameRequest{
+	string UserName = 1;
+}
+
+message GetUserByEmailRequest{
+	string Email = 1;
+}
+
+message AddUserRequest{
+	string UserName = 1;
+	string Email = 2;
+	string Password = 3;
+}
+
+message AddUserResponse{
+	bool IsAdded = 1;
+}
+
+message GetAllUsersResponse{
+	repeated UserResponse Users = 1;
+}
