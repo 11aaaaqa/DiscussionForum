@@ -49,6 +49,7 @@ builder.Services.AddAuthentication(x =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddGrpc();
 
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
