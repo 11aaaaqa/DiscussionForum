@@ -8,15 +8,15 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
 service UserService{
-	rpc GetAllUsers(google.protobuf.Empty) returns (GetAllUsersResponse);
-	rpc GetUserById(GetUserByIdRequest) returns (UserResponse);
-	rpc GetUserByUserName(GetUserByUserNameRequest) returns (UserResponse);
-	rpc GetUserByEmail(GetUserByEmailRequest) returns (UserResponse);
-	rpc AddUser(AddUserRequest) returns (AddUserResponse);
-	rpc UpdateUser(UpdateUserRequest) returns (UserResponse);
-	rpc DeleteUserById(DeleteUserByIdRequest) returns (UserDeletedResponse);
-	rpc DeleteUserByEmail(DeleteUserByEmailRequest) returns (UserDeletedResponse);
-	rpc DeleteUserByUserName(DeleteUserByUserNameRequest) returns (UserDeletedResponse);
+	rpc GetAllUsersAsync(google.protobuf.Empty) returns (GetAllUsersResponse);
+	rpc GetUserByIdAsync(GetUserByIdRequest) returns (UserResponse);
+	rpc GetUserByUserNameAsync(GetUserByUserNameRequest) returns (UserResponse);
+	rpc GetUserByEmailAsync(GetUserByEmailRequest) returns (UserResponse);
+	rpc AddUserAsync(AddUserRequest) returns (AddUserResponse);
+	rpc UpdateUserAsync(UpdateUserRequest) returns (UserResponse);
+	rpc DeleteUserByIdAsync(DeleteUserByIdRequest) returns (UserDeletedResponse);
+	rpc DeleteUserByEmailAsync(DeleteUserByEmailRequest) returns (UserDeletedResponse);
+	rpc DeleteUserByUserNameAsync(DeleteUserByUserNameRequest) returns (UserDeletedResponse);
 }
 
 message UserResponse{
