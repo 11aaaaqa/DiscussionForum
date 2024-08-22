@@ -71,20 +71,6 @@ namespace RegisterMicroservice.Api.Controllers
         {
             logger.LogInformation("Register method start working");
 
-            var userExists = await userManager.FindByEmailAsync(model.Email);
-            if (userExists != null)
-            {
-                logger.LogError("User with current email already exists, end method");
-                return Conflict("Пользователь с такой почтой уже существует");
-            }
-
-            var userNameHold = await userManager.FindByNameAsync(model.UserName.ToUpper());
-            if (userNameHold != null)
-            {
-                logger.LogError("User with current username already exists, end method");
-                return Conflict("Пользователь с таким именем уже существует");
-            }
-
             var user = new User
             {
                 Id = Guid.NewGuid().ToString(),
@@ -100,8 +86,8 @@ namespace RegisterMicroservice.Api.Controllers
 
             if (!result.Succeeded)
             {
-                logger.LogCritical("User wasn't created, end method");
-                return BadRequest("Что-то пошло не так");
+                logger.LogError("Current user already exists, end method");
+                return Conflict(result.Errors);
             }
 
             var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
