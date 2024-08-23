@@ -30,7 +30,8 @@ services:
         - ASPNETCORE_ENVIRONMENT=Development
         - ASPNETCORE_URLS=http://+:8080
       depends_on:
-        - postgres-db
+        - postgres-register-microservice
+        - rabbitmq
 
     user-microservice-api:
       image: ${DOCKER_REGISTRY-}user-microservice-api
@@ -43,21 +44,44 @@ services:
         - ASPNETCORE_ENVIRONMENT=Development
         - ASPNETCORE_URLS=http://+:8080
       depends_on:
-        - postgres-db
+        - postgres-user-microservice
+        - rabbitmq
 
-    postgres-db:
-       container_name: postgres
+    postgres-register-microservice:
+       container_name: postgres-register-microservice
        image: postgres:latest
        environment:
          POSTGRES_USER: postgres
          POSTGRES_PASSWORD: postgres
          POSTGRES_DB: RegisterMicroservice
-         POSTGRES_HOST: postgres-db
-       ports: 
-         - "5432:5432"
+         POSTGRES_HOST: postgres-register-microservice
        volumes: 
          - postgres-data:/var/lib/postgresql/data
 
+    postgres-user-microservice:
+       container_name: postgres-user-microservice
+       image: postgres:latest
+       environment:
+         POSTGRES_USER: postgres
+         POSTGRES_PASSWORD: postgres
+         POSTGRES_DB: UserMicroservice
+         POSTGRES_HOST: postgres-user-microservice
+       volumes: 
+         - postgres-data:/var/lib/postgresql/data
+
+    rabbitmq:
+        image: rabbitmq:latest
+        hostname: rabbitmq
+        restart: always
+        environment:
+            - RABBITMQ_DEFAULT_USER=rmuser
+            - RABBITMQ_DEFAULT_PASS=rmpassword
+            - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}] disk_free_limit 2147483648
+        volumes:
+            - ./rabbitmq:/var/lib/rabbitmq
+        ports:
+            - 15672:15672
+            - 5672:5672
 volumes:
   postgres-data:    
     
