@@ -79,9 +79,6 @@ namespace RegisterMicroservice.Api.Controllers
             var user = new User
             {
                 Id = Guid.NewGuid().ToString(),
-                Posts = 0,
-                Answers = 0,
-                RegisteredAt = DateOnly.FromDateTime(DateTime.UtcNow),
                 UserName = model.UserName,
                 Email = model.Email,
                 EmailConfirmed = false
