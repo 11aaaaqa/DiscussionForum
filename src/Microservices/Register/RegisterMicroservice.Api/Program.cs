@@ -64,7 +64,6 @@ builder.Services.AddMassTransit(x =>
         config.ConfigureEndpoints(context);
     });
 });
-builder.Services.AddGrpc();
 
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
