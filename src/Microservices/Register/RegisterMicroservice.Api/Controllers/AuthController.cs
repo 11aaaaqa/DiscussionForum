@@ -19,16 +19,16 @@ namespace RegisterMicroservice.Api.Controllers
         private readonly ILogger<AuthController> logger;
         private readonly ITokenService tokenService;
         private readonly IEmailSender emailSender;
-        private readonly IPublishEndpoint publishEndpoint;
+        private readonly IBus bus;
 
         public AuthController(UserManager<User> userManager, ITokenService tokenService, ILogger<AuthController> logger,IEmailSender emailSender,
-            IPublishEndpoint publishEndpoint)
+            IBus bus)
         {
             this.userManager = userManager;
             this.logger = logger;
             this.tokenService = tokenService;
             this.emailSender = emailSender;
-            this.publishEndpoint = publishEndpoint;
+            this.bus = bus;
         }
 
         [HttpPost]
@@ -102,7 +102,7 @@ namespace RegisterMicroservice.Api.Controllers
             await emailSender.SendEmailAsync(new MailboxAddress("", model.Email), "Подтвердите свою почту",
                 $"Подтвердите регистрацию, перейдя по <a href=\"{confirmationLink}\">ссылке</a>");
 
-            await publishEndpoint.Publish<IUserRegistered>(new
+            await bus.Publish<IUserRegistered>(new
             {
                 UserId = user.Id,
                 UserName = user.UserName
