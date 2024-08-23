@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneralClassesLib", "src\Li
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "User", "User", "{114FFBBA-D3E5-4ADB-98A6-25FE08A1B5E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserMicroservie.Api", "src\Microservices\User\UserMicroservie.Api\UserMicroservie.Api.csproj", "{EC6577A1-B998-48A0-9145-17F3F1F30CA3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserMicroservice.Api", "src\Microservices\User\UserMicroservie.Api\UserMicroservice.Api.csproj", "{EC6577A1-B998-48A0-9145-17F3F1F30CA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
