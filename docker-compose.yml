@@ -50,6 +50,8 @@ services:
     postgres-register-microservice:
        container_name: postgres-register-microservice
        image: postgres:latest
+       expose:
+        - 5432
        environment:
          POSTGRES_USER: postgres
          POSTGRES_PASSWORD: postgres
@@ -61,6 +63,8 @@ services:
     postgres-user-microservice:
        container_name: postgres-user-microservice
        image: postgres:latest
+       expose:
+        - 5432
        environment:
          POSTGRES_USER: postgres
          POSTGRES_PASSWORD: postgres
