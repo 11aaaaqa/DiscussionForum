@@ -8,6 +8,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Microservices/Register/RegisterMicroservice.Api/RegisterMicroservice.Api.csproj", "src/Microservices/Register/RegisterMicroservice.Api/"]
+COPY ["src/Building-blocks/MessageBus/MessageBus.csproj", "src/Building-blocks/MessageBus/"]
 COPY ["src/Libs/GeneralClassesLib/GeneralClassesLib.csproj", "src/Libs/GeneralClassesLib/"]
 RUN dotnet restore "./src/Microservices/Register/RegisterMicroservice.Api/./RegisterMicroservice.Api.csproj"
 COPY . .
