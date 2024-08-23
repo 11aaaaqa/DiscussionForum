@@ -1,5 +1,7 @@
 ﻿using System.Security.Claims;
 using GeneralClassesLib.ApiResponses;
+using MassTransit;
+using MessageBus.Messages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MimeKit;
@@ -17,13 +19,16 @@ namespace RegisterMicroservice.Api.Controllers
         private readonly ILogger<AuthController> logger;
         private readonly ITokenService tokenService;
         private readonly IEmailSender emailSender;
+        private readonly IPublishEndpoint publishEndpoint;
 
-        public AuthController(UserManager<User> userManager, ITokenService tokenService, ILogger<AuthController> logger,IEmailSender emailSender)
+        public AuthController(UserManager<User> userManager, ITokenService tokenService, ILogger<AuthController> logger,IEmailSender emailSender,
+            IPublishEndpoint publishEndpoint)
         {
             this.userManager = userManager;
             this.logger = logger;
             this.tokenService = tokenService;
             this.emailSender = emailSender;
+            this.publishEndpoint = publishEndpoint;
         }
 
         [HttpPost]
@@ -96,6 +101,12 @@ namespace RegisterMicroservice.Api.Controllers
 
             await emailSender.SendEmailAsync(new MailboxAddress("", model.Email), "Подтвердите свою почту",
                 $"Подтвердите регистрацию, перейдя по <a href=\"{confirmationLink}\">ссылке</a>");
+
+            await publishEndpoint.Publish<IUserRegistered>(new
+            {
+                UserId = user.Id,
+                UserName = user.UserName
+            });
 
             logger.LogInformation("Email was sent, register method ends working");
 
