@@ -1,9 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using GeneralClassesLib.ApiResponses;
-using Newtonsoft.Json;
 using RegisterMicroservice.Api.Models.ApiResponses;
 using Web.MVC.Models.ApiRequests;
 using JsonSerializer = System.Text.Json.JsonSerializer;
