@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Web.MVC.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,15 +42,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.Use(async (context, next) =>
-{
-    context.Request.Cookies.TryGetValue("accessToken", out var accessToken);
-    if (accessToken != null)
-    {
-        context.Request.Headers.Add("Authorization", "Bearer " + accessToken);
-    }
-    await next();
-});
+app.UseMiddleware<JwtTokenMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
