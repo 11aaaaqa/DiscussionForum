@@ -56,11 +56,7 @@ builder.Services.AddMassTransit(x =>
     x.SetKebabCaseEndpointNameFormatter();
     x.UsingRabbitMq((context, config) =>
     {
-        config.Host("localhost", "/", h =>
-        {
-            h.Username("guest");
-            h.Password("guest");
-        });
+        config.Host("amqp://rmuser:rmpassword@rabbitmq");
         config.ConfigureEndpoints(context);
     });
 });

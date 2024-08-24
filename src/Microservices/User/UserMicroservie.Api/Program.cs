@@ -17,14 +17,10 @@ builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
     x.AddConsumer<UserRegisteredConsumer>();
-    x.UsingRabbitMq((context, cfg) =>
+    x.UsingRabbitMq((context, config) =>
     {
-        cfg.Host("localhost", "/", h =>
-        {
-            h.Username("guest");
-            h.Password("guest");
-        });
-        cfg.ConfigureEndpoints(context);
+        config.Host("amqp://rmuser:rmpassword@rabbitmq");
+        config.ConfigureEndpoints(context);
     });
 });
 
