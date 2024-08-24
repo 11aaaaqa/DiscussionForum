@@ -34,7 +34,7 @@ namespace RegisterMicroservice.Api.Controllers
             
             var user = await userManager.FindByNameAsync(userName);
 
-            if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
                 return BadRequest("Invalid request");
             }

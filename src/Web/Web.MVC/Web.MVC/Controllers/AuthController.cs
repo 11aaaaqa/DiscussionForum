@@ -118,7 +118,7 @@ namespace Web.MVC.Controllers
 
                     Response.Cookies.Append("accessToken",content!.Token, new CookieOptions
                     {
-                        Expires = DateTimeOffset.Now.AddMinutes(2),
+                        Expires = DateTimeOffset.UtcNow.AddMonths(2),
                         HttpOnly = true,
                         SameSite = SameSiteMode.Strict,
                         Secure = true
@@ -149,6 +149,7 @@ namespace Web.MVC.Controllers
             return View(model);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Logout(string returnUrl)
         {
