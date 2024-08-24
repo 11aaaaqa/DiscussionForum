@@ -1,7 +1,9 @@
 ﻿using System.Net;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using GeneralClassesLib.ApiResponses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.MVC.DTOs.Auth;
 
@@ -145,6 +147,33 @@ namespace Web.MVC.Controllers
                 logger.LogError("Model wasn't valid, end method");
             }
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout(string returnUrl)
+        {
+            logger.LogInformation("Logout method starts working");
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+
+            var response = await httpClient.GetAsync(
+                $"http://register-microservice-api:8080/api/Token/revoke?userName={HttpContext.User.Identity.Name}");
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                Response.Cookies.Delete("accessToken");
+
+                logger.LogInformation("User was successfully logged out");
+            }
+            else
+            {
+                logger.LogCritical("User with current username doesn't exist, end method");
+            }
+
+            if (!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
+
         }
     }
 }
