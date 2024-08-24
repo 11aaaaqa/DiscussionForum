@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MimeKit;
-using RegisterMicroservice.Api.DTOs.ResetPassword;
 using RegisterMicroservice.Api.Models.UserModels;
-using RegisterMicroservice.Api.Services;
 
 namespace RegisterMicroservice.Api.Controllers
 {
@@ -14,56 +10,70 @@ namespace RegisterMicroservice.Api.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly ILogger<AuthController> logger;
-        private readonly IEmailSender emailSender;
 
-        public UserController(UserManager<User> userManager, ILogger<AuthController> logger, IEmailSender emailSender)
+        public UserController(UserManager<User> userManager, ILogger<AuthController> logger)
         {
             this.userManager = userManager;
             this.logger = logger;
-            this.emailSender = emailSender;
         }
 
-        [HttpPost]
-        [Route("ForgotPassword")]
-        public async Task<IActionResult> ForgotPassword([FromBody]ForgotPasswordDto model, string callbackController, string callbackMethod)
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetUserByIdAsync(string uid)
         {
-            var user = await userManager.FindByEmailAsync(model.Email);
+            var user = await userManager.FindByIdAsync(uid);
             if (user == null)
             {
-                return BadRequest("User with current email doesn't exist");
+                return BadRequest("Пользователя с таким идентификатором не существует");
             }
 
-            if (!await userManager.IsEmailConfirmedAsync(user))
-            {
-                return BadRequest("Email doesn't confirmed");
-            }
-
-            var token = await userManager.GeneratePasswordResetTokenAsync(user);
-            var callbackUrl = Url.Action(callbackMethod, callbackController, new {userId = user.Id, token = token},
-                protocol: HttpContext.Request.Scheme);
-            await emailSender.SendEmailAsync(new MailboxAddress("", model.Email), "Сброс пароля",
-                $"Для сброса пароля перейдите по <a href=\"{callbackUrl}\">ссылке</a>");
-
-            return Content("Для сброса пароля проверьте электронную почту и перейдите по ссылке, указанной в письме");
+            return Ok(user);
         }
 
-        [HttpPost]
-        [Route("ResetPassword")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordDto model)
+        [HttpGet("GetByUserName")]
+        public async Task<IActionResult> GetUserByUserNameAsync(string userName)
         {
-            var user = await userManager.FindByIdAsync(model.UserId);
+            var user = await userManager.FindByNameAsync(userName.ToUpper());
             if (user == null)
             {
-                return BadRequest();
+                return BadRequest("Пользователя с таким именем не существует");
             }
 
-            var result = await userManager.ResetPasswordAsync(user, model.Token, model.Password);
-            if (!result.Succeeded)
+            return Ok(user);
+        }
+
+        [HttpGet("GetByEmail")]
+        public async Task<IActionResult> GetUserByEmailAsync(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
             {
-                return BadRequest();
+                return BadRequest("Пользователя с такой почтой не существует");
             }
 
-            return Ok();
+            return Ok(user);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUserByUserName(string userName)
+        {
+            var result = await userManager.DeleteAsync(new User { UserName = userName });
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+            return BadRequest("Пользователя с таким именем не существует");
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser([FromBody]User user)
+        {
+            var result = await userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return Ok(user);
+            }
+
+            return BadRequest("Такого пользователя не существует");
         }
     }
 }
