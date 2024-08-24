@@ -140,26 +140,26 @@ namespace RegisterMicroservice.Api.Controllers
 
         [HttpPost]
         [Route("ForgotPassword")]
-        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto model, string callbackController, string callbackMethod)
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto model)
         {
             var user = await userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                return BadRequest("User with current email doesn't exist");
+                return BadRequest("Пользователя с такой эл. почтой не существует");
             }
 
             if (!await userManager.IsEmailConfirmedAsync(user))
             {
-                return BadRequest("Email doesn't confirmed");
+                return BadRequest("Эл. почта не подтверждена");
             }
 
             var token = await userManager.GeneratePasswordResetTokenAsync(user);
-            var callbackUrl = Url.Action(callbackMethod, callbackController, new { userId = user.Id, token = token },
-                protocol: HttpContext.Request.Scheme);
+            var callbackUrl =
+                $"{model.Uri.Protocol}://{model.Uri.DomainName}/{model.Uri.Controller}/{model.Uri.Action}?token={token}&userId={user.Id}";
             await emailSender.SendEmailAsync(new MailboxAddress("", model.Email), "Сброс пароля",
                 $"Для сброса пароля перейдите по <a href=\"{callbackUrl}\">ссылке</a>");
 
-            return Content("Для сброса пароля проверьте электронную почту и перейдите по ссылке, указанной в письме");
+            return Ok("Для сброса пароля проверьте электронную почту и перейдите по ссылке, указанной в письме");
         }
 
         [HttpPost]
@@ -169,13 +169,14 @@ namespace RegisterMicroservice.Api.Controllers
             var user = await userManager.FindByIdAsync(model.UserId);
             if (user == null)
             {
-                return BadRequest();
+                return BadRequest("Такого пользователя не существует");
             }
 
+            model.Token = model.Token.Replace(" ", "+");
             var result = await userManager.ResetPasswordAsync(user, model.Token, model.Password);
             if (!result.Succeeded)
             {
-                return BadRequest();
+                return BadRequest("Что-то пошло не так, попробуйте ещё раз");
             }
 
             return Ok();
