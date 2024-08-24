@@ -14,7 +14,7 @@ namespace RegisterMicroservice.Api.Services
         public async Task SendEmailAsync(MailboxAddress to, string subject, string content)
         {
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("Подтверждение почты", config["Email:From"]));
+            emailMessage.From.Add(new MailboxAddress(config["Email:CompanyName"], config["Email:From"]));
             emailMessage.To.Add(to);
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = content };
