@@ -51,7 +51,7 @@ namespace RegisterMicroservice.Api.Controllers
             });
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("revoke")]
         public async Task<IActionResult> Revoke(string userName)
         {
