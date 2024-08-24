@@ -74,7 +74,7 @@ services:
          - postgres-data:/var/lib/postgresql/data
 
     rabbitmq:
-        image: rabbitmq:latest
+        image: rabbitmq:3-management
         hostname: rabbitmq
         restart: always
         environment:
