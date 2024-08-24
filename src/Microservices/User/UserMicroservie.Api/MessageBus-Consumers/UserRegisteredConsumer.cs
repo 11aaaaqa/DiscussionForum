@@ -19,7 +19,7 @@ namespace UserMicroservice.Api.MessageBus_Consumers
             {
                 Id = Guid.NewGuid(),
                 UserName = context.Message.UserName,
-                RegisteredAt = DateOnly.FromDateTime(DateTime.Now),
+                RegisteredAt = DateOnly.FromDateTime(DateTime.UtcNow),
                 Posts = 0,
                 Answers = 0,
                 AspNetUserId = context.Message.UserId
