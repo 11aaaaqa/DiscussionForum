@@ -59,7 +59,7 @@ namespace RegisterMicroservice.Api.Controllers
             var refreshToken = tokenService.GenerateRefreshToken();
 
             user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = DateTime.MaxValue;
+            user.RefreshTokenExpiryTime = DateTime.Now.AddMonths(2);
 
             await userManager.UpdateAsync(user);
 
