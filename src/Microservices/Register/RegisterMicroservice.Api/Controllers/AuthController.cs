@@ -66,7 +66,8 @@ namespace RegisterMicroservice.Api.Controllers
             return Ok(new AuthenticatedResponse
             {
                 RefreshToken = refreshToken,
-                Token = accessToken
+                Token = accessToken,
+                UserName = user.UserName
             });
         }
 
