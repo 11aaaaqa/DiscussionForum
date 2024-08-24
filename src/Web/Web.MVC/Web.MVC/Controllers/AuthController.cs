@@ -6,6 +6,7 @@ using GeneralClassesLib.ApiResponses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.MVC.DTOs.Auth;
+using Web.MVC.DTOs.ResetPassword;
 
 namespace Web.MVC.Controllers
 {
@@ -174,7 +175,77 @@ namespace Web.MVC.Controllers
                 return LocalRedirect(returnUrl);
 
             return RedirectToAction("Index", "Home");
+        }
 
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                using var httpClient = httpClientFactory.CreateClient();
+
+                model.Uri = new ForgotPasswordUri()
+                {
+                    Protocol = configuration["Uri:Protocol"],
+                    DomainName = configuration["Uri:DomainName"],
+                    Controller = "Auth",
+                    Action = "ResetPassword"
+                };
+
+                using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PostAsync(
+                    "http://register-microservice-api:8080/api/Auth/ForgotPassword",
+                    jsonContent);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return View("ForgotPasswordConfirmation");
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty,error);
+                }
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword(string token, string userId)
+        {
+            var model = new ResetPasswordDto { Token = token, UserId = userId };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                using var httpClient = httpClientFactory.CreateClient();
+                using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PostAsync(
+                    "http://register-microservice-api:8080/api/Auth/ResetPassword",
+                    jsonContent);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return View("Success");
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty,error);
+                }
+            }
+            return View(model);
         }
     }
 }
