@@ -31,7 +31,7 @@ namespace RegisterMicroservice.Api.Controllers
 
             var principal = tokenService.GetPrincipalFromExpiredToken(accessToken);
             var userName = principal.Identity.Name;
-
+            
             var user = await userManager.FindByNameAsync(userName);
 
             if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
