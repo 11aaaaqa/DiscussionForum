@@ -5,7 +5,7 @@ namespace RegisterMicroservice.Api.DTOs.ResetPassword
     public class ResetPasswordDto
     {
         [Required]
-        [Display(Name = "Пароль")]
+        [Display(Name = "Новый пароль")]
         [DataType(DataType.Password)]
         [StringLength(int.MaxValue, ErrorMessage = "Пароль должен содержать как минимум 8 символов", MinimumLength = 8)]
         public string Password { get; set; }
