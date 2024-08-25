@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MimeKit;
+using RegisterMicroservice.Api.DTOs.Auth;
 using RegisterMicroservice.Api.Models.UserModels;
+using RegisterMicroservice.Api.Services;
 
 namespace RegisterMicroservice.Api.Controllers
 {
@@ -10,11 +13,13 @@ namespace RegisterMicroservice.Api.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly ILogger<AuthController> logger;
+        private readonly IEmailSender emailSender;
 
-        public UserController(UserManager<User> userManager, ILogger<AuthController> logger)
+        public UserController(UserManager<User> userManager, ILogger<AuthController> logger, IEmailSender emailSender)
         {
             this.userManager = userManager;
             this.logger = logger;
+            this.emailSender = emailSender;
         }
 
         [HttpGet("GetById")]
@@ -33,6 +38,20 @@ namespace RegisterMicroservice.Api.Controllers
         public async Task<IActionResult> GetUserByUserNameAsync(string userName)
         {
             var user = await userManager.FindByNameAsync(userName.ToUpper());
+            if (user == null)
+            {
+                return BadRequest("Пользователя с таким именем не существует");
+            }
+
+            return Ok(user);
+        }
+
+        [HttpGet("GetByUserNameOrEmail")]
+        public async Task<IActionResult> GetUserByUserNameOrEmailAsync(string userNameOrEmail)
+        {
+            var userNameUser = await userManager.FindByNameAsync(userNameOrEmail.ToUpper());
+            var emailUser = await userManager.FindByEmailAsync(userNameOrEmail);
+            var user = userNameUser ?? emailUser;
             if (user == null)
             {
                 return BadRequest("Пользователя с таким именем не существует");
@@ -74,6 +93,23 @@ namespace RegisterMicroservice.Api.Controllers
             }
 
             return BadRequest("Такого пользователя не существует");
+        }
+
+        [HttpPost("SendEmailConfirmationLink")]
+        public async Task<IActionResult> SendEmailConfirmationLink([FromBody] ConfirmEmailMethodUri uri, string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return BadRequest("Такого пользователя не существует");
+            }
+            var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink =
+                $"{uri.Protocol}://{uri.DomainName}/{uri.Controller}/{uri.Action}?token={token}&userId={user.Id}";
+
+            await emailSender.SendEmailAsync(new MailboxAddress("", user.Email), "Подтвердите свою почту",
+                $"Подтвердите регистрацию, перейдя по <a href=\"{confirmationLink}\">ссылке</a>");
+            return Ok();
         }
     }
 }
