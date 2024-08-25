@@ -1,0 +1,4 @@
+﻿@model string
+
+<h3>Вы не были аутентифицированы, так как Ваша почта не подтверждена</h3>
+<a asp-controller="Auth" asp-action="ConfirmEmailPrepare" asp-route-userId="@Model">подтвердить почту</a>
