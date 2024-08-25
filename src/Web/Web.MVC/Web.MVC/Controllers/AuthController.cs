@@ -1,14 +1,12 @@
 ﻿using System.Net;
-using System.Reflection;
-using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using GeneralClassesLib.ApiResponses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RegisterMicroservice.Api.Models.ApiResponses;
 using Web.MVC.DTOs.Auth;
 using Web.MVC.DTOs.ResetPassword;
+using Web.MVC.Models.ApiResponses;
 
 namespace Web.MVC.Controllers
 {
@@ -89,6 +87,24 @@ namespace Web.MVC.Controllers
             var response = await client.GetAsync($"http://register-microservice-api:8080/api/Auth/confirmEmail?token={token}&userId={userId}");
             if (response.StatusCode == HttpStatusCode.OK)
             {
+                var userResponse = await client.GetAsync($"http://register-microservice-api:8080/api/User/GetById?uid={userId}");
+                if (userResponse.StatusCode != HttpStatusCode.OK)
+                {
+                    return View("ActionError");
+                }
+
+                var user = await userResponse.Content.ReadFromJsonAsync<UserResponse>();
+                
+                var authResponse = await client.GetAsync(
+                    $"http://register-microservice-api:8080/api/User/AuthUserByUserName?userName={user.UserName}");
+                if (authResponse.StatusCode != HttpStatusCode.OK)
+                {
+                    return View("ActionError");
+                }
+
+                var authenticated = await authResponse.Content.ReadFromJsonAsync<AuthenticatedResponse>();
+                AuthenticateUser(authenticated!.Token);
+
                 logger.LogInformation("Response has success status code, end method");
                 return View();
             }
