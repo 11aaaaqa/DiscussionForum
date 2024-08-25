@@ -1,10 +1,12 @@
 ﻿using System.Net;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using GeneralClassesLib.ApiResponses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RegisterMicroservice.Api.Models.ApiResponses;
 using Web.MVC.DTOs.Auth;
 using Web.MVC.DTOs.ResetPassword;
 
@@ -109,6 +111,21 @@ namespace Web.MVC.Controllers
             if (ModelState.IsValid)
             {
                 using HttpClient httpClient = httpClientFactory.CreateClient();
+
+                var userResponse = await httpClient.GetAsync(
+                    $"http://register-microservice-api:8080/api/User/GetByUserNameOrEmail?userNameOrEmail={model.UserNameOrEmail}");
+                if (userResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    var user = await userResponse.Content.ReadFromJsonAsync<GetUserResponse>();
+                    if (user.EmailConfirmed == false)
+                        return View("EmailIsNotConfirmed", user.Id);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Такого пользователя не существует");
+                    return View(model);
+                }
+                
                 using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
 
                 var response = await httpClient.PostAsync("http://register-microservice-api:8080/api/Auth/login", jsonContent);
@@ -240,6 +257,31 @@ namespace Web.MVC.Controllers
                 }
             }
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmailPrepare(string userId)
+        {
+            using var httpClient = httpClientFactory.CreateClient();
+            var uri = new ConfirmEmailMethodUri
+            {
+                Protocol = configuration["Uri:Protocol"],
+                DomainName = configuration["Uri:DomainName"],
+                Controller = "Auth",
+                Action = "ConfirmEmail"
+            };
+
+            using StringContent jsonContent = new(JsonSerializer.Serialize(uri), Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PostAsync(
+                $"http://register-microservice-api:8080/api/User/SendEmailConfirmationLink?userId={userId}",
+                jsonContent);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return View("Confirmation");
+            }
+
+            return View("ActionError");
         }
 
         private void AuthenticateUser(string jwtToken)
