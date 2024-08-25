@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using GeneralClassesLib.ApiResponses;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MimeKit;
 using RegisterMicroservice.Api.DTOs.Auth;
 using RegisterMicroservice.Api.Models.UserModels;
 using RegisterMicroservice.Api.Services;
+using System.Security.Claims;
 
 namespace RegisterMicroservice.Api.Controllers
 {
@@ -14,12 +16,14 @@ namespace RegisterMicroservice.Api.Controllers
         private readonly UserManager<User> userManager;
         private readonly ILogger<AuthController> logger;
         private readonly IEmailSender emailSender;
+        private readonly ITokenService tokenService;
 
-        public UserController(UserManager<User> userManager, ILogger<AuthController> logger, IEmailSender emailSender)
+        public UserController(UserManager<User> userManager, ILogger<AuthController> logger, IEmailSender emailSender, ITokenService tokenService)
         {
             this.userManager = userManager;
             this.logger = logger;
             this.emailSender = emailSender;
+            this.tokenService = tokenService;
         }
 
         [HttpGet("GetById")]
@@ -110,6 +114,38 @@ namespace RegisterMicroservice.Api.Controllers
             await emailSender.SendEmailAsync(new MailboxAddress("", user.Email), "Подтвердите свою почту",
                 $"Подтвердите регистрацию, перейдя по <a href=\"{confirmationLink}\">ссылке</a>");
             return Ok();
+        }
+
+        [Route("AuthUserByUserName")]
+        [HttpGet]
+        public async Task<IActionResult> AuthUserByUserName(string userName)
+        {
+            var user = await userManager.FindByNameAsync(userName.ToUpper());
+
+            var userRoles = await userManager.GetRolesAsync(user);
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.UserName)
+            };
+            foreach (var role in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var accessToken = tokenService.GenerateAccessToken(claims);
+            var refreshToken = tokenService.GenerateRefreshToken();
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMonths(2);
+
+            await userManager.UpdateAsync(user);
+
+            return Ok(new AuthenticatedResponse
+            {
+                RefreshToken = refreshToken,
+                Token = accessToken
+            });
         }
     }
 }
