@@ -73,9 +73,9 @@ namespace RegisterMicroservice.Api.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteUserByUserName(string userName)
+        public async Task<IActionResult> DeleteUserById(string uid)
         {
-            var result = await userManager.DeleteAsync(new User { UserName = userName });
+            var result = await userManager.DeleteAsync(new User { Id = uid });
             if (result.Succeeded)
             {
                 return Ok();
