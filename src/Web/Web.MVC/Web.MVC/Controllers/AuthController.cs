@@ -108,22 +108,16 @@ namespace Web.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                using HttpClient httpclient = httpClientFactory.CreateClient();
+                using HttpClient httpClient = httpClientFactory.CreateClient();
                 using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
 
-                var response = await httpclient.PostAsync("http://register-microservice-api:8080/api/Auth/login", jsonContent);
+                var response = await httpClient.PostAsync("http://register-microservice-api:8080/api/Auth/login", jsonContent);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     var content = await response.Content.ReadFromJsonAsync<AuthenticatedResponse>();
 
-                    Response.Cookies.Append("accessToken",content!.Token, new CookieOptions
-                    {
-                        Expires = DateTimeOffset.UtcNow.AddMonths(2),
-                        HttpOnly = true,
-                        SameSite = SameSiteMode.Strict,
-                        Secure = true
-                    });
+                    AuthenticateUser(content!.Token);
 
                     if (!string.IsNullOrEmpty(returnUrl))
                     {
@@ -246,6 +240,17 @@ namespace Web.MVC.Controllers
                 }
             }
             return View(model);
+        }
+
+        private void AuthenticateUser(string jwtToken)
+        {
+            Response.Cookies.Append("accessToken", jwtToken, new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddMonths(2),
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict,
+                Secure = true
+            });
         }
     }
 }
