@@ -1,4 +1,4 @@
-﻿namespace RegisterMicroservice.Api.Models.ApiResponses
+﻿namespace Web.MVC.Models.ApiResponses
 {
     public class GetUserResponse
     {
