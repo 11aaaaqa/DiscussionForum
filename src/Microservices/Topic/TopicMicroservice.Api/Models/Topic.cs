@@ -1,5 +1,8 @@
-﻿namespace TopicMicroservice.Api.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace TopicMicroservice.Api.Models
 {
+    [Index(nameof(Name), IsUnique = true)]
     public class Topic
     {
         public Guid Id { get; set; }
