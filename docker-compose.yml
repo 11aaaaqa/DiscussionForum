@@ -59,6 +59,7 @@ services:
         - ASPNETCORE_URLS=http://+:8080
       depends_on:
         - postgres-topic-microservice
+        - rabbitmq
 
     postgres-topic-microservice:
       container_name: postgres-topic-microservice
