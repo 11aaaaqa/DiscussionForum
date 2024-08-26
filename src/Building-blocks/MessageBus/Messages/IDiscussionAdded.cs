@@ -2,7 +2,7 @@
 {
     public interface IDiscussionAdded
     {
-        int DiscussionCount { get; set; }
+        uint DiscussionCount { get; set; }
         string TopicName { get; set; }
     }
 }
