@@ -61,6 +61,33 @@ services:
         - postgres-topic-microservice
         - rabbitmq
 
+    discussion-microservice-api:
+      image: ${DOCKER_REGISTRY-}discussion-microservice-api
+      build:
+        context: .
+        dockerfile: src/Microservices/Discussion/DiscussionMicroservice.Api/Dockerfile
+      ports: 
+        - "9054:8080"
+      environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - ASPNETCORE_URLS=http://+:8080
+      depends_on:
+        - postgres-discussion-microservice
+        - rabbitmq
+
+    postgres-discussion-microservice:
+      container_name: postgres-discussion-microservice
+      image: postgres:latest
+      expose:
+        - 5432
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: DiscussionMicroservice
+        POSTGRES_HOST: postgres-discussion-microservice
+      volumes: 
+        - postgres-data:/var/lib/postgresql/data
+
     postgres-topic-microservice:
       container_name: postgres-topic-microservice
       image: postgres:latest
@@ -117,4 +144,5 @@ services:
 volumes:
   postgres-data:    
     
+
 
