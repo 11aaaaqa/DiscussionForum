@@ -1,4 +1,10 @@
+using DiscussionMicroservice.Api.Database;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(
+    builder.Configuration["Database:ConnectionString"]));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
