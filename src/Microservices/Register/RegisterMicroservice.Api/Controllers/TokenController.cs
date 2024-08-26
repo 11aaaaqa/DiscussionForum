@@ -47,7 +47,6 @@ namespace RegisterMicroservice.Api.Controllers
             await userManager.UpdateAsync(user);
             return Ok(new AuthenticatedResponse
             {
-                RefreshToken = newRefreshToken,
                 Token = newAccessToken
             });
         }
