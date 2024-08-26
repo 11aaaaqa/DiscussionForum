@@ -7,6 +7,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Microservices/Topic/TopicMicroservice.Api/TopicMicroservice.Api.csproj", "src/Microservices/Topic/TopicMicroservice.Api/"]
+COPY ["src/Building-blocks/MessageBus/MessageBus.csproj", "src/Building-blocks/MessageBus/"]
 RUN dotnet restore "./src/Microservices/Topic/TopicMicroservice.Api/./TopicMicroservice.Api.csproj"
 COPY . .
 WORKDIR "/src/src/Microservices/Topic/TopicMicroservice.Api"
