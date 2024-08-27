@@ -8,5 +8,6 @@ namespace TopicMicroservice.Api.Database
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
         public DbSet<Topic> Topics { get; set; }
+        public DbSet<Topic> SuggestedTopics { get; set; }
     }
 }
