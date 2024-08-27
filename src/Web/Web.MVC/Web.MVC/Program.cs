@@ -46,11 +46,12 @@ app.UseRouting();
 app.UseMiddleware<JwtTokenMiddleware>();
 
 app.UseAuthentication();
-app.UseStatusCodePages(async context =>
+app.UseStatusCodePages(context =>
 {
     var response = context.HttpContext.Response;
     if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
         response.Redirect("/Auth/Login");
+    return Task.CompletedTask;
 });
 app.UseAuthorization();
 
