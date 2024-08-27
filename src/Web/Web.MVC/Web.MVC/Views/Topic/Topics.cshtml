@@ -1,0 +1,12 @@
+﻿@model List<Web.MVC.Models.ApiResponses.TopicResponse>
+
+<div class="text-center">
+    <h3>Темы</h3>
+    <a asp-action="SuggestTopic" asp-controller="Topic">Предложить тему</a>
+    @foreach (var topic in Model)
+    {
+        <h4>@topic.Name</h4>
+        <p>Постов: @topic.PostsCount</p>
+    }
+</div>
+
