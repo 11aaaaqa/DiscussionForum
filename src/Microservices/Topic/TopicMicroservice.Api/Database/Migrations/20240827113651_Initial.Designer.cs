@@ -12,8 +12,8 @@ using TopicMicroservice.Api.Database;
 namespace TopicMicroservice.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240827102512_AddSuggestedTopicsTable")]
-    partial class AddSuggestedTopicsTable
+    [Migration("20240827113651_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

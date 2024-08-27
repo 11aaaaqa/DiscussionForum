@@ -12,7 +12,7 @@ namespace TopicMicroservice.Api.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Topics",
+                name: "Topic",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -21,12 +21,12 @@ namespace TopicMicroservice.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Topics", x => x.Id);
+                    table.PrimaryKey("PK_Topic", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Topics_Name",
-                table: "Topics",
+                name: "IX_Topic_Name",
+                table: "Topic",
                 column: "Name",
                 unique: true);
         }
@@ -35,7 +35,7 @@ namespace TopicMicroservice.Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Topics");
+                name: "Topic");
         }
     }
 }
