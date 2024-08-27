@@ -24,16 +24,16 @@ namespace TopicMicroservice.Api.Controllers
         public async Task<IActionResult> SuggestTopicAsync([FromBody] TopicDto model)
         {
             var topic = await context.Topics.SingleOrDefaultAsync(x => x.Name == model.Name);
-            if (topic != null)
+            if (topic == null)
             {
                 var suggestedTopic = await context.SuggestedTopics.SingleOrDefaultAsync(x => x.Name == model.Name);
                 if (suggestedTopic != null)
                 {
                     logger.LogError("Topic wasn't suggested because current topic name already suggested");
-                    return BadRequest("Тема уже предложена");
+                    return BadRequest(new ErrorResponse{Reason = "Тема уже предложена" });
                 }
 
-                await context.SuggestedTopics.AddAsync(new Topic
+                await context.SuggestedTopics.AddAsync(new SuggestedTopic
                 {
                     Id = Guid.NewGuid(),
                     Name = model.Name,
@@ -44,14 +44,14 @@ namespace TopicMicroservice.Api.Controllers
                 return Ok();
             }
             logger.LogError("Topic wasn't suggested because current topic name already exists");
-            return BadRequest("Тема уже существует");
+            return BadRequest(new ErrorResponse{Reason = "Тема уже существует" });
         }
 
         [Route("RejectSuggestedTopic")]
         [HttpDelete]
         public async Task<IActionResult> RejectSuggestedTopicAsync(Guid id)
         {
-            context.SuggestedTopics.Remove(new Topic { Id = id });
+            context.SuggestedTopics.Remove(new SuggestedTopic { Id = id });
             await context.SaveChangesAsync();
             logger.LogInformation("Suggested topic was successfully rejected");
             return Ok();
@@ -63,7 +63,7 @@ namespace TopicMicroservice.Api.Controllers
         {
             var topic = await context.SuggestedTopics.SingleAsync(x => x.Id == id);
             context.SuggestedTopics.Remove(topic);
-            await context.Topics.AddAsync(topic);
+            await context.Topics.AddAsync(new Topic{Id = topic.Id, Name = topic.Name, PostsCount = topic.PostsCount});
             await context.SaveChangesAsync();
             logger.LogInformation("Suggested topic was successfully accepted");
             return Ok();
