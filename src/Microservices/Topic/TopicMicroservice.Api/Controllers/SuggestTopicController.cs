@@ -47,7 +47,7 @@ namespace TopicMicroservice.Api.Controllers
             return BadRequest(new ErrorResponse{Reason = "Тема уже существует" });
         }
 
-        [Route("RejectSuggestedTopic")]
+        [Route("RejectSuggestedTopic/{id}")]
         [HttpDelete]
         public async Task<IActionResult> RejectSuggestedTopicAsync(Guid id)
         {
@@ -57,8 +57,8 @@ namespace TopicMicroservice.Api.Controllers
             return Ok();
         }
 
-        [Route("AcceptSuggestedTopic")]
-        [HttpGet]
+        [Route("AcceptSuggestedTopic/{id}")]
+        [HttpDelete]
         public async Task<IActionResult> AcceptSuggestedTopicAsync(Guid id)
         {
             var topic = await context.SuggestedTopics.SingleAsync(x => x.Id == id);
@@ -69,5 +69,9 @@ namespace TopicMicroservice.Api.Controllers
             return Ok();
         }
 
+        [Route("GetAllSuggestedTopics")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllSuggestedTopicsAsync() =>
+            Ok(await context.SuggestedTopics.ToListAsync());
     }
 }
