@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -45,6 +46,12 @@ app.UseRouting();
 app.UseMiddleware<JwtTokenMiddleware>();
 
 app.UseAuthentication();
+app.UseStatusCodePages(async context =>
+{
+    var response = context.HttpContext.Response;
+    if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
+        response.Redirect("/Auth/Login");
+});
 app.UseAuthorization();
 
 app.MapControllerRoute(
