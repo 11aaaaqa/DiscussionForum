@@ -1,0 +1,16 @@
+﻿@model List<Web.MVC.Models.ApiResponses.TopicResponse>
+
+<div class="text-center">
+    <h3>Предложенные темы</h3>
+    <table>
+        <tr><th>Название</th><th>Принять</th><th>Отклонить</th></tr> 
+        @foreach (var suggestedTopic in Model)
+        {
+            <tr>
+                <td>@suggestedTopic.Name</td>
+                <td><form method="post" asp-action="AcceptSuggestedTopic" asp-controller="Moderator" asp-route-id=@suggestedTopic.Id><input type="submit" value="принять"/></form></td>
+                <td><form method="post" asp-controller="Moderator" asp-action="RejectSuggestedTopic" asp-route-id=@suggestedTopic.Id><input type="submit" value="отклонить"/></form></td>
+            </tr>
+        }
+    </table>
+</div>
