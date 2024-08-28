@@ -46,10 +46,7 @@ namespace Web.MVC.Controllers
                 var discussions = await discussionResponse.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
                 return View(discussions);
             }
-            else
-            {
-                return View("ActionError");
-            }
+            return View("ActionError");
         }
 
         [Authorize]
