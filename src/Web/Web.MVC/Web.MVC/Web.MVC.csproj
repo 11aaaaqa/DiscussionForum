@@ -21,4 +21,12 @@
     <ProjectReference Include="..\..\..\Libs\GeneralClassesLib\GeneralClassesLib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Topic\Topic.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Topic\Topic.cshtml" />
+  </ItemGroup>
+
 </Project>
