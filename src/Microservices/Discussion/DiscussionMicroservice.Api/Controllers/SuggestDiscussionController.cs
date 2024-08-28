@@ -26,7 +26,7 @@ namespace DiscussionMicroservice.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> SuggestToCreateDiscussionAsync([FromBody] DiscussionDto model, string topicName)
         {
-            await context.SuggestedDiscussions.AddAsync(new Discussion
+            await context.SuggestedDiscussions.AddAsync(new SuggestedDiscussion
             {
                 Id = Guid.NewGuid(),
                 Title = model.Title,
@@ -48,7 +48,7 @@ namespace DiscussionMicroservice.Api.Controllers
         [HttpDelete]
         public async Task<IActionResult> RejectSuggestedDiscussionAsync(Guid id)
         {
-            context.SuggestedDiscussions.Remove(new Discussion { Id = id });
+            context.SuggestedDiscussions.Remove(new SuggestedDiscussion { Id = id });
             await context.SaveChangesAsync();
             return Ok();
         }
@@ -65,7 +65,16 @@ namespace DiscussionMicroservice.Api.Controllers
             });
 
             context.SuggestedDiscussions.Remove(acceptedDiscussion);
-            await context.Discussions.AddAsync(acceptedDiscussion);
+            await context.Discussions.AddAsync(new Discussion
+            {
+                Id = acceptedDiscussion.Id,
+                Content = acceptedDiscussion.Content,
+                CreatedAt = acceptedDiscussion.CreatedAt,
+                CreatedBy = acceptedDiscussion.CreatedBy,
+                Rating = acceptedDiscussion.Rating,
+                Title = acceptedDiscussion.Title,
+                TopicName = acceptedDiscussion.TopicName
+            });
             await context.SaveChangesAsync();
             return Ok();
         }
