@@ -8,6 +8,6 @@ namespace DiscussionMicroservice.Api.Database
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
         public DbSet<Discussion> Discussions { get; set; }
-        public DbSet<Discussion> SuggestedDiscussions { get; set; }
+        public DbSet<SuggestedDiscussion> SuggestedDiscussions { get; set; }
     }
 }
