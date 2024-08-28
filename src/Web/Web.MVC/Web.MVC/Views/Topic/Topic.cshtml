@@ -1,0 +1,13 @@
+﻿@model List<Web.MVC.Models.ApiResponses.DiscussionResponse>
+
+<h3>Обсуждения</h3>
+
+<div>
+    @foreach (var discussion in Model)
+    {
+        <h5>@discussion.Title</h5>
+        <h6>Создано: @discussion.CreatedBy</h6>
+        <h6>Рейтинг: @discussion.Rating</h6>
+        <h6>Дата создания: @discussion.CreatedAt.Date</h6>
+    }
+</div>
