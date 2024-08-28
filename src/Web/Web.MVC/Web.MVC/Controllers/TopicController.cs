@@ -30,6 +30,28 @@ namespace Web.MVC.Controllers
             return View(content);
         }
 
+        [Route("topics/{topicName}")]
+        [HttpGet]
+        public async Task<IActionResult> Topic(string topicName)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+
+            var result =
+                await httpClient.GetAsync($"http://topic-microservice-api:8080/api/Topic/GetByName?name={topicName}");
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                var topic = await result.Content.ReadFromJsonAsync<TopicResponse>();
+                var discussionResponse = await httpClient.GetAsync(
+                    $"http://discussion-microservice-api:8080/api/Discussion/GetDiscussionsByTopicName?topicName={topic.Name}");
+                var discussions = await discussionResponse.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
+                return View(discussions);
+            }
+            else
+            {
+                return View("ActionError");
+            }
+        }
+
         [Authorize]
         [HttpGet]
         public IActionResult SuggestTopic()
