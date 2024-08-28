@@ -2,10 +2,10 @@
 
 <div class="text-center">
     <h3>Темы</h3>
-    <a asp-action="SuggestTopic" asp-controller="Topic">Предложить тему</a>
+    <a asp-action="SuggestTopic" asp-controller="Topic">Предложить тему</a><br/>
     @foreach (var topic in Model)
     {
-        <h4>@topic.Name</h4>
+        <a href="~/topics/@topic.Name">@topic.Name</a>
         <p>Постов: @topic.PostsCount</p>
     }
 </div>
