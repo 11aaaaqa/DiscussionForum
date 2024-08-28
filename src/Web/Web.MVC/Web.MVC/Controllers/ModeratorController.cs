@@ -46,5 +46,16 @@ namespace Web.MVC.Controllers
             await httpClient.DeleteAsync($"http://topic-microservice-api:8080/api/SuggestTopic/RejectSuggestedTopic/{id}");
             return RedirectToAction("SuggestedTopics");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> SuggestedDiscussions()
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+
+            var response = await httpClient.GetAsync(
+                    "http://discussion-microservice-api:8080/api/SuggestDiscussion/GetAllSuggestedDiscussions");
+            var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
+            return View(discussions);
+        }
     }
 }
