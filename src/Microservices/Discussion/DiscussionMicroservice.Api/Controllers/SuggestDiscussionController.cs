@@ -44,7 +44,7 @@ namespace DiscussionMicroservice.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllSuggestedDiscussionsAsync() => Ok(await context.SuggestedDiscussions.ToListAsync());
 
-        [Route("RejectSuggestedDiscussion")]
+        [Route("RejectSuggestedDiscussion/{id}")]
         [HttpDelete]
         public async Task<IActionResult> RejectSuggestedDiscussionAsync(Guid id)
         {
@@ -53,7 +53,8 @@ namespace DiscussionMicroservice.Api.Controllers
             return Ok();
         }
 
-        [Route("AcceptSuggestedDiscussion")]
+        [HttpDelete]
+        [Route("AcceptSuggestedDiscussion/{id}")]
         public async Task<IActionResult> AcceptSuggestedDiscussionAsync(Guid id)
         {
             var acceptedDiscussion = await context.SuggestedDiscussions.SingleAsync(x => x.Id == id);
