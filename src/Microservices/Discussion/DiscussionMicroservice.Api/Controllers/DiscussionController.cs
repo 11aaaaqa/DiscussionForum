@@ -19,5 +19,16 @@ namespace DiscussionMicroservice.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetDiscussionsByTopicNameAsync(string topicName) =>
             Ok(await context.Discussions.Where(x => x.TopicName == topicName).ToListAsync());
+
+        [Route("GetDiscussionById")]
+        [HttpGet]
+        public async Task<IActionResult> GetDiscussionByIdAsync(Guid id)
+        {
+            var discussion = await context.Discussions.SingleOrDefaultAsync(x => x.Id == id);
+            if (discussion == null)
+                return BadRequest();
+            
+            return Ok(discussion);
+        }
     }
 }

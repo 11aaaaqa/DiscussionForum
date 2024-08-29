@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Web.MVC.DTOs.Discussion;
+using Web.MVC.Models.ApiResponses;
 
 namespace Web.MVC.Controllers
 {
@@ -46,6 +47,25 @@ namespace Web.MVC.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        [Route("discussions/{id}")]
+        public async Task<IActionResult> GetDiscussion(Guid id)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+
+            var response =
+                await httpClient.GetAsync(
+                    $"http://discussion-microservice-api:8080/api/Discussion/GetDiscussionById?id={id}");
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var discussion = await response.Content.ReadFromJsonAsync<DiscussionResponse>();
+                return View(discussion);
+            }
+
+            return View("ActionError");
         }
     }
 }
