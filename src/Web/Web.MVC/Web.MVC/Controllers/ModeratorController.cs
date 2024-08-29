@@ -57,5 +57,40 @@ namespace Web.MVC.Controllers
             var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
             return View(discussions);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AcceptSuggestedDiscussion(Guid id)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+
+            await httpClient.DeleteAsync($"http://discussion-microservice-api:8080/api/SuggestDiscussion/AcceptSuggestedDiscussion/{id}");
+            return RedirectToAction("SuggestedDiscussions");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RejectSuggestedDiscussion(Guid id)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+
+            await httpClient.DeleteAsync($"http://discussion-microservice-api:8080/api/SuggestDiscussion/RejectSuggestedDiscussion/{id}");
+            return RedirectToAction("SuggestedDiscussions");
+        }
+
+        [HttpGet]
+        [Route("SuggestedDiscussions/{id}")]
+        public async Task<IActionResult> SuggestedDiscussion(Guid id)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+
+            var response = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/GetSuggestedDiscussionById?id={id}");
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var suggestedDiscussion = await response.Content.ReadFromJsonAsync<DiscussionResponse>();
+                return View(suggestedDiscussion);
+            }
+
+            return View("ActionError");
+        }
     }
 }
