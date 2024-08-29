@@ -16,7 +16,7 @@ namespace TopicMicroservice.Api.Services.MessageBus_Consumers
         public async Task Consume(ConsumeContext<IDiscussionAdded> context)
         {
             var topic = await topicRepository.GetByNameAsync(context.Message.TopicName);
-            topic.PostsCount += context.Message.DiscussionCount;
+            topic.PostsCount += 1;
             await topicRepository.UpdateAsync(topic);
         }
     }
