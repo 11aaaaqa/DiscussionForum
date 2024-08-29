@@ -1,0 +1,7 @@
+﻿@model Web.MVC.Models.ApiResponses.DiscussionResponse
+
+<h3>@Model.Title</h3>
+<p>@Model.Content</p>
+
+<form method="post" asp-controller="Moderator" asp-action="AcceptSuggestedDiscussion" asp-route-id="@Model.Id"><input type="submit" value="принять"/></form>
+<form method="post" asp-controller="Moderator" asp-action="RejectSuggestedDiscussion" asp-route-id="@Model.Id"><input type="submit" value="отклонить" /></form>
