@@ -4,6 +4,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.MVC.DTOs.Topic;
+using Web.MVC.Models;
 using Web.MVC.Models.ApiResponses;
 using StringContent = System.Net.Http.StringContent;
 
@@ -44,7 +45,8 @@ namespace Web.MVC.Controllers
                 var discussionResponse = await httpClient.GetAsync(
                     $"http://discussion-microservice-api:8080/api/Discussion/GetDiscussionsByTopicName?topicName={topic.Name}");
                 var discussions = await discussionResponse.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
-                return View(discussions);
+                var discussionViewModel = new DiscussionViewModel { Discussions = discussions, TopicName = topicName };
+                return View(discussionViewModel);
             }
             return View("ActionError");
         }
