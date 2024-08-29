@@ -31,7 +31,7 @@ namespace DiscussionMicroservice.Api.Controllers
                 Id = Guid.NewGuid(),
                 Title = model.Title,
                 Content = model.Content,
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow),
                 Rating = 0,
                 TopicName = topicName,
                 CreatedBy = model.CreatedBy
@@ -61,7 +61,6 @@ namespace DiscussionMicroservice.Api.Controllers
 
             await publishEndpoint.Publish<IDiscussionAdded>(new
             {
-                DiscussionCount = 1,
                 TopicName = acceptedDiscussion.TopicName
             });
 
@@ -78,6 +77,17 @@ namespace DiscussionMicroservice.Api.Controllers
             });
             await context.SaveChangesAsync();
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("GetSuggestedDiscussionById")]
+        public async Task<IActionResult> GetSuggestedDiscussionByIdAsync(Guid id)
+        {
+            var suggestedDiscussion = await context.SuggestedDiscussions.SingleOrDefaultAsync(x => x.Id == id);
+            if (suggestedDiscussion == null)
+                return BadRequest();
+            
+            return Ok(suggestedDiscussion);
         }
     }
 }
