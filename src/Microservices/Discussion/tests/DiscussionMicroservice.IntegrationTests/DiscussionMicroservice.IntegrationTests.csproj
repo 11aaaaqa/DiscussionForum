@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\DiscussionMicroservice.Api\DiscussionMicroservice.Api.csproj" />
+  </ItemGroup>
+
 </Project>
