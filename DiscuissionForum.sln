@@ -41,6 +41,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Discussion", "Discussion", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscussionMicroservice.Api", "src\Microservices\Discussion\DiscussionMicroservice.Api\DiscussionMicroservice.Api.csproj", "{57871911-117A-4BFC-A633-25EC66F8C271}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{15482B26-0F15-4DAB-8A7C-0E212F82C7C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscussionMicroservice.IntegrationTests", "src\Microservices\Discussion\tests\DiscussionMicroservice.IntegrationTests\DiscussionMicroservice.IntegrationTests.csproj", "{FE019865-DBA6-441C-9558-5AC7A043898C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +87,10 @@ Global
 		{57871911-117A-4BFC-A633-25EC66F8C271}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57871911-117A-4BFC-A633-25EC66F8C271}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57871911-117A-4BFC-A633-25EC66F8C271}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE019865-DBA6-441C-9558-5AC7A043898C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE019865-DBA6-441C-9558-5AC7A043898C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE019865-DBA6-441C-9558-5AC7A043898C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE019865-DBA6-441C-9558-5AC7A043898C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,6 +113,8 @@ Global
 		{3D0690B2-37E6-46E7-9871-3874380DC90E} = {C61A33EA-1106-4CD4-A85D-99B5E0FE66E3}
 		{BF82F7B0-D301-4ACC-8367-BE43EB79FA16} = {9D4EB9A7-E617-4195-BF0E-9CC2E9BA5866}
 		{57871911-117A-4BFC-A633-25EC66F8C271} = {BF82F7B0-D301-4ACC-8367-BE43EB79FA16}
+		{15482B26-0F15-4DAB-8A7C-0E212F82C7C8} = {BF82F7B0-D301-4ACC-8367-BE43EB79FA16}
+		{FE019865-DBA6-441C-9558-5AC7A043898C} = {15482B26-0F15-4DAB-8A7C-0E212F82C7C8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9F5758DC-BF57-41BA-9D49-8FD04B6D71B4}
