@@ -4,8 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using DiscussionMicroservice.Api.Database;
+using DiscussionMicroservice.Api.DTOs;
 using DiscussionMicroservice.Api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DiscussionMicroservice.IntegrationTests
 {
@@ -47,6 +51,24 @@ namespace DiscussionMicroservice.IntegrationTests
             var suggestedDiscussions = await response.Content.ReadFromJsonAsync<List<SuggestedDiscussion>>();
             Assert.NotNull(suggestedDiscussions);
             Assert.Equal(2, suggestedDiscussions.Count);
+        }
+
+        [Fact]
+        public async Task SuggestToCreateDiscussionAsync_ReturnsOk()
+        {
+            var model = new DiscussionDto{Content = "TestContent1212", CreatedBy = "TestCreatedBy1212", Title = "TestTitle1212"};
+            using StringContent content = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync("api/SuggestDiscussion/SuggestToCreate?topicName=TestTopicName1212", content);
+
+            response.EnsureSuccessStatusCode();
+            var resp = await client.GetAsync("api/SuggestDiscussion/GetAllSuggestedDiscussions");
+            resp.EnsureSuccessStatusCode();
+            var suggestedDiscussions = await resp.Content.ReadFromJsonAsync<List<SuggestedDiscussion>>();
+            var addedSuggestedDiscussion = suggestedDiscussions.Where(x => x.Content == "TestContent1212")
+                .Where(x => x.CreatedBy == "TestCreatedBy1212").Where(x => x.Title == "TestTitle1212")
+                .SingleOrDefault();
+            Assert.NotNull(addedSuggestedDiscussion);
         }
     }
 }
