@@ -4,6 +4,10 @@ using System.Text;
 using System.Text.Json;
 using DiscussionMicroservice.Api.DTOs;
 using DiscussionMicroservice.Api.Models;
+using MassTransit;
+using MassTransit.Testing;
+using MessageBus.Messages;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DiscussionMicroservice.IntegrationTests
 {
@@ -106,6 +110,24 @@ namespace DiscussionMicroservice.IntegrationTests
             response.EnsureSuccessStatusCode();
             var resp = await client.GetAsync($"api/SuggestDiscussion/GetSuggestedDiscussionById?id={id}");
             Assert.Equal(HttpStatusCode.BadRequest, resp.StatusCode);
+        }
+
+        [Fact]
+        public async Task AcceptSuggestedDiscussionAsync_ReturnsOk()
+        {
+            var id = new Guid("8bb9b1c2-4112-4b9c-b67b-8775a0ca6584");
+
+            var response = await client.DeleteAsync($"api/SuggestDiscussion/AcceptSuggestedDiscussion/{id}");
+
+            response.EnsureSuccessStatusCode();
+            var resp = await client.GetAsync($"api/SuggestDiscussion/GetSuggestedDiscussionById?id={id}");
+            Assert.Equal(HttpStatusCode.BadRequest, resp.StatusCode);
+
+            var resp2 = await client.GetAsync($"api/Discussion/GetDiscussionById?id={id}");
+            resp2.EnsureSuccessStatusCode();
+            var discussion = await resp2.Content.ReadFromJsonAsync<Discussion>();
+            Assert.NotNull(discussion);
+            Assert.Equal(id, discussion.Id);
         }
     }
 }
