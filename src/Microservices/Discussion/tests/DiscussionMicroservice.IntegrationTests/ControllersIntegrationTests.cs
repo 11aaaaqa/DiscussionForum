@@ -4,10 +4,6 @@ using System.Text;
 using System.Text.Json;
 using DiscussionMicroservice.Api.DTOs;
 using DiscussionMicroservice.Api.Models;
-using MassTransit;
-using MassTransit.Testing;
-using MessageBus.Messages;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DiscussionMicroservice.IntegrationTests
 {
