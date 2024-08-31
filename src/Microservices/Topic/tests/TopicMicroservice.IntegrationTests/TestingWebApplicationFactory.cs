@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TopicMicroservice.Api.Database;
+using TopicMicroservice.Api.Models;
 
 namespace TopicMicroservice.IntegrationTests
 {
@@ -37,6 +38,12 @@ namespace TopicMicroservice.IntegrationTests
                 {
                     throw new Exception("Database wasn't created");
                 }
+
+                databaseContext.SuggestedTopics.Add(new SuggestedTopic { Id = new Guid("e7982376-cd20-4e49-9045-c247f8d0b8ed"), Name = "TestName1", PostsCount = 123});
+                databaseContext.SuggestedTopics.Add(new SuggestedTopic { Id = new Guid("0d603044-db37-4220-874f-684cc96c4dc0"), Name = "TestName2", PostsCount = 321 });
+                databaseContext.SuggestedTopics.Add(new SuggestedTopic { Id = new Guid("ac7dabc5-ef1d-47e7-aedd-871bbd1054a0"), Name = "TestName3", PostsCount = 0 });
+
+                databaseContext.SaveChanges();
             });
         }
     }
