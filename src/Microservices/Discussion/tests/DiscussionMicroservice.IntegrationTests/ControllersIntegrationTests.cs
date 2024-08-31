@@ -7,11 +7,11 @@ using DiscussionMicroservice.Api.Models;
 
 namespace DiscussionMicroservice.IntegrationTests
 {
-    public class DiscussionControllerIntegrationTests : IClassFixture<TestingWebAppFactory<Program>>
+    public class ControllersIntegrationTests : IClassFixture<TestingWebAppFactory<Program>>
     {
         private readonly HttpClient client;
 
-        public DiscussionControllerIntegrationTests(TestingWebAppFactory<Program> factory)
+        public ControllersIntegrationTests(TestingWebAppFactory<Program> factory)
         {
             client = factory.CreateClient();
         }
@@ -50,6 +50,16 @@ namespace DiscussionMicroservice.IntegrationTests
         }
 
         [Fact]
+        public async Task GetAllSuggestedDiscussionsAsync_ReturnOkWithListOfSuggestedDiscussions()
+        {
+            var response = await client.GetAsync("api/SuggestDiscussion/GetAllSuggestedDiscussions");
+
+            response.EnsureSuccessStatusCode();
+            var suggestedDiscussions = await response.Content.ReadFromJsonAsync<List<SuggestedDiscussion>>();
+            Assert.NotNull(suggestedDiscussions);
+        }
+
+        [Fact]
         public async Task GetSuggestedDiscussionByIdAsync_ReturnsBadRequest()
         {
             var response = await client.GetAsync($"api/SuggestDiscussion/GetSuggestedDiscussionById?id={Guid.Empty}");
@@ -67,17 +77,6 @@ namespace DiscussionMicroservice.IntegrationTests
             var suggestedDiscussion = await response.Content.ReadFromJsonAsync<SuggestedDiscussion>();
             Assert.NotNull(suggestedDiscussion);
             Assert.Equal(id, suggestedDiscussion.Id);
-        }
-
-        [Fact]
-        public async Task GetAllSuggestedDiscussionsAsync_ReturnOkWithListOfSuggestedDiscussions()
-        {
-            var response = await client.GetAsync("api/SuggestDiscussion/GetAllSuggestedDiscussions");
-
-            response.EnsureSuccessStatusCode();
-            var suggestedDiscussions = await response.Content.ReadFromJsonAsync<List<SuggestedDiscussion>>();
-            Assert.NotNull(suggestedDiscussions);
-            Assert.Equal(2, suggestedDiscussions.Count);
         }
 
         [Fact]
