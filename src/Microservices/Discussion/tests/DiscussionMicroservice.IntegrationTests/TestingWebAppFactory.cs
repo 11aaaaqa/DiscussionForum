@@ -36,34 +36,12 @@ namespace DiscussionMicroservice.IntegrationTests
                     throw new Exception("Database wasn't created");
                 }
 
-                appContext.Discussions.Add(new Discussion
-                {
-                    Content = "TestContent",
-                    CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow),
-                    CreatedBy = "TestCreatedBy", Id = new Guid("8077167c-d724-4258-8451-b617dc4bdfec"), Rating = 123,
-                    TopicName = "TestTopicName",
-                    Title = "TestTitle"
-                });
-                appContext.Discussions.Add(new Discussion
-                {
-                    Content = "TestContent2",
-                    CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow),
-                    CreatedBy = "TestCreatedBy2",
-                    Id = Guid.NewGuid(),
-                    Rating = -224,
-                    TopicName = "TestTopicName",
-                    Title = "TestTitle2"
-                });
-                appContext.Discussions.Add(new Discussion
-                {
-                    Content = "TestContent3",
-                    CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow),
-                    CreatedBy = "TestCreatedBy3",
-                    Id = Guid.NewGuid(),
-                    Rating = 1,
-                    TopicName = "TestTopicName2",
-                    Title = "TestTitle3"
-                });
+                appContext.Discussions.Add(new Discussion { Content = "TestContent", CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow), CreatedBy = "TestCreatedBy", Id = new Guid("8077167c-d724-4258-8451-b617dc4bdfec"), Rating = 123, TopicName = "TestTopicName", Title = "TestTitle" });
+                appContext.Discussions.Add(new Discussion { Content = "TestContent2", CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow), CreatedBy = "TestCreatedBy2", Id = Guid.NewGuid(), Rating = -224, TopicName = "TestTopicName", Title = "TestTitle2" });
+                appContext.Discussions.Add(new Discussion { Content = "TestContent3", CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow), CreatedBy = "TestCreatedBy3", Id = Guid.NewGuid(), Rating = 1, TopicName = "TestTopicName2", Title = "TestTitle3" });
+                
+
+
                 appContext.SaveChanges();
             });
         }
