@@ -41,7 +41,7 @@ namespace DiscussionMicroservice.IntegrationTests
                 appContext.Discussions.Add(new Discussion { Content = "TestContent3", CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow), CreatedBy = "TestCreatedBy3", Id = Guid.NewGuid(), Rating = 1, TopicName = "TestTopicName2", Title = "TestTitle3" });
 
                 appContext.SuggestedDiscussions.Add(new SuggestedDiscussion { Id = new Guid("1fd24884-7dd7-40a9-bfe5-f8247a5e3bc7"), Content = "TestContent555", CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow), CreatedBy = "TestCreatedBy555", Rating = 523, Title = "TestTitle555", TopicName = "TestTopicName555"});
-                appContext.SuggestedDiscussions.Add(new SuggestedDiscussion { Id = Guid.NewGuid(), Content = "TestContent666", CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow), CreatedBy = "TestCreatedBy666", Rating = 343, Title = "TestTitle666", TopicName = "TestTopicName666" });
+                appContext.SuggestedDiscussions.Add(new SuggestedDiscussion { Id = new Guid("0629b192-d453-4dc2-86f5-d8bbd7fb0955"), Content = "TestContent666", CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow), CreatedBy = "TestCreatedBy666", Rating = 343, Title = "TestTitle666", TopicName = "TestTopicName666" });
 
                 appContext.SaveChanges();
             });
