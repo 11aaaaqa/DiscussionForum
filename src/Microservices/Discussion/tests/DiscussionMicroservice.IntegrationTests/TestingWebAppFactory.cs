@@ -1,5 +1,6 @@
 ﻿using DiscussionMicroservice.Api.Database;
 using DiscussionMicroservice.Api.Models;
+using MassTransit;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,8 @@ namespace DiscussionMicroservice.IntegrationTests
                          typeof(DbContextOptions<ApplicationDbContext>));
                 if (descriptor is not null)
                     services.Remove(descriptor);
-                
+
+                services.AddMassTransitTestHarness();
                 services.AddDbContext<ApplicationDbContext>(x => x.UseInMemoryDatabase("DiscussionControllerTests"));
                 
                 var sp = services.BuildServiceProvider();
@@ -42,6 +44,7 @@ namespace DiscussionMicroservice.IntegrationTests
 
                 appContext.SuggestedDiscussions.Add(new SuggestedDiscussion { Id = new Guid("1fd24884-7dd7-40a9-bfe5-f8247a5e3bc7"), Content = "TestContent555", CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow), CreatedBy = "TestCreatedBy555", Rating = 523, Title = "TestTitle555", TopicName = "TestTopicName555"});
                 appContext.SuggestedDiscussions.Add(new SuggestedDiscussion { Id = new Guid("0629b192-d453-4dc2-86f5-d8bbd7fb0955"), Content = "TestContent666", CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow), CreatedBy = "TestCreatedBy666", Rating = 343, Title = "TestTitle666", TopicName = "TestTopicName666" });
+                appContext.SuggestedDiscussions.Add(new SuggestedDiscussion { Id = new Guid("8bb9b1c2-4112-4b9c-b67b-8775a0ca6584"), Content = "TestContent565", CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow), CreatedBy = "TestCreatedBy565", Rating = 343, Title = "TestTitle565", TopicName = "TestTopicName565" });
 
                 appContext.SaveChanges();
             });
