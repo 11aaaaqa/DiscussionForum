@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\TopicMicroservice.Api\TopicMicroservice.Api.csproj" />
+  </ItemGroup>
+
 </Project>
