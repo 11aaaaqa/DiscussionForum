@@ -37,5 +37,16 @@ namespace DiscussionMicroservice.IntegrationTests
             Assert.NotNull(suggestedDiscussion);
             Assert.Equal(id, suggestedDiscussion.Id);
         }
+
+        [Fact]
+        public async Task GetAllSuggestedDiscussionsAsync_ReturnOkWithListOfSuggestedDiscussions()
+        {
+            var response = await client.GetAsync("api/SuggestDiscussion/GetAllSuggestedDiscussions");
+
+            response.EnsureSuccessStatusCode();
+            var suggestedDiscussions = await response.Content.ReadFromJsonAsync<List<SuggestedDiscussion>>();
+            Assert.NotNull(suggestedDiscussions);
+            Assert.Equal(2, suggestedDiscussions.Count);
+        }
     }
 }
