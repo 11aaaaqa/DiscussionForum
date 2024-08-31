@@ -49,6 +49,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7093468A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopicMicroservice.IntegrationTests", "src\Microservices\Topic\tests\TopicMicroservice.IntegrationTests\TopicMicroservice.IntegrationTests.csproj", "{BC7EA828-701C-4766-92CE-B3590DB8C1F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopicMicroservice.UnitTests", "src\Microservices\Topic\tests\TopicMicroservice.UnitTests\TopicMicroservice.UnitTests.csproj", "{91705583-25DF-4B45-A178-EA5EB0F24702}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{BC7EA828-701C-4766-92CE-B3590DB8C1F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC7EA828-701C-4766-92CE-B3590DB8C1F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC7EA828-701C-4766-92CE-B3590DB8C1F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91705583-25DF-4B45-A178-EA5EB0F24702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91705583-25DF-4B45-A178-EA5EB0F24702}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91705583-25DF-4B45-A178-EA5EB0F24702}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91705583-25DF-4B45-A178-EA5EB0F24702}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,6 +131,7 @@ Global
 		{FE019865-DBA6-441C-9558-5AC7A043898C} = {15482B26-0F15-4DAB-8A7C-0E212F82C7C8}
 		{7093468A-2020-4815-8794-A65CCC4E4E8C} = {C61A33EA-1106-4CD4-A85D-99B5E0FE66E3}
 		{BC7EA828-701C-4766-92CE-B3590DB8C1F8} = {7093468A-2020-4815-8794-A65CCC4E4E8C}
+		{91705583-25DF-4B45-A178-EA5EB0F24702} = {7093468A-2020-4815-8794-A65CCC4E4E8C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9F5758DC-BF57-41BA-9D49-8FD04B6D71B4}
