@@ -48,5 +48,20 @@ namespace TopicMicroservice.IntegrationTests
             var createdSuggestedTopic = suggestedTopics.SingleOrDefault(x => x.Name == "CorrectTopicName");
             Assert.NotNull(createdSuggestedTopic);
         }
+
+        [Fact]
+        public async Task RejectSuggestedTopicAsync_ReturnsOk()
+        {
+            var id = new Guid("e7982376-cd20-4e49-9045-c247f8d0b8ed");
+            var response = await client.DeleteAsync($"api/SuggestTopic/RejectSuggestedTopic/{id}");
+            
+            response.EnsureSuccessStatusCode();
+            var getResponse = await client.GetAsync("api/SuggestTopic/GetAllSuggestedTopics");
+            getResponse.EnsureSuccessStatusCode();
+            var suggestedTopics = await getResponse.Content.ReadFromJsonAsync<List<SuggestedTopic>>();
+            Assert.NotNull(suggestedTopics);
+            var isContains = suggestedTopics.Contains(new SuggestedTopic { Id = id });
+            Assert.False(isContains);
+        }
     }
 }
