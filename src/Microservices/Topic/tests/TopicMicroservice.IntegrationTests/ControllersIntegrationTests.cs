@@ -82,5 +82,14 @@ namespace TopicMicroservice.IntegrationTests
             var getTopicResponse = await client.GetAsync($"api/Topic/GetById?id={id}");
             getTopicResponse.EnsureSuccessStatusCode();
         }
+
+        [Fact]
+        public async Task GetAllSuggestedTopicsAsync_ReturnsOkWithListOfTopics()
+        {
+            var response = await client.GetAsync("api/SuggestTopic/GetAllSuggestedTopics");
+            response.EnsureSuccessStatusCode();
+            var topics = await response.Content.ReadFromJsonAsync<List<Topic>>();
+            Assert.NotNull(topics);
+        }
     }
 }
