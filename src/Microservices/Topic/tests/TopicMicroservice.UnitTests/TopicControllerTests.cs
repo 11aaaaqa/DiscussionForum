@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using TopicMicroservice.Api.Controllers;
+using TopicMicroservice.Api.DTOs;
 using TopicMicroservice.Api.Models;
 using TopicMicroservice.Api.Services.Repository;
 
@@ -83,6 +84,37 @@ namespace TopicMicroservice.UnitTests
             var methodResult = Assert.IsType<OkObjectResult>(result);
             var topic = Assert.IsAssignableFrom<Topic>(methodResult.Value);
             Assert.Equal(new Guid("741ba091-7d2c-4c26-8247-f538c217c473"), topic.Id);
+        }
+
+        [Fact]
+        public async Task CreateTopicAsync_ReturnsBadRequest()
+        {
+            var mock = new Mock<IRepository<Topic>>();
+            mock.Setup(x => x.GetByNameAsync("existingName")).ReturnsAsync(new Topic
+                { Id = It.IsAny<Guid>(), Name = "existingName", PostsCount = It.IsAny<uint>() });
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+
+            var result = await controller.CreateTopicAsync(new TopicDto { Name = "existingName" });
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task CreateTopicAsync_ReturnsOkWithCreatedTopic()
+        {
+            var model = new TopicDto { Name = "notExistingName" };
+            var mock = new Mock<IRepository<Topic>>();
+            mock
+                .Setup(x => x.GetByNameAsync(model.Name))
+                .ReturnsAsync((Topic?)null);
+            mock
+                .Setup(x => x.CreateAsync(new Topic{Id = new Guid("2e969450-dbc2-4a5f-bcd0-b23e3eb8a7d1"), Name = model.Name, PostsCount = 0}))
+                .ReturnsAsync(new Topic { Id = new Guid("2e969450-dbc2-4a5f-bcd0-b23e3eb8a7d1"), Name = model.Name, PostsCount = 0 });
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+
+            var result = await controller.CreateTopicAsync(model);
+            
+            Assert.IsType<OkObjectResult>(result);
         }
     }
 }
