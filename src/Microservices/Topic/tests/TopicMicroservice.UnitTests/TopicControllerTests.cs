@@ -32,5 +32,31 @@ namespace TopicMicroservice.UnitTests
             var topics = Assert.IsAssignableFrom<List<Topic>>(methodResult.Value);
             Assert.Equal(2, topics.Count);
         }
+
+        [Fact]
+        public async Task GetTopicByNameAsync_ReturnsBadRequest()
+        {
+            var mock = new Mock<IRepository<Topic>>();
+            mock.Setup(x => x.GetByNameAsync("incorrectName")).ReturnsAsync((Topic?)null);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+
+            var result = await controller.GetTopicByNameAsync("incorrectName");
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task GetTopicByNameAsync_ReturnsOkWithTopic()
+        {
+            var mock = new Mock<IRepository<Topic>>();
+            mock.Setup(x => x.GetByNameAsync("correctName")).ReturnsAsync(new Topic{Id = Guid.NewGuid(), Name = "correctName", PostsCount = It.IsAny<uint>()});
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+
+            var result = await controller.GetTopicByNameAsync("correctName");
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            var topic = Assert.IsAssignableFrom<Topic>(methodResult.Value);
+            Assert.Equal("correctName", topic.Name);
+        }
     }
 }
