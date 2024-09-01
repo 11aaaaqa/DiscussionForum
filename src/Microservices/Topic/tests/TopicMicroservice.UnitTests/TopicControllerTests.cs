@@ -58,5 +58,31 @@ namespace TopicMicroservice.UnitTests
             var topic = Assert.IsAssignableFrom<Topic>(methodResult.Value);
             Assert.Equal("correctName", topic.Name);
         }
+
+        [Fact]
+        public async Task GetTopicByIdAsync_ReturnsBadRequest()
+        {
+            var mock = new Mock<IRepository<Topic>>();
+            mock.Setup(x => x.GetByIdAsync(new Guid("741ba091-7d2c-4c26-8247-f538c217c473"))).ReturnsAsync((Topic?)null);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+
+            var result = await controller.GetTopicByIdAsync(new Guid("741ba091-7d2c-4c26-8247-f538c217c473"));
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task GetTopicByIdAsync_ReturnsOkWithTopic()
+        {
+            var mock = new Mock<IRepository<Topic>>();
+            mock.Setup(x => x.GetByIdAsync(new Guid("741ba091-7d2c-4c26-8247-f538c217c473"))).ReturnsAsync(new Topic{ Id = new Guid("741ba091-7d2c-4c26-8247-f538c217c473"), Name = It.IsAny<string>(), PostsCount = It.IsAny<uint>() });
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+
+            var result = await controller.GetTopicByIdAsync(new Guid("741ba091-7d2c-4c26-8247-f538c217c473"));
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            var topic = Assert.IsAssignableFrom<Topic>(methodResult.Value);
+            Assert.Equal(new Guid("741ba091-7d2c-4c26-8247-f538c217c473"), topic.Id);
+        }
     }
 }
