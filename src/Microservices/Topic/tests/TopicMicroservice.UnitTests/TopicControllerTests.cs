@@ -188,5 +188,33 @@ namespace TopicMicroservice.UnitTests
 
             Assert.IsType<OkResult>(result);
         }
+
+        [Fact]
+        public async Task DeleteTopicByNameAsync_ReturnsBadRequest()
+        {
+            string name = "notExistingName";
+            var mock = new Mock<IRepository<Topic>>();
+            mock.Setup(x => x.GetByNameAsync(name)).ReturnsAsync((Topic?)null);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+
+            var result = await controller.DeleteTopicByNameAsync(name);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task DeleteTopicByNameAsync_ReturnsOk()
+        {
+            string name = "existingName";
+            var mock = new Mock<IRepository<Topic>>();
+            mock.Setup(x => x.GetByNameAsync(name)).ReturnsAsync(new Topic
+                { Id = It.IsAny<Guid>(), Name = name, PostsCount = It.IsAny<uint>() });
+            mock.Setup(x => x.DeleteByNameAsync(name));
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+
+            var result = await controller.DeleteTopicByNameAsync(name);
+
+            Assert.IsType<OkResult>(result);
+        }
     }
 }
