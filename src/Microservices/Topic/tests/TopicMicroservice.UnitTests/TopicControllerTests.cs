@@ -103,18 +103,62 @@ namespace TopicMicroservice.UnitTests
         public async Task CreateTopicAsync_ReturnsOkWithCreatedTopic()
         {
             var model = new TopicDto { Name = "notExistingName" };
+            var createTopicModel = new Topic
+            {
+                Id = new Guid("2e969450-dbc2-4a5f-bcd0-b23e3eb8a7d1"),
+                Name = "notExistingName",
+                PostsCount = 0
+            };
             var mock = new Mock<IRepository<Topic>>();
-            mock
-                .Setup(x => x.GetByNameAsync(model.Name))
-                .ReturnsAsync((Topic?)null);
-            mock
-                .Setup(x => x.CreateAsync(new Topic{Id = new Guid("2e969450-dbc2-4a5f-bcd0-b23e3eb8a7d1"), Name = model.Name, PostsCount = 0}))
-                .ReturnsAsync(new Topic { Id = new Guid("2e969450-dbc2-4a5f-bcd0-b23e3eb8a7d1"), Name = model.Name, PostsCount = 0 });
+            mock.Setup(x => x.GetByNameAsync(model.Name)).ReturnsAsync((Topic?)null);
+            mock.Setup(x => x.CreateAsync(createTopicModel)).ReturnsAsync(createTopicModel);
             var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
 
             var result = await controller.CreateTopicAsync(model);
             
             Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task UpdateTopicAsync_ReturnsBadRequest()
+        {
+            var model = new Topic
+            {
+                Id = new Guid("20d7f6f4-3691-45fc-9057-654208ed1eae"), Name = It.IsAny<string>(),
+                PostsCount = It.IsAny<uint>()
+            };
+            var mock = new Mock<IRepository<Topic>>();
+            mock.Setup(x => x.GetByIdAsync(model.Id)).ReturnsAsync((Topic?)null);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+
+            var result = await controller.UpdateTopicAsync(model);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task UpdateTopicAsync_ReturnsOkWithUpdatedTopic()
+        {
+            var model = new Topic
+            {
+                Id = new Guid("20d7f6f4-3691-45fc-9057-654208ed1eae"),
+                Name = "updateTopicName",
+                PostsCount = 123
+            };
+            var mock = new Mock<IRepository<Topic>>();
+            mock.Setup(x => x.GetByIdAsync(model.Id)).ReturnsAsync(new Topic
+            {
+                Id = new Guid("20d7f6f4-3691-45fc-9057-654208ed1eae"),
+                Name = It.IsAny<string>(), PostsCount = It.IsAny<uint>()
+            });
+            mock.Setup(x => x.UpdateAsync(model)).ReturnsAsync(model);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+
+            var result = await controller.UpdateTopicAsync(model);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            var topic = Assert.IsType<Topic>(methodResult.Value);
+            Assert.Equal(model.Id, topic.Id);
         }
     }
 }
