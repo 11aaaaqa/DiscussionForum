@@ -8,5 +8,6 @@ namespace CommentMicroservice.Api.Database
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<SuggestedComment> SuggestedComments { get; set; }
     }
 }
