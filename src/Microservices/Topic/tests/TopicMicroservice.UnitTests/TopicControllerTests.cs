@@ -160,5 +160,33 @@ namespace TopicMicroservice.UnitTests
             var topic = Assert.IsType<Topic>(methodResult.Value);
             Assert.Equal(model.Id, topic.Id);
         }
+
+        [Fact]
+        public async Task DeleteTopicByIdAsync_ReturnsBadRequest()
+        {
+            var id = new Guid("e4d0f8d1-c73b-4d65-9952-72331581fe50");
+            var mock = new Mock<IRepository<Topic>>();
+            mock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync((Topic?)null);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+
+            var result = await controller.DeleteTopicByIdAsync(id);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task DeleteTopicByIdAsync_ReturnsOk()
+        {
+            var id = new Guid("e4d0f8d1-c73b-4d65-9952-72331581fe50");
+            var mock = new Mock<IRepository<Topic>>();
+            mock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(new Topic
+                { Id = id, Name = It.IsAny<string>(), PostsCount = It.IsAny<uint>() });
+            mock.Setup(x => x.DeleteByIdAsync(id));
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+
+            var result = await controller.DeleteTopicByIdAsync(id);
+
+            Assert.IsType<OkResult>(result);
+        }
     }
 }
