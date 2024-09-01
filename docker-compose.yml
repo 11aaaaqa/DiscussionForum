@@ -75,6 +75,33 @@ services:
         - postgres-discussion-microservice
         - rabbitmq
 
+    comment-microservice-api:
+      image: ${DOCKER_REGISTRY-}comment-microservice-api
+      build:
+        context: .
+        dockerfile: src/Microservices/Comment/CommentMicroservice.Api/Dockerfile
+      ports:
+        - "1045:8080"
+      environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - ASPNETCORE_URLS=http://+:8080
+      depends_on:
+        - rabbitmq
+        - postgres-comment-microservice
+
+    postgres-comment-microservice:
+      container_name: postgres-comment-microservice
+      image: postgres:latest
+      expose:
+        - 5432
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: CommentMicroservice
+        POSTGRES_HOST: postgres-comment-microservice
+      volumes: 
+        - postgres-data:/var/lib/postgresql/data
+
     postgres-discussion-microservice:
       container_name: postgres-discussion-microservice
       image: postgres:latest
@@ -144,5 +171,6 @@ services:
 volumes:
   postgres-data:    
     
+
 
 
