@@ -1,4 +1,6 @@
 using CommentMicroservice.Api.Database;
+using CommentMicroservice.Api.Models;
+using CommentMicroservice.Api.Services.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddTransient<IRepository<Comment>, CommentRepository>();
 
 var app = builder.Build();
 
