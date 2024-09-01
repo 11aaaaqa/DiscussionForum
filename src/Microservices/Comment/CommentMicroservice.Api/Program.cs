@@ -12,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IRepository<Comment>, CommentRepository>();
+builder.Services.AddTransient<IRepository<SuggestedComment>, SuggestCommentRepository>();
 
 var app = builder.Build();
 
