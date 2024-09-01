@@ -38,7 +38,7 @@ namespace TopicMicroservice.Api.Controllers
 
         [Route("GetById")]
         [HttpGet]
-        public async Task<IActionResult> GetTopicByNameAsync(Guid id)
+        public async Task<IActionResult> GetTopicByIdAsync(Guid id)
         {
             var topic = await topicRepository.GetByIdAsync(id);
             if (topic == null)
