@@ -4,6 +4,7 @@ using DiscussionMicroservice.Api.Models;
 using MassTransit;
 using MassTransit.Transports.Fabric;
 using MessageBus.Messages;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,7 +27,7 @@ namespace DiscussionMicroservice.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> SuggestToCreateDiscussionAsync([FromBody] DiscussionDto model, string topicName)
         {
-            await context.SuggestedDiscussions.AddAsync(new SuggestedDiscussion
+            var suggestedDiscussion = new SuggestedDiscussion
             {
                 Id = Guid.NewGuid(),
                 Title = model.Title,
@@ -35,8 +36,12 @@ namespace DiscussionMicroservice.Api.Controllers
                 Rating = 0,
                 TopicName = topicName,
                 CreatedBy = model.CreatedBy
-            });
+            };
+            await context.SuggestedDiscussions.AddAsync(suggestedDiscussion);
             await context.SaveChangesAsync();
+
+            await publishEndpoint.Publish<IUserSuggestedDiscussion>(new { SuggestedDiscussionId = suggestedDiscussion.Id, suggestedDiscussion.CreatedBy});
+
             return Ok();
         }
 
