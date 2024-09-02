@@ -18,7 +18,7 @@ namespace UserMicroservice.Api.MessageBus_Consumers
             var user = await databaseContext.Users.SingleOrDefaultAsync(x => x.UserName == context.Message.CreatedBy);
             if (user is not null)
             {
-                user.SuggestedCommentsIds.Remove(context.Message.AcceptedCommentId);
+                user.SuggestedCommentsIds.Remove(context.Message.RejectedCommentId);
                 databaseContext.Users.Update(user);
                 await databaseContext.SaveChangesAsync();
             }

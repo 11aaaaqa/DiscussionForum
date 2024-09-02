@@ -74,7 +74,7 @@ namespace CommentMicroservice.Api.Controllers
             var suggestedComment = await suggestCommentRepository.GetByIdAsync(id);
             if (suggestedComment is not null)
             {
-                await publishEndpoint.Publish<ISuggestedCommentRejected>(new { AcceptedCommentId = suggestedComment.Id, suggestedComment.CreatedBy});
+                await publishEndpoint.Publish<ISuggestedCommentRejected>(new { RejectedCommentId = suggestedComment.Id, suggestedComment.CreatedBy});
                 await suggestCommentRepository.DeleteByIdAsync(id);
             }
             else
