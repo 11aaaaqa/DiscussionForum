@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using GeneralClassesLib.ApiResponses;
@@ -34,6 +35,9 @@ namespace Web.MVC.Middlewares
                     using var httpClient = httpClientFactory.CreateClient();
                     var response = await httpClient.GetAsync(
                         $"http://register-microservice-api:8080/api/User/GetByUserName?userName={currentUserName}");
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
+                        await next(context);
+                    
 
                     var currentUser = await response.Content.ReadFromJsonAsync<GetUserResponse>();
                     if (currentUser.RefreshTokenExpiryTime < DateTime.UtcNow)
