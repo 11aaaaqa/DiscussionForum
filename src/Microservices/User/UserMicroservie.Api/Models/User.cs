@@ -9,6 +9,7 @@ namespace UserMicroservice.Api.Models
         public Guid Id { get; set; }
         public List<Guid> CreatedDiscussionsIds { get; set; }
         public List<Guid> SuggestedDiscussionsIds { get; set; }
+        public List<Guid> SuggestedCommentsIds { get; set; }
         public List<Guid> CommentsIds { get; set; }
         public string UserName { get; set; }
         public uint Posts { get; set; }
