@@ -53,8 +53,12 @@ namespace DiscussionMicroservice.Api.Controllers
         [HttpDelete]
         public async Task<IActionResult> RejectSuggestedDiscussionAsync(Guid id)
         {
-            context.SuggestedDiscussions.Remove(new SuggestedDiscussion { Id = id });
+            var suggestedDiscussion = await context.SuggestedDiscussions.SingleAsync(x => x.Id == id);
+            context.SuggestedDiscussions.Remove(suggestedDiscussion);
             await context.SaveChangesAsync();
+
+            await publishEndpoint.Publish<ISuggestedDiscussionRejected>(new { SuggestedDiscussionId = id, SuggestedBy = suggestedDiscussion.CreatedBy });
+
             return Ok();
         }
 
