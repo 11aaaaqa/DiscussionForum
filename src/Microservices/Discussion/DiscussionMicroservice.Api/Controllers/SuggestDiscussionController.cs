@@ -85,6 +85,9 @@ namespace DiscussionMicroservice.Api.Controllers
                 TopicName = acceptedDiscussion.TopicName
             });
             await context.SaveChangesAsync();
+
+            await publishEndpoint.Publish<ISuggestedDiscussionAccepted>(new { AcceptedDiscussionId = acceptedDiscussion.Id, acceptedDiscussion.CreatedBy});
+
             return Ok();
         }
 
