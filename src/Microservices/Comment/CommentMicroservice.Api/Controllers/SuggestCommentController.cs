@@ -1,6 +1,8 @@
 ﻿using CommentMicroservice.Api.DTOs;
 using CommentMicroservice.Api.Models;
 using CommentMicroservice.Api.Services.Repository;
+using MassTransit;
+using MessageBus.Messages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommentMicroservice.Api.Controllers
@@ -11,11 +13,14 @@ namespace CommentMicroservice.Api.Controllers
     {
         private readonly IRepository<SuggestedComment> suggestCommentRepository;
         private readonly IRepository<Comment> commentRepository;
+        private readonly IPublishEndpoint publishEndpoint;
 
-        public SuggestCommentController(IRepository<SuggestedComment> suggestCommentRepository, IRepository<Comment> commentRepository)
+        public SuggestCommentController(IRepository<SuggestedComment> suggestCommentRepository, IRepository<Comment> commentRepository,
+            IPublishEndpoint publishEndpoint)
         {
             this.suggestCommentRepository = suggestCommentRepository;
             this.commentRepository = commentRepository;
+            this.publishEndpoint = publishEndpoint;
         }
 
         [Route("GetAllSuggestedComments")]
@@ -31,6 +36,13 @@ namespace CommentMicroservice.Api.Controllers
                 Content = model.Content, CreatedBy = model.CreatedBy, DiscussionId = model.DiscussionId,
                 CreatedDate = DateTime.UtcNow, Id = Guid.NewGuid()
             });
+
+            await publishEndpoint.Publish<IUserSuggestedComment>(new
+            {
+                SuggestedCommentId = suggestedComment.Id,
+                SuggestedBy = suggestedComment.CreatedBy
+            });
+
             return Ok(suggestedComment);
         }
 
@@ -48,8 +60,6 @@ namespace CommentMicroservice.Api.Controllers
                 CreatedDate = suggestedComment.CreatedDate,
                 DiscussionId = suggestedComment.DiscussionId
             });
-
-            //TODO: message bus publishes comment was added message
 
             return Ok();
         }
