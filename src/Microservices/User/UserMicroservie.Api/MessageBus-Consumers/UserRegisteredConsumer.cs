@@ -26,6 +26,7 @@ namespace UserMicroservice.Api.MessageBus_Consumers
                 CommentsIds = new List<Guid>(),
                 CreatedDiscussionsIds = new List<Guid>(),
                 SuggestedDiscussionsIds = new List<Guid>(),
+                SuggestedCommentsIds = new List<Guid>()
             });
             await databaseContext.SaveChangesAsync();
         }
