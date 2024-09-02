@@ -22,7 +22,10 @@ namespace UserMicroservice.Api.MessageBus_Consumers
                 RegisteredAt = DateOnly.FromDateTime(DateTime.UtcNow),
                 Posts = 0,
                 Answers = 0,
-                AspNetUserId = context.Message.UserId
+                AspNetUserId = context.Message.UserId,
+                CommentsIds = new List<Guid>(),
+                CreatedDiscussionsIds = new List<Guid>(),
+                SuggestedDiscussionsIds = new List<Guid>(),
             });
             await databaseContext.SaveChangesAsync();
         }
