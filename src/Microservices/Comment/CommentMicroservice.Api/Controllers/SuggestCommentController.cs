@@ -71,7 +71,16 @@ namespace CommentMicroservice.Api.Controllers
         [HttpDelete]
         public async Task<IActionResult> RejectSuggestedCommentAsync(Guid id)
         {
-            await suggestCommentRepository.DeleteByIdAsync(id);
+            var suggestedComment = await suggestCommentRepository.GetByIdAsync(id);
+            if (suggestedComment is not null)
+            {
+                await publishEndpoint.Publish<ISuggestedCommentRejected>(new { AcceptedCommentId = suggestedComment.Id, suggestedComment.CreatedBy});
+                await suggestCommentRepository.DeleteByIdAsync(id);
+            }
+            else
+            {
+                return BadRequest();
+            }
             return Ok();
         }
     }
