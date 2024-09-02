@@ -11,7 +11,6 @@ namespace UserMicroservice.Api.Models
         public List<Guid> SuggestedDiscussionsIds { get; set; }
         public List<Guid> CommentsIds { get; set; }
         public string UserName { get; set; }
-        public byte[] Avatar { get; set; }
         public uint Posts { get; set; }
         public uint Answers { get; set; }
         public DateOnly RegisteredAt { get; set; }
