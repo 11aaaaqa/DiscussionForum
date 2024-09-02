@@ -36,7 +36,7 @@ namespace CommentMicroservice.Api.Controllers
 
         [Route("AcceptSuggestedComment/{id}")]
         [HttpDelete]
-        public async Task<IActionResult> AcceptSuggestedCommentAsync(Guid id)
+        public async Task<IActionResult> AcceptSuggestedCommentAsync(Guid id)   
         {
             var suggestedComment = await suggestCommentRepository.GetByIdAsync(id);
             await suggestCommentRepository.DeleteByIdAsync(id);
