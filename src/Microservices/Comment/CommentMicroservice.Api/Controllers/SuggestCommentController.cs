@@ -78,12 +78,9 @@ namespace CommentMicroservice.Api.Controllers
             {
                 await publishEndpoint.Publish<ISuggestedCommentRejected>(new { RejectedCommentId = suggestedComment.Id, suggestedComment.CreatedBy});
                 await suggestCommentRepository.DeleteByIdAsync(id);
+                return Ok();
             }
-            else
-            {
-                return BadRequest();
-            }
-            return Ok();
+            return BadRequest();
         }
     }
 }
