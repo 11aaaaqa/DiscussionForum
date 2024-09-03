@@ -52,6 +52,8 @@ namespace CommentMicroservice.Api.Controllers
         public async Task<IActionResult> AcceptSuggestedCommentAsync(Guid id)   
         {
             var suggestedComment = await suggestCommentRepository.GetByIdAsync(id);
+            if (suggestedComment == null) return BadRequest();
+
             await suggestCommentRepository.DeleteByIdAsync(id);
             await commentRepository.CreateAsync(new Comment
             {
