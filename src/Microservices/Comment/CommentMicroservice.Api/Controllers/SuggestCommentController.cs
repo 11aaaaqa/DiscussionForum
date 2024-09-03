@@ -3,7 +3,6 @@ using CommentMicroservice.Api.Models;
 using CommentMicroservice.Api.Services.Repository;
 using MassTransit;
 using MessageBus.Messages;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommentMicroservice.Api.Controllers
