@@ -37,8 +37,12 @@ namespace CommentMicroservice.Api.Services.Repository
 
         public async Task DeleteByIdAsync(Guid id)
         {
-            context.SuggestedComments.Remove(new SuggestedComment { Id = id });
-            await context.SaveChangesAsync();
+            var suggestedComment = await context.SuggestedComments.SingleOrDefaultAsync(x => x.Id == id);
+            if (suggestedComment is not null)
+            {
+                context.SuggestedComments.Remove(suggestedComment);
+                await context.SaveChangesAsync();
+            }
         }
     }
 }
