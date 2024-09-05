@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Web.MVC.Models.ApiResponses;
+using Web.MVC.Models.ApiResponses.CommentsResponses;
 
 namespace Web.MVC.Controllers
 {
@@ -90,6 +91,19 @@ namespace Web.MVC.Controllers
                 return View(suggestedDiscussion);
             }
 
+            return View("ActionError");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SuggestedComments()
+        {
+            using var httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync("http://comment-microservice-api:8080/api/SuggestComment/GetAllSuggestedComments");
+            if (response.IsSuccessStatusCode)
+            {
+                var suggestedComments = await response.Content.ReadFromJsonAsync<List<SuggestedCommentResponse>>();
+                return View(suggestedComments);
+            }
             return View("ActionError");
         }
     }
