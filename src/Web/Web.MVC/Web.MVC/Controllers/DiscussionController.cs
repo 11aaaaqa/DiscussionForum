@@ -76,7 +76,6 @@ namespace Web.MVC.Controllers
         [Route("discussions/{id}")]
         public async Task<IActionResult> SuggestComment(SuggestCommentDto model, Guid id)
         {
-            string returnUrl = Request.Path;
             if (ModelState.IsValid)
             {
                 var discussionId = id;
@@ -92,12 +91,12 @@ namespace Web.MVC.Controllers
                 var response = await httpClient.PostAsync("http://comment-microservice-api:8080/api/SuggestComment/Suggest", jsonContent);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    return View("ThanksForComment", returnUrl);
+                    return View("ThanksForComment", discussionId);
                 }
                 ModelState.AddModelError(string.Empty, "Что-то пошло не так, попробуйте еще раз");
-                return View("SomethingWentWrong", returnUrl);
+                return View("SomethingWentWrong", discussionId);
             }
-            return View("SomethingWentWrong", returnUrl);
+            return View("SomethingWentWrong", id);
         }
     }
 }
