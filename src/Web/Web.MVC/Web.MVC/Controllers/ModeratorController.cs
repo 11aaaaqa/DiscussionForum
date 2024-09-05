@@ -118,5 +118,17 @@ namespace Web.MVC.Controllers
             }
             return View("ActionError");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> RejectSuggestedComment(Guid id)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.DeleteAsync($"http://comment-microservice-api:8080/api/SuggestComment/RejectSuggestedComment/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("SuggestedComments");
+            }
+            return View("ActionError");
+        }
     }
 }
