@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedComments.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedDiscussion.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedDiscussions.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Topic\Topic.cshtml" />
@@ -41,6 +42,10 @@
 
   <ItemGroup>
     <Folder Include="Models\ViewModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Moderator\SuggestedComments.cshtml" />
   </ItemGroup>
 
 </Project>
