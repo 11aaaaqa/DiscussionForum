@@ -2,7 +2,7 @@ version: '3.4'
 
 services: 
     web-mvc:
-       image: ${DOCKER_REGISTRY-}webmvc
+       image: ${DOCKER_REGISTRY-}web-mvc
        build: 
          context: .
          dockerfile: src/Web/Web.MVC/Web.MVC/Dockerfile
