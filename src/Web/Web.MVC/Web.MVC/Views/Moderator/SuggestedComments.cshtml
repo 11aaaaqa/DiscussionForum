@@ -1,0 +1,8 @@
+﻿@model List<Web.MVC.Models.ApiResponses.CommentsResponses.SuggestedCommentResponse>
+
+<div class="text-center">
+    @foreach (var suggestedComment in Model)
+    {
+        <p>@suggestedComment.Content</p>
+    }
+</div>
