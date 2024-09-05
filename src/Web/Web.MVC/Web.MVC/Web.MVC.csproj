@@ -44,4 +44,8 @@
     <UpToDateCheckInput Remove="Views\Comment\SuggestComment.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\ViewModels\" />
+  </ItemGroup>
+
 </Project>
