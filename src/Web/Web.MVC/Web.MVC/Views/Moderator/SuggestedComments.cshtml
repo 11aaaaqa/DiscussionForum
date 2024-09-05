@@ -7,5 +7,8 @@
         <form method="post" asp-controller="Moderator" asp-action="AcceptSuggestedComment" asp-route-id="@suggestedComment.Id">
             <input type="submit" value="принять"/>
         </form>
+        <form method="post" asp-controller="Moderator" asp-action="RejectSuggestedComment" asp-route-id="@suggestedComment.Id">
+            <input type="submit" value="отклонить" />
+        </form>
     }
 </div>
