@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Comment\SuggestComment.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedDiscussion.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedDiscussions.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Topic\Topic.cshtml" />
@@ -38,10 +37,6 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Moderator\SuggestedDiscussion.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Comment\SuggestComment.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
