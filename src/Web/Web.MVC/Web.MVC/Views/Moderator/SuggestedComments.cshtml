@@ -4,5 +4,8 @@
     @foreach (var suggestedComment in Model)
     {
         <p>@suggestedComment.Content</p>
+        <form method="post" asp-controller="Moderator" asp-action="AcceptSuggestedComment" asp-route-id="@suggestedComment.Id">
+            <input type="submit" value="принять"/>
+        </form>
     }
 </div>
