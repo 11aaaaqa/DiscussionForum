@@ -2,13 +2,10 @@
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Web.MVC.DTOs.Comment;
 using Web.MVC.DTOs.Discussion;
-using Web.MVC.Models;
 using Web.MVC.Models.ApiResponses;
-using Web.MVC.Models.ViewModels;
 
 namespace Web.MVC.Controllers
 {
@@ -65,15 +62,10 @@ namespace Web.MVC.Controllers
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var discussion = await response.Content.ReadFromJsonAsync<DiscussionResponse>();
-                //var discussionViewModel = new GetDiscussionViewModel
-                //{
-                //    Content = discussion.Content, CreatedAt = discussion.CreatedAt, CreatedBy = discussion.CreatedBy,
-                //    DiscussionId = id, Id = discussion.Id, Rating = discussion.Rating, Title = discussion.Title, TopicName = discussion.TopicName
-                //};
                 ViewBag.Content = discussion.Content; ViewBag.CreatedAt = discussion.CreatedAt; ViewBag.CreatedBy = discussion.CreatedBy;
                 ViewBag.Id = discussion.Id; ViewBag.Rating = discussion.Rating; ViewBag.Title = discussion.Title;
                 ViewBag.TopicName = discussion.TopicName; ViewBag.DiscussionId = id; ViewBag.ReturnUrl = HttpContext.Request.Path;
-                return View(/*discussionViewModel*/);
+                return View();
             }
 
             return View("ActionError");
