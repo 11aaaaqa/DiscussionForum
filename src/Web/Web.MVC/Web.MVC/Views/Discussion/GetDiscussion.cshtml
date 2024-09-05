@@ -1,9 +1,20 @@
-﻿@model Web.MVC.Models.ApiResponses.DiscussionResponse
+﻿@model Web.MVC.DTOs.Comment.SuggestCommentDto
 
 <div class="text-center">
-    <h4>@Model.Title</h4>
-    <p>Создано by: @Model.CreatedBy</p>
-    <p>Дата создания: @Model.CreatedAt</p>
-    <p>Рейтинг: @Model.Rating</p>
-    <p>@Model.Content</p>
+    <h4>@ViewBag.Title</h4>
+    <p>Создано by: @ViewBag.CreatedBy</p>
+    <p>Дата создания: @ViewBag.CreatedAt</p>
+    <p>Рейтинг: @ViewBag.Rating</p>
+    <p>@ViewBag.Content</p>
+    
+    <form method="post" asp-controller="Discussion" asp-action="SuggestComment" asp-route-id="@ViewBag.DiscussionId">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div>
+            <label asp-for="Content"></label><br/>
+            <input asp-for="Content"/>
+            <span asp-validation-for="Content"></span>
+        </div>
+        <input type="submit" value="отправить"/>
+    </form>
 </div>
+
