@@ -4,8 +4,11 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Web.MVC.DTOs.Comment;
 using Web.MVC.DTOs.Discussion;
+using Web.MVC.Models;
 using Web.MVC.Models.ApiResponses;
+using Web.MVC.Models.ViewModels;
 
 namespace Web.MVC.Controllers
 {
@@ -62,10 +65,46 @@ namespace Web.MVC.Controllers
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var discussion = await response.Content.ReadFromJsonAsync<DiscussionResponse>();
-                return View(discussion);
+                //var discussionViewModel = new GetDiscussionViewModel
+                //{
+                //    Content = discussion.Content, CreatedAt = discussion.CreatedAt, CreatedBy = discussion.CreatedBy,
+                //    DiscussionId = id, Id = discussion.Id, Rating = discussion.Rating, Title = discussion.Title, TopicName = discussion.TopicName
+                //};
+                ViewBag.Content = discussion.Content; ViewBag.CreatedAt = discussion.CreatedAt; ViewBag.CreatedBy = discussion.CreatedBy;
+                ViewBag.Id = discussion.Id; ViewBag.Rating = discussion.Rating; ViewBag.Title = discussion.Title;
+                ViewBag.TopicName = discussion.TopicName; ViewBag.DiscussionId = id; ViewBag.ReturnUrl = HttpContext.Request.Path;
+                return View(/*discussionViewModel*/);
             }
 
             return View("ActionError");
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("discussions/{id}")]
+        public async Task<IActionResult> SuggestComment(SuggestCommentDto model, Guid id)
+        {
+            if (ModelState.IsValid)
+            {
+                var discussionId = id;
+                model.CreatedBy = User.Identity.Name;
+                using var httpClient = httpClientFactory.CreateClient();
+                using StringContent jsonContent = new(JsonSerializer.Serialize(new
+                {
+                    model.CreatedBy,
+                    model.Content,
+                    DiscussionId = discussionId
+                }), Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PostAsync("http://comment-microservice-api:8080/api/SuggestComment/Suggest", jsonContent);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return RedirectToAction("Thanks", routeValues: HttpContext.Request.Path.ToString());
+                }
+                ModelState.AddModelError(string.Empty, "Что-то пошло не так, попробуйте еще раз");
+                return RedirectToAction("SomethingWentWrong", routeValues: HttpContext.Request.Path.ToString());
+            }
+            return RedirectToAction("SomethingWentWrong", routeValues: HttpContext.Request.Path);
         }
     }
 }
