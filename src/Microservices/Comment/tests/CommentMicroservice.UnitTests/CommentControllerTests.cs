@@ -112,5 +112,18 @@ namespace CommentMicroservice.UnitTests
             Assert.Equal(model.CreatedBy, updatedComment.CreatedBy);
             Assert.Equal(model.CreatedDate, updatedComment.CreatedDate);
         }
+
+        [Fact]
+        public async Task DeleteCommentByIdAsync_ReturnsOk()
+        {
+            var id = It.IsAny<Guid>();
+            var mock = new Mock<IRepository<Comment>>();
+            mock.Setup(x => x.DeleteByIdAsync(id));
+            var controller = new CommentController(mock.Object);
+
+            var result = await controller.DeleteCommentByIdAsync(id);
+
+            Assert.IsType<OkResult>(result);
+        }
     }
 }
