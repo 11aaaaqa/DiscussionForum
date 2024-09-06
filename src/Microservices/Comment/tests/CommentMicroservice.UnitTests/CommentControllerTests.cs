@@ -1,5 +1,4 @@
-﻿using System.Net;
-using CommentMicroservice.Api.Controllers;
+﻿using CommentMicroservice.Api.Controllers;
 using CommentMicroservice.Api.Models;
 using CommentMicroservice.Api.Services.Repository;
 using Microsoft.AspNetCore.Mvc;
@@ -124,6 +123,33 @@ namespace CommentMicroservice.UnitTests
             var result = await controller.DeleteCommentByIdAsync(id);
 
             Assert.IsType<OkResult>(result);
+        }
+
+        [Fact]
+        public async Task CreateCommentAsync_ReturnsOkWithCreatedComment()
+        {
+            Comment model = new()
+            {
+                Content = It.IsAny<string>(),
+                CreatedBy = It.IsAny<string>(),
+                CreatedDate = It.IsAny<DateTime>(),
+                DiscussionId = It.IsAny<Guid>(),
+                Id = It.IsAny<Guid>()
+            };
+            var mock = new Mock<IRepository<Comment>>();
+            mock.Setup(x => x.CreateAsync(model)).ReturnsAsync(model);
+            var controller = new CommentController(mock.Object);
+
+            var result = await controller.CreateCommentAsync(model);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(200, methodResult.StatusCode);
+            var createdComment = Assert.IsType<Comment>(methodResult.Value);
+            Assert.Equal(model.Id, createdComment.Id);
+            Assert.Equal(model.DiscussionId, createdComment.DiscussionId);
+            Assert.Equal(model.Content, createdComment.Content);
+            Assert.Equal(model.CreatedBy, createdComment.CreatedBy);
+            Assert.Equal(model.CreatedDate, createdComment.CreatedDate);
         }
     }
 }
