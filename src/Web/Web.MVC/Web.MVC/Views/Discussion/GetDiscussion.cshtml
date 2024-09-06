@@ -23,6 +23,12 @@
     {
         <p>@comment.CreatedBy в @comment.CreatedDate</p>
         <p>@comment.Content</p>
+        if (User.Identity.Name == comment.CreatedBy)
+        {
+            <form method="post" asp-controller="Comment" asp-action="DeleteComment" asp-route-returnUrl="@Context.Request.Path" asp-route-id="@comment.Id">
+                <input type="submit" value="удалить"/>
+            </form>
+        }
     }
 </div>
 
