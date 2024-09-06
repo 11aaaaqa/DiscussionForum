@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Web.MVC.DTOs.Comment;
 using Web.MVC.DTOs.Discussion;
 using Web.MVC.Models.ApiResponses;
+using Web.MVC.Models.ApiResponses.CommentsResponses;
 
 namespace Web.MVC.Controllers
 {
@@ -65,6 +66,15 @@ namespace Web.MVC.Controllers
                 ViewBag.Content = discussion.Content; ViewBag.CreatedAt = discussion.CreatedAt; ViewBag.CreatedBy = discussion.CreatedBy;
                 ViewBag.Id = discussion.Id; ViewBag.Rating = discussion.Rating; ViewBag.Title = discussion.Title;
                 ViewBag.TopicName = discussion.TopicName; ViewBag.DiscussionId = id; ViewBag.ReturnUrl = HttpContext.Request.Path;
+
+                var getCommentsResponse = await httpClient.GetAsync(
+                    $"http://comment-microservice-api:8080/api/Comment/GetCommentsByDiscussionId/{id}");
+                if (getCommentsResponse.IsSuccessStatusCode)
+                {
+                    var comments = await getCommentsResponse.Content.ReadFromJsonAsync<List<CommentResponse>>();
+                    ViewBag.Comments = comments;
+                }
+
                 return View();
             }
 
