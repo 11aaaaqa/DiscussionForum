@@ -15,8 +15,15 @@ namespace CommentMicroservice.Api.Services.Repository
 
         public async Task<List<Comment>> GetAllAsync() => await context.Comments.ToListAsync();
 
-        public async Task<List<Comment>> GetByDiscussionIdAsync(Guid id) =>
-            await context.Comments.Where(x => x.DiscussionId == id).ToListAsync();
+        public async Task<List<Comment>?> GetByDiscussionIdAsync(Guid id)
+        {
+            var discussion = await context.Comments.FirstOrDefaultAsync(x => x.DiscussionId == id);
+            if (discussion is null)
+            {
+                return null;
+            }
+            return await context.Comments.Where(x => x.DiscussionId == id).ToListAsync();
+        }
 
         public async Task<Comment?> GetByIdAsync(Guid id) =>
             await context.Comments.SingleOrDefaultAsync(x => x.Id == id);
@@ -37,7 +44,8 @@ namespace CommentMicroservice.Api.Services.Repository
 
         public async Task DeleteByIdAsync(Guid id)
         {
-            context.Comments.Remove(new Comment { Id = id });
+            var comment = await context.Comments.SingleAsync(x => x.Id == id);
+            context.Comments.Remove(comment);
             await context.SaveChangesAsync();
         }
     }

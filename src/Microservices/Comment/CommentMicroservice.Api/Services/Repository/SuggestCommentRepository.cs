@@ -15,8 +15,16 @@ namespace CommentMicroservice.Api.Services.Repository
 
         public async Task<List<SuggestedComment>> GetAllAsync() => await context.SuggestedComments.ToListAsync();
 
-        public async Task<List<SuggestedComment>> GetByDiscussionIdAsync(Guid id) =>
-            await context.SuggestedComments.Where(x => x.DiscussionId == id).ToListAsync();
+        public async Task<List<SuggestedComment>?> GetByDiscussionIdAsync(Guid id)
+        {
+            var suggestedDiscussion = await context.SuggestedComments.FirstOrDefaultAsync(x => x.DiscussionId == id);
+            if (suggestedDiscussion is null)
+            {
+                return null;
+            }
+            return await context.SuggestedComments.Where(x => x.DiscussionId == id).ToListAsync();
+        }
+            
 
         public async Task<SuggestedComment?> GetByIdAsync(Guid id) =>
             await context.SuggestedComments.SingleOrDefaultAsync(x => x.Id == id);
