@@ -31,5 +31,40 @@ namespace CommentMicroservice.UnitTests
             var comments = Assert.IsType<List<Comment>>(methodResult.Value);
             Assert.Equal(3, comments.Count);
         }
+
+        [Fact]
+        public async Task GetCommentsByDiscussionIdAsync_ReturnsBadRequest()
+        {
+            var id = It.IsAny<Guid>();
+            var mock = new Mock<IRepository<Comment>>();
+            mock.Setup(x => x.GetByDiscussionIdAsync(id)).ReturnsAsync((List<Comment>?)null);
+            var controller = new CommentController(mock.Object);
+
+            var result = await controller.GetCommentsByDiscussionIdAsync(id);
+
+            Assert.IsType<BadRequestResult>(result);
+        }
+
+        [Fact]
+        public async Task GetCommentsByDiscussionIdAsync_ReturnsOkWithListOfComments()
+        {
+            var discussionId = It.IsAny<Guid>();
+            var mock = new Mock<IRepository<Comment>>();
+            mock.Setup(x => x.GetByDiscussionIdAsync(discussionId)).ReturnsAsync(new List<Comment>
+            {
+                new(){DiscussionId = discussionId, Id=It.IsAny<Guid>(), CreatedBy = It.IsAny<string>(),
+                    Content = It.IsAny<string>(), CreatedDate = It.IsAny<DateTime>()},
+                new(){DiscussionId = discussionId, Id=It.IsAny<Guid>(), CreatedBy = It.IsAny<string>(),
+                    Content = It.IsAny<string>(), CreatedDate = It.IsAny<DateTime>()}
+            });
+            var controller = new CommentController(mock.Object);
+
+            var result = await controller.GetCommentsByDiscussionIdAsync(discussionId);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(200, methodResult.StatusCode);
+            var comments = Assert.IsType<List<Comment>>(methodResult.Value);
+            Assert.Equal(2, comments.Count);
+        }
     }
 }
