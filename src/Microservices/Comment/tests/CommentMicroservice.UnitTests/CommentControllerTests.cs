@@ -1,6 +1,7 @@
 ﻿using CommentMicroservice.Api.Controllers;
 using CommentMicroservice.Api.Models;
 using CommentMicroservice.Api.Services.Repository;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -21,7 +22,7 @@ namespace CommentMicroservice.UnitTests
                 new (){Content = It.IsAny<string>(), CreatedBy = It.IsAny<string>(), CreatedDate = It.IsAny<DateTime>(),
                     DiscussionId = It.IsAny<Guid>(),Id = It.IsAny<Guid>()}
             });
-            var controller = new CommentController(mock.Object);
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
 
             var result = await controller.GetAllCommentsAsync();
 
@@ -37,7 +38,7 @@ namespace CommentMicroservice.UnitTests
             var id = It.IsAny<Guid>();
             var mock = new Mock<IRepository<Comment>>();
             mock.Setup(x => x.GetByDiscussionIdAsync(id)).ReturnsAsync((List<Comment>?)null);
-            var controller = new CommentController(mock.Object);
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
 
             var result = await controller.GetCommentsByDiscussionIdAsync(id);
 
@@ -56,7 +57,7 @@ namespace CommentMicroservice.UnitTests
                 new(){DiscussionId = discussionId, Id=It.IsAny<Guid>(), CreatedBy = It.IsAny<string>(),
                     Content = It.IsAny<string>(), CreatedDate = It.IsAny<DateTime>()}
             });
-            var controller = new CommentController(mock.Object);
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
 
             var result = await controller.GetCommentsByDiscussionIdAsync(discussionId);
 
@@ -76,7 +77,7 @@ namespace CommentMicroservice.UnitTests
             };
             var mock = new Mock<IRepository<Comment>>();
             mock.Setup(x => x.GetByIdAsync(model.Id)).ReturnsAsync((Comment?)null);
-            var controller = new CommentController(mock.Object);
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
 
             var result = await controller.UpdateCommentAsync(model);
 
@@ -98,7 +99,7 @@ namespace CommentMicroservice.UnitTests
                 DiscussionId = It.IsAny<Guid>(), Id = model.Id
             });
             mock.Setup(x => x.UpdateAsync(model)).ReturnsAsync(model);
-            var controller = new CommentController(mock.Object);
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
 
             var result = await controller.UpdateCommentAsync(model);
 
@@ -110,19 +111,6 @@ namespace CommentMicroservice.UnitTests
             Assert.Equal(model.Content, updatedComment.Content);
             Assert.Equal(model.CreatedBy, updatedComment.CreatedBy);
             Assert.Equal(model.CreatedDate, updatedComment.CreatedDate);
-        }
-
-        [Fact]
-        public async Task DeleteCommentByIdAsync_ReturnsOk()
-        {
-            var id = It.IsAny<Guid>();
-            var mock = new Mock<IRepository<Comment>>();
-            mock.Setup(x => x.DeleteByIdAsync(id));
-            var controller = new CommentController(mock.Object);
-
-            var result = await controller.DeleteCommentByIdAsync(id);
-
-            Assert.IsType<OkResult>(result);
         }
 
         [Fact]
@@ -138,7 +126,7 @@ namespace CommentMicroservice.UnitTests
             };
             var mock = new Mock<IRepository<Comment>>();
             mock.Setup(x => x.CreateAsync(model)).ReturnsAsync(model);
-            var controller = new CommentController(mock.Object);
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
 
             var result = await controller.CreateCommentAsync(model);
 
@@ -150,6 +138,33 @@ namespace CommentMicroservice.UnitTests
             Assert.Equal(model.Content, createdComment.Content);
             Assert.Equal(model.CreatedBy, createdComment.CreatedBy);
             Assert.Equal(model.CreatedDate, createdComment.CreatedDate);
+        }
+
+        [Fact]
+        public async Task DeleteCommentByIdAsync_BadRequest()
+        {
+            var id = It.IsAny<Guid>();
+            var mock = new Mock<IRepository<Comment>>();
+            mock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync((Comment?)null);
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
+
+            var result = await controller.DeleteCommentByIdAsync(id);
+
+            Assert.IsType<BadRequestResult>(result);
+        }
+
+        [Fact]
+        public async Task DeleteCommentByIdAsync_ReturnsOk()
+        {
+            var id = It.IsAny<Guid>();
+            var mock = new Mock<IRepository<Comment>>();
+            mock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(new Comment { Id = id, CreatedBy = It.IsAny<string>()});
+            mock.Setup(x => x.DeleteByIdAsync(id));
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
+
+            var result = await controller.DeleteCommentByIdAsync(id);
+
+            Assert.IsType<OkResult>(result);
         }
     }
 }
