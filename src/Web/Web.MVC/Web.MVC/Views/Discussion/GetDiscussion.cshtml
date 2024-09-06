@@ -1,12 +1,13 @@
 ﻿@model Web.MVC.DTOs.Comment.SuggestCommentDto
 
-<div class="text-center">
+<div>
     <h4>@ViewBag.Title</h4>
     <p>Создано by: @ViewBag.CreatedBy</p>
     <p>Дата создания: @ViewBag.CreatedAt</p>
     <p>Рейтинг: @ViewBag.Rating</p>
     <p>@ViewBag.Content</p>
-    
+</div>
+<div>
     <form method="post" asp-controller="Discussion" asp-action="SuggestComment" asp-route-id="@ViewBag.DiscussionId">
         <div asp-validation-summary="ModelOnly"></div>
         <div>
@@ -16,5 +17,12 @@
         </div>
         <input type="submit" value="отправить"/>
     </form>
+</div>
+<div>
+    @foreach (var comment in ViewBag.Comments)
+    {
+        <p>@comment.CreatedBy в @comment.CreatedDate</p>
+        <p>@comment.Content</p>
+    }
 </div>
 
