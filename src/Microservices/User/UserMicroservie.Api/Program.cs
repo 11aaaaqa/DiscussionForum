@@ -2,6 +2,7 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using UserMicroservice.Api.Database;
 using UserMicroservice.Api.MessageBus_Consumers;
+using UserMicroservice.Api.MessageBus_Consumers.CommentConsumers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
+    x.AddConsumer<CommentCreatedConsumer>();
     x.AddConsumer<SuggestedCommentRejectedConsumer>();
     x.AddConsumer<SuggestedCommentAcceptedConsumer>();
     x.AddConsumer<UserSuggestedCommentConsumer>();
