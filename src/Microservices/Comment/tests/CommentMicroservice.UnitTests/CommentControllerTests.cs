@@ -66,5 +66,51 @@ namespace CommentMicroservice.UnitTests
             var comments = Assert.IsType<List<Comment>>(methodResult.Value);
             Assert.Equal(2, comments.Count);
         }
+
+        [Fact]
+        public async Task UpdateCommentAsync_ReturnsBadRequest()
+        {
+            Comment model = new()
+            {
+                Content = It.IsAny<string>(), CreatedBy = It.IsAny<string>(), CreatedDate = It.IsAny<DateTime>(),
+                DiscussionId = It.IsAny<Guid>(), Id = It.IsAny<Guid>()
+            };
+            var mock = new Mock<IRepository<Comment>>();
+            mock.Setup(x => x.GetByIdAsync(model.Id)).ReturnsAsync((Comment?)null);
+            var controller = new CommentController(mock.Object);
+
+            var result = await controller.UpdateCommentAsync(model);
+
+            Assert.IsType<BadRequestResult>(result);
+        }
+
+        [Fact]
+        public async Task UpdateCommentAsync_ReturnsOkWithUpdatedComment()
+        {
+            Comment model = new()
+            {
+                Content = It.IsAny<string>(), CreatedBy = It.IsAny<string>(), CreatedDate = It.IsAny<DateTime>(), 
+                DiscussionId = It.IsAny<Guid>(), Id = It.IsAny<Guid>()
+            };
+            var mock = new Mock<IRepository<Comment>>();
+            mock.Setup(x => x.GetByIdAsync(model.Id)).ReturnsAsync(new Comment
+            {
+                Content = It.IsAny<string>(), CreatedBy = It.IsAny<string>(), CreatedDate = It.IsAny<DateTime>(),
+                DiscussionId = It.IsAny<Guid>(), Id = model.Id
+            });
+            mock.Setup(x => x.UpdateAsync(model)).ReturnsAsync(model);
+            var controller = new CommentController(mock.Object);
+
+            var result = await controller.UpdateCommentAsync(model);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(200, methodResult.StatusCode);
+            var updatedComment = Assert.IsType<Comment>(methodResult.Value);
+            Assert.Equal(model.Id, updatedComment.Id);
+            Assert.Equal(model.DiscussionId, updatedComment.DiscussionId);
+            Assert.Equal(model.Content, updatedComment.Content);
+            Assert.Equal(model.CreatedBy, updatedComment.CreatedBy);
+            Assert.Equal(model.CreatedDate, updatedComment.CreatedDate);
+        }
     }
 }
