@@ -32,6 +32,7 @@ namespace TopicMicroservice.UnitTests
             var methodResult = Assert.IsType<OkObjectResult>(result);
             var topics = Assert.IsAssignableFrom<List<Topic>>(methodResult.Value);
             Assert.Equal(2, topics.Count);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -44,6 +45,7 @@ namespace TopicMicroservice.UnitTests
             var result = await controller.GetTopicByNameAsync("incorrectName");
 
             Assert.IsType<BadRequestObjectResult>(result);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -58,6 +60,7 @@ namespace TopicMicroservice.UnitTests
             var methodResult = Assert.IsType<OkObjectResult>(result);
             var topic = Assert.IsAssignableFrom<Topic>(methodResult.Value);
             Assert.Equal("correctName", topic.Name);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -70,6 +73,7 @@ namespace TopicMicroservice.UnitTests
             var result = await controller.GetTopicByIdAsync(new Guid("741ba091-7d2c-4c26-8247-f538c217c473"));
 
             Assert.IsType<BadRequestObjectResult>(result);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -84,6 +88,7 @@ namespace TopicMicroservice.UnitTests
             var methodResult = Assert.IsType<OkObjectResult>(result);
             var topic = Assert.IsAssignableFrom<Topic>(methodResult.Value);
             Assert.Equal(new Guid("741ba091-7d2c-4c26-8247-f538c217c473"), topic.Id);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -97,26 +102,21 @@ namespace TopicMicroservice.UnitTests
             var result = await controller.CreateTopicAsync(new TopicDto { Name = "existingName" });
 
             Assert.IsType<BadRequestObjectResult>(result);
+            mock.VerifyAll();
         }
 
         [Fact]
         public async Task CreateTopicAsync_ReturnsOkWithCreatedTopic()
         {
             var model = new TopicDto { Name = "notExistingName" };
-            var createTopicModel = new Topic
-            {
-                Id = new Guid("2e969450-dbc2-4a5f-bcd0-b23e3eb8a7d1"),
-                Name = "notExistingName",
-                PostsCount = 0
-            };
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByNameAsync(model.Name)).ReturnsAsync((Topic?)null);
-            mock.Setup(x => x.CreateAsync(createTopicModel)).ReturnsAsync(createTopicModel);
             var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
 
             var result = await controller.CreateTopicAsync(model);
             
             Assert.IsType<OkObjectResult>(result);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -134,6 +134,7 @@ namespace TopicMicroservice.UnitTests
             var result = await controller.UpdateTopicAsync(model);
 
             Assert.IsType<BadRequestObjectResult>(result);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -159,6 +160,7 @@ namespace TopicMicroservice.UnitTests
             var methodResult = Assert.IsType<OkObjectResult>(result);
             var topic = Assert.IsType<Topic>(methodResult.Value);
             Assert.Equal(model.Id, topic.Id);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -172,6 +174,7 @@ namespace TopicMicroservice.UnitTests
             var result = await controller.DeleteTopicByIdAsync(id);
 
             Assert.IsType<BadRequestObjectResult>(result);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -187,6 +190,7 @@ namespace TopicMicroservice.UnitTests
             var result = await controller.DeleteTopicByIdAsync(id);
 
             Assert.IsType<OkResult>(result);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -200,6 +204,7 @@ namespace TopicMicroservice.UnitTests
             var result = await controller.DeleteTopicByNameAsync(name);
 
             Assert.IsType<BadRequestObjectResult>(result);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -215,6 +220,7 @@ namespace TopicMicroservice.UnitTests
             var result = await controller.DeleteTopicByNameAsync(name);
 
             Assert.IsType<OkResult>(result);
+            mock.VerifyAll();
         }
     }
 }
