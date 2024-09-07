@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ReportMicroservice.Database;
+using ReportMicroservice.Models;
+using ReportMicroservice.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddTransient<IReportService<Report>, ReportService>();
 
 var app = builder.Build();
 
