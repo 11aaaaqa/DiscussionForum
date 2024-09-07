@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Server.Kestrel.Core.Features;
 using Moq;
 using ReportMicroservice.Api.Controllers;
-using ReportMicroservice.Api.DTOs;
 using ReportMicroservice.Api.Models;
 using ReportMicroservice.Api.Services;
 
