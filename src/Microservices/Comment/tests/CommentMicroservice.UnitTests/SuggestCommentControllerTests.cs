@@ -30,6 +30,7 @@ namespace CommentMicroservice.UnitTests
             var methodResult = Assert.IsType<OkObjectResult>(result);
             var comments = Assert.IsType<List<SuggestedComment>>(methodResult.Value);
             Assert.Equal(3, comments.Count);
+            mock.VerifyAll();
         }
     }
 }
