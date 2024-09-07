@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using ReportMicroservice.Api.Controllers;
+using ReportMicroservice.Api.DTOs;
 using ReportMicroservice.Api.Models;
 using ReportMicroservice.Api.Services;
 
@@ -86,6 +87,26 @@ namespace ReportMicroservice.UnitTests
 
             Assert.IsType<OkResult>(result);
             mock.Verify(x => x.DeleteReportsByUserName(userName));
+        }
+
+        [Fact]
+        public async Task CreateReportAsync_ReturnsOkWithReport()
+        {
+            var model = new CreateReportDto
+            {
+                Reason = It.IsAny<string>(),
+                ReportedCommentContent = It.IsAny<string>(),
+                UserIdReportedTo = It.IsAny<Guid>(),
+                UserNameReportedBy = It.IsAny<string>()
+            };
+            var mock = new Mock<IReportService<Report>>();
+            var controller = new ReportController(mock.Object);
+
+            var result = await controller.CreateReportAsync(model);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(200, methodResult.StatusCode);
+            mock.VerifyAll();
         }
     }
 }
