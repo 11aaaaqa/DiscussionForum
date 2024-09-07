@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ReportMicroservice.Models;
+using ReportMicroservice.Api.Models;
 
-namespace ReportMicroservice.Database
+namespace ReportMicroservice.Api.Database
 {
     public class ApplicationDbContext: DbContext
     {

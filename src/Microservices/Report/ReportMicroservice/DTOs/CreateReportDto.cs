@@ -1,4 +1,4 @@
-﻿namespace ReportMicroservice.DTOs
+﻿namespace ReportMicroservice.Api.DTOs
 {
     public class CreateReportDto
     {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ReportMicroservice.DTOs;
-using ReportMicroservice.Models;
-using ReportMicroservice.Services;
+using ReportMicroservice.Api.DTOs;
+using ReportMicroservice.Api.Models;
+using ReportMicroservice.Api.Services;
 
-namespace ReportMicroservice.Controllers
+namespace ReportMicroservice.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

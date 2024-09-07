@@ -1,4 +1,4 @@
-﻿namespace ReportMicroservice.Models
+﻿namespace ReportMicroservice.Api.Models
 {
     public class Report
     {

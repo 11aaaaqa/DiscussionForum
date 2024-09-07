@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using ReportMicroservice.Database;
-using ReportMicroservice.Models;
-using ReportMicroservice.Services;
+using ReportMicroservice.Api.Database;
+using ReportMicroservice.Api.Models;
+using ReportMicroservice.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

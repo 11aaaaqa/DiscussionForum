@@ -1,6 +1,6 @@
-﻿using ReportMicroservice.Models;
+﻿using ReportMicroservice.Api.Models;
 
-namespace ReportMicroservice.Services
+namespace ReportMicroservice.Api.Services
 {
     public interface IReportService<TModel>
     {

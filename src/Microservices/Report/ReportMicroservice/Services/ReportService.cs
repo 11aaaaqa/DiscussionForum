@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ReportMicroservice.Database;
-using ReportMicroservice.Models;
+using ReportMicroservice.Api.Database;
+using ReportMicroservice.Api.Models;
 
-namespace ReportMicroservice.Services
+namespace ReportMicroservice.Api.Services
 {
     public class ReportService : IReportService<Report>
     {
