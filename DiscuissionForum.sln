@@ -63,7 +63,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommentMicroservice.Integra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Report", "Report", "{5DF7E54C-1B09-442F-AB2A-71E74F0CD5E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportMicroservice", "src\Microservices\Report\ReportMicroservice\ReportMicroservice.csproj", "{79B87557-F567-42AC-9832-D7C4F53E2539}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportMicroservice.Api", "src\Microservices\Report\ReportMicroservice\ReportMicroservice.Api.csproj", "{79B87557-F567-42AC-9832-D7C4F53E2539}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
