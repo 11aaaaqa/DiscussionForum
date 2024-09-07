@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Server.Kestrel.Core.Features;
 using Moq;
 using ReportMicroservice.Api.Controllers;
+using ReportMicroservice.Api.DTOs;
 using ReportMicroservice.Api.Models;
 using ReportMicroservice.Api.Services;
 
@@ -73,6 +74,20 @@ namespace ReportMicroservice.UnitTests
             var report = Assert.IsType<Report>(methodResult.Value);
             Assert.Equal(id, report.Id);
             mock.Verify(x => x.GetReportByIdAsync(id));
+        }
+
+        [Fact]
+        public async Task DeleteReportsByUserNameAsync_ReturnsOk()
+        {
+            string userName = It.IsAny<string>();
+            var mock = new Mock<IReportService<Report>>();
+            mock.Setup(x => x.DeleteReportsByUserName(userName));
+            var controller = new ReportController(mock.Object);
+
+            var result = await controller.DeleteReportsByUserNameAsync(userName);
+
+            Assert.IsType<OkResult>(result);
+            mock.Verify(x => x.DeleteReportsByUserName(userName));
         }
     }
 }
