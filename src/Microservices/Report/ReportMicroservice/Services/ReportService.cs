@@ -36,5 +36,8 @@ namespace ReportMicroservice.Api.Services
 
             await context.SaveChangesAsync();
         }
+
+        public async Task<List<Report>?> GetReportsByReportType(string reportType) =>
+            await context.Reports.Where(x => x.ReportType == reportType).ToListAsync();
     }
 }
