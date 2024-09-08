@@ -26,7 +26,11 @@ namespace UserMicroservice.Api.MessageBus_Consumers
                 CommentsIds = new List<Guid>(),
                 CreatedDiscussionsIds = new List<Guid>(),
                 SuggestedDiscussionsIds = new List<Guid>(),
-                SuggestedCommentsIds = new List<Guid>()
+                SuggestedCommentsIds = new List<Guid>(),
+                BanType = "Not banned",
+                BannedFor = "Not banned",
+                BannedUntil = new DateTime(),
+                IsBanned = false
             });
             await databaseContext.SaveChangesAsync();
         }
