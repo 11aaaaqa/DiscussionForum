@@ -43,7 +43,8 @@ namespace ReportMicroservice.Api.Controllers
                 ReportedDiscussionContent = model.ReportedDiscussionContent,
                 ReportedDiscussionTitle = model.ReportedDiscussionTitle,
                 UserIdReportedTo = model.UserIdReportedTo,
-                UserNameReportedBy = model.UserNameReportedBy
+                UserNameReportedBy = model.UserNameReportedBy,
+                ReportType = model.ReportType
             });
             return Ok(report);
         }
