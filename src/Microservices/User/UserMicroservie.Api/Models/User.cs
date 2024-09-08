@@ -15,5 +15,9 @@ namespace UserMicroservice.Api.Models
         public uint Posts { get; set; }
         public uint Answers { get; set; }
         public DateOnly RegisteredAt { get; set; }
+        public bool IsBanned { get; set; }
+        public DateTime BannedUntil { get; set; }
+        public string BannedFor { get; set; }
+        public string BanType { get; set; }
     }
 }
