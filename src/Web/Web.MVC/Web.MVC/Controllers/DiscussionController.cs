@@ -64,8 +64,7 @@ namespace Web.MVC.Controllers
             {
                 var discussion = await response.Content.ReadFromJsonAsync<DiscussionResponse>();
                 ViewBag.Content = discussion.Content; ViewBag.CreatedAt = discussion.CreatedAt; ViewBag.CreatedBy = discussion.CreatedBy;
-                ViewBag.Id = discussion.Id; ViewBag.Rating = discussion.Rating; ViewBag.Title = discussion.Title;
-                ViewBag.TopicName = discussion.TopicName; ViewBag.DiscussionId = id; ViewBag.ReturnUrl = HttpContext.Request.Path;
+                ViewBag.Rating = discussion.Rating; ViewBag.Title = discussion.Title; ViewBag.DiscussionId = id;
 
                 var getCommentsResponse = await httpClient.GetAsync(
                     $"http://comment-microservice-api:8080/api/Comment/GetCommentsByDiscussionId/{id}");
