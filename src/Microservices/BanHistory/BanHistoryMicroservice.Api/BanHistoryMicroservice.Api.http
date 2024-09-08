@@ -1,0 +1,6 @@
+@BanHistoryMicroservice.Api_HostAddress = http://localhost:5283
+
+GET {{BanHistoryMicroservice.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
