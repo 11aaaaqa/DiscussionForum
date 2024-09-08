@@ -37,6 +37,7 @@ builder.Services.AddMassTransit(x =>
 });
 
 builder.Services.AddTransient<IUserService<User>, UserService>();
+builder.Services.AddTransient<IBanService<User>, BanService>();
 
 var app = builder.Build();
 
