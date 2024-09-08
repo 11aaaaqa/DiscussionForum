@@ -56,5 +56,15 @@ namespace ReportMicroservice.Api.Controllers
             await reportService.DeleteReportsByUserName(userName);
             return Ok();
         }
+
+        [Route("GetReportsByReportType/{reportType}")]
+        [HttpGet]
+        public async Task<IActionResult> GetReportsByReportTypeAsync(string reportType)
+        {
+            var reports = await reportService.GetReportsByReportType(reportType);
+            if (reports is null)
+                return BadRequest();
+            return Ok(reports);
+        }
     }
 }
