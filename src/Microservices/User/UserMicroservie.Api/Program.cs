@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using UserMicroservice.Api.Database;
 using UserMicroservice.Api.MessageBus_Consumers;
 using UserMicroservice.Api.MessageBus_Consumers.CommentConsumers;
+using UserMicroservice.Api.Models;
+using UserMicroservice.Api.Services.Ban;
+using UserMicroservice.Api.Services.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +35,8 @@ builder.Services.AddMassTransit(x =>
         config.ConfigureEndpoints(context);
     });
 });
+
+builder.Services.AddTransient<IUserService<User>, UserService>();
 
 var app = builder.Build();
 
