@@ -8,5 +8,6 @@
         public string? ReportedDiscussionTitle { get; set; }
         public string? ReportedDiscussionContent { get; set; }
         public string Reason { get; set; }
+        public string ReportType { get; set; }
     }
 }
