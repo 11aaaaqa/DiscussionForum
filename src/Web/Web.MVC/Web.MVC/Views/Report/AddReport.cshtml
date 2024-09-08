@@ -1,0 +1,23 @@
+﻿@model Web.MVC.DTOs.Report.CreateReportDto
+
+@if (Model.ReportedCommentContent is null)
+{
+    <h3>Сообщить о нарушении от пользователя @@ @Model.ReportedUserName</h3>
+    <h4>Заголовок: @Model.ReportedDiscussionTitle</h4>
+    <p>Обсуждение: @Model.ReportedDiscussionContent</p>
+}
+else
+{
+    <h3>Сообщить о нарушении от пользователя @@ @Model.ReportedUserName</h3>
+    <p>Комментарий: @Model.ReportedCommentContent</p>
+}
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="Reason"></label><br/>
+        <input asp-for="Reason"/>
+        <span asp-validation-for="Reason"></span>
+    </div>
+    <input type="submit" value="отправить"/>
+</form>
