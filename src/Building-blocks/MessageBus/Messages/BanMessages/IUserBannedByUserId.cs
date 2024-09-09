@@ -6,5 +6,6 @@
         public string Reason { get; set; }
         public string BanType { get; set; }
         public uint DurationIdDays { get; set; }
+        public string UserName { get; set; }
     }
 }
