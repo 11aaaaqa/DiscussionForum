@@ -54,7 +54,8 @@ namespace UserMicroservice.Api.Services.Ban
                 UserId = userId,
                 Reason = reason,
                 BanType = banType,
-                DurationIdDays = forDays
+                DurationIdDays = forDays,
+                user.UserName
             });
         }
 
@@ -75,7 +76,8 @@ namespace UserMicroservice.Api.Services.Ban
                 UserName = userName,
                 Reason = reason,
                 BanType = banType,
-                DurationIdDays = forDays
+                DurationIdDays = forDays,
+                UserId = user.Id
             });
         }
 
@@ -90,11 +92,6 @@ namespace UserMicroservice.Api.Services.Ban
             user.BannedUntil = new DateTime();
             context.Users.Update(user);
             await context.SaveChangesAsync();
-
-            await publishEndpoint.Publish<IUserUnbannedByUserId>(new
-            {
-                UserId = userId
-            });
         }
 
         public async Task UnbanUserAsync(string userName)
@@ -108,11 +105,6 @@ namespace UserMicroservice.Api.Services.Ban
             user.BannedUntil = new DateTime();
             context.Users.Update(user);
             await context.SaveChangesAsync();
-
-            await publishEndpoint.Publish<IUserUnbannedByUserName>(new
-            {
-                UserName = userName
-            });
         }
     }
 }
