@@ -43,7 +43,7 @@ namespace Web.MVC.Controllers
                 using HttpClient httpClient = httpClientFactory.CreateClient();
 
                 var userResponse = await httpClient.GetAsync(
-                    $"http://user-microservice-api:8080/api/CustUser/GetUserByUserName/{model.ReportedUserName}");
+                    $"http://user-microservice-api:8080/api/profile/User/GetUserByUserName/{model.ReportedUserName}");
                 if (!userResponse.IsSuccessStatusCode) return View("ActionError");
                 var user = await userResponse.Content.ReadFromJsonAsync<CustUserResponse>();
 
