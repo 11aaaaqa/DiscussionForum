@@ -2,6 +2,7 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.MVC.Constants;
 using Web.MVC.DTOs.Report;
 using Web.MVC.Models.ApiRequests;
 using Web.MVC.Models.ApiResponses.CustUserResponses;
@@ -10,8 +11,6 @@ namespace Web.MVC.Controllers
 {
     public class ReportController : Controller
     {
-        private const string DiscussionType = "Обсуждение";
-        private const string CommentType = "Комментарий";
         private readonly IHttpClientFactory httpClientFactory;
 
         public ReportController(IHttpClientFactory httpClientFactory)
@@ -52,7 +51,7 @@ namespace Web.MVC.Controllers
                     Reason = model.Reason, ReportedCommentContent = model.ReportedCommentContent, ReportedDiscussionContent = model.ReportedDiscussionContent,
                     ReportedDiscussionTitle = model.ReportedDiscussionTitle, UserIdReportedTo = user.Id, UserNameReportedBy = User.Identity.Name
                 };
-                requestModel.ReportType = requestModel.ReportedCommentContent is null ? DiscussionType : CommentType;
+                requestModel.ReportType = requestModel.ReportedCommentContent is null ? ReportTypeConstants.DiscussionType : ReportTypeConstants.CommentType;
                 
                 using StringContent jsonContent = new(JsonSerializer.Serialize(requestModel), Encoding.UTF8, "application/json");
 
