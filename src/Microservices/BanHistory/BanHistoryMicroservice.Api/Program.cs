@@ -1,4 +1,5 @@
 using BanHistoryMicroservice.Api.Database;
+using BanHistoryMicroservice.Api.MessageBus.MessageBusConsumers;
 using BanHistoryMicroservice.Api.Models;
 using BanHistoryMicroservice.Api.Services;
 using MassTransit;
@@ -12,6 +13,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(
 builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
+    x.AddConsumer<UserBannedByUserNameConsumer>();
+    x.AddConsumer<UserBannedByUserIdConsumer>();
     x.UsingRabbitMq((context, config) =>
     {
         config.Host(
