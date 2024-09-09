@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using MessageBus.Messages.BanMessages;
+using Microsoft.EntityFrameworkCore;
 using UserMicroservice.Api.Database;
 
 namespace UserMicroservice.Api.Services.Ban
@@ -6,10 +8,12 @@ namespace UserMicroservice.Api.Services.Ban
     public class BanService : IBanService<Models.User>
     {
         private readonly ApplicationDbContext context;
+        private readonly IPublishEndpoint publishEndpoint;
 
-        public BanService(ApplicationDbContext context)
+        public BanService(ApplicationDbContext context, IPublishEndpoint publishEndpoint)
         {
             this.context = context;
+            this.publishEndpoint = publishEndpoint;
         }
         public async Task<bool> IsUserBannedAsync(Guid userId)
         {
@@ -44,6 +48,14 @@ namespace UserMicroservice.Api.Services.Ban
             user.BannedUntil = DateTime.UtcNow.AddDays(forDays);
             context.Users.Update(user);
             await context.SaveChangesAsync();
+
+            await publishEndpoint.Publish<IUserBannedByUserId>(new
+            {
+                UserId = userId,
+                Reason = reason,
+                BanType = banType,
+                DurationIdDays = forDays
+            });
         }
 
         public async Task BanUserAsync(string userName, string reason, string banType, uint forDays)
@@ -57,6 +69,14 @@ namespace UserMicroservice.Api.Services.Ban
             user.BannedUntil = DateTime.UtcNow.AddDays(forDays);
             context.Users.Update(user);
             await context.SaveChangesAsync();
+
+            await publishEndpoint.Publish<IUserBannedByUserName>(new
+            {
+                UserName = userName,
+                Reason = reason,
+                BanType = banType,
+                DurationIdDays = forDays
+            });
         }
 
         public async Task UnbanUserAsync(Guid userId)
@@ -70,6 +90,11 @@ namespace UserMicroservice.Api.Services.Ban
             user.BannedUntil = new DateTime();
             context.Users.Update(user);
             await context.SaveChangesAsync();
+
+            await publishEndpoint.Publish<IUserUnbannedByUserId>(new
+            {
+                UserId = userId
+            });
         }
 
         public async Task UnbanUserAsync(string userName)
@@ -83,6 +108,11 @@ namespace UserMicroservice.Api.Services.Ban
             user.BannedUntil = new DateTime();
             context.Users.Update(user);
             await context.SaveChangesAsync();
+
+            await publishEndpoint.Publish<IUserUnbannedByUserName>(new
+            {
+                UserName = userName
+            });
         }
     }
 }
