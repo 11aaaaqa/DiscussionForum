@@ -249,5 +249,19 @@ namespace BanHistoryMicroservice.UnitTests
             Assert.IsType<OkResult>(result);
             mock.VerifyAll();
         }
+
+        [Fact]
+        public async Task DeleteBansByUserNameAsync_ReturnsOk()
+        {
+            var userName = It.IsAny<string>();
+            var mock = new Mock<IBanService<Ban>>();
+            mock.Setup(x => x.DeleteBansByUserName(userName));
+            var controller = new BanHistoryController(mock.Object);
+
+            var result = await controller.DeleteBansByUserNameAsync(userName);
+
+            Assert.IsType<OkResult>(result);
+            mock.VerifyAll();
+        }
     }
 }
