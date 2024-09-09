@@ -1,4 +1,6 @@
 using BanHistoryMicroservice.Api.Database;
+using BanHistoryMicroservice.Api.Models;
+using BanHistoryMicroservice.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddTransient<IBanService<Ban>, BanService>();
 
 var app = builder.Build();
 
