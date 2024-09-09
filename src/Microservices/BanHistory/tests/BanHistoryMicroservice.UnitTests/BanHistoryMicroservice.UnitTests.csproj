@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\BanHistoryMicroservice.Api\BanHistoryMicroservice.Api.csproj" />
+  </ItemGroup>
+
 </Project>
