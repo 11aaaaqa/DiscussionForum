@@ -1,17 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UserMicroservice.Api.Database;
 
 namespace UserMicroservice.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/profile/[controller]")]
     [ApiController]
-    public class CustUserController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly ApplicationDbContext context;
 
-        public CustUserController(ApplicationDbContext context)
+        public UserController(ApplicationDbContext context)
         {
             this.context = context;
         }
