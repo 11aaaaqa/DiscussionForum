@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using UserMicroservice.Api.Database;
+using UserMicroservice.Api.DTOs;
+using UserMicroservice.Api.Models;
+using UserMicroservice.Api.Services.Ban;
+using UserMicroservice.Api.Services.User;
 
 namespace UserMicroservice.Api.Controllers
 {
@@ -8,21 +10,122 @@ namespace UserMicroservice.Api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly ApplicationDbContext context;
+        private readonly IUserService<User> userService;
+        private readonly IBanService<User> banService;
+        private readonly IChangeUserName changeUserName;
 
-        public UserController(ApplicationDbContext context)
+        public UserController(IUserService<User> userService, IBanService<User> banService, IChangeUserName changeUserName)
         {
-            this.context = context;
+            this.banService = banService;
+            this.userService = userService;
+            this.changeUserName = changeUserName;
         }
 
         [Route("GetUserByUserName/{userName}")]
         [HttpGet]
         public async Task<IActionResult> GetUserByUserNameAsync(string userName)
         {
-            var user = await context.Users.SingleOrDefaultAsync(x => x.UserName == userName);
+            var user = await userService.GetUserByUserName(userName);
             if (user is null)
                 return BadRequest();
             return Ok(user);
+        }
+
+        [Route("GetUserById/{userId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetUserByIdAsync(Guid userId)
+        {
+            var user = await userService.GetUserByIdAsync(userId);
+            if (user is null)
+                return BadRequest();
+            return Ok(user);
+        }
+
+        [Route("GetCreatedDiscussionsIdsByUserId/{userId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetCreatedDiscussionsIdsByUserIdAsync(Guid userId)
+        {
+            var ids = await userService.GetCreatedDiscussionsIdsByUserIdAsync(userId);
+            if (ids is null) return BadRequest();
+
+            return Ok(ids);
+        }
+
+        [Route("GetSuggestedDiscussionsIdsByUserId/{userId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetSuggestedDiscussionsIdsByUserIdAsync(Guid userId)
+        {
+            var ids = await userService.GetSuggestedDiscussionsIdsByUserIdAsync(userId);
+            if (ids is null) return BadRequest();
+
+            return Ok(ids);
+        }
+
+        [Route("GetSuggestedCommentsIdsByUserId/{userId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetSuggestedCommentsIdsByUserIdAsync(Guid userId)
+        {
+            var ids = await userService.GetSuggestedCommentsIdsByUserIdAsync(userId);
+            if (ids is null) return BadRequest();
+
+            return Ok(ids);
+        }
+
+        [Route("GetCommentsIdsByUserId/{userId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetCommentsIdsByUserIdAsync(Guid userId)
+        {
+            var ids = await userService.GetCommentsIdsByUserIdAsync(userId);
+            if (ids is null) return BadRequest();
+
+            return Ok(ids);
+        }
+
+        [Route("IsUserBanned/{userId}")]
+        [HttpGet]
+        public async Task<IActionResult> IsUserBannedAsync(Guid userId) =>
+            Ok(await banService.IsUserBannedAsync(userId));
+
+        [Route("BanUserByUserId/{userId}")]
+        [HttpPost]
+        public async Task<IActionResult> BanUserByIdAsync(Guid userId, [FromBody] BanDto model)
+        {
+            await banService.BanUserAsync(userId, model.Reason, model.BanType, model.ForDays);
+            return Ok();
+        }
+
+        [Route("BanUserByUserName/{userName}")]
+        [HttpPost]
+        public async Task<IActionResult> BanUserByUserNameAsync(string userName, [FromBody] BanDto model)
+        {
+            await banService.BanUserAsync(userName, model.Reason, model.BanType, model.ForDays);
+            return Ok();
+        }
+
+        [Route("UnbanUserByUserId/{userId}")]
+        [HttpPost]
+        public async Task<IActionResult> UnbanUserByUserIdAsync(Guid userId)
+        {
+            await banService.UnbanUserAsync(userId);
+            return Ok();
+        }
+
+        [Route("UnbanUserByUserName/{userName}")]
+        [HttpPost]
+        public async Task<IActionResult> UnbanUserByUserNameAsync(string userName)
+        {
+            await banService.UnbanUserAsync(userName);
+            return Ok();
+        }
+
+        [Route("ChangeUserName/{userId}")]
+        [HttpPost]
+        public async Task<IActionResult> ChangeUserNameAsync(Guid userId, [FromBody] string newUserName)
+        {
+            var isChanged = await changeUserName.ChangeUserNameAsync(userId, newUserName);
+            if (isChanged)
+                return Ok();
+            return BadRequest();
         }
     }
 }
