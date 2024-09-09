@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using BanHistoryMicroservice.Api.Controllers;
+using BanHistoryMicroservice.Api.DTOs;
 using BanHistoryMicroservice.Api.Models;
 using BanHistoryMicroservice.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -202,6 +203,23 @@ namespace BanHistoryMicroservice.UnitTests
             var ban = Assert.IsType<Ban>(methodResult.Value);
             Assert.Equal(id, ban.Id);
             mock.Verify(x => x.GetByIdAsync(id));
+        }
+
+        [Fact]
+        public async Task CreateBanAsync_ReturnOkWithCreatedBan()
+        {
+            var model = new BanDto
+            {
+                BanType = It.IsAny<string>(), DurationInDays = It.IsAny<uint>(), UserName = It.IsAny<string>(), 
+                Reason = It.IsAny<string>(), UserId = It.IsAny<Guid>()
+            };
+            var mock = new Mock<IBanService<Ban>>();
+            var controller = new BanHistoryController(mock.Object);
+
+            var result = await controller.CreateBanAsync(model);
+
+            Assert.IsType<OkObjectResult>(result);
+            mock.VerifyAll();
         }
     }
 }
