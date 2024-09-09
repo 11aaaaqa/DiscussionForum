@@ -1,10 +1,8 @@
-﻿using System.Net;
-using BanHistoryMicroservice.Api.Controllers;
+﻿using BanHistoryMicroservice.Api.Controllers;
 using BanHistoryMicroservice.Api.DTOs;
 using BanHistoryMicroservice.Api.Models;
 using BanHistoryMicroservice.Api.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Any;
 using Moq;
 
 namespace BanHistoryMicroservice.UnitTests
