@@ -102,6 +102,33 @@ services:
       depends_on:
         - postgres-report-microservice
 
+    banhistory-microservice-api:
+      image: ${DOCKER_REGISTRY-}banhistory-microservice-api
+      build:
+        context: .
+        dockerfile: src/Microservices/BanHistory/BanHistoryMicroservice.Api/Dockerfile
+      ports:
+        - "2058:8080"
+      environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - ASPNETCORE_URLS=http://+:8080
+      depends_on:
+        - rabbitmq
+        - postgres-banhistory-microservice
+
+    postgres-banhistory-microservice:
+      container_name: postgres-banhistory-microservice
+      image: postgres:latest
+      expose:
+        - 5432
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: BanHistoryMicroservice
+        POSTGRES_HOST: postgres-banhistory-microservice
+      volumes: 
+        - postgres-data:/var/lib/postgresql/data
+
     postgres-report-microservice:
       container_name: postgres-report-microservice
       image: postgres:latest
@@ -197,6 +224,7 @@ services:
 volumes:
   postgres-data:    
     
+
 
 
 
