@@ -3,7 +3,7 @@ using UserMicroservice.Api.Database;
 
 namespace UserMicroservice.Api.Services.User
 {
-    public class UserService : IUserService<Models.User>
+    public class UserService : IUserService<Models.User>, IChangeUserName
     {
         private readonly ApplicationDbContext context;
 
@@ -48,6 +48,17 @@ namespace UserMicroservice.Api.Services.User
             if (user is null)
                 return null;
             return user.CommentsIds;
+        }
+
+        public async Task<bool> ChangeUserNameAsync(Guid userId, string newUserName)
+        {
+            var user = await context.Users.SingleOrDefaultAsync(x => x.Id == userId);
+            if (user is null) return false;
+            
+            user.UserName = newUserName;
+            context.Users.Update(user);
+            await context.SaveChangesAsync();
+            return true;
         }
     }
 }
