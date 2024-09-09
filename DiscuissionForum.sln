@@ -71,7 +71,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReportMicroservice.UnitTest
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BanHistory", "BanHistory", "{7BA64B07-BFBA-4F7B-B89D-5CADC0B33749}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BanHistoryMicroservice.Api", "src\Microservices\BanHistory\BanHistoryMicroservice.Api\BanHistoryMicroservice.Api.csproj", "{8C28B699-9D94-44F4-823C-96B58559EEDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BanHistoryMicroservice.Api", "src\Microservices\BanHistory\BanHistoryMicroservice.Api\BanHistoryMicroservice.Api.csproj", "{8C28B699-9D94-44F4-823C-96B58559EEDB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4C1026EF-A59A-4F75-BB52-DD99005E44AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BanHistoryMicroservice.UnitTests", "src\Microservices\BanHistory\tests\BanHistoryMicroservice.UnitTests\BanHistoryMicroservice.UnitTests.csproj", "{9669715B-876A-4781-87DE-76412A6A1A8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,6 +155,10 @@ Global
 		{8C28B699-9D94-44F4-823C-96B58559EEDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C28B699-9D94-44F4-823C-96B58559EEDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C28B699-9D94-44F4-823C-96B58559EEDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9669715B-876A-4781-87DE-76412A6A1A8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9669715B-876A-4781-87DE-76412A6A1A8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9669715B-876A-4781-87DE-76412A6A1A8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9669715B-876A-4781-87DE-76412A6A1A8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -189,6 +197,8 @@ Global
 		{184C7C3D-4EB3-4565-9102-B2CACD92F942} = {14238F32-9F2B-41CB-A218-690D84C2CC70}
 		{7BA64B07-BFBA-4F7B-B89D-5CADC0B33749} = {9D4EB9A7-E617-4195-BF0E-9CC2E9BA5866}
 		{8C28B699-9D94-44F4-823C-96B58559EEDB} = {7BA64B07-BFBA-4F7B-B89D-5CADC0B33749}
+		{4C1026EF-A59A-4F75-BB52-DD99005E44AC} = {7BA64B07-BFBA-4F7B-B89D-5CADC0B33749}
+		{9669715B-876A-4781-87DE-76412A6A1A8D} = {4C1026EF-A59A-4F75-BB52-DD99005E44AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9F5758DC-BF57-41BA-9D49-8FD04B6D71B4}
