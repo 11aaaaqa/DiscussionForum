@@ -1,4 +1,5 @@
-﻿using BanHistoryMicroservice.Api.Controllers;
+﻿using System.Net;
+using BanHistoryMicroservice.Api.Controllers;
 using BanHistoryMicroservice.Api.Models;
 using BanHistoryMicroservice.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -57,6 +58,40 @@ namespace BanHistoryMicroservice.UnitTests
             var bans = Assert.IsType<List<Ban>>(methodResult.Value);
             Assert.Equal(3, bans.Count);
             mock.Verify(x => x.GetAllBansAsync());
+        }
+
+        [Fact]
+        public async Task GetBansByUserIdAsync_ReturnsOkWithListOfBansWithNeededUserId()
+        {
+            var id = It.IsAny<Guid>();
+            var mock = new Mock<IBanService<Ban>>();
+            mock.Setup(x => x.GetByUserIdAsync(id)).ReturnsAsync(new List<Ban>
+            {
+                new ()
+                {
+                    BanType = It.IsAny<string>(), DurationInDays = It.IsAny<uint>(), Id = It.IsAny<Guid>(), UserName = It.IsAny<string>(),
+                    Reason = It.IsAny<string>(), UserId = id
+                },
+                new ()
+                {
+                    BanType = It.IsAny<string>(), DurationInDays = It.IsAny<uint>(), Id = It.IsAny<Guid>(), UserName = It.IsAny<string>(),
+                    Reason = It.IsAny<string>(), UserId = id
+                }
+            });
+            var controller = new BanHistoryController(mock.Object);
+
+            var result = await controller.GetBansByUserIdAsync(id);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            Assert.Equal(200, methodResult.StatusCode);
+            var bans = Assert.IsType<List<Ban>>(methodResult.Value);
+            Assert.Equal(2, bans.Count);
+            foreach (var ban in bans)
+            {
+                Assert.Equal(id, ban.UserId);
+            }
+            mock.Verify(x => x.GetByUserIdAsync(id));
         }
     }
 }
