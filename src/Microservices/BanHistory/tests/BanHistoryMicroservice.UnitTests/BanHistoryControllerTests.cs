@@ -3,6 +3,7 @@ using BanHistoryMicroservice.Api.Controllers;
 using BanHistoryMicroservice.Api.Models;
 using BanHistoryMicroservice.Api.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Any;
 using Moq;
 
 namespace BanHistoryMicroservice.UnitTests
@@ -165,6 +166,42 @@ namespace BanHistoryMicroservice.UnitTests
                 Assert.Equal(banType, ban.BanType);
             }
             mock.Verify(x => x.GetByBanTypeAsync(banType));
+        }
+
+        [Fact]
+        public async Task GetBanByIdAsync_ReturnsBadRequest()
+        {
+            var id = It.IsAny<Guid>();
+            var mock = new Mock<IBanService<Ban>>();
+            mock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync((Ban?)null);
+            var controller = new BanHistoryController(mock.Object);
+
+            var result = await controller.GetBanByIdAsync(id);
+
+            Assert.IsType<BadRequestResult>(result);
+            mock.Verify(x => x.GetByIdAsync(id));
+        }
+
+        [Fact]
+        public async Task GetBanByIdAsync_ReturnsOkWithBan()
+        {
+            var id = It.IsAny<Guid>();
+            var mock = new Mock<IBanService<Ban>>();
+            mock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(new Ban
+            {
+                BanType = It.IsAny<string>(), DurationInDays = It.IsAny<uint>(), 
+                Id = id, UserName = It.IsAny<string>(), Reason = It.IsAny<string>(), UserId = It.IsAny<Guid>()
+            });
+            var controller = new BanHistoryController(mock.Object);
+
+            var result = await controller.GetBanByIdAsync(id);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(200, methodResult.StatusCode);
+            Assert.NotNull(methodResult.Value);
+            var ban = Assert.IsType<Ban>(methodResult.Value);
+            Assert.Equal(id, ban.Id);
+            mock.Verify(x => x.GetByIdAsync(id));
         }
     }
 }
