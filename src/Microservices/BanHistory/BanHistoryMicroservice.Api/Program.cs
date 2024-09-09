@@ -1,12 +1,24 @@
 using BanHistoryMicroservice.Api.Database;
 using BanHistoryMicroservice.Api.Models;
 using BanHistoryMicroservice.Api.Services;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(
     builder.Configuration["Database:ConnectionString"]));
+
+builder.Services.AddMassTransit(x =>
+{
+    x.SetKebabCaseEndpointNameFormatter();
+    x.UsingRabbitMq((context, config) =>
+    {
+        config.Host(
+            $"amqp://{builder.Configuration["RabbitMQ:User"]}:{builder.Configuration["RabbitMQ:Password"]}@{builder.Configuration["RabbitMQ:HostName"]}");
+        config.ConfigureEndpoints(context);
+    });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
