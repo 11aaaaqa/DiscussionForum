@@ -171,5 +171,19 @@ namespace ReportMicroservice.UnitTests
             Assert.Empty(reports);
             mock.Verify(x => x.GetReportsByReportType(reportType));
         }
+
+        [Fact]
+        public async Task DeleteReportByIdAsync_ReturnsOk()
+        {
+            var reportId = It.IsAny<Guid>();
+            var mock = new Mock<IReportService<Report>>();
+            mock.Setup(x => x.DeleteReportById(reportId));
+            var controller = new ReportController(mock.Object);
+
+            var result = await controller.DeleteReportByIdAsync(reportId);
+
+            Assert.IsType<OkResult>(result);
+            mock.Verify(x =>x.DeleteReportById(reportId));
+        }
     }
 }
