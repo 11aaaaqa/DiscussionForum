@@ -163,11 +163,5 @@ namespace Web.MVC.Controllers
 
             return View(model);
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> DeleteReport(Guid reportId)
-        //{
-
-        //}
     }
 }
