@@ -6,6 +6,7 @@ using Web.MVC.Constants;
 using Web.MVC.DTOs.Report;
 using Web.MVC.Models.ApiRequests;
 using Web.MVC.Models.ApiResponses.CustUserResponses;
+using Web.MVC.Models.ApiResponses.ReportResponses;
 
 namespace Web.MVC.Controllers
 {
@@ -21,10 +22,12 @@ namespace Web.MVC.Controllers
         [Authorize]
         [HttpGet]
         public IActionResult AddReport(string reportedUserName, string? reportedCommentContent,
-            string? reportedDiscussionTitle, string? reportedDiscussionContent)
+            string? reportedDiscussionTitle, string? reportedDiscussionContent, Guid? reportedDiscussionId, Guid reportedCommentId)
         {
             var model = new CreateReportDto
             {
+                ReportedDiscussionId = reportedDiscussionId,
+                ReportedCommentId = reportedCommentId,
                 ReportedUserName = reportedUserName,
                 ReportedCommentContent = reportedCommentContent,
                 ReportedDiscussionContent = reportedDiscussionContent,
@@ -49,7 +52,8 @@ namespace Web.MVC.Controllers
                 var requestModel = new CreateReportRequest
                 {
                     Reason = model.Reason, ReportedCommentContent = model.ReportedCommentContent, ReportedDiscussionContent = model.ReportedDiscussionContent,
-                    ReportedDiscussionTitle = model.ReportedDiscussionTitle, UserIdReportedTo = user.Id, UserNameReportedBy = User.Identity.Name
+                    ReportedDiscussionTitle = model.ReportedDiscussionTitle, UserIdReportedTo = user.Id, UserNameReportedBy = User.Identity.Name,
+                    ReportedCommentId = model.ReportedCommentId, ReportedDiscussionId = model.ReportedDiscussionId
                 };
                 requestModel.ReportType = requestModel.ReportedCommentContent is null ? ReportTypeConstants.DiscussionType : ReportTypeConstants.CommentType;
                 
@@ -66,6 +70,32 @@ namespace Web.MVC.Controllers
             }
 
             return View(model);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Reports(string reportType)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://report-microservice-api:8080/api/Report/GetReportsByReportType/{reportType}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var reports = await response.Content.ReadFromJsonAsync<List<ReportApiResponse>>();
+            return View(reports);
+        }
+
+        [Route("reports/{reportId}")]
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetReport(Guid reportId)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync($"http://report-microservice-api:8080/api/Report/GetReportById/{reportId}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var report = await response.Content.ReadFromJsonAsync<ReportApiResponse>();
+            return View(report);
         }
     }
 }
