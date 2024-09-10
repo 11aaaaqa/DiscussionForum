@@ -7,7 +7,7 @@
     <p>Рейтинг: @ViewBag.Rating</p>
     <p>@ViewBag.Content</p>
     <a asp-action="AddReport" asp-controller="Report" asp-route-reportedUserName="@ViewBag.CreatedBy" asp-route-reportedDiscussionTitle="@ViewBag.Title"
-       asp-route-reportedDiscussionContent="@ViewBag.Content">пожаловаться</a>
+       asp-route-reportedDiscussionContent="@ViewBag.Content" asp-route-reportedDiscussionId="@ViewBag.DiscussionId">пожаловаться</a>
 </div>
 <div>
     <form method="post" asp-controller="Discussion" asp-action="SuggestComment" asp-route-id="@ViewBag.DiscussionId">
@@ -40,7 +40,7 @@
             else
             {
                 <a asp-action="AddReport" asp-controller="Report" asp-route-reportedUserName="@comment.CreatedBy"
-                   asp-route-reportedCommentContent="@comment.Content">пожаловаться</a>
+                   asp-route-reportedCommentContent="@comment.Content" asp-route-reportedCommentId="@comment.Id">пожаловаться</a>
             }
         }
     }
