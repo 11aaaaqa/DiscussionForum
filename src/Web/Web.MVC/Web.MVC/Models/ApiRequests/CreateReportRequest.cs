@@ -9,5 +9,7 @@
         public string? ReportedDiscussionContent { get; set; }
         public string Reason { get; set; }
         public string ReportType { get; set; }
+        public Guid? ReportedCommentId { get; set; }
+        public Guid? ReportedDiscussionId { get; set; }
     }
 }
