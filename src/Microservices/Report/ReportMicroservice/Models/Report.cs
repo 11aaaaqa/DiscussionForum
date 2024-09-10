@@ -3,6 +3,8 @@
     public class Report
     {
         public Guid Id { get; set; }
+        public Guid? ReportedCommentId { get; set; }
+        public Guid? ReportedDiscussionId { get; set; }
         public string UserNameReportedBy { get; set; }
         public Guid UserIdReportedTo { get; set; }
         public string? ReportedCommentContent { get; set; }
