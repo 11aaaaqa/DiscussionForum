@@ -1,0 +1,32 @@
+﻿@model Web.MVC.DTOs.Moderator.BanUserDto
+
+<h3>Отстранить пользователя</h3>
+<form method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="Reason"></label><br />
+        <input asp-for="Reason" />
+        <span asp-validation-for="Reason"></span>
+    </div>
+    <div>
+        <label asp-for="ForDays"></label><br />
+        <input asp-for="ForDays" />
+        <span asp-validation-for="ForDays"></span>
+    </div>
+    <div>
+        <p>Тип бана</p>
+        <p>
+            <input type="radio" value="Общий" name="banType" /> Общий
+        </p>
+        <p>
+            <input type="radio" value="Комментарий" name="banType" /> Комментарий
+        </p>
+        <p>
+            <input type="radio" value="Обсуждение" name="banType" /> Обсуждение
+        </p>
+        <p>
+            <input type="radio" value="Жалоба" name="banType" /> Жалоба
+        </p>
+    </div>
+    <input type="submit" value="отстранить" />
+</form>
