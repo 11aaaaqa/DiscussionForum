@@ -97,5 +97,17 @@ namespace Web.MVC.Controllers
             var report = await response.Content.ReadFromJsonAsync<ReportApiResponse>();
             return View(report);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteReport(Guid reportId)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response =
+                await httpClient.DeleteAsync(
+                    $"http://report-microservice-api:8080/api/Report/DeleteReportById/{reportId}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            return RedirectToAction("Reports", "Report", new {reportType = "Обсуждение"});
+        }
     }
 }
