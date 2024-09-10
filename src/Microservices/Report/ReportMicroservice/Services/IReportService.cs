@@ -9,5 +9,6 @@ namespace ReportMicroservice.Api.Services
         Task<Report> CreateReportAsync(TModel model);
         Task DeleteReportsByUserName(string userName);
         Task<List<Report>?> GetReportsByReportType(string reportType);
+        Task DeleteReportById(Guid reportId);
     }
 }

@@ -68,5 +68,13 @@ namespace ReportMicroservice.Api.Controllers
                 return BadRequest();
             return Ok(reports);
         }
+
+        [Route("DeleteReportById/{reportId}")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteReportByIdAsync(Guid reportId)
+        {
+            await reportService.DeleteReportById(reportId);
+            return Ok();
+        }
     }
 }

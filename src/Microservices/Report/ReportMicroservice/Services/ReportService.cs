@@ -39,5 +39,14 @@ namespace ReportMicroservice.Api.Services
 
         public async Task<List<Report>?> GetReportsByReportType(string reportType) =>
             await context.Reports.Where(x => x.ReportType == reportType).ToListAsync();
+
+        public async Task DeleteReportById(Guid reportId)
+        {
+            var report = await context.Reports.SingleOrDefaultAsync(x => x.Id == reportId);
+            if (report is null) return;
+            
+            context.Reports.Remove(report);
+            await context.SaveChangesAsync();
+        }
     }
 }
