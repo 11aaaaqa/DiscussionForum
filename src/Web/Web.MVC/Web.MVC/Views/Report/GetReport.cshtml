@@ -7,8 +7,11 @@
         <p>@Model.ReportedDiscussionContent</p>
         <p>Reported by: @@@Model.UserNameReportedBy</p>
         <p>Причина: @Model.Reason</p>
-        <a asp-controller="Moderator" asp-action="BanUserByUserId" asp-route-returnUrl="@Context.Request.Path" asp-route-userId="@Model.UserIdReportedTo">
-            принять жалобу и отстранить пользователя
+        <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@Context.Request.Path" asp-route-userId="@Model.UserIdReportedTo">
+            отстранить пользователя
+        </a><br/>
+        <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@Context.Request.Path" asp-route-userName="@Model.UserNameReportedBy">
+            отстранить пожаловавшегося пользователя
         </a>
         <form method="post" asp-controller="Report" asp-action="DeleteReport" asp-route-reportId="@Model.Id">
             <input type="submit" value="удалить жалобу" />
@@ -19,8 +22,11 @@
         <h3>@Model.ReportedCommentContent</h3>
         <p>Reported by: @@@Model.UserNameReportedBy</p>
         <p>Причина: @Model.Reason</p>
-        <a asp-controller="Moderator" asp-action="BanUserByUserId" asp-route-returnUrl="@Context.Request.Path" asp-route-userId="@Model.UserIdReportedTo">
-            принять жалобу и отстранить пользователя
+        <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@Context.Request.Path" asp-route-userId="@Model.UserIdReportedTo">
+            отстранить пользователя
+        </a><br/>
+        <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@Context.Request.Path" asp-route-userName="@Model.UserNameReportedBy">
+            отстранить пожаловавшегося пользователя
         </a>
         <form method="post" asp-controller="Report" asp-action="DeleteReport" asp-route-reportId="@Model.Id">
             <input type="submit" value="удалить жалобу"/>
