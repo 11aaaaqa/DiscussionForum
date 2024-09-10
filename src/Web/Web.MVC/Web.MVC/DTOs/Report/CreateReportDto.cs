@@ -8,6 +8,8 @@ namespace Web.MVC.DTOs.Report
         public string? ReportedCommentContent { get; set; }
         public string? ReportedDiscussionTitle { get; set; }
         public string? ReportedDiscussionContent { get; set; }
+        public Guid? ReportedCommentId { get; set; }
+        public Guid? ReportedDiscussionId { get; set; }
 
         [Required]
         [Display(Name="Причина")]
