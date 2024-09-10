@@ -26,10 +26,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Moderator\BanUserByUserId.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedComments.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedDiscussion.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedDiscussions.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Report\AddReport.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Report\GetReport.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Topic\Topic.cshtml" />
   </ItemGroup>
 
@@ -51,6 +53,14 @@
 
   <ItemGroup>
     <Folder Include="Models\ViewModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Report\GetReport.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Moderator\BanUserByUserId.cshtml" />
   </ItemGroup>
 
 </Project>
