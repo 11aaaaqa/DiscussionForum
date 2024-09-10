@@ -18,17 +18,18 @@ namespace ReportMicroservice.UnitTests
                 new()
                 {
                     Id = It.IsAny<Guid>(),Reason = It.IsAny<string>(), ReportedCommentContent = It.IsAny<string>(), UserIdReportedTo = It.IsAny<Guid>(),
-                    UserNameReportedBy = It.IsAny<string>()
+                    UserNameReportedBy = It.IsAny<string>(), ReportType = It.IsAny<string>(), ReportedCommentId = It.IsAny<Guid>()
                 },
                 new()
                 {
                     Id = It.IsAny<Guid>(),Reason = It.IsAny<string>(), ReportedCommentContent = It.IsAny<string>(), UserIdReportedTo = It.IsAny<Guid>(),
-                    UserNameReportedBy = It.IsAny<string>()
+                    UserNameReportedBy = It.IsAny<string>(), ReportType = It.IsAny<string>(), ReportedCommentId = It.IsAny<Guid>()
                 },
                 new()
                 {
                     Id = It.IsAny<Guid>(),Reason = It.IsAny<string>(), UserIdReportedTo = It.IsAny<Guid>(), UserNameReportedBy = It.IsAny<string>(),
-                    ReportedDiscussionContent = It.IsAny<string>(), ReportedDiscussionTitle = It.IsAny<string>()
+                    ReportedDiscussionContent = It.IsAny<string>(), ReportedDiscussionTitle = It.IsAny<string>(),
+                    ReportType = It.IsAny<string>(), ReportedDiscussionId = It.IsAny<Guid>()
                 }
             });
             var controller = new ReportController(mock.Object);
