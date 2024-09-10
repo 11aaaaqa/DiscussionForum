@@ -4,6 +4,8 @@ using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using Web.MVC.DTOs.Moderator;
 using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ApiResponses.CommentsResponses;
 
@@ -130,5 +132,42 @@ namespace Web.MVC.Controllers
             }
             return View("ActionError");
         }
+
+        [HttpGet]
+        public IActionResult BanUserByUserId()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BanUserByUserId(Guid userId, BanUserDto model, string returnUrl, string? banType)
+        {
+            if (ModelState.IsValid)
+            {
+                if (string.IsNullOrEmpty(banType))
+                {
+                    ModelState.AddModelError(string.Empty,"Выберите тип бана");
+                    return View(model);
+                }
+                using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+                using HttpClient httpClient = httpClientFactory.CreateClient();
+                var response = await httpClient.PostAsync(
+                    $"http://user-microservice-api:8080/api/profile/User/BanUserByUserId/{userId}", jsonContent);
+                if (!response.IsSuccessStatusCode) return View("ActionError");
+
+                if (!string.IsNullOrEmpty(returnUrl))
+                    return LocalRedirect(returnUrl);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(model);
+        }
+
+        //[HttpPost]
+        //public async Task<IActionResult> DeleteReport(Guid reportId)
+        //{
+
+        //}
     }
 }
