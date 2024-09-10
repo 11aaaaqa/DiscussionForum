@@ -134,26 +134,43 @@ namespace Web.MVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult BanUserByUserId()
+        public IActionResult BanUser()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> BanUserByUserId(Guid userId, BanUserDto model, string returnUrl, string? banType)
+        public async Task<IActionResult> BanUser(string? userName, Guid? userId, BanUserDto model, string returnUrl, string? banType)
         {
             if (ModelState.IsValid)
             {
                 if (string.IsNullOrEmpty(banType))
                 {
-                    ModelState.AddModelError(string.Empty,"Выберите тип бана");
+                    ModelState.AddModelError(string.Empty, "Выберите тип бана");
                     return View(model);
                 }
-                using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+
+                if (userName is null && userId is null)
+                    return View("ActionError");
+
+                model.BanType = banType;
                 using HttpClient httpClient = httpClientFactory.CreateClient();
-                var response = await httpClient.PostAsync(
-                    $"http://user-microservice-api:8080/api/profile/User/BanUserByUserId/{userId}", jsonContent);
-                if (!response.IsSuccessStatusCode) return View("ActionError");
+
+                if (userId is null)
+                {
+                    using StringContent jsonContent =
+                        new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+                    var response = await httpClient.PostAsync(
+                        $"http://user-microservice-api:8080/api/profile/User/BanUserByUserName/{userName}", jsonContent);
+                    if (!response.IsSuccessStatusCode) return View("ActionError");
+                }
+                else
+                {
+                    using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+                    var response = await httpClient.PostAsync(
+                        $"http://user-microservice-api:8080/api/profile/User/BanUserByUserId/{userId}", jsonContent);
+                    if (!response.IsSuccessStatusCode) return View("ActionError");
+                }
 
                 if (!string.IsNullOrEmpty(returnUrl))
                     return LocalRedirect(returnUrl);
