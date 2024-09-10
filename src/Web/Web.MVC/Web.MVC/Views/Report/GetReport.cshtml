@@ -10,6 +10,9 @@
         <a asp-controller="Moderator" asp-action="BanUserByUserId" asp-route-returnUrl="@Context.Request.Path" asp-route-userId="@Model.UserIdReportedTo">
             принять жалобу и отстранить пользователя
         </a>
+        <form method="post" asp-controller="Report" asp-action="DeleteReport" asp-route-reportId="@Model.Id">
+            <input type="submit" value="удалить жалобу" />
+        </form>
     }
     else
     {
@@ -19,5 +22,8 @@
         <a asp-controller="Moderator" asp-action="BanUserByUserId" asp-route-returnUrl="@Context.Request.Path" asp-route-userId="@Model.UserIdReportedTo">
             принять жалобу и отстранить пользователя
         </a>
+        <form method="post" asp-controller="Report" asp-action="DeleteReport" asp-route-reportId="@Model.Id">
+            <input type="submit" value="удалить жалобу"/>
+        </form>
     }
 </div>
