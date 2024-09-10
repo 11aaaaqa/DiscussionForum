@@ -1,0 +1,30 @@
+﻿@model List<Web.MVC.Models.ApiResponses.ReportResponses.ReportApiResponse>
+
+<div class="text-center">
+    <h3>Жалобы</h3>
+    @if (Model.Count == 0)
+    {
+        <h5>Жалоб нет</h5>
+    }
+    else
+    {
+        @foreach (var report in Model)
+        {
+            if (report.ReportedCommentContent is null)
+            {
+                <table>
+                    <tr><th>От пользователя</th><th>Обсуждение</th><th></th></tr>
+                    <tr><td>@report.UserNameReportedBy</td><td><a href="~/reports/@report.Id">перейти</a></td></tr>
+                </table>
+            }
+            else
+            {
+                <table>
+                    <tr><th>От пользователя</th><th>Комментарий</th></tr>
+                    <tr><td>@report.UserNameReportedBy</td><td><a href="~/reports/@report.Id">перейти</a></td></tr>
+                </table>
+            }
+        }
+    }
+    
+</div>

@@ -1,0 +1,23 @@
+﻿@model Web.MVC.Models.ApiResponses.ReportResponses.ReportApiResponse
+
+<div class="text-center">
+    @if (Model.ReportType == "Обсуждение")
+    {
+        <h3>@Model.ReportedDiscussionTitle</h3>
+        <p>@Model.ReportedDiscussionContent</p>
+        <p>Reported by: @@@Model.UserNameReportedBy</p>
+        <p>Причина: @Model.Reason</p>
+        <a asp-controller="Moderator" asp-action="BanUserByUserId" asp-route-returnUrl="@Context.Request.Path" asp-route-userId="@Model.UserIdReportedTo">
+            принять жалобу и отстранить пользователя
+        </a>
+    }
+    else
+    {
+        <h3>@Model.ReportedCommentContent</h3>
+        <p>Reported by: @@@Model.UserNameReportedBy</p>
+        <p>Причина: @Model.Reason</p>
+        <a asp-controller="Moderator" asp-action="BanUserByUserId" asp-route-returnUrl="@Context.Request.Path" asp-route-userId="@Model.UserIdReportedTo">
+            принять жалобу и отстранить пользователя
+        </a>
+    }
+</div>
