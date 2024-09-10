@@ -1,0 +1,15 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Web.MVC.DTOs.Moderator
+{
+    public class BanUserDto
+    {
+        [Required]
+        [Display(Name = "Длительность в днях")]
+        public uint ForDays { get; set; }
+        public string? BanType { get; set; }
+        [Required]
+        [Display(Name = "Причина")]
+        public string Reason { get; set; }
+    }
+}
