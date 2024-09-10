@@ -2,13 +2,13 @@
 
 @if (Model.ReportedCommentContent is null)
 {
-    <h3>Сообщить о нарушении от пользователя @@ @Model.ReportedUserName</h3>
+    <h3>Сообщить о нарушении от пользователя @@@Model.ReportedUserName</h3>
     <h4>Заголовок: @Model.ReportedDiscussionTitle</h4>
     <p>Обсуждение: @Model.ReportedDiscussionContent</p>
 }
 else
 {
-    <h3>Сообщить о нарушении от пользователя @@ @Model.ReportedUserName</h3>
+    <h3>Сообщить о нарушении от пользователя @@@Model.ReportedUserName</h3>
     <p>Комментарий: @Model.ReportedCommentContent</p>
 }
 
