@@ -126,5 +126,19 @@ namespace Web.MVC.Controllers
             }
             return View("SomethingWentWrong", id);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteDiscussion(Guid discussionId, string returnUrl)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.DeleteAsync(
+                $"http://discussion-microservice-api:8080/api/Discussion/DeleteDiscussionById/{discussionId}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            if (!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
