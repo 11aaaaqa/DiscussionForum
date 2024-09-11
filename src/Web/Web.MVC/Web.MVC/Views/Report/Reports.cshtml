@@ -10,20 +10,18 @@
     {
         @foreach (var report in Model)
         {
+            <table>
             if (report.ReportedCommentContent is null)
             {
-                <table>
-                    <tr><th>От пользователя</th><th>Обсуждение</th><th></th></tr>
-                    <tr><td>@report.UserNameReportedBy</td><td><a href="~/reports/@report.Id">перейти</a></td></tr>
-                </table>
+                <tr><th>От пользователя</th><th>Обсуждение</th><th></th></tr>
+                <tr><td>@report.UserNameReportedBy</td><td><a href="~/reports/@report.Id">перейти</a></td></tr>
             }
             else
             {
-                <table>
-                    <tr><th>От пользователя</th><th>Комментарий</th></tr>
-                    <tr><td>@report.UserNameReportedBy</td><td><a href="~/reports/@report.Id">перейти</a></td></tr>
-                </table>
+                <tr><th>От пользователя</th><th>Комментарий</th></tr>
+                <tr><td>@report.UserNameReportedBy</td><td><a href="~/reports/@report.Id">перейти</a></td></tr>
             }
+            </table>
         }
     }
     
