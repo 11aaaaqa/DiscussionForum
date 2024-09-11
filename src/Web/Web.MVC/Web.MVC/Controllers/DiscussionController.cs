@@ -103,9 +103,9 @@ namespace Web.MVC.Controllers
                     $"http://user-microservice-api:8080/api/profile/User/IsUserBannedByUserName/{User.Identity.Name}?banTypes[]={BanTypeConstants.GeneralBanType}&banTypes[]={BanTypeConstants.CommentBanType}";
                 var isUserBannedResponse = await httpClient.GetAsync(getLink);
                 if (!isUserBannedResponse.IsSuccessStatusCode) return View("ActionError");
-
+                
                 var isUserBanned = await isUserBannedResponse.Content.ReadFromJsonAsync<bool>();
-                if (isUserBanned) return View("CommentBanned");
+                if (isUserBanned) return View("CommentBanned", model: id);
 
                 var discussionId = id;
                 model.CreatedBy = User.Identity.Name;
