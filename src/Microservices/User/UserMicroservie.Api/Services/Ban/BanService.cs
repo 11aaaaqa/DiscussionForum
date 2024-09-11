@@ -37,6 +37,28 @@ namespace UserMicroservice.Api.Services.Ban
             return false;
         }
 
+        public async Task<bool> IsUserBannedAsync(string userName)
+        {
+            var user = await context.Users.SingleOrDefaultAsync(x => x.UserName == userName);
+            if (user is null) return false;
+
+            if (user.IsBanned)
+            {
+                if (DateTime.UtcNow > user.BannedUntil)
+                {
+                    user.IsBanned = false;
+                    user.BanType = "Not banned";
+                    user.BannedFor = "Not banned";
+                    user.BannedUntil = new DateTime();
+                    context.Users.Update(user);
+                    await context.SaveChangesAsync();
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
         public async Task BanUserAsync(Guid userId, string reason, string banType, uint forDays)
         {
             var user = await context.Users.SingleOrDefaultAsync(x => x.Id == userId);
