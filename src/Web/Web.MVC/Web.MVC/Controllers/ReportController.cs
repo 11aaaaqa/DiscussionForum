@@ -44,6 +44,14 @@ namespace Web.MVC.Controllers
             {
                 using HttpClient httpClient = httpClientFactory.CreateClient();
 
+                var getLink =
+                    $"http://user-microservice-api:8080/api/profile/User/IsUserBannedByUserName/{User.Identity.Name}?banTypes[]={BanTypeConstants.GeneralBanType}&banTypes[]={BanTypeConstants.ReportBanType}";
+                var isUserBannedResponse = await httpClient.GetAsync(getLink);
+                if (!isUserBannedResponse.IsSuccessStatusCode) return View("ActionError");
+
+                var isUserBanned = await isUserBannedResponse.Content.ReadFromJsonAsync<bool>();
+                if (isUserBanned) return View("ReportBanned");
+
                 var userResponse = await httpClient.GetAsync(
                     $"http://user-microservice-api:8080/api/profile/User/GetUserByUserName/{model.ReportedUserName}");
                 if (!userResponse.IsSuccessStatusCode) return View("ActionError");

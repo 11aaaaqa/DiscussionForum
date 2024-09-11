@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.MVC.Constants;
 using Web.MVC.DTOs.Comment;
 using Web.MVC.DTOs.Discussion;
 using Web.MVC.Models.ApiResponses;
@@ -33,6 +34,15 @@ namespace Web.MVC.Controllers
             if (ModelState.IsValid)
             {
                 using var httpClient = httpClientFactory.CreateClient();
+
+                var getLink =
+                    $"http://user-microservice-api:8080/api/profile/User/IsUserBannedByUserName/{User.Identity.Name}?banTypes[]={BanTypeConstants.GeneralBanType}&banTypes[]={BanTypeConstants.DiscussionBanType}";
+                var isUserBannedResponse = await httpClient.GetAsync(getLink);
+                if (!isUserBannedResponse.IsSuccessStatusCode) return View("ActionError");
+
+                var isUserBanned = await isUserBannedResponse.Content.ReadFromJsonAsync<bool>();
+                if (isUserBanned) return View("DiscussionBanned");
+
                 using StringContent jsonContent = new
                     (JsonSerializer.Serialize(new { model.Title, model.Content, CreatedBy = User.Identity.Name}), Encoding.UTF8, "application/json");
 
@@ -87,9 +97,18 @@ namespace Web.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
+                using var httpClient = httpClientFactory.CreateClient();
+
+                var getLink =
+                    $"http://user-microservice-api:8080/api/profile/User/IsUserBannedByUserName/{User.Identity.Name}?banTypes[]={BanTypeConstants.GeneralBanType}&banTypes[]={BanTypeConstants.CommentBanType}";
+                var isUserBannedResponse = await httpClient.GetAsync(getLink);
+                if (!isUserBannedResponse.IsSuccessStatusCode) return View("ActionError");
+
+                var isUserBanned = await isUserBannedResponse.Content.ReadFromJsonAsync<bool>();
+                if (isUserBanned) return View("CommentBanned");
+
                 var discussionId = id;
                 model.CreatedBy = User.Identity.Name;
-                using var httpClient = httpClientFactory.CreateClient();
                 using StringContent jsonContent = new(JsonSerializer.Serialize(new
                 {
                     model.CreatedBy,
