@@ -13,6 +13,10 @@
         <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@Context.Request.Path" asp-route-userName="@Model.UserNameReportedBy">
             отстранить пожаловавшегося пользователя
         </a>
+        <form method="post" asp-controller="Discussion" asp-action="DeleteDiscussion" asp-route-discussionId="@Model.ReportedDiscussionId"
+              asp-route-returnUrl="@Context.Request.Path">
+            <input type="submit" value="удалить обсуждение"/>
+        </form>
         <form method="post" asp-controller="Report" asp-action="DeleteReport" asp-route-reportId="@Model.Id">
             <input type="submit" value="удалить жалобу" />
         </form>
@@ -28,6 +32,10 @@
         <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@Context.Request.Path" asp-route-userName="@Model.UserNameReportedBy">
             отстранить пожаловавшегося пользователя
         </a>
+        <form method="post" asp-controller="Comment" asp-action="DeleteComment" asp-route-returnUrl="@Context.Request.Path"
+              asp-route-id="@Model.ReportedCommentId">
+            <input type="submit" value="удалить комментарий" />
+        </form>
         <form method="post" asp-controller="Report" asp-action="DeleteReport" asp-route-reportId="@Model.Id">
             <input type="submit" value="удалить жалобу"/>
         </form>
