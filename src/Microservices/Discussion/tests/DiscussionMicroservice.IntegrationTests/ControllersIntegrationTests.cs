@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using DiscussionMicroservice.Api.DTOs;
 using DiscussionMicroservice.Api.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DiscussionMicroservice.IntegrationTests
 {
@@ -124,6 +125,26 @@ namespace DiscussionMicroservice.IntegrationTests
             var discussion = await resp2.Content.ReadFromJsonAsync<Discussion>();
             Assert.NotNull(discussion);
             Assert.Equal(id, discussion.Id);
+        }
+
+        [Fact]
+        public async Task DeleteDiscussionByIdAsync_ReturnsOk()
+        {
+            var discussionId = new Guid("5a38b400-8be8-466c-a0ed-62249bc7811b");
+
+            var response = await client.DeleteAsync($"api/Discussion/DeleteDiscussionById/{discussionId}");
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async Task DeleteDiscussionByIdAsync_ReturnsBadRequest()
+        {
+            var discussionId = Guid.NewGuid();
+
+            var response = await client.DeleteAsync($"api/Discussion/DeleteDiscussionById/{discussionId}");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
     }
 }
