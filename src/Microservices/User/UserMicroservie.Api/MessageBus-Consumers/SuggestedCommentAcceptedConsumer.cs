@@ -20,6 +20,7 @@ namespace UserMicroservice.Api.MessageBus_Consumers
             {
                 user.SuggestedCommentsIds.Remove(context.Message.AcceptedCommentId);
                 user.CommentsIds.Add(context.Message.AcceptedCommentId);
+                user.Answers += 1;
                 databaseContext.Users.Update(user);
                 await databaseContext.SaveChangesAsync();
             }
