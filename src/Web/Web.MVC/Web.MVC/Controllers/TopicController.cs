@@ -82,14 +82,10 @@ namespace Web.MVC.Controllers
                     "http://topic-microservice-api:8080/api/SuggestTopic/SuggestTopic",
                     jsonContent);
                 if (response.StatusCode == HttpStatusCode.OK)
-                {
                     return View("Thanks");
-                }
-                else
-                {
-                    var error = await response.Content.ReadFromJsonAsync<ErrorResponse>();
-                    ModelState.AddModelError(string.Empty, error.Reason);
-                }
+
+                var error = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+                ModelState.AddModelError(string.Empty, error.Reason);
             }
             return View(model);
         }
