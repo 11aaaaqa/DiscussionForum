@@ -1,4 +1,7 @@
-﻿<div class="text-center">
+﻿@model Guid
+
+<div class="text-center">
     <h3>Вы не можете прокомментировать, так как Вы были отстранены, причину отстранения можно посмотреть в профиле</h3>
-    <a asp-action="Index" asp-controller="Home">на главную</a>
+    <a href="~/discussions/@Model">к обсуждению</a>
+    <br/><a asp-action="Index" asp-controller="Home">на главную</a>
 </div>
