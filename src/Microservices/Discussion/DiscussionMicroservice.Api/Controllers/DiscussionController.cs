@@ -30,5 +30,18 @@ namespace DiscussionMicroservice.Api.Controllers
             
             return Ok(discussion);
         }
+
+        [Route("DeleteDiscussionById/{discussionId}")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteDiscussionByIdAsync(Guid discussionId)
+        {
+            var discussion = await context.Discussions.SingleOrDefaultAsync(x => x.Id == discussionId);
+            if (discussion is null)
+                return BadRequest();
+
+            context.Remove(discussion);
+            await context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }
