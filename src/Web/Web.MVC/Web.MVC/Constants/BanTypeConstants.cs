@@ -6,5 +6,6 @@
         public const string CommentBanType = "Комментарий";
         public const string DiscussionBanType = "Обсуждение";
         public const string ReportBanType = "Жалоба";
+        public const string TopicBanType = "Тема";
     }
 }
