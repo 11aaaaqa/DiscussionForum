@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.MVC.Constants;
 using Web.MVC.DTOs.Topic;
 using Web.MVC.Models;
 using Web.MVC.Models.ApiResponses;
@@ -66,6 +67,15 @@ namespace Web.MVC.Controllers
             {
                 using var httpClient = httpClientFactory.CreateClient();
 
+                var getLink =
+                    $"http://user-microservice-api:8080/api/profile/User/IsUserBannedByBanTypeByUserName/{User.Identity.Name}?banTypes[]={BanTypeConstants.GeneralBanType}&banTypes[]={BanTypeConstants.TopicBanType}";
+
+                var isUserBannedResponse = await httpClient.GetAsync(getLink);
+                if (!isUserBannedResponse.IsSuccessStatusCode) return View("ActionError");
+                
+                var isUserBanned = await isUserBannedResponse.Content.ReadFromJsonAsync<bool>();
+                if (isUserBanned) return View("TopicBanned");
+                
                 using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
 
                 var response = await httpClient.PostAsync(
