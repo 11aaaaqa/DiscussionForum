@@ -385,5 +385,26 @@ namespace UserMicroservice.UnitTests
             Assert.IsType<OkResult>(result);
             mock.VerifyAll();
         }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task IsUserBannedUserNameOverload_ReturnsOk(bool isBanned)
+        {
+            string userName = It.IsAny<string>();
+            var mock = new Mock<IBanService<User>>();
+            mock.Setup(x => x.IsUserBannedAsync(userName)).ReturnsAsync(isBanned);
+            var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
+                new Mock<IChangeUserName>().Object);
+
+            var result = await controller.IsUserBannedAsync(userName);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            Assert.Equal(200, methodResult.StatusCode);
+            var isUserBannedResult = Assert.IsType<bool>(methodResult.Value);
+            Assert.Equal(isBanned, isUserBannedResult);
+            mock.VerifyAll();
+        }
     }
 }
