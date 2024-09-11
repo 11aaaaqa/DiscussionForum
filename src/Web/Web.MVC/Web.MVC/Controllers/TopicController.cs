@@ -68,7 +68,7 @@ namespace Web.MVC.Controllers
                 using var httpClient = httpClientFactory.CreateClient();
 
                 var getLink =
-                    $"http://user-microservice-api:8080/api/profile/User/IsUserBannedByBanTypeByUserName/{User.Identity.Name}?banTypes[]={BanTypeConstants.GeneralBanType}&banTypes[]={BanTypeConstants.TopicBanType}";
+                    $"http://user-microservice-api:8080/api/profile/User/IsUserBannedByUserName/{User.Identity.Name}?banTypes[]={BanTypeConstants.GeneralBanType}&banTypes[]={BanTypeConstants.TopicBanType}";
 
                 var isUserBannedResponse = await httpClient.GetAsync(getLink);
                 if (!isUserBannedResponse.IsSuccessStatusCode) return View("ActionError");
