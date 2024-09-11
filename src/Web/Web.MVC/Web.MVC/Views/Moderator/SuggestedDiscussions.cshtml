@@ -1,12 +1,9 @@
 ﻿@model List<Web.MVC.Models.ApiResponses.DiscussionResponse>
 
 <div class="text-center">
-    <h3>Предложенные темы</h3>
-    <table>
-        <tr><th>Название</th><th>Принять</th><th>Отклонить</th></tr>
-        @foreach (var suggestedDiscussion in Model)
-        {
-            <a href="~/SuggestedDiscussions/@suggestedDiscussion.Id">@suggestedDiscussion.Title</a>
-        }
-    </table>
+    <h3>Предложенные обсуждения</h3>
+    @foreach (var suggestedDiscussion in Model)
+    {
+        <a href="~/SuggestedDiscussions/@suggestedDiscussion.Id">@suggestedDiscussion.Title</a>
+    }
 </div>
