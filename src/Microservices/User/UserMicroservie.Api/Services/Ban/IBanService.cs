@@ -2,8 +2,6 @@
 {
     public interface IBanService<TUser> where TUser : class
     {
-        Task<bool> IsUserBannedAsync(Guid userId);
-        Task<bool> IsUserBannedAsync(string userName);
         Task<bool> IsUserBannedAsync(Guid userId, params string[] banTypes);
         Task<bool> IsUserBannedAsync(string userName, params string[] banTypes);
         Task BanUserAsync(Guid userId, string reason, string banType, uint forDays);

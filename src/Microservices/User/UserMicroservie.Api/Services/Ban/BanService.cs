@@ -15,49 +15,6 @@ namespace UserMicroservice.Api.Services.Ban
             this.context = context;
             this.publishEndpoint = publishEndpoint;
         }
-        public async Task<bool> IsUserBannedAsync(Guid userId)
-        {
-            var user = await context.Users.SingleOrDefaultAsync(x => x.Id == userId);
-            if (user is null) return false;
-
-            if (user.IsBanned)
-            {
-                if (DateTime.UtcNow > user.BannedUntil)
-                {
-                    user.IsBanned = false;
-                    user.BanType = "Not banned";
-                    user.BannedFor = "Not banned";
-                    user.BannedUntil = new DateTime();
-                    context.Users.Update(user);
-                    await context.SaveChangesAsync();
-                    return false;
-                }
-                return true;
-            }
-            return false;
-        }
-
-        public async Task<bool> IsUserBannedAsync(string userName)
-        {
-            var user = await context.Users.SingleOrDefaultAsync(x => x.UserName == userName);
-            if (user is null) return false;
-
-            if (user.IsBanned)
-            {
-                if (DateTime.UtcNow > user.BannedUntil)
-                {
-                    user.IsBanned = false;
-                    user.BanType = "Not banned";
-                    user.BannedFor = "Not banned";
-                    user.BannedUntil = new DateTime();
-                    context.Users.Update(user);
-                    await context.SaveChangesAsync();
-                    return false;
-                }
-                return true;
-            }
-            return false;
-        }
 
         public async Task<bool> IsUserBannedAsync(Guid userId, params string[] banTypes)
         {
