@@ -59,6 +59,58 @@ namespace UserMicroservice.Api.Services.Ban
             return false;
         }
 
+        public async Task<bool> IsUserBannedAsync(Guid userId, params string[] banTypes)
+        {
+            var user = await context.Users.SingleOrDefaultAsync(x => x.Id == userId);
+            if (user is null) return false;
+            if (!user.IsBanned) return false;
+
+            if (DateTime.UtcNow > user.BannedUntil)
+            {
+                user.IsBanned = false;
+                user.BanType = "Not banned";
+                user.BannedFor = "Not banned";
+                user.BannedUntil = new DateTime();
+                context.Users.Update(user);
+                await context.SaveChangesAsync();
+                return false;
+            }
+
+            foreach (var banType in banTypes)
+            {
+                if (user.BanType == banType)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> IsUserBannedAsync(string userName, params string[] banTypes)
+        {
+            var user = await context.Users.SingleOrDefaultAsync(x => x.UserName == userName);
+            if (user is null) return false;
+            if (!user.IsBanned) return false;
+
+            if (DateTime.UtcNow > user.BannedUntil)
+            {
+                user.IsBanned = false;
+                user.BanType = "Not banned";
+                user.BannedFor = "Not banned";
+                user.BannedUntil = new DateTime();
+                context.Users.Update(user);
+                await context.SaveChangesAsync();
+                return false;
+            }
+
+            foreach (var banType in banTypes)
+            {
+                if (user.BanType == banType)
+                    return true;
+            }
+
+            return false;
+        }
+
         public async Task BanUserAsync(Guid userId, string reason, string banType, uint forDays)
         {
             var user = await context.Users.SingleOrDefaultAsync(x => x.Id == userId);
