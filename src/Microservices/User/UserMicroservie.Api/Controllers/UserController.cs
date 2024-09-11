@@ -91,6 +91,16 @@ namespace UserMicroservice.Api.Controllers
         public async Task<IActionResult> IsUserBannedAsync(string userName) =>
             Ok(await banService.IsUserBannedAsync(userName));
 
+        [Route("IsUserBannedByBanTypeByUserName/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> IsUserBannedAsync(string userName, [FromQuery(Name = "banTypes[]")]params string[] banTypes) =>
+            Ok(await banService.IsUserBannedAsync(userName, banTypes));
+
+        [Route("IsUserBannedByBanTypeByUserId/{userId}")]
+        [HttpGet]
+        public async Task<IActionResult> IsUserBannedAsync(Guid userId, [FromQuery(Name = "banTypes[]")] params string[] banTypes) =>
+            Ok(await banService.IsUserBannedAsync(userId, banTypes));
+
         [Route("BanUserByUserId/{userId}")]
         [HttpPost]
         public async Task<IActionResult> BanUserByIdAsync(Guid userId, [FromBody] BanDto model)
