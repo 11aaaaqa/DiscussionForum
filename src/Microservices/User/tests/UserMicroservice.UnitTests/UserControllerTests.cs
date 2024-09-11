@@ -406,5 +406,49 @@ namespace UserMicroservice.UnitTests
             Assert.Equal(isBanned, isUserBannedResult);
             mock.VerifyAll();
         }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task IsUserBannedAsyncByBanTypeOverloadByUserName_ReturnsOk(bool isBanned)
+        {
+            string[] banTypes = It.IsAny<string[]>();
+            var userName = It.IsAny<string>();
+            var mock = new Mock<IBanService<User>>();
+            mock.Setup(x => x.IsUserBannedAsync(userName, banTypes)).ReturnsAsync(isBanned);
+            var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
+                new Mock<IChangeUserName>().Object);
+
+            var result = await controller.IsUserBannedAsync(userName, banTypes);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            Assert.Equal(200, methodResult.StatusCode);
+            var isUserBannedResult = Assert.IsType<bool>(methodResult.Value);
+            Assert.Equal(isBanned, isUserBannedResult);
+            mock.VerifyAll();
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task IsUserBannedAsyncByBanTypeOverloadByUserId_ReturnsOk(bool isBanned)
+        {
+            string[] banTypes = It.IsAny<string[]>();
+            var userId = It.IsAny<Guid>();
+            var mock = new Mock<IBanService<User>>();
+            mock.Setup(x => x.IsUserBannedAsync(userId, banTypes)).ReturnsAsync(isBanned);
+            var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
+                new Mock<IChangeUserName>().Object);
+
+            var result = await controller.IsUserBannedAsync(userId, banTypes);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            Assert.Equal(200, methodResult.StatusCode);
+            var isUserBannedResult = Assert.IsType<bool>(methodResult.Value);
+            Assert.Equal(isBanned, isUserBannedResult);
+            mock.VerifyAll();
+        }
     }
 }
