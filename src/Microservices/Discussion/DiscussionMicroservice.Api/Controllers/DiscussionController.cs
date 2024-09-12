@@ -2,6 +2,7 @@
 using MassTransit;
 using MassTransit.Transports.Fabric;
 using MessageBus.Messages;
+using MessageBus.Messages.BanMessages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,8 +50,9 @@ namespace DiscussionMicroservice.Api.Controllers
 
             await publishEndpoint.Publish<IDiscussionDeleted>(new
             {
-                discussion.TopicName, discussionId
+                discussion.TopicName
             });
+            await publishEndpoint.Publish<DiscussionDeleted>(new { DiscussionId = discussionId });
 
             return Ok();
         }
