@@ -49,7 +49,7 @@ namespace DiscussionMicroservice.Api.Controllers
 
             await publishEndpoint.Publish<IDiscussionDeleted>(new
             {
-                discussion.TopicName
+                discussion.TopicName, discussionId
             });
 
             return Ok();
