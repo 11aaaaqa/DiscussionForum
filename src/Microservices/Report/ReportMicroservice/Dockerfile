@@ -7,6 +7,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Microservices/Report/ReportMicroservice/ReportMicroservice.Api.csproj", "src/Microservices/Report/ReportMicroservice/"]
+COPY ["src/Building-blocks/MessageBus/MessageBus.csproj", "src/Building-blocks/MessageBus/"]
 RUN dotnet restore "./src/Microservices/Report/ReportMicroservice/./ReportMicroservice.Api.csproj"
 COPY . .
 WORKDIR "/src/src/Microservices/Report/ReportMicroservice"
