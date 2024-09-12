@@ -1,4 +1,7 @@
 ﻿using DiscussionMicroservice.Api.Database;
+using MassTransit;
+using MassTransit.Transports.Fabric;
+using MessageBus.Messages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +12,12 @@ namespace DiscussionMicroservice.Api.Controllers
     public class DiscussionController : ControllerBase
     {
         private readonly ApplicationDbContext context;
+        private readonly IPublishEndpoint publishEndpoint;
 
-        public DiscussionController(ApplicationDbContext context)
+        public DiscussionController(ApplicationDbContext context, IPublishEndpoint publishEndpoint)
         {
             this.context = context;
+            this.publishEndpoint = publishEndpoint;
         }
 
         [Route("GetDiscussionsByTopicName")]
@@ -41,6 +46,12 @@ namespace DiscussionMicroservice.Api.Controllers
 
             context.Remove(discussion);
             await context.SaveChangesAsync();
+
+            await publishEndpoint.Publish<IDiscussionDeleted>(new
+            {
+                discussion.TopicName
+            });
+
             return Ok();
         }
     }
