@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ReportMicroservice.Api.Database;
 using ReportMicroservice.Api.Models;
 using ReportMicroservice.Api.Services;
+using ReportMicroservice.Api.Services.MessageBusConsumers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
+    x.AddConsumer<DiscussionDeletedConsumer>();
     x.UsingRabbitMq((context, config) =>
     {
         config.Host(
