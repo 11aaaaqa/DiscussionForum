@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using ReportMicroservice.Api.Database;
 using ReportMicroservice.Api.Models;
@@ -10,6 +11,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddMassTransit(x =>
+{
+    x.SetKebabCaseEndpointNameFormatter();
+    x.UsingRabbitMq((context, config) =>
+    {
+        config.Host(
+            $"amqp://{builder.Configuration["RabbitMQ:User"]}:{builder.Configuration["RabbitMQ:Password"]}@{builder.Configuration["RabbitMQ:HostName"]}");
+        config.ConfigureEndpoints(context);
+    });
+});
 
 builder.Services.AddTransient<IReportService<Report>, ReportService>();
 
