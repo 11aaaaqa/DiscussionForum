@@ -14,7 +14,7 @@
             отстранить пожаловавшегося пользователя
         </a>
         <form method="post" asp-controller="Discussion" asp-action="DeleteDiscussion" asp-route-discussionId="@Model.ReportedDiscussionId"
-              asp-route-returnUrl="@Context.Request.Path">
+              asp-route-reportType="@Model.ReportType">
             <input type="submit" value="удалить обсуждение"/>
         </form>
         <form method="post" asp-controller="Report" asp-action="DeleteReport" asp-route-reportId="@Model.Id">
@@ -33,7 +33,7 @@
             отстранить пожаловавшегося пользователя
         </a>
         <form method="post" asp-controller="Comment" asp-action="DeleteComment" asp-route-returnUrl="@Context.Request.Path"
-              asp-route-id="@Model.ReportedCommentId">
+              asp-route-reportType="@Model.ReportType">
             <input type="submit" value="удалить комментарий" />
         </form>
         <form method="post" asp-controller="Report" asp-action="DeleteReport" asp-route-reportId="@Model.Id">
