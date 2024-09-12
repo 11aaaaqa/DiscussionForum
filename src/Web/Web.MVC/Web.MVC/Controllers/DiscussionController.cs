@@ -128,7 +128,7 @@ namespace Web.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteDiscussion(Guid discussionId, string returnUrl)
+        public async Task<IActionResult> DeleteDiscussion(Guid discussionId, string? returnUrl, string? reportType)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.DeleteAsync(
@@ -137,6 +137,9 @@ namespace Web.MVC.Controllers
 
             if (!string.IsNullOrEmpty(returnUrl))
                 return LocalRedirect(returnUrl);
+
+            if (!string.IsNullOrEmpty(reportType))
+                return RedirectToAction("Reports", "Report", new {reportType});
 
             return RedirectToAction("Index", "Home");
         }
