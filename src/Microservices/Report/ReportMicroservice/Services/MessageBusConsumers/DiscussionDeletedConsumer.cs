@@ -8,6 +8,7 @@ namespace ReportMicroservice.Api.Services.MessageBusConsumers
     public class DiscussionDeletedConsumer : IConsumer<DiscussionDeleted>
     {
         private readonly ApplicationDbContext databaseContext;
+
         public DiscussionDeletedConsumer(ApplicationDbContext databaseContext)
         {
             this.databaseContext = databaseContext;
