@@ -48,10 +48,7 @@ namespace DiscussionMicroservice.Api.Controllers
             context.Remove(discussion);
             await context.SaveChangesAsync();
 
-            await publishEndpoint.Publish<IDiscussionDeleted>(new
-            {
-                discussion.TopicName
-            });
+            await publishEndpoint.Publish<IDiscussionDeleted>(new { discussion.TopicName });
             await publishEndpoint.Publish<DiscussionDeleted>(new { DiscussionId = discussionId });
 
             return Ok();
