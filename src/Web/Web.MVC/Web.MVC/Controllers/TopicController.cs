@@ -75,7 +75,8 @@ namespace Web.MVC.Controllers
                 
                 var isUserBanned = await isUserBannedResponse.Content.ReadFromJsonAsync<bool>();
                 if (isUserBanned) return View("TopicBanned");
-                
+
+                model.SuggestedBy = User.Identity.Name;
                 using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
 
                 var response = await httpClient.PostAsync(
