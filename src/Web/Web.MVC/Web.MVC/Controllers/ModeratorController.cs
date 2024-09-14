@@ -254,8 +254,7 @@ namespace Web.MVC.Controllers
                         break;
                     }
                 }
-                
-                
+
                 if (!string.IsNullOrEmpty(returnUrl))
                     return LocalRedirect(returnUrl);
 
