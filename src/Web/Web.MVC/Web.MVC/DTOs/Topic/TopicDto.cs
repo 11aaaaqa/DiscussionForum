@@ -7,5 +7,6 @@ namespace Web.MVC.DTOs.Topic
         [Required]
         [Display(Name = "Название")]
         public string Name { get; set; }
+        public string SuggestedBy { get; set; } = string.Empty;
     }
 }
