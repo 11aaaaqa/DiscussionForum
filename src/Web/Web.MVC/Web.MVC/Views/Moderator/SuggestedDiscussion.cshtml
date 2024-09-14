@@ -1,7 +1,14 @@
-﻿@model Web.MVC.Models.ApiResponses.DiscussionResponse
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Web.MVC.Constants
+@model Web.MVC.Models.ApiResponses.DiscussionResponse
 
 <h3>@Model.Title</h3>
 <p>@Model.Content</p>
 
 <form method="post" asp-controller="Moderator" asp-action="AcceptSuggestedDiscussion" asp-route-id="@Model.Id"><input type="submit" value="принять"/></form>
 <form method="post" asp-controller="Moderator" asp-action="RejectSuggestedDiscussion" asp-route-id="@Model.Id"><input type="submit" value="отклонить" /></form>
+<a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion"
+   asp-route-returnUrl="/Moderator/SuggestedDiscussions" asp-route-userName="@Model.CreatedBy"
+   asp-route-suggestionDeleteId="@Model.Id" asp-route-suggestionDeleteType="@BanTypeConstants.DiscussionBanType">
+    остранить и отклонить предложение
+</a>
