@@ -5,19 +5,25 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Web.MVC.Constants;
 using Web.MVC.DTOs.Moderator;
 using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ApiResponses.CommentsResponses;
+using Web.MVC.Services;
 
 namespace Web.MVC.Controllers
 {
     public class ModeratorController : Controller
     {
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly IReportService reportService;
+        private readonly ISuggestionService suggestionService;
 
-        public ModeratorController(IHttpClientFactory httpClientFactory)
+        public ModeratorController(IHttpClientFactory httpClientFactory, IReportService reportService, ISuggestionService suggestionService)
         {
             this.httpClientFactory = httpClientFactory;
+            this.reportService = reportService;
+            this.suggestionService = suggestionService;
         }
 
         [HttpGet]
@@ -172,6 +178,84 @@ namespace Web.MVC.Controllers
                     if (!response.IsSuccessStatusCode) return View("ActionError");
                 }
 
+                if (!string.IsNullOrEmpty(returnUrl))
+                    return LocalRedirect(returnUrl);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult BanUserAndDeleteSuggestion()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BanUserAndDeleteSuggestion(string? userName, Guid? userId, BanUserDto model, string returnUrl, string? banType,
+            Guid suggestionDeleteId, string suggestionDeleteType)
+        {
+            if (ModelState.IsValid)
+            {
+                if (string.IsNullOrEmpty(banType))
+                {
+                    ModelState.AddModelError(string.Empty, "Выберите тип бана");
+                    return View(model);
+                }
+
+                if (userName is null && userId is null)
+                    return View("ActionError");
+
+                model.BanType = banType;
+                using HttpClient httpClient = httpClientFactory.CreateClient();
+
+                if (userId is null)
+                {
+                    using StringContent jsonContent =
+                        new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+                    var response = await httpClient.PostAsync(
+                        $"http://user-microservice-api:8080/api/profile/User/BanUserByUserName/{userName}", jsonContent);
+                    if (!response.IsSuccessStatusCode) return View("ActionError");
+                }
+                else
+                {
+                    using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+                    var response = await httpClient.PostAsync(
+                        $"http://user-microservice-api:8080/api/profile/User/BanUserByUserId/{userId}", jsonContent);
+                    if (!response.IsSuccessStatusCode) return View("ActionError");
+                }
+
+                switch (suggestionDeleteType)
+                {
+                    case BanTypeConstants.TopicBanType:
+                    {
+                        var isDeleted = await suggestionService.DeleteSuggestedTopic(suggestionDeleteId);
+                        if (!isDeleted) return View("ActionError");
+                        break;
+                    }
+                    case BanTypeConstants.CommentBanType:
+                    {
+                        var isDeleted = await suggestionService.DeleteSuggestedComment(suggestionDeleteId);
+                        if (!isDeleted) return View("ActionError");
+                        break;
+                    }
+                    case BanTypeConstants.DiscussionBanType:
+                    {
+                        var isDeleted = await suggestionService.DeleteSuggestedDiscussion(suggestionDeleteId);
+                        if (!isDeleted) return View("ActionError");
+                        break;
+                    }
+                    case BanTypeConstants.ReportBanType:
+                    {
+                        var isDeleted = await reportService.DeleteReport(suggestionDeleteId);
+                        if (!isDeleted) return View("ActionError");
+                        break;
+                    }
+                }
+                
+                
                 if (!string.IsNullOrEmpty(returnUrl))
                     return LocalRedirect(returnUrl);
 
