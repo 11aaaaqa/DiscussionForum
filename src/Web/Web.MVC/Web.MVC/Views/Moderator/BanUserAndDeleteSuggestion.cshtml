@@ -1,4 +1,5 @@
-﻿@model Web.MVC.DTOs.Moderator.BanUserDto
+﻿@using Web.MVC.Constants
+@model Web.MVC.DTOs.Moderator.BanUserDto
 
 <h3>Отстранить пользователя</h3>
 <form method="post">
@@ -16,19 +17,19 @@
     <div>
         <p>Тип бана</p>
         <p>
-            <input type="radio" value="Общий" name="banType" /> Общий
+            <input type="radio" value="@BanTypeConstants.GeneralBanType" name="banType" /> Общий
         </p>
         <p>
-            <input type="radio" value="Комментарий" name="banType" /> Комментарий
+            <input type="radio" value="@BanTypeConstants.CommentBanType" name="banType" /> Комментарий
         </p>
         <p>
-            <input type="radio" value="Обсуждение" name="banType" /> Обсуждение
+            <input type="radio" value="@BanTypeConstants.DiscussionBanType" name="banType" /> Обсуждение
         </p>
         <p>
-            <input type="radio" value="Жалоба" name="banType" /> Жалоба
+            <input type="radio" value="@BanTypeConstants.ReportBanType" name="banType" /> Жалоба
         </p>
         <p>
-            <input type="radio" value="Тема" name="banType" /> Тема
+            <input type="radio" value="@BanTypeConstants.TopicBanType" name="banType" /> Тема
         </p>
     </div>
     <input type="submit" value="отстранить" />
