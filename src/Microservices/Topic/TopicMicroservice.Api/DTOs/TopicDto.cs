@@ -3,5 +3,6 @@
     public class TopicDto
     {
         public string Name { get; set; }
+        public string SuggestedBy { get; set; }
     }
 }
