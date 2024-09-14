@@ -115,7 +115,7 @@ namespace Web.MVC.Controllers
                     $"http://report-microservice-api:8080/api/Report/DeleteReportById/{reportId}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
-            return RedirectToAction("Reports", "Report", new {reportType = "Обсуждение"});
+            return RedirectToAction("Reports", "Report", new {reportType = ReportTypeConstants.DiscussionType});
         }
     }
 }
