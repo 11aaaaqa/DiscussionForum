@@ -37,7 +37,8 @@ namespace TopicMicroservice.Api.Controllers
                 {
                     Id = Guid.NewGuid(),
                     Name = model.Name,
-                    PostsCount = 0
+                    PostsCount = 0, 
+                    SuggestedBy = model.SuggestedBy
                 });
                 await context.SaveChangesAsync();
                 logger.LogInformation("Topic was successfully suggested");
