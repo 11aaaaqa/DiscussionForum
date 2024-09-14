@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Web.MVC.Middlewares;
+using Web.MVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,8 +28,10 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
-builder.Services.AddHttpClient();
+builder.Services.AddTransient<IReportService, SuggestionsService>();
+builder.Services.AddTransient<ISuggestionService, SuggestionsService>();
 
+builder.Services.AddHttpClient();
 builder.Services.AddCors();
 
 var app = builder.Build();
