@@ -4,6 +4,7 @@
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string SuggestedBy { get; set; }
         public uint PostsCount { get; set; }
     }
 }
