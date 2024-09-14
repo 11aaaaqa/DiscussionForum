@@ -1,15 +1,17 @@
-﻿@model List<Web.MVC.Models.ApiResponses.TopicResponse>
+﻿@using Web.MVC.Constants
+@model List<Web.MVC.Models.ApiResponses.TopicResponse>
 
 <div class="text-center">
     <h3>Предложенные темы</h3>
     <table>
-        <tr><th>Название</th><th>Принять</th><th>Отклонить</th></tr> 
+        <tr><th>Название</th><th>Принять</th><th>Отклонить</th><th>Отстранить предлагающего</th></tr> 
         @foreach (var suggestedTopic in Model)
         {
             <tr>
                 <td>@suggestedTopic.Name</td>
                 <td><form method="post" asp-action="AcceptSuggestedTopic" asp-controller="Moderator" asp-route-id=@suggestedTopic.Id><input type="submit" value="принять"/></form></td>
                 <td><form method="post" asp-controller="Moderator" asp-action="RejectSuggestedTopic" asp-route-id=@suggestedTopic.Id><input type="submit" value="отклонить"/></form></td>
+                <td><a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion" asp-route-returnUrl="@Context.Request.Path" asp-route-userName="@suggestedTopic.SuggestedBy" asp-route-suggestionDeleteId="@suggestedTopic.Id" asp-route-suggestionDeleteType="@BanTypeConstants.TopicBanType">остранить и отклонить предложение</a></td>
             </tr>
         }
     </table>
