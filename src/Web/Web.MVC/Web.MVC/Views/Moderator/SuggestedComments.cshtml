@@ -3,6 +3,7 @@
 @model List<Web.MVC.Models.ApiResponses.CommentsResponses.SuggestedCommentResponse>
 
 <div class="text-center">
+    <h3>Предложенные комментарии</h3>
     @foreach (var suggestedComment in Model)
     {
         <p>@suggestedComment.Content</p>
@@ -10,7 +11,7 @@
             <input type="submit" value="принять"/>
         </form>
         <form method="post" asp-controller="Moderator" asp-action="RejectSuggestedComment" asp-route-id="@suggestedComment.Id">
-            <input type="submit" value="отклонить" />
+            <input type="submit" value="отклонить"/>
         </form>
         <a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion"
            asp-route-returnUrl="@Context.Request.Path" asp-route-userName="@suggestedComment.CreatedBy"
