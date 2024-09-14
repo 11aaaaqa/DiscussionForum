@@ -18,7 +18,7 @@ namespace TopicMicroservice.IntegrationTests
         [Fact]
         public async Task SuggestTopicAsync_ReturnsBadRequest()
         {
-            var model = new TopicDto { Name = "TestName1" };
+            var model = new TopicDto { Name = "TestName1", SuggestedBy = "CorrectSuggestedBy" };
             using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
 
             var response = await client.PostAsync("api/SuggestTopic/SuggestTopic", jsonContent);
@@ -31,7 +31,7 @@ namespace TopicMicroservice.IntegrationTests
         [Fact]
         public async Task SuggestTopicAsync_ReturnsOk()
         {
-            var model = new TopicDto { Name = "CorrectTopicName" };
+            var model = new TopicDto { Name = "CorrectTopicName", SuggestedBy = "CorrectSuggestedBy"};
             using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
 
             var response = await client.PostAsync("api/SuggestTopic/SuggestTopic", jsonContent);
