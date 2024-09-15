@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Web.MVC.Constants
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -26,10 +27,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Report" asp-action="Reports" asp-route-reportType="Обсуждение">DiscussionReports</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Report" asp-action="Reports" asp-route-reportType="@ReportTypeConstants.DiscussionType">DiscussionReports</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Report" asp-action="Reports" asp-route-reportType="Комментарий">CommentsReports</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Report" asp-action="Reports" asp-route-reportType="@ReportTypeConstants.CommentType">CommentsReports</a>
                         </li>
                     </ul>
                 </div>
