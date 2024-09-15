@@ -5,16 +5,18 @@ namespace Web.MVC.DTOs.Auth
     public class RegisterDto
     {
         [Required(ErrorMessage = "Поле \"Эл. почта\" обязательно")]
+        [StringLength(80, ErrorMessage = "Максимальное количество символов почты превышено")]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Эл. почта")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Поле \"Имя пользователя\" обязательно")]
+        [StringLength(30, ErrorMessage = "Максимальная длина имени пользователя - 30 символов")]
         [Display(Name = "Имя пользователя")]
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Поле \"Пароль\" обязательно")]
-        [StringLength(int.MaxValue, ErrorMessage = "Пароль должен содержать как минимум 8 символов", MinimumLength = 8)]
+        [StringLength(40, ErrorMessage = "Пароль должен содержать как минимум 8 символов", MinimumLength = 8)]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
         public string Password { get; set; }

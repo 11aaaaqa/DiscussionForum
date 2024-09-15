@@ -7,12 +7,13 @@ namespace Web.MVC.DTOs.ResetPassword
         [Required]
         [Display(Name = "Новый пароль")]
         [DataType(DataType.Password)]
-        [StringLength(int.MaxValue, ErrorMessage = "Пароль должен содержать как минимум 8 символов", MinimumLength = 8)]
+        [StringLength(40, ErrorMessage = "Пароль должен содержать как минимум 8 символов", MinimumLength = 8)]
         public string Password { get; set; }
 
         [Required]
         [Display(Name = "Подтвердите пароль")]
         [DataType(DataType.Password)]
+        [StringLength(40, ErrorMessage = "Пароль должен содержать как минимум 8 символов", MinimumLength = 8)]
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         public string PasswordConfirm { get; set; }
 
