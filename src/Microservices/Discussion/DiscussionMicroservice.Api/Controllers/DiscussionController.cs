@@ -1,6 +1,5 @@
 ﻿using DiscussionMicroservice.Api.Database;
 using MassTransit;
-using MassTransit.Transports.Fabric;
 using MessageBus.Messages;
 using MessageBus.Messages.BanMessages;
 using Microsoft.AspNetCore.Mvc;
