@@ -2,10 +2,10 @@
 {
     public static class BanTypeConstants
     {
-        public const string GeneralBanType = "Общий";
-        public const string CommentBanType = "Комментарий";
-        public const string DiscussionBanType = "Обсуждение";
-        public const string ReportBanType = "Жалоба";
-        public const string TopicBanType = "Тема";
+        public const string GeneralBanType = "General";
+        public const string CommentBanType = "Comment";
+        public const string DiscussionBanType = "Discussion";
+        public const string ReportBanType = "Report";
+        public const string TopicBanType = "Topic";
     }
 }

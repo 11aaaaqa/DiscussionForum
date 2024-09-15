@@ -2,7 +2,7 @@
 {
     public static class ReportTypeConstants
     {
-        public const string DiscussionType = "Обсуждение";
-        public const string CommentType = "Комментарий";
+        public const string DiscussionType = "Discussion";
+        public const string CommentType = "Comment";
     }
 }
