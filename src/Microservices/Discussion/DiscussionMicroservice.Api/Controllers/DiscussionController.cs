@@ -1,5 +1,7 @@
 ﻿using DiscussionMicroservice.Api.Database;
+using DiscussionMicroservice.Api.Models;
 using MassTransit;
+using MassTransit.Transports.Fabric;
 using MessageBus.Messages;
 using MessageBus.Messages.BanMessages;
 using Microsoft.AspNetCore.Mvc;
@@ -47,8 +49,8 @@ namespace DiscussionMicroservice.Api.Controllers
             context.Remove(discussion);
             await context.SaveChangesAsync();
 
-            await publishEndpoint.Publish<IDiscussionDeleted>(new { discussion.TopicName });
-            await publishEndpoint.Publish<DiscussionDeleted>(new { DiscussionId = discussionId });
+            await publishEndpoint.Publish<IDiscussionDeleted>(new { DiscussionId = discussion.Id });
+            await publishEndpoint.Publish<IDiscussionDeletedForTopic>(new { TopicName = discussion.TopicName });
 
             return Ok();
         }
