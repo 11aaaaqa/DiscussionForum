@@ -1,11 +1,11 @@
 ﻿using MassTransit;
-using MessageBus.Messages.BanMessages;
+using MessageBus.Messages;
 using Microsoft.EntityFrameworkCore;
 using ReportMicroservice.Api.Database;
 
 namespace ReportMicroservice.Api.Services.MessageBusConsumers
 {
-    public class DiscussionDeletedConsumer : IConsumer<DiscussionDeleted>
+    public class DiscussionDeletedConsumer : IConsumer<IDiscussionDeleted>
     {
         private readonly ApplicationDbContext databaseContext;
 
@@ -13,14 +13,15 @@ namespace ReportMicroservice.Api.Services.MessageBusConsumers
         {
             this.databaseContext = databaseContext;
         }
-        public async Task Consume(ConsumeContext<DiscussionDeleted> context)
+        public async Task Consume(ConsumeContext<IDiscussionDeleted> context)
         {
-            var reports =
-                await databaseContext.Reports.Where(x => x.ReportedDiscussionId == context.Message.DiscussionId).ToListAsync();
+            var reports = await databaseContext.Reports
+                .Where(x => x.ReportedDiscussionId == context.Message.DiscussionId).ToListAsync();
             foreach (var report in reports)
             {
                 databaseContext.Reports.Remove(report);
             }
+
             await databaseContext.SaveChangesAsync();
         }
     }

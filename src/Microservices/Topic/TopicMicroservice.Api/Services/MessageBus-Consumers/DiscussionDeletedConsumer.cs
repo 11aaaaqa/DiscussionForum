@@ -1,25 +1,27 @@
 ﻿using MassTransit;
 using MessageBus.Messages;
-using TopicMicroservice.Api.Models;
-using TopicMicroservice.Api.Services.Repository;
+using Microsoft.EntityFrameworkCore;
+using TopicMicroservice.Api.Database;
 
 namespace TopicMicroservice.Api.Services.MessageBus_Consumers
 {
-    public class DiscussionDeletedConsumer : IConsumer<IDiscussionDeleted>
+    public class DiscussionDeletedConsumer : IConsumer<IDiscussionDeletedForTopic>
     {
-        private readonly IRepository<Topic> topicRepository;
+        private readonly ApplicationDbContext databaseContext;
 
-        public DiscussionDeletedConsumer(IRepository<Topic> topicRepository)
+        public DiscussionDeletedConsumer(ApplicationDbContext databaseContext)
         {
-            this.topicRepository = topicRepository;
+            this.databaseContext = databaseContext;
         }
-        public async Task Consume(ConsumeContext<IDiscussionDeleted> context)
+
+        public async Task Consume(ConsumeContext<IDiscussionDeletedForTopic> context)
         {
-            var topic = await topicRepository.GetByNameAsync(context.Message.TopicName);
+            var topic = await databaseContext.Topics.SingleOrDefaultAsync(x => x.Name == context.Message.TopicName);
             if (topic is not null)
             {
                 topic.PostsCount -= 1;
-                await topicRepository.UpdateAsync(topic);
+                databaseContext.Topics.Update(topic);
+                await databaseContext.SaveChangesAsync();
             }
         }
     }
