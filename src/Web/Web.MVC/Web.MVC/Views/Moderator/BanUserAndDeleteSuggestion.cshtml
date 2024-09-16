@@ -2,6 +2,15 @@
 @model Web.MVC.DTOs.Moderator.BanUserDto
 
 <h3>Отстранить пользователя</h3>
+@if (ViewBag.IsUserBanned)
+{
+    <h5>Пользователь уже забанен до @ViewBag.BannedUntil по причине "@ViewBag.BanReason".</h5>
+    <h5>Тип бана: @ViewBag.BanType</h5>
+}
+else
+{
+    <h5>Пользователь не в бане</h5>
+}
 <form method="post">
     <div asp-validation-summary="ModelOnly"></div>
     <div>
