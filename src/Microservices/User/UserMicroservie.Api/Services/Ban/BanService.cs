@@ -33,6 +33,9 @@ namespace UserMicroservice.Api.Services.Ban
                 return false;
             }
 
+            if (banTypes.Length == 0)
+                return true;
+            
             foreach (var banType in banTypes)
             {
                 if (user.BanType == banType)
@@ -58,6 +61,9 @@ namespace UserMicroservice.Api.Services.Ban
                 await context.SaveChangesAsync();
                 return false;
             }
+
+            if (banTypes.Length == 0)
+                return true;
 
             foreach (var banType in banTypes)
             {
