@@ -5,6 +5,8 @@ using MessageBus.Messages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MimeKit;
+using Npgsql.Internal;
+using RegisterMicroservice.Api.Constants;
 using RegisterMicroservice.Api.DTOs.Auth;
 using RegisterMicroservice.Api.DTOs.ResetPassword;
 using RegisterMicroservice.Api.Models.UserModels;
@@ -91,6 +93,8 @@ namespace RegisterMicroservice.Api.Controllers
                 logger.LogError("Current user already exists, end method");
                 return Conflict(result.Errors);
             }
+
+            await userManager.AddToRoleAsync(user, UserRoleConstants.UserRole);
 
             var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink =
