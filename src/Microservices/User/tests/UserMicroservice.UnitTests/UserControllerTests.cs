@@ -450,5 +450,71 @@ namespace UserMicroservice.UnitTests
             Assert.Equal(isBanned, isUserBannedResult);
             mock.VerifyAll();
         }
+
+        [Fact]
+        public async Task UserBanInfoByUserNameAsync_ReturnsOkWithNotBannedUser()
+        {
+            string userName = It.IsAny<string>();
+            var mock = new Mock<IBanService<User>>();
+            mock.Setup(x => x.IsUserBannedAsync(userName)).ReturnsAsync(false);
+            var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
+                new Mock<IChangeUserName>().Object);
+
+            var result = await controller.UserBanInfoByUserNameAsync(userName);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            Assert.Equal(200, methodResult.StatusCode);
+            var banInfo = Assert.IsType<UserBanInfoModel>(methodResult.Value);
+            Assert.False(banInfo.IsBanned);
+            Assert.Equal(banInfo.UserName, userName);
+            mock.VerifyAll();
+        }
+
+        [Fact]
+        public async Task UserBanInfoByUserNameAsync_ReturnsBadRequest()
+        {
+            string userName = It.IsAny<string>();
+            var banMock = new Mock<IBanService<User>>();
+            var userMock = new Mock<IUserService<User>>();
+            banMock.Setup(x => x.IsUserBannedAsync(userName)).ReturnsAsync(true);
+            userMock.Setup(x => x.GetUserByUserName(userName)).ReturnsAsync((User?)null);
+            var controller = new UserController(userMock.Object, banMock.Object,
+                new Mock<IChangeUserName>().Object);
+
+            var result = await controller.UserBanInfoByUserNameAsync(userName);
+
+            Assert.IsType<BadRequestResult>(result);
+            banMock.Verify(x => x.IsUserBannedAsync(userName));
+            userMock.Verify(x => x.GetUserByUserName(userName));
+        }
+
+        [Fact]
+        public async Task UserBanInfoByUserNameAsync_ReturnsOkWithBannedUser()
+        {
+            string userName = It.IsAny<string>();
+            var returnUser = new User
+            {
+                UserName = userName, IsBanned = true, BannedFor = It.IsAny<string>(), BanType = It.IsAny<string>(), BannedUntil = It.IsAny<DateTime>()
+            };
+            var banMock = new Mock<IBanService<User>>();
+            var userMock = new Mock<IUserService<User>>();
+            banMock.Setup(x => x.IsUserBannedAsync(userName)).ReturnsAsync(true);
+            userMock.Setup(x => x.GetUserByUserName(userName)).ReturnsAsync(returnUser);
+            var controller = new UserController(userMock.Object, banMock.Object,
+                new Mock<IChangeUserName>().Object);
+
+            var result = await controller.UserBanInfoByUserNameAsync(userName);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            Assert.Equal(200, methodResult.StatusCode);
+            var banInfo = Assert.IsType<UserBanInfoModel>(methodResult.Value);
+            Assert.Equal(returnUser.UserName, banInfo.UserName);
+            Assert.Equal(returnUser.IsBanned, banInfo.IsBanned);
+            Assert.Equal(returnUser.BannedFor, banInfo.BanReason);
+            Assert.Equal(returnUser.BanType, banInfo.BanType);
+            Assert.Equal(returnUser.BannedUntil, banInfo.BannedUntil);
+        }
     }
 }
