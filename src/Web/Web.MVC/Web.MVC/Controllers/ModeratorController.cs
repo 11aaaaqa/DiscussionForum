@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Diagnostics.Eventing.Reader;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Web.MVC.Constants;
 using Web.MVC.DTOs.Moderator;
 using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ApiResponses.CommentsResponses;
+using Web.MVC.Models.ApiResponses.CustUserResponses;
 using Web.MVC.Services;
 
 namespace Web.MVC.Controllers
@@ -137,8 +139,40 @@ namespace Web.MVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult BanUser()
+        public async Task<IActionResult> BanUser(string? userName, Guid? userId)
         {
+            if (userName is null && userId is null) return View("ActionError");
+
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            if (userName is null)
+            {
+                var response = await httpClient.GetAsync($"http://user-microservice-api:8080/api/profile/User/UserBanInfoByUserId/{userId}");
+                if (!response.IsSuccessStatusCode) return View("ActionError");
+
+                var banInfo = await response.Content.ReadFromJsonAsync<UserBanInfoResponse>();
+                ViewBag.IsUserBanned = banInfo.IsBanned;
+                if (banInfo.IsBanned)
+                {
+                    ViewBag.BanReason = banInfo.BanReason;
+                    ViewBag.BanType = banInfo.BanType;
+                    ViewBag.BannedUntil = banInfo.BannedUntil;
+                }
+            }
+            else
+            {
+                var response = await httpClient.GetAsync($"http://user-microservice-api:8080/api/profile/User/UserBanInfoByUserName/{userName}");
+                if (!response.IsSuccessStatusCode) return View("ActionError");
+
+                var banInfo = await response.Content.ReadFromJsonAsync<UserBanInfoResponse>();
+                ViewBag.IsUserBanned = banInfo.IsBanned;
+                if (banInfo.IsBanned)
+                {
+                    ViewBag.BanReason = banInfo.BanReason;
+                    ViewBag.BanType = banInfo.BanType;
+                    ViewBag.BannedUntil = banInfo.BannedUntil;
+                }
+            }
+            
             return View();
         }
 
@@ -185,8 +219,40 @@ namespace Web.MVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult BanUserAndDeleteSuggestion()
+        public async Task<IActionResult> BanUserAndDeleteSuggestion(string? userName, Guid? userId)
         {
+            if (userName is null && userId is null) return View("ActionError");
+
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            if (userName is null)
+            {
+                var response = await httpClient.GetAsync($"http://user-microservice-api:8080/api/profile/User/UserBanInfoByUserId/{userId}");
+                if (!response.IsSuccessStatusCode) return View("ActionError");
+
+                var banInfo = await response.Content.ReadFromJsonAsync<UserBanInfoResponse>();
+                ViewBag.IsUserBanned = banInfo.IsBanned;
+                if (banInfo.IsBanned)
+                {
+                    ViewBag.BanReason = banInfo.BanReason;
+                    ViewBag.BanType = banInfo.BanType;
+                    ViewBag.BannedUntil = banInfo.BannedUntil;
+                }
+            }
+            else
+            {
+                var response = await httpClient.GetAsync($"http://user-microservice-api:8080/api/profile/User/UserBanInfoByUserName/{userName}");
+                if (!response.IsSuccessStatusCode) return View("ActionError");
+
+                var banInfo = await response.Content.ReadFromJsonAsync<UserBanInfoResponse>();
+                ViewBag.IsUserBanned = banInfo.IsBanned;
+                if (banInfo.IsBanned)
+                {
+                    ViewBag.BanReason = banInfo.BanReason;
+                    ViewBag.BanType = banInfo.BanType;
+                    ViewBag.BannedUntil = banInfo.BannedUntil;
+                }
+            }
+
             return View();
         }
 
