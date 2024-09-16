@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RegisterMicroservice.Api.Constants;
 using RegisterMicroservice.Api.Models.UserModels;
 
 namespace RegisterMicroservice.Api.Database
@@ -11,6 +13,22 @@ namespace RegisterMicroservice.Api.Database
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                ConcurrencyStamp = Guid.NewGuid().ToString(), Id = Guid.NewGuid().ToString(),
+                Name = UserRoleConstants.UserRole, NormalizedName = UserRoleConstants.UserRole.ToUpper()
+            },
+            new IdentityRole
+            {
+                ConcurrencyStamp = Guid.NewGuid().ToString(), Id = Guid.NewGuid().ToString(),
+                Name = UserRoleConstants.ModeratorRole, NormalizedName = UserRoleConstants.ModeratorRole.ToUpper()
+            },
+            new IdentityRole
+            {
+                ConcurrencyStamp = Guid.NewGuid().ToString(), Id = Guid.NewGuid().ToString(),
+                Name = UserRoleConstants.AdminRole, NormalizedName = UserRoleConstants.AdminRole.ToUpper()
+            });
 
             builder.Entity<User>()
                 .Ignore(x => x.PhoneNumber)
