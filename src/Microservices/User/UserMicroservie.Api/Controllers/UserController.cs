@@ -132,5 +132,41 @@ namespace UserMicroservice.Api.Controllers
                 return Ok();
             return BadRequest();
         }
+
+        [Route("UserBanInfoByUserName/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> UserBanInfoByUserNameAsync(string userName)
+        {
+            var isBanned = await banService.IsUserBannedAsync(userName);
+            if (!isBanned) return Ok(new UserBanInfoModel{BannedUntil = new DateTime(), IsBanned = false, UserName = userName});
+
+            var user = await userService.GetUserByUserName(userName);
+            if (user is null) return BadRequest();
+
+            return Ok(new UserBanInfoModel
+            {
+                BanReason = user.BannedFor, UserName = userName, BanType = user.BanType, BannedUntil = user.BannedUntil, IsBanned = true
+            });
+        }
+
+        [Route("UserBanInfoByUserId/{userId}")]
+        [HttpGet]
+        public async Task<IActionResult> UserBanInfoByUserIdAsync(Guid userId)
+        {
+            var isBanned = await banService.IsUserBannedAsync(userId);
+            if (!isBanned) return Ok(new UserBanInfoModel { BannedUntil = new DateTime(), IsBanned = false, UserId = userId });
+
+            var user = await userService.GetUserByIdAsync(userId);
+            if (user is null) return BadRequest();
+
+            return Ok(new UserBanInfoModel
+            {
+                BanReason = user.BannedFor,
+                UserId = userId,
+                BanType = user.BanType,
+                BannedUntil = user.BannedUntil,
+                IsBanned = true
+            });
+        }
     }
 }
