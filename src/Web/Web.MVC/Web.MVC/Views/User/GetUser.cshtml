@@ -16,7 +16,11 @@
         }
     </div>
     <div>
-        @if (ViewBag.Discussions is not null)
+        @if (ViewBag.Discussions is null || ViewBag.Discussions.Count == 0)
+        {
+            <h3>Обсуждения ещё не созданы</h3>
+        }
+        else
         {
             foreach (var discussion in ViewBag.Discussions)
             {
@@ -27,7 +31,11 @@
         }
     </div>
     <div>
-        @if (ViewBag.Comments is not null)
+        @if (ViewBag.Comments is null || ViewBag.Comments.Count == 0)
+        {
+            <h3>Комментарии ещё не созданы</h3>
+        }
+        else
         {
             foreach (var comment in ViewBag.Comments)
             {
