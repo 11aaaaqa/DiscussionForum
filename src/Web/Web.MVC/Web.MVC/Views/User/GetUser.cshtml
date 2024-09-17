@@ -1,0 +1,39 @@
+﻿@model Web.MVC.Models.ApiResponses.CustUserResponses.UserResponse
+
+<div class="text-center">
+    <div>
+        <p>Имя пользователя: @Model.UserName</p>
+        <p>Зарегистрирован: @Model.RegisteredAt</p>
+        <p>Создано обсуждений: @Model.Posts</p>
+        <p>Ответов: @Model.Answers</p>
+        @if (User.Identity.Name == Model.UserName)
+        {
+            if (Model.IsBanned)
+            {
+                <p>Забанен по причине "@Model.BannedFor" до @Model.BannedUntil</p>
+                <p>Тип бана: @Model.BanType</p>
+            }
+        }
+    </div>
+    <div>
+        @if (ViewBag.Discussions is not null)
+        {
+            foreach (var discussion in ViewBag.Discussions)
+            {
+                <h5>@discussion.Title</h5>
+                <p>Создано: @discussion.CreatedAt</p>
+                <p>Рейтинг: @discussion.Rating</p>
+            }
+        }
+    </div>
+    <div>
+        @if (ViewBag.Comments is not null)
+        {
+            foreach (var comment in ViewBag.Comments)
+            {
+                <h6>@comment.Content</h6>
+                <p>Создано: @comment.CreatedDate</p>
+            }
+        }
+    </div>
+</div>
