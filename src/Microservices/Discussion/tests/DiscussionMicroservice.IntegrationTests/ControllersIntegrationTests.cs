@@ -146,5 +146,22 @@ namespace DiscussionMicroservice.IntegrationTests
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
+
+        [Fact]
+        public async Task GetDiscussionsByIdsAsync_ReturnsOkWithListOfDiscussions()
+        {
+            var ids = new Guid[]
+            {
+                new ("8077167c-d724-4258-8451-b617dc4bdfec"), new ("5a38b400-8be8-466c-a0ed-62249bc7811b"), Guid.NewGuid()
+            };
+
+            var response = await client.GetAsync($"api/Discussion/GetDiscussionsByIds?ids[]={ids[0]}&ids[]={ids[1]}&ids[]={ids[2]}");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.True(response.IsSuccessStatusCode);
+            var returnedDiscussions = await response.Content.ReadFromJsonAsync<List<Discussion>>();
+            Assert.NotNull(returnedDiscussions);
+            Assert.Equal(2, returnedDiscussions.Count);
+        }
     }
 }
