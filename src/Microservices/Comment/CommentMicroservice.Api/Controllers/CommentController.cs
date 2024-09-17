@@ -78,6 +78,15 @@ namespace CommentMicroservice.Api.Controllers
 
             return Ok(createdComment);
         }
-        
+
+        [Route("GetCommentsByIds")]
+        [HttpGet]
+        public async Task<IActionResult> GetCommentsByIdsAsync([FromQuery(Name = "ids[]")] params Guid[] ids)
+        {
+            if (ids.Length == 0)
+                return Ok();
+            var comments = await repository.GetByIds(ids);
+            return Ok(comments);
+        }
     }
 }
