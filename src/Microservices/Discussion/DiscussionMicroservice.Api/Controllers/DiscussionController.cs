@@ -38,6 +38,20 @@ namespace DiscussionMicroservice.Api.Controllers
             return Ok(discussion);
         }
 
+        [Route("GetDiscussionsByIds")]
+        [HttpGet]
+        public async Task<IActionResult> GetDiscussionsByIdsAsync([FromQuery(Name = "ids[]")] params Guid[] ids)
+        {
+            var discussions = new List<Discussion>();
+            foreach (var id in ids)
+            {
+                var discussion = await context.Discussions.SingleOrDefaultAsync(x => x.Id == id);
+                if(discussion is not null) discussions.Add(discussion);
+            }
+
+            return Ok(discussions);
+        }
+
         [Route("DeleteDiscussionById/{discussionId}")]
         [HttpDelete]
         public async Task<IActionResult> DeleteDiscussionByIdAsync(Guid discussionId)
