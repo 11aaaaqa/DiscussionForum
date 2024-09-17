@@ -4,6 +4,7 @@
     {
         Task<List<TModel>> GetAllAsync();
         Task<List<TModel>?> GetByDiscussionIdAsync(Guid id);
+        Task<List<TModel>> GetByIds(params Guid[] ids);
         Task<TModel?> GetByIdAsync(Guid id);
         Task<TModel> UpdateAsync(TModel model);
         Task<TModel> CreateAsync(TModel model);
