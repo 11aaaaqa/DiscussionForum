@@ -33,6 +33,7 @@
     <_ContentIncludedByDefault Remove="Views\Report\AddReport.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Report\GetReport.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Topic\Topic.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\User\GetUser.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -61,6 +62,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Moderator\BanUserAndDeleteSuggestion.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\User\GetUser.cshtml" />
   </ItemGroup>
 
 </Project>
