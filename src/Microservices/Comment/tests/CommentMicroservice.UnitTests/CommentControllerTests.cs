@@ -166,5 +166,36 @@ namespace CommentMicroservice.UnitTests
 
             Assert.IsType<OkResult>(result);
         }
+
+        [Fact]
+        public async Task GetCommentsByIdsAsync_ReturnsOk()
+        {
+            var mock = new Mock<IRepository<Comment>>();
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
+
+            var result = await controller.GetCommentsByIdsAsync();
+
+            Assert.IsType<OkResult>(result);
+        }
+
+        [Fact]
+        public async Task GetCommentsByIdsAsync_ReturnsOkWithListOfComments()
+        {
+            var id1 = Guid.NewGuid(); var id2 = Guid.NewGuid(); var id3 = Guid.NewGuid();
+            var mock = new Mock<IRepository<Comment>>();
+            mock.Setup(x => x.GetByIds(id1, id2, id3)).ReturnsAsync(new List<Comment>
+            {
+                new Comment{Id = id1}, new Comment{Id = id2}, new Comment{Id = id3}
+            });
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
+
+            var result = await controller.GetCommentsByIdsAsync(id1, id2, id3);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            var comments = Assert.IsType<List<Comment>>(methodResult.Value);
+            Assert.Equal(3, comments.Count);
+            mock.Verify(x => x.GetByIds(id1,id2,id3));
+        }
     }
 }
