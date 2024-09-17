@@ -25,6 +25,18 @@ namespace CommentMicroservice.Api.Services.Repository
             return await context.Comments.Where(x => x.DiscussionId == id).ToListAsync();
         }
 
+        public async Task<List<Comment>> GetByIds(params Guid[] ids)
+        {
+            var comments = new List<Comment>();
+            foreach (var id in ids)
+            {
+                var comment = await context.Comments.SingleOrDefaultAsync(x => x.Id == id);
+                if (comment is not null)
+                    comments.Add(comment);
+            }
+            return comments;
+        }
+
         public async Task<Comment?> GetByIdAsync(Guid id) =>
             await context.Comments.SingleOrDefaultAsync(x => x.Id == id);
 
