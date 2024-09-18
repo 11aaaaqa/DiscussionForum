@@ -68,11 +68,6 @@ namespace DiscussionMicroservice.Api.Controllers
         {
             var acceptedDiscussion = await context.SuggestedDiscussions.SingleAsync(x => x.Id == id);
 
-            await publishEndpoint.Publish<IDiscussionAdded>(new
-            {
-                TopicName = acceptedDiscussion.TopicName
-            });
-
             context.SuggestedDiscussions.Remove(acceptedDiscussion);
             await context.Discussions.AddAsync(new Discussion
             {
@@ -86,7 +81,10 @@ namespace DiscussionMicroservice.Api.Controllers
             });
             await context.SaveChangesAsync();
 
-            await publishEndpoint.Publish<ISuggestedDiscussionAccepted>(new { AcceptedDiscussionId = acceptedDiscussion.Id, acceptedDiscussion.CreatedBy});
+            await publishEndpoint.Publish<ISuggestedDiscussionAccepted>(new
+            {
+                AcceptedDiscussionId = acceptedDiscussion.Id, acceptedDiscussion.CreatedBy, TopicName = acceptedDiscussion.TopicName
+            });
 
             return Ok();
         }
