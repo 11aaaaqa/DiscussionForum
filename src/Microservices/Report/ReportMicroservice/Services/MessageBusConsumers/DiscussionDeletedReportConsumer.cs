@@ -5,11 +5,11 @@ using ReportMicroservice.Api.Database;
 
 namespace ReportMicroservice.Api.Services.MessageBusConsumers
 {
-    public class DiscussionDeletedConsumer : IConsumer<IDiscussionDeleted>
+    public class DiscussionDeletedReportConsumer : IConsumer<IDiscussionDeleted>
     {
         private readonly ApplicationDbContext databaseContext;
 
-        public DiscussionDeletedConsumer(ApplicationDbContext databaseContext)
+        public DiscussionDeletedReportConsumer(ApplicationDbContext databaseContext)
         {
             this.databaseContext = databaseContext;
         }
