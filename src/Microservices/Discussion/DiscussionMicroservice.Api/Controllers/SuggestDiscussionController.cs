@@ -101,5 +101,19 @@ namespace DiscussionMicroservice.Api.Controllers
             
             return Ok(suggestedDiscussion);
         }
+
+        [Route("GetSuggestedDiscussionsByIds")]
+        [HttpGet]
+        public async Task<IActionResult> GetSuggestedDiscussionsByIdsAsync([FromQuery(Name = "ids[]")] params Guid[] ids)
+        {
+            var suggestedDiscussions = new List<SuggestedDiscussion>();
+            foreach (var id in ids)
+            {
+                var suggestedDiscussion = await context.SuggestedDiscussions.SingleOrDefaultAsync(x => x.Id == id);
+                if (suggestedDiscussion is not null) suggestedDiscussions.Add(suggestedDiscussion);
+            }
+
+            return Ok(suggestedDiscussions);
+        }
     }
 }
