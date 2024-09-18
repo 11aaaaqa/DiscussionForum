@@ -20,6 +20,7 @@ namespace UserMicroservice.Api.MessageBus_Consumers
             {
                 user.SuggestedDiscussionsIds.Remove(context.Message.AcceptedDiscussionId);
                 user.CreatedDiscussionsIds.Add(context.Message.AcceptedDiscussionId);
+                user.Posts += 1;
                 databaseContext.Users.Update(user);
                 await databaseContext.SaveChangesAsync();
             }
