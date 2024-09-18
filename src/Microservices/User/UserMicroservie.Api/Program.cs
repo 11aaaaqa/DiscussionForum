@@ -19,6 +19,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
+    x.AddConsumer<DiscussionDeletedUserConsumer>();
     x.AddConsumer<CommentDeletedConsumer>();
     x.AddConsumer<CommentCreatedConsumer>();
     x.AddConsumer<SuggestedCommentRejectedConsumer>();
