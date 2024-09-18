@@ -168,17 +168,6 @@ namespace CommentMicroservice.UnitTests
         }
 
         [Fact]
-        public async Task GetCommentsByIdsAsync_ReturnsOk()
-        {
-            var mock = new Mock<IRepository<Comment>>();
-            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
-
-            var result = await controller.GetCommentsByIdsAsync();
-
-            Assert.IsType<OkResult>(result);
-        }
-
-        [Fact]
         public async Task GetCommentsByIdsAsync_ReturnsOkWithListOfComments()
         {
             var id1 = Guid.NewGuid(); var id2 = Guid.NewGuid(); var id3 = Guid.NewGuid();
