@@ -25,7 +25,7 @@ namespace Web.MVC.Controllers
 
             var user = await response.Content.ReadFromJsonAsync<UserResponse>();
 
-            #region GetDiscussions
+            #region GettingDiscussions
 
             StringBuilder sb = new StringBuilder("http://discussion-microservice-api:8080/api/Discussion/GetDiscussionsByIds?");
             foreach (var discussionId in user.CreatedDiscussionsIds)
@@ -43,7 +43,7 @@ namespace Web.MVC.Controllers
             #endregion
 
 
-            #region GetComments
+            #region GettingComments
 
             StringBuilder getCommentsLink = new StringBuilder("http://comment-microservice-api:8080/api/Comment/GetCommentsByIds?");
             foreach (var commentId in user.CommentsIds)
@@ -60,6 +60,44 @@ namespace Web.MVC.Controllers
 
             #endregion
 
+            if (User.Identity.Name == user.UserName)
+            {
+                #region GettingSuggestedComments
+
+                StringBuilder getSuggestedCommentsLink
+                    = new StringBuilder("http://comment-microservice-api:8080/api/SuggestComment/GetSuggestedCommentsByIds?");
+                foreach (var suggestedCommentId in user.SuggestedCommentsIds)
+                {
+                    getSuggestedCommentsLink.Append($"ids[]={suggestedCommentId}&");
+                }
+
+                getSuggestedCommentsLink.Remove(getSuggestedCommentsLink.Length - 1, 1);
+                var suggestedCommentsResponse = await httpClient.GetAsync(getSuggestedCommentsLink.ToString());
+                if (!suggestedCommentsResponse.IsSuccessStatusCode) return View("ActionError");
+
+                var suggestedComments = await suggestedCommentsResponse.Content.ReadFromJsonAsync<List<SuggestedCommentResponse>>();
+                ViewBag.SuggestedComments = suggestedComments;
+
+                #endregion
+
+                #region GettingSuggestedDiscussions
+
+                StringBuilder getSuggestedDiscussionLink = 
+                    new StringBuilder("http://discussion-microservice-api:8080/api/SuggestDiscussion/GetSuggestedDiscussionsByIds?");
+                foreach (var suggestedDiscussionId in user.SuggestedDiscussionsIds)
+                {
+                    getSuggestedDiscussionLink.Append($"ids[]={suggestedDiscussionId}&");
+                }
+
+                getSuggestedDiscussionLink.Remove(getSuggestedDiscussionLink.Length - 1, 1);
+                var suggestedDiscussionsResponse = await httpClient.GetAsync(getSuggestedDiscussionLink.ToString());
+                if (!suggestedDiscussionsResponse.IsSuccessStatusCode) return View("ActionError");
+
+                var suggestedDiscussions = await suggestedDiscussionsResponse.Content.ReadFromJsonAsync<List<SuggestedDiscussionResponse>>();
+                ViewBag.SuggestedDiscussions = suggestedDiscussions;
+
+                #endregion
+            }
             return View(user);
         }
     }
