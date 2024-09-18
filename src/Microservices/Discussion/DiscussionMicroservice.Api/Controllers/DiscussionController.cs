@@ -59,11 +59,14 @@ namespace DiscussionMicroservice.Api.Controllers
             var discussion = await context.Discussions.SingleOrDefaultAsync(x => x.Id == discussionId);
             if (discussion is null)
                 return BadRequest();
-
+            
             context.Remove(discussion);
             await context.SaveChangesAsync();
 
-            await publishEndpoint.Publish<IDiscussionDeleted>(new { DiscussionId = discussion.Id, TopicName = discussion.TopicName });
+            await publishEndpoint.Publish<IDiscussionDeleted>(new
+            {
+                DiscussionId = discussion.Id, discussion.TopicName, UserNameDiscussionCreatedBy = discussion.CreatedBy
+            });
 
             return Ok();
         }
