@@ -5,16 +5,16 @@ using TopicMicroservice.Api.Database;
 
 namespace TopicMicroservice.Api.Services.MessageBus_Consumers
 {
-    public class DiscussionDeletedConsumer : IConsumer<IDiscussionDeletedForTopic>
+    public class DiscussionDeletedTopicConsumer : IConsumer<IDiscussionDeleted>
     {
         private readonly ApplicationDbContext databaseContext;
 
-        public DiscussionDeletedConsumer(ApplicationDbContext databaseContext)
+        public DiscussionDeletedTopicConsumer(ApplicationDbContext databaseContext)
         {
             this.databaseContext = databaseContext;
         }
 
-        public async Task Consume(ConsumeContext<IDiscussionDeletedForTopic> context)
+        public async Task Consume(ConsumeContext<IDiscussionDeleted> context)
         {
             var topic = await databaseContext.Topics.SingleOrDefaultAsync(x => x.Name == context.Message.TopicName);
             if (topic is not null)
