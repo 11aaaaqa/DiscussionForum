@@ -5,7 +5,7 @@ using TopicMicroservice.Api.Services.Repository;
 
 namespace TopicMicroservice.Api.Services.MessageBus_Consumers
 {
-    public class DiscussionAddedConsumer : IConsumer<IDiscussionAdded>
+    public class DiscussionAddedConsumer : IConsumer<ISuggestedDiscussionAccepted>
     {
         private readonly IRepository<Topic> topicRepository;
 
@@ -13,7 +13,7 @@ namespace TopicMicroservice.Api.Services.MessageBus_Consumers
         {
             this.topicRepository = topicRepository;
         }
-        public async Task Consume(ConsumeContext<IDiscussionAdded> context)
+        public async Task Consume(ConsumeContext<ISuggestedDiscussionAccepted> context)
         {
             var topic = await topicRepository.GetByNameAsync(context.Message.TopicName);
             topic.PostsCount += 1;
