@@ -81,5 +81,13 @@ namespace CommentMicroservice.Api.Controllers
             }
             return BadRequest();
         }
+
+        [Route("GetSuggestedCommentsByIds")]
+        [HttpGet]
+        public async Task<IActionResult> GetSuggestedCommentsByIdsAsync([FromQuery(Name = "ids[]")]params Guid[] ids)
+        {
+            var suggestedComments = await suggestCommentRepository.GetByIds(ids);
+            return Ok(suggestedComments);
+        }
     }
 }
