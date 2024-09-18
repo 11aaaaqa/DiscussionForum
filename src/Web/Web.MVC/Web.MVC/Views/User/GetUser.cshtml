@@ -22,9 +22,9 @@
         }
         else
         {
+            <h3>Созданные обсуждения</h3>
             foreach (var discussion in ViewBag.Discussions)
             {
-                <h3>Созданные обсуждения</h3>
                 <h5>@discussion.Title</h5>
                 <p>Создано: @discussion.CreatedAt</p>
                 <p>Рейтинг: @discussion.Rating</p>
@@ -38,9 +38,9 @@
         }
         else
         {
+            <h3>Созданные комментарии</h3>
             foreach (var comment in ViewBag.Comments)
             {
-                <h3>Созданные комментарии</h3>
                 <h6>@comment.Content</h6>
                 <p>Создано: @comment.CreatedDate</p>
             }
