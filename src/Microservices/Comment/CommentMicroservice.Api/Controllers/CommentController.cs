@@ -83,8 +83,6 @@ namespace CommentMicroservice.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCommentsByIdsAsync([FromQuery(Name = "ids[]")] params Guid[] ids)
         {
-            if (ids.Length == 0)
-                return Ok();
             var comments = await repository.GetByIds(ids);
             return Ok(comments);
         }
