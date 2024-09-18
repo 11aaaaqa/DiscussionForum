@@ -32,5 +32,29 @@ namespace CommentMicroservice.UnitTests
             Assert.Equal(3, comments.Count);
             mock.VerifyAll();
         }
+
+        [Fact]
+        public async Task GetSuggestedCommentsByIdsAsync_ReturnsOkWithListOfSuggestedComments()
+        {
+            var ids = new Guid[]
+            {
+                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() 
+            };
+            var mock = new Mock<IRepository<SuggestedComment>>();
+            mock.Setup(x => x.GetByIds(ids)).ReturnsAsync(new List<SuggestedComment>
+            {
+                new(){Id = ids[0]}, new (){Id = ids[1]}, new(){Id = ids[2]}
+            });
+            var controller = new SuggestCommentController(mock.Object, new Mock<IRepository<Comment>>().Object,
+                new Mock<IPublishEndpoint>().Object);
+
+            var result = await controller.GetSuggestedCommentsByIdsAsync(ids);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            var suggestedComments = Assert.IsType<List<SuggestedComment>>(methodResult.Value);
+            Assert.Equal(3, suggestedComments.Count);
+            mock.VerifyAll();
+        }
     }
 }
