@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Web.MVC.Models.ApiResponses.Discussion;
 
 namespace Web.MVC.Controllers
 {
@@ -23,6 +24,20 @@ namespace Web.MVC.Controllers
                 return LocalRedirect(returnUrl);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [Route("MySuggestions/{suggestedDiscussionId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetSuggestedDiscussionById(Guid suggestedDiscussionId)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/GetSuggestedDiscussionById?id={suggestedDiscussionId}");
+
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var suggestedComments = await response.Content.ReadFromJsonAsync<SuggestedDiscussionResponse>();
+            return View(suggestedComments);
         }
     }
 }
