@@ -5,11 +5,11 @@ using UserMicroservice.Api.Database;
 
 namespace UserMicroservice.Api.MessageBus_Consumers
 {
-    public class SuggestedCommentAcceptedConsumer : IConsumer<ISuggestedCommentAccepted>
+    public class SuggestedCommentAcceptedUserConsumer : IConsumer<ISuggestedCommentAccepted>
     {
         private readonly ApplicationDbContext databaseContext;
 
-        public SuggestedCommentAcceptedConsumer(ApplicationDbContext databaseContext)
+        public SuggestedCommentAcceptedUserConsumer(ApplicationDbContext databaseContext)
         {
             this.databaseContext = databaseContext;
         }

@@ -20,15 +20,15 @@ builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
     x.AddConsumer<DiscussionDeletedUserConsumer>();
-    x.AddConsumer<CommentDeletedConsumer>();
-    x.AddConsumer<CommentCreatedConsumer>();
-    x.AddConsumer<SuggestedCommentRejectedConsumer>();
-    x.AddConsumer<SuggestedCommentAcceptedConsumer>();
-    x.AddConsumer<UserSuggestedCommentConsumer>();
-    x.AddConsumer<SuggestedDiscussionAcceptedConsumer>();
-    x.AddConsumer<SuggestedDiscussionRejectedConsumer>();
-    x.AddConsumer<UserSuggestedDiscussionConsumer>();
-    x.AddConsumer<UserRegisteredConsumer>();
+    x.AddConsumer<CommentDeletedUserConsumer>();
+    x.AddConsumer<CommentCreatedUserConsumer>();
+    x.AddConsumer<SuggestedCommentRejectedUserConsumer>();
+    x.AddConsumer<SuggestedCommentAcceptedUserConsumer>();
+    x.AddConsumer<UserSuggestedCommentUserConsumer>();
+    x.AddConsumer<SuggestedDiscussionAcceptedUSerConsumer>();
+    x.AddConsumer<SuggestedDiscussionRejectedUserConsumer>();
+    x.AddConsumer<UserSuggestedDiscussionUserConsumer>();
+    x.AddConsumer<UserRegisteredUserConsumer>();
     x.UsingRabbitMq((context, config) =>
     {
         config.Host(

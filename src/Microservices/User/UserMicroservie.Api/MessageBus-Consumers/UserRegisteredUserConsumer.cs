@@ -5,11 +5,11 @@ using UserMicroservice.Api.Models;
 
 namespace UserMicroservice.Api.MessageBus_Consumers
 {
-    public class UserRegisteredConsumer : IConsumer<IUserRegistered>
+    public class UserRegisteredUserConsumer : IConsumer<IUserRegistered>
     {
         private readonly ApplicationDbContext databaseContext;
 
-        public UserRegisteredConsumer(ApplicationDbContext databaseContext)
+        public UserRegisteredUserConsumer(ApplicationDbContext databaseContext)
         {
             this.databaseContext = databaseContext;
         }

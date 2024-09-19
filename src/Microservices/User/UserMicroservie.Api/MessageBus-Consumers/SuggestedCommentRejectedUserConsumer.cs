@@ -5,20 +5,20 @@ using UserMicroservice.Api.Database;
 
 namespace UserMicroservice.Api.MessageBus_Consumers
 {
-    public class SuggestedDiscussionRejectedConsumer : IConsumer<ISuggestedDiscussionRejected>
+    public class SuggestedCommentRejectedUserConsumer : IConsumer<ISuggestedCommentRejected>
     {
         private readonly ApplicationDbContext databaseContext;
 
-        public SuggestedDiscussionRejectedConsumer(ApplicationDbContext databaseContext)
+        public SuggestedCommentRejectedUserConsumer(ApplicationDbContext databaseContext)
         {
             this.databaseContext = databaseContext;
         }
-        public async Task Consume(ConsumeContext<ISuggestedDiscussionRejected> context)
+        public async Task Consume(ConsumeContext<ISuggestedCommentRejected> context)
         {
-            var user = await databaseContext.Users.SingleOrDefaultAsync(x => x.UserName == context.Message.SuggestedBy);
+            var user = await databaseContext.Users.SingleOrDefaultAsync(x => x.UserName == context.Message.CreatedBy);
             if (user is not null)
             {
-                user.SuggestedDiscussionsIds.Remove(context.Message.SuggestedDiscussionId);
+                user.SuggestedCommentsIds.Remove(context.Message.RejectedCommentId);
                 databaseContext.Users.Update(user);
                 await databaseContext.SaveChangesAsync();
             }
