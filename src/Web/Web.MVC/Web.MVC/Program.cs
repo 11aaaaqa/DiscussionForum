@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Web;
 using Web.MVC.Middlewares;
 using Web.MVC.Services;
 
@@ -53,7 +54,12 @@ app.UseStatusCodePages(context =>
 {
     var response = context.HttpContext.Response;
     if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
-        response.Redirect("/Auth/Login");
+    {
+        var returnUrl = context.HttpContext.Request.Path + context.HttpContext.Request.QueryString;
+        var encodedReturnUrl = HttpUtility.UrlEncode(returnUrl);
+        response.Redirect($"/Auth/Login?returnUrl={encodedReturnUrl}");
+    }
+    
     return Task.CompletedTask;
 });
 app.UseAuthorization();
