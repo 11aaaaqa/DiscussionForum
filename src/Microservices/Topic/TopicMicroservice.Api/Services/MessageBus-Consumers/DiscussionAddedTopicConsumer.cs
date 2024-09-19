@@ -5,11 +5,11 @@ using TopicMicroservice.Api.Services.Repository;
 
 namespace TopicMicroservice.Api.Services.MessageBus_Consumers
 {
-    public class DiscussionAddedConsumer : IConsumer<ISuggestedDiscussionAccepted>
+    public class DiscussionAddedTopicConsumer : IConsumer<ISuggestedDiscussionAccepted>
     {
         private readonly IRepository<Topic> topicRepository;
 
-        public DiscussionAddedConsumer(IRepository<Topic> topicRepository)
+        public DiscussionAddedTopicConsumer(IRepository<Topic> topicRepository)
         {
             this.topicRepository = topicRepository;
         }
