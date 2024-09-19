@@ -5,11 +5,11 @@ using MessageBus.Messages.BanMessages;
 
 namespace BanHistoryMicroservice.Api.MessageBus.MessageBusConsumers
 {
-    public class UserBannedByUserIdConsumer : IConsumer<IUserBannedByUserId>
+    public class UserBannedByUserIdBanHistoryConsumer : IConsumer<IUserBannedByUserId>
     {
         private readonly IBanService<Ban> banService;
 
-        public UserBannedByUserIdConsumer(IBanService<Ban> banService)
+        public UserBannedByUserIdBanHistoryConsumer(IBanService<Ban> banService)
         {
            this.banService = banService;
         }
