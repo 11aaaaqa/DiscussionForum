@@ -4,6 +4,7 @@
     {
         Task<List<TModel>> GetAllAsync();
         Task<List<TModel>?> GetByDiscussionIdAsync(Guid id);
+        Task<List<TModel>> GetByUserNameAsync(string userName);
         Task<List<TModel>> GetByIds(params Guid[] ids);
         Task<List<TModel>> GetByUserName(string userName);
         Task<TModel?> GetByIdAsync(Guid id);
