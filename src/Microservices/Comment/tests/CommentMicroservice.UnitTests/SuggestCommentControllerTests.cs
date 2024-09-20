@@ -56,5 +56,26 @@ namespace CommentMicroservice.UnitTests
             Assert.Equal(3, suggestedComments.Count);
             mock.VerifyAll();
         }
+
+        [Fact]
+        public async Task GetSuggestedCommentsByUserNameAsync_ReturnsOkWithListOfSuggestedCommentsWithSpecifiedUserName()
+        {
+            string userName = It.IsAny<string>();
+            var mock = new Mock<IRepository<SuggestedComment>>();
+            mock.Setup(x => x.GetByUserName(userName)).ReturnsAsync(new List<SuggestedComment>
+            {
+                new (){CreatedBy = userName}, new (){ CreatedBy = userName}
+            });
+            var controller = new SuggestCommentController(mock.Object, new Mock<IRepository<Comment>>().Object,
+                new Mock<IPublishEndpoint>().Object);
+
+            var result = await controller.GetSuggestedCommentsByUserNameAsync(userName);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            var suggestedComments = Assert.IsType<List<SuggestedComment>>(methodResult.Value);
+            Assert.Equal(2, suggestedComments.Count);
+            mock.VerifyAll();
+        }
     }
 }
