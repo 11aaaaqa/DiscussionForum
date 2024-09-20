@@ -4,7 +4,6 @@ using System.Text;
 using System.Text.Json;
 using DiscussionMicroservice.Api.DTOs;
 using DiscussionMicroservice.Api.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace DiscussionMicroservice.IntegrationTests
 {
