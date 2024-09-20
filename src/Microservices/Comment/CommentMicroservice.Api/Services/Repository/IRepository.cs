@@ -4,12 +4,12 @@
     {
         Task<List<TModel>> GetAllAsync();
         Task<List<TModel>?> GetByDiscussionIdAsync(Guid id);
-        Task<List<TModel>> GetByUserNameAsync(string userName);
         Task<List<TModel>> GetByIds(params Guid[] ids);
         Task<List<TModel>> GetByUserName(string userName);
         Task<TModel?> GetByIdAsync(Guid id);
         Task<TModel> UpdateAsync(TModel model);
         Task<TModel> CreateAsync(TModel model);
         Task DeleteByIdAsync(Guid id);
+        Task DeleteByUserNameAsync(string userName);
     }
 }
