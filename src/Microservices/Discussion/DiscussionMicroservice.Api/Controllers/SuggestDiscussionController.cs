@@ -121,5 +121,20 @@ namespace DiscussionMicroservice.Api.Controllers
             var suggestedTopics = await context.SuggestedDiscussions.Where(x => x.CreatedBy == userName).ToListAsync();
             return Ok(suggestedTopics);
         }
+
+        [Route("DeleteAllSuggestedDiscussionsByUserName/{userName}")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAllSuggestedDiscussionsByUserNameAsync(string userName)
+        {
+            var suggestedDiscussions =
+                await context.SuggestedDiscussions.Where(x => x.CreatedBy == userName).ToListAsync();
+            foreach (var suggestedDiscussion in suggestedDiscussions)
+            {
+                context.SuggestedDiscussions.Remove(suggestedDiscussion);
+            }
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }
