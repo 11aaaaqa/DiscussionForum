@@ -37,6 +37,9 @@ namespace CommentMicroservice.Api.Services.Repository
             return suggestedComments;
         }
 
+        public async Task<List<SuggestedComment>> GetByUserName(string userName)
+            => await context.SuggestedComments.Where(x => x.CreatedBy == userName).ToListAsync();
+
 
         public async Task<SuggestedComment?> GetByIdAsync(Guid id) =>
             await context.SuggestedComments.SingleOrDefaultAsync(x => x.Id == id);
