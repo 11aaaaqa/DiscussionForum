@@ -325,5 +325,18 @@ namespace Web.MVC.Controllers
 
             return View(model);
         }
+
+        [Route("SuggestedTopics/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> GetSuggestedTopicsByUserName(string userName)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://topic-microservice-api:8080/api/SuggestTopic/GetSuggestedTopicsByUserName/{userName}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var suggestedTopics = await response.Content.ReadFromJsonAsync<TopicResponse>();
+            return View(suggestedTopics);
+        }
     }
 }
