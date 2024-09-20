@@ -113,5 +113,13 @@ namespace DiscussionMicroservice.Api.Controllers
 
             return Ok(suggestedDiscussions);
         }
+
+        [Route("GetSuggestedDiscussionsByUserName/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> GetSuggestedDiscussionsByUserNameAsync(string userName)
+        {
+            var suggestedTopics = await context.SuggestedDiscussions.Where(x => x.CreatedBy == userName).ToListAsync();
+            return Ok(suggestedTopics);
+        }
     }
 }
