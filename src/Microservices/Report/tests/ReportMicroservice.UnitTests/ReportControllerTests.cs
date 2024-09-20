@@ -185,5 +185,25 @@ namespace ReportMicroservice.UnitTests
             Assert.IsType<OkResult>(result);
             mock.Verify(x =>x.DeleteReportById(reportId));
         }
+
+        [Fact]
+        public async Task GetReportsByUserNameAsync_ReturnsOkWithListIfReportsWithSpecifiedCreatedByUserName()
+        {
+            var userName = It.IsAny<string>();
+            var mock = new Mock<IReportService<Report>>();
+            mock.Setup(x => x.GetByUserNameAsync(userName)).ReturnsAsync(new List<Report>
+            {
+                new(){UserNameReportedBy = userName}, new(){UserNameReportedBy = userName},new(){UserNameReportedBy = userName}
+            });
+            var controller = new ReportController(mock.Object);
+
+            var result = await controller.GetReportsByUserNameAsync(userName);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            var reports = Assert.IsType<List<Report>>(methodResult.Value);
+            Assert.Equal(3, reports.Count);
+            mock.Verify(x => x.GetByUserNameAsync(userName));
+        }
     }
 }
