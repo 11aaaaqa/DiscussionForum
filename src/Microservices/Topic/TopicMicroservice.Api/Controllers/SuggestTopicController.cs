@@ -74,5 +74,10 @@ namespace TopicMicroservice.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllSuggestedTopicsAsync() =>
             Ok(await context.SuggestedTopics.ToListAsync());
+
+        [Route("GetSuggestedTopicsByUserName/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> GetSuggestedTopicsByUserNameAsync(string userName) =>
+            Ok(await context.SuggestedTopics.Where(x => x.SuggestedBy == userName).ToListAsync());
     }
 }
