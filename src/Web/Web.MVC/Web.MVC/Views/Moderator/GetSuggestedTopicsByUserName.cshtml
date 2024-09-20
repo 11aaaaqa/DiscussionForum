@@ -3,6 +3,19 @@
 
 <div class="text-center">
     <h3>Предложенные темы</h3>
+    @foreach (var suggestedTopic in Model)
+    {
+        <form method="post" asp-controller="Moderator" asp-action="DeleteSuggestedTopicsByUserName" asp-route-userName="@suggestedTopic.SuggestedBy"
+              asp-route-returnUrl="@Context.Request.Path">
+            <input type="submit" value="удалить все предложенные темы"/>
+        </form>
+        <form method="post" asp-controller="Moderator" asp-action="BanUser" asp-route-userName="@suggestedTopic.SuggestedBy"
+              asp-route-returnUrl="@Context.Request.Path">
+            <input type="submit" value="забанить пользователя"/>
+        </form>
+        break;
+    }
+    
     <table>
         <tr><th>Название</th><th>Принять</th><th>Отклонить</th><th>Отстранить предлагающего</th></tr>
         @foreach (var suggestedTopic in Model)
