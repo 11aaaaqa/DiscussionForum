@@ -180,5 +180,15 @@ namespace DiscussionMicroservice.IntegrationTests
             Assert.NotNull(returnedSuggestedDiscussions);
             Assert.Equal(2, returnedSuggestedDiscussions.Count);
         }
+
+        [Fact]
+        public async Task GetSuggestedDiscussionsByUserNameAsync_ReturnsOkWithListOfSuggestedDiscussionsWithSpecifiedCreatedByProperty()
+        {
+            string userName = "TestCreatedBy555";
+            var response = await client.GetAsync ($"api/SuggestDiscussion/GetSuggestedDiscussionsByUserName/{userName}");
+            response.EnsureSuccessStatusCode();
+            var suggestedDiscussions = await response.Content.ReadFromJsonAsync<List<SuggestedDiscussion>>();
+            Assert.Equal(1, suggestedDiscussions.Count);
+        }
     }
 }
