@@ -2,7 +2,6 @@
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
 using TopicMicroservice.Api.DTOs;
 using TopicMicroservice.Api.Models;
 
