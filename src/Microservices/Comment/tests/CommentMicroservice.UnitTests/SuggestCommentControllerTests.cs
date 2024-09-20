@@ -4,6 +4,7 @@ using CommentMicroservice.Api.Services.Repository;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using IPublishEndpoint = MassTransit.IPublishEndpoint;
 
 namespace CommentMicroservice.UnitTests
 {
@@ -75,6 +76,21 @@ namespace CommentMicroservice.UnitTests
             Assert.NotNull(methodResult.Value);
             var suggestedComments = Assert.IsType<List<SuggestedComment>>(methodResult.Value);
             Assert.Equal(2, suggestedComments.Count);
+            mock.VerifyAll();
+        }
+
+        [Fact]
+        public async Task DeleteAllSuggestedCommentsByUserNameAsync_ReturnsOk()
+        {
+            string userName = It.IsAny<string>();
+            var mock = new Mock<IRepository<SuggestedComment>>();
+            mock.Setup(x => x.DeleteByUserNameAsync(userName));
+            var controller = new SuggestCommentController(mock.Object, new Mock<IRepository<Comment>>().Object,
+                new Mock<IPublishEndpoint>().Object);
+
+            var result = await controller.DeleteAllSuggestedCommentsByUserNameAsync(userName);
+
+            Assert.IsType<OkResult>(result);
             mock.VerifyAll();
         }
     }
