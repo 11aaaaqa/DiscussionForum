@@ -37,6 +37,9 @@ namespace CommentMicroservice.Api.Services.Repository
             return comments;
         }
 
+        public async Task<List<Comment>> GetByUserName(string userName) =>
+            await context.Comments.Where(x => x.CreatedBy == userName).ToListAsync();
+
         public async Task<Comment?> GetByIdAsync(Guid id) =>
             await context.Comments.SingleOrDefaultAsync(x => x.Id == id);
 
