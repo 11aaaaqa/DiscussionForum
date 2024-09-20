@@ -67,5 +67,16 @@ namespace CommentMicroservice.Api.Services.Repository
                 await context.SaveChangesAsync();
             }
         }
+
+        public async Task DeleteByUserNameAsync(string userName)
+        {
+            var suggestedComments = await context.SuggestedComments.Where(x => x.CreatedBy == userName).ToListAsync();
+            foreach (var suggestedComment in suggestedComments)
+            {
+                context.SuggestedComments.Remove(suggestedComment);
+            }
+
+            await context.SaveChangesAsync();
+        }
     }
 }
