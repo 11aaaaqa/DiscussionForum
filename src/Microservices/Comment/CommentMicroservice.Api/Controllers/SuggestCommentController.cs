@@ -95,11 +95,12 @@ namespace CommentMicroservice.Api.Controllers
         public async Task<IActionResult> GetSuggestedCommentsByUserNameAsync(string userName)
             => Ok(await suggestCommentRepository.GetByUserName(userName));
 
-        [Route("DeleteAllSuggestedDiscussionsByUserName/{userName}")]
+        [Route("DeleteAllSuggestedCommentsByUserName/{userName}")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteAllSuggestedDiscussionsByUserNameAsync(string userName)
+        public async Task<IActionResult> DeleteAllSuggestedCommentsByUserNameAsync(string userName)
         {
-            var s
+            await suggestCommentRepository.DeleteByUserNameAsync(userName);
+            return Ok();
         }
     }
 }
