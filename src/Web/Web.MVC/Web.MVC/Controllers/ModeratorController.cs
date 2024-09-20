@@ -338,5 +338,19 @@ namespace Web.MVC.Controllers
             var suggestedTopics = await response.Content.ReadFromJsonAsync<List<TopicResponse>>();
             return View(suggestedTopics);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteSuggestedTopicsByUserName(string userName, string returnUrl)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.DeleteAsync(
+                $"http://topic-microservice-api:8080/api/SuggestTopic/DeleteAllSuggestedTopicsByUserName/{userName}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            if (!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
