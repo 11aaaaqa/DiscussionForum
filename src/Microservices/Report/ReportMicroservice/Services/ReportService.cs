@@ -19,6 +19,9 @@ namespace ReportMicroservice.Api.Services
         public async Task<Report?> GetReportByIdAsync(Guid reportId) =>
             await context.Reports.SingleOrDefaultAsync(x => x.Id == reportId);
 
+        public async Task<List<Report>> GetByUserNameAsync(string userName)
+            => await context.Reports.Where(x => x.UserNameReportedBy == userName).ToListAsync();
+
         public async Task<Report> CreateReportAsync(Report model)
         {
             await context.Reports.AddAsync(model);
