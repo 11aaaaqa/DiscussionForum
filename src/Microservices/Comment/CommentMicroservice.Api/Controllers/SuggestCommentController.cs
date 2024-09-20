@@ -94,6 +94,5 @@ namespace CommentMicroservice.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetSuggestedCommentsByUserNameAsync(string userName)
             => Ok(await suggestCommentRepository.GetByUserName(userName));
-        
     }
 }
