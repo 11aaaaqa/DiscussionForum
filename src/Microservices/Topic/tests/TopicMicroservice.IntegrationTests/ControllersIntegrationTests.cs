@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using TopicMicroservice.Api.DTOs;
 using TopicMicroservice.Api.Models;
 
@@ -85,6 +86,16 @@ namespace TopicMicroservice.IntegrationTests
             response.EnsureSuccessStatusCode();
             var topics = await response.Content.ReadFromJsonAsync<List<Topic>>();
             Assert.NotNull(topics);
+        }
+
+        [Fact]
+        public async Task GetSuggestedTopicsByUserNameAsync_ReturnsOkWitListOfSuggestedTopicsWithSpecifiedUser()
+        {
+            string userName = "TestSuggestedBy1";
+            var response = await client.GetAsync($"api/SuggestTopic/GetSuggestedTopicsByUserName/{userName}");
+            response.EnsureSuccessStatusCode();
+            var suggestedTopics = await response.Content.ReadFromJsonAsync<List<SuggestedTopic>>();
+            Assert.Equal(2, suggestedTopics.Count);
         }
     }
 }
