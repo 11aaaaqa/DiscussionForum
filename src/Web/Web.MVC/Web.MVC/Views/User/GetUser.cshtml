@@ -1,4 +1,5 @@
-﻿@model Web.MVC.Models.ApiResponses.CustUserResponses.UserResponse
+﻿@using Web.MVC.Constants
+@model Web.MVC.Models.ApiResponses.CustUserResponses.UserResponse
 
 <div class="text-center">
     <div>
@@ -6,13 +7,17 @@
         <p>Зарегистрирован: @Model.RegisteredAt</p>
         <p>Создано обсуждений: @Model.Posts</p>
         <p>Ответов: @Model.Answers</p>
-        @if (User.Identity.Name == Model.UserName)
+        @if (User.Identity.Name == Model.UserName || User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
         {
             if (Model.IsBanned)
             {
                 <p>Забанен по причине "@Model.BannedFor" до @Model.BannedUntil</p>
                 <p>Тип бана: @Model.BanType</p>
             }
+        }
+        @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
+        {
+            <a href="~/SuggestedTopics/@Model.UserName">предложенные темы</a>
         }
     </div>
     <div>
