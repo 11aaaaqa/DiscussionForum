@@ -79,5 +79,18 @@ namespace TopicMicroservice.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetSuggestedTopicsByUserNameAsync(string userName) =>
             Ok(await context.SuggestedTopics.Where(x => x.SuggestedBy == userName).ToListAsync());
+
+        [Route("DeleteAllSuggestedTopicsByUserName/{userName}")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAllSuggestedTopicsByUserNameAsync(string userName)
+        {
+            var suggestedTopics = await context.SuggestedTopics.Where(x => x.SuggestedBy == userName).ToListAsync();
+            foreach (var suggestedTopic in suggestedTopics)
+            {
+                context.Remove(suggestedTopic);
+            }
+            await context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }
