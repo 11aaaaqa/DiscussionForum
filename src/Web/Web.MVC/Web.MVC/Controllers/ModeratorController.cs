@@ -335,7 +335,7 @@ namespace Web.MVC.Controllers
                 $"http://topic-microservice-api:8080/api/SuggestTopic/GetSuggestedTopicsByUserName/{userName}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
-            var suggestedTopics = await response.Content.ReadFromJsonAsync<TopicResponse>();
+            var suggestedTopics = await response.Content.ReadFromJsonAsync<List<TopicResponse>>();
             return View(suggestedTopics);
         }
     }
