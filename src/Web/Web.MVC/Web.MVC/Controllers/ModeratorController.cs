@@ -397,5 +397,19 @@ namespace Web.MVC.Controllers
             var suggestedComments = await response.Content.ReadFromJsonAsync<List<SuggestedCommentResponse>>();
             return View(suggestedComments);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAllSuggestedCommentsByUserName(string userName, string returnUrl)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.DeleteAsync(
+                $"http://comment-microservice-api:8080/api/SuggestComment/DeleteAllSuggestedCommentsByUserName/{userName}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            if (!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
