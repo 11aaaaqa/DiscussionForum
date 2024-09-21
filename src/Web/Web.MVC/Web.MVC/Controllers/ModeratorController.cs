@@ -137,27 +137,29 @@ namespace Web.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AcceptSuggestedComment(Guid id)
+        public async Task<IActionResult> AcceptSuggestedComment(Guid id, string returnUrl)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.DeleteAsync($"http://comment-microservice-api:8080/api/SuggestComment/AcceptSuggestedComment/{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("SuggestedComments");
-            }
-            return View("ActionError");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            if (!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
-        public async Task<IActionResult> RejectSuggestedComment(Guid id)
+        public async Task<IActionResult> RejectSuggestedComment(Guid id, string returnUrl)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.DeleteAsync($"http://comment-microservice-api:8080/api/SuggestComment/RejectSuggestedComment/{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("SuggestedComments");
-            }
-            return View("ActionError");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            if (!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
