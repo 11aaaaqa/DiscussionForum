@@ -8,6 +8,7 @@ using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ApiResponses.CommentsResponses;
 using Web.MVC.Models.ApiResponses.CustUserResponses;
 using Web.MVC.Models.ApiResponses.Discussion;
+using Web.MVC.Models.ApiResponses.ReportResponses;
 using Web.MVC.Services;
 using DiscussionResponse = Web.MVC.Models.ApiResponses.DiscussionResponse;
 
@@ -410,6 +411,19 @@ namespace Web.MVC.Controllers
                 return LocalRedirect(returnUrl);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [Route("Reports/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> GetReportsByUserName(string userName)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://report-microservice-api:8080/api/Report/GetReportsByUserName/{userName}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var reports = await response.Content.ReadFromJsonAsync<List<ReportApiResponse>>();
+            return View(reports);
         }
     }
 }
