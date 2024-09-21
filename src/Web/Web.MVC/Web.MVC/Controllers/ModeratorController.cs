@@ -368,5 +368,19 @@ namespace Web.MVC.Controllers
             var suggestedDiscussions = await response.Content.ReadFromJsonAsync<List<SuggestedDiscussionResponse>>();
             return View(suggestedDiscussions);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAllSuggestedDiscussionsByUserName(string userName, string returnUrl)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.DeleteAsync(
+                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/DeleteAllSuggestedDiscussionsByUserName/{userName}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            if (!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
