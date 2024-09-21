@@ -79,20 +79,30 @@ namespace Web.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AcceptSuggestedDiscussion(Guid id)
+        public async Task<IActionResult> AcceptSuggestedDiscussion(Guid id, string returnUrl)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
-            await httpClient.DeleteAsync($"http://discussion-microservice-api:8080/api/SuggestDiscussion/AcceptSuggestedDiscussion/{id}");
+            var response = await httpClient.DeleteAsync($"http://discussion-microservice-api:8080/api/SuggestDiscussion/AcceptSuggestedDiscussion/{id}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            if (!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
+
             return RedirectToAction("SuggestedDiscussions");
         }
 
         [HttpPost]
-        public async Task<IActionResult> RejectSuggestedDiscussion(Guid id)
+        public async Task<IActionResult> RejectSuggestedDiscussion(Guid id, string returnUrl)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
-            await httpClient.DeleteAsync($"http://discussion-microservice-api:8080/api/SuggestDiscussion/RejectSuggestedDiscussion/{id}");
+            var response = await httpClient.DeleteAsync($"http://discussion-microservice-api:8080/api/SuggestDiscussion/RejectSuggestedDiscussion/{id}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            if(!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
+
             return RedirectToAction("SuggestedDiscussions");
         }
 
