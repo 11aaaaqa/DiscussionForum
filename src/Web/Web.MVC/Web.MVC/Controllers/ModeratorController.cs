@@ -425,5 +425,19 @@ namespace Web.MVC.Controllers
             var reports = await response.Content.ReadFromJsonAsync<List<ReportApiResponse>>();
             return View(reports);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAllReportsByUserName(string userName, string returnUrl)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.DeleteAsync(
+                $"http://report-microservice-api:8080/api/Report/DeleteReportsByUserName/{userName}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            if (!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
