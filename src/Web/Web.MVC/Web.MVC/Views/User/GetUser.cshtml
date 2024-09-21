@@ -17,7 +17,7 @@
         }
         @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
         {
-            <a href="~/SuggestedTopics/@Model.UserName">предложенные темы</a>
+            <a href="~/SuggestedTopics/@Model.UserName">предложенные темы</a><br/>
             <a href="~/Suggestions/Discussions/@Model.UserName">предложенные обсуждения</a>
         }
     </div>

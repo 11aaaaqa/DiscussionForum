@@ -10,7 +10,7 @@
         </form>
         <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@Context.Request.Path" asp-route-userName="@ViewBag.SuggestedByUserName">
             отстранить пользователя
-        </a>
+        </a><br/>
     }
     @foreach (var suggestedDiscussion in Model)
     {
