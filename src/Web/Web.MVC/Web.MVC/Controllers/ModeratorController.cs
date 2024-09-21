@@ -68,7 +68,7 @@ namespace Web.MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SuggestedDiscussions(string returnUrl)
+        public async Task<IActionResult> SuggestedDiscussions()
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
@@ -77,7 +77,6 @@ namespace Web.MVC.Controllers
 
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
-            ViewBag.ReturnUrl = returnUrl;
             var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
             return View(discussions);
         }
