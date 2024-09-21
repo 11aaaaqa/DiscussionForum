@@ -1,4 +1,5 @@
-﻿@model System.Collections.Generic.List<Web.MVC.Models.ApiResponses.Discussion.SuggestedDiscussionResponse>
+﻿@using System.Web
+@model System.Collections.Generic.List<Web.MVC.Models.ApiResponses.Discussion.SuggestedDiscussionResponse>
 
 <div class="text-center">
     <h3>Предложенные обсуждения</h3>
@@ -14,7 +15,7 @@
     }
     @foreach (var suggestedDiscussion in Model)
     {
-        <a href="~/SuggestedDiscussions/@suggestedDiscussion.Id">@suggestedDiscussion.Title</a>
+        <a href="~/SuggestedDiscussions/@suggestedDiscussion.Id?returnUrl=@HttpUtility.UrlEncode(Context.Request.Path + Context.Request.QueryString)">@suggestedDiscussion.Title</a>
         <br/>
     }
 </div>
