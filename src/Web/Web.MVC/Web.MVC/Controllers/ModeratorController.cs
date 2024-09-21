@@ -413,7 +413,7 @@ namespace Web.MVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [Route("Reports/{userName}")]
+        [Route("ReportsByUser/{userName}")]
         [HttpGet]
         public async Task<IActionResult> GetReportsByUserName(string userName)
         {
