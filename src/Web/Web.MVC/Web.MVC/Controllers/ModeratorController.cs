@@ -365,6 +365,7 @@ namespace Web.MVC.Controllers
                 $"http://discussion-microservice-api:8080/api/SuggestDiscussion/GetSuggestedDiscussionsByUserName/{userName}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
+            ViewBag.SuggestedByUserName = userName;
             var suggestedDiscussions = await response.Content.ReadFromJsonAsync<List<SuggestedDiscussionResponse>>();
             return View(suggestedDiscussions);
         }
