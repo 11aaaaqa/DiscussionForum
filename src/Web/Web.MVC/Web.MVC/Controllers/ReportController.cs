@@ -107,13 +107,16 @@ namespace Web.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteReport(Guid reportId)
+        public async Task<IActionResult> DeleteReport(Guid reportId, string returnUrl)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response =
                 await httpClient.DeleteAsync(
                     $"http://report-microservice-api:8080/api/Report/DeleteReportById/{reportId}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            if (!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
 
             return RedirectToAction("Reports", "Report", new {reportType = ReportTypeConstants.DiscussionType});
         }
