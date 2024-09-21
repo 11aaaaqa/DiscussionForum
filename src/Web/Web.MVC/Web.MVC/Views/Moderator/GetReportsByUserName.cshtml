@@ -1,0 +1,33 @@
+﻿@model System.Collections.Generic.List<Web.MVC.Models.ApiResponses.ReportResponses.ReportApiResponse>
+
+<div class="text-center">
+    <h3>Жалобы</h3>
+    @if (Model.Count == 0)
+    {
+        <h5>Жалоб нет</h5>
+    }
+    else
+    {
+        <form method="post" asp-controller="Moderator" asp-action="DeleteAllReportsByUserName" asp-route-returnUrl="@Context.Request.Path"
+              asp-route-userName="@ViewBag.ReportedByUserName">
+            <input type="submit" value="удалить все жалобы"/>
+        </form>
+        <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@Context.Request.Path" asp-route-userName="@ViewBag.ReportedByUserName"
+           >отстранить пользователя</a>
+        <table>
+            <tr><th>От пользователя</th><th>Причина</th><th>Тип</th></tr>
+            @foreach (var report in Model)
+            {
+                if (report.ReportedCommentContent is null)
+                {
+                    <tr><td>@report.UserNameReportedBy</td><td>@report.Reason</td><td><a href="~/reports/@report.Id">обсуждение</a></td></tr>
+                }
+                else
+                {
+                    <tr><td>@report.UserNameReportedBy</td><td>@report.Reason</td><td><a href="~/reports/@report.Id">комментарий</a></td></tr>
+                }
+            }
+        </table>
+    }
+    
+</div>
