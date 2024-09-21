@@ -1,0 +1,21 @@
+﻿@model System.Collections.Generic.List<Web.MVC.Models.ApiResponses.Discussion.SuggestedDiscussionResponse>
+
+<div class="text-center">
+    <h3>Предложенные обсуждения</h3>
+    @if (Model.Count != 0)
+    {
+        <form method="post" asp-controller="Moderator" asp-action="DeleteAllSuggestedDiscussionsByUserName" asp-route-userName="@ViewBag.SuggestedByUserName"
+              asp-route-returnUrl="@Context.Request.Path">
+            <input type="submit" value="удалить все предложенные обсуждения"/>
+        </form>
+        <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@Context.Request.Path" asp-route-userName="@ViewBag.SuggestedByUserName">
+            отстранить пользователя
+        </a>
+    }
+    @foreach (var suggestedDiscussion in Model)
+    {
+        <a href="~/SuggestedDiscussions/@suggestedDiscussion.Id">@suggestedDiscussion.Title</a>
+        <br/>
+    }
+</div>
+
