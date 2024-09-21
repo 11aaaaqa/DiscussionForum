@@ -7,7 +7,9 @@ using Web.MVC.DTOs.Moderator;
 using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ApiResponses.CommentsResponses;
 using Web.MVC.Models.ApiResponses.CustUserResponses;
+using Web.MVC.Models.ApiResponses.Discussion;
 using Web.MVC.Services;
+using DiscussionResponse = Web.MVC.Models.ApiResponses.DiscussionResponse;
 
 namespace Web.MVC.Controllers
 {
@@ -352,6 +354,19 @@ namespace Web.MVC.Controllers
                 return LocalRedirect(returnUrl);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [Route("SuggestedDiscussions/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> GetSuggestedDiscussionsByUserName(string userName)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/GetSuggestedDiscussionsByUserName/{userName}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var suggestedDiscussions = await response.Content.ReadFromJsonAsync<List<SuggestedDiscussionResponse>>();
+            return View(suggestedDiscussions);
         }
     }
 }
