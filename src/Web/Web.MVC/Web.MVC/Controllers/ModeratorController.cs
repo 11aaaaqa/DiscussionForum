@@ -383,5 +383,19 @@ namespace Web.MVC.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        [Route("Suggestions/Comments/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> GetSuggestedCommentsByUserName(string userName)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://comment-microservice-api:8080/api/SuggestComment/GetSuggestedCommentsByUserName/{userName}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            ViewBag.SuggestedByUserName = userName;
+            var suggestedComments = await response.Content.ReadFromJsonAsync<List<SuggestedCommentResponse>>();
+            return View(suggestedComments);
+        }
     }
 }
