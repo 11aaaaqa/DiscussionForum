@@ -7,10 +7,12 @@
     @foreach (var suggestedComment in Model)
     {
         <p>@suggestedComment.Content</p>
-        <form method="post" asp-controller="Moderator" asp-action="AcceptSuggestedComment" asp-route-id="@suggestedComment.Id">
+        <form method="post" asp-controller="Moderator" asp-action="AcceptSuggestedComment" asp-route-id="@suggestedComment.Id"
+              asp-route-returnUrl="@Context.Request.Path">
             <input type="submit" value="принять"/>
         </form>
-        <form method="post" asp-controller="Moderator" asp-action="RejectSuggestedComment" asp-route-id="@suggestedComment.Id">
+        <form method="post" asp-controller="Moderator" asp-action="RejectSuggestedComment" asp-route-id="@suggestedComment.Id"
+              asp-route-returnUrl="@Context.Request.Path">
             <input type="submit" value="отклонить"/>
         </form>
         <a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion"
