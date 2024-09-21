@@ -96,12 +96,13 @@ namespace Web.MVC.Controllers
         [Route("reports/{reportId}")]
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetReport(Guid reportId)
+        public async Task<IActionResult> GetReport(Guid reportId, string returnUrl)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync($"http://report-microservice-api:8080/api/Report/GetReportById/{reportId}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
+            ViewBag.ReturnUrl = returnUrl;
             var report = await response.Content.ReadFromJsonAsync<ReportApiResponse>();
             return View(report);
         }
