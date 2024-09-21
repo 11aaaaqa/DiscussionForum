@@ -1,8 +1,10 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ApiResponses.CommentsResponses;
-using Web.MVC.Models.ApiResponses.CustUserResponses;
 using Web.MVC.Models.ApiResponses.Discussion;
+using DiscussionResponse = Web.MVC.Models.ApiResponses.Discussion.DiscussionResponse;
+using UserResponse = Web.MVC.Models.ApiResponses.CustUserResponses.UserResponse;
 
 namespace Web.MVC.Controllers
 {
@@ -24,7 +26,7 @@ namespace Web.MVC.Controllers
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var user = await response.Content.ReadFromJsonAsync<UserResponse>();
-
+            
             #region GettingDiscussions
 
             StringBuilder sb = new StringBuilder("http://discussion-microservice-api:8080/api/Discussion/GetDiscussionsByIds?");
@@ -41,7 +43,6 @@ namespace Web.MVC.Controllers
             ViewBag.Discussions = discussions;
 
             #endregion
-
 
             #region GettingComments
 
@@ -95,6 +96,17 @@ namespace Web.MVC.Controllers
 
                 var suggestedDiscussions = await suggestedDiscussionsResponse.Content.ReadFromJsonAsync<List<SuggestedDiscussionResponse>>();
                 ViewBag.SuggestedDiscussions = suggestedDiscussions;
+
+                #endregion
+
+                #region GettingSuggestedTopics
+
+                var getSuggestedTopicResponse = await httpClient.GetAsync(
+                    $"http://topic-microservice-api:8080/api/SuggestTopic/GetSuggestedTopicsByUserName/{user.UserName}");
+                if (!getSuggestedTopicResponse.IsSuccessStatusCode) return View("ActionError");
+
+                var suggestedTopics = await getSuggestedTopicResponse.Content.ReadFromJsonAsync<List<TopicResponse>>();
+                ViewBag.SuggestedTopics = suggestedTopics;
 
                 #endregion
             }
