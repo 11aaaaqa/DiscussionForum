@@ -422,6 +422,7 @@ namespace Web.MVC.Controllers
                 $"http://report-microservice-api:8080/api/Report/GetReportsByUserName/{userName}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
+            ViewBag.ReportedByUserName = userName;
             var reports = await response.Content.ReadFromJsonAsync<List<ReportApiResponse>>();
             return View(reports);
         }
