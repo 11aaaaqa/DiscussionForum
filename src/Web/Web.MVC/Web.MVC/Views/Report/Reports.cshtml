@@ -1,4 +1,5 @@
-﻿@model List<Web.MVC.Models.ApiResponses.ReportResponses.ReportApiResponse>
+﻿@using System.Web
+@model List<Web.MVC.Models.ApiResponses.ReportResponses.ReportApiResponse>
 
 <div class="text-center">
     <h3>Жалобы</h3>
@@ -14,11 +15,11 @@
             {
                 if (report.ReportedCommentContent is null)
                 {
-                    <tr><td>@report.UserNameReportedBy</td><td>@report.Reason</td><td><a href="~/reports/@report.Id">обсуждение</a></td></tr>
+                    <tr><td>@report.UserNameReportedBy</td><td>@report.Reason</td><td><a href="~/reports/@report.Id?returnUrl=@HttpUtility.UrlEncode(Context.Request.Path + Context.Request.QueryString)">обсуждение</a></td></tr>
                 }
                 else
                 {
-                    <tr><td>@report.UserNameReportedBy</td><td>@report.Reason</td><td><a href="~/reports/@report.Id">комментарий</a></td></tr>
+                    <tr><td>@report.UserNameReportedBy</td><td>@report.Reason</td><td><a href="~/reports/@report.Id?returnUrl=@HttpUtility.UrlEncode(Context.Request.Path + Context.Request.QueryString)">комментарий</a></td></tr>
                 }
             }
         </table>
