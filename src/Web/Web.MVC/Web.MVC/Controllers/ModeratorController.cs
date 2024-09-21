@@ -356,7 +356,7 @@ namespace Web.MVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [Route("SuggestedDiscussions/{userName}")]
+        [Route("Suggestions/Discussions/{userName}")]
         [HttpGet]
         public async Task<IActionResult> GetSuggestedDiscussionsByUserName(string userName)
         {
