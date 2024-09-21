@@ -9,10 +9,8 @@
               asp-route-returnUrl="@Context.Request.Path">
             <input type="submit" value="удалить все предложенные темы" />
         </form>
-        <form method="post" asp-controller="Moderator" asp-action="BanUser" asp-route-userName="@ViewBag.SuggestedByUserName"
-              asp-route-returnUrl="@Context.Request.Path">
-            <input type="submit" value="забанить пользователя" />
-        </form>
+        <a asp-controller="Moderator" asp-action="BanUser" asp-route-userName="@ViewBag.SuggestedByUserName"
+           asp-route-returnUrl="@Context.Request.Path">забанить пользователя</a>
     }
     
     <table>
