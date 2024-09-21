@@ -68,12 +68,16 @@ namespace Web.MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SuggestedDiscussions()
+        public async Task<IActionResult> SuggestedDiscussions(string returnUrl)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
             var response = await httpClient.GetAsync(
                     "http://discussion-microservice-api:8080/api/SuggestDiscussion/GetAllSuggestedDiscussions");
+
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            ViewBag.ReturnUrl = returnUrl;
             var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
             return View(discussions);
         }
@@ -108,7 +112,7 @@ namespace Web.MVC.Controllers
 
         [HttpGet]
         [Route("SuggestedDiscussions/{id}")]
-        public async Task<IActionResult> SuggestedDiscussion(Guid id)
+        public async Task<IActionResult> SuggestedDiscussion(Guid id, string returnUrl)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
@@ -116,6 +120,7 @@ namespace Web.MVC.Controllers
                 $"http://discussion-microservice-api:8080/api/SuggestDiscussion/GetSuggestedDiscussionById?id={id}");
             if (response.StatusCode == HttpStatusCode.OK)
             {
+                ViewBag.ReturnUrl = returnUrl;
                 var suggestedDiscussion = await response.Content.ReadFromJsonAsync<DiscussionResponse>();
                 return View(suggestedDiscussion);
             }
