@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Moderator\BanUserAndDeleteSuggestion.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Moderator\GetSuggestedCommentsByUserName.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedComments.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedDiscussion.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedDiscussions.cshtml" />
@@ -66,6 +67,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\User\GetUser.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Moderator\GetSuggestedCommentsByUserName.cshtml" />
   </ItemGroup>
 
 </Project>
