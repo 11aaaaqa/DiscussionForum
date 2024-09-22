@@ -9,5 +9,7 @@
         public DateOnly CreatedAt { get; set; }
         public int Rating { get; set; }
         public string CreatedBy { get; set; }
+        public List<string> UsersIncreasedRating { get; set; }
+        public List<string> UsersDecreasedRating { get; set; }
     }
 }

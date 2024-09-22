@@ -77,7 +77,9 @@ namespace DiscussionMicroservice.Api.Controllers
                 CreatedBy = acceptedDiscussion.CreatedBy,
                 Rating = acceptedDiscussion.Rating,
                 Title = acceptedDiscussion.Title,
-                TopicName = acceptedDiscussion.TopicName
+                TopicName = acceptedDiscussion.TopicName,
+                UsersDecreasedRating = new List<string>(),
+                UsersIncreasedRating = new List<string>()
             });
             await context.SaveChangesAsync();
 
