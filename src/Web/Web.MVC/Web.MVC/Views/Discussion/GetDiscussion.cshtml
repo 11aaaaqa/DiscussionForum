@@ -5,14 +5,18 @@
     <p>Создано by: @ViewBag.CreatedBy</p>
     <p>Дата создания: @ViewBag.CreatedAt</p>
     <p>Рейтинг: @ViewBag.Rating</p>
-    <form method="post" asp-action="IncreaseDiscussionRatingByOne" asp-controller="Discussion" asp-route-returnUrl="@Context.Request.Path"
-          asp-route-discussionId="@ViewBag.DiscussionId">
-        <input type="submit" value="+"/>
-    </form>
-    <form method="post" asp-action="DecreaseDiscussionRatingByOne" asp-controller="Discussion" asp-route-returnUrl="@Context.Request.Path"
-          asp-route-discussionId="@ViewBag.DiscussionId">
-        <input type="submit" value="-" />
-    </form>
+    @if (User.Identity.Name != @ViewBag.CreatedBy)
+    {
+        <form method="post" asp-action="IncreaseDiscussionRatingByOne" asp-controller="Discussion" asp-route-returnUrl="@Context.Request.Path"
+            asp-route-discussionId="@ViewBag.DiscussionId">
+            <input type="submit" value="+"/>
+        </form>
+        <form method="post" asp-action="DecreaseDiscussionRatingByOne" asp-controller="Discussion" asp-route-returnUrl="@Context.Request.Path"
+            asp-route-discussionId="@ViewBag.DiscussionId">
+            <input type="submit" value="-" />
+        </form>
+    }
+    
     <p>@ViewBag.Content</p>
     @if (User.Identity.Name != ViewBag.CreatedBy)
     {
