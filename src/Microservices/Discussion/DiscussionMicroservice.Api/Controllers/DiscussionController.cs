@@ -2,9 +2,7 @@
 using DiscussionMicroservice.Api.DTOs;
 using DiscussionMicroservice.Api.Models;
 using MassTransit;
-using MassTransit.Transports.Fabric;
 using MessageBus.Messages;
-using MessageBus.Messages.BanMessages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
