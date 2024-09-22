@@ -154,7 +154,7 @@ namespace Web.MVC.Controllers
                 Encoding.UTF8, "application/json");
             var response = await httpClient.PatchAsync(
                 $"http://discussion-microservice-api:8080/api/Discussion/IncreaseDiscussionRatingByOne", jsonContent);
-            if (!response.IsSuccessStatusCode) return View("RatingIsAlreadyIncreased", model: Request.Path);
+            if (!response.IsSuccessStatusCode) return View("RatingIsAlreadyIncreased", model: returnUrl);
 
             if(!string.IsNullOrEmpty(returnUrl)) 
                 return LocalRedirect(returnUrl);
@@ -172,7 +172,7 @@ namespace Web.MVC.Controllers
                 Encoding.UTF8, "application/json");
             var response = await httpClient.PatchAsync(
                 $"http://discussion-microservice-api:8080/api/Discussion/DecreaseDiscussionRatingByOne", jsonContent);
-            if (!response.IsSuccessStatusCode) return View("RatingIsAlreadyDecreased", model: Request.Path);
+            if (!response.IsSuccessStatusCode) return View("RatingIsAlreadyDecreased", model: returnUrl);
 
             if (!string.IsNullOrEmpty(returnUrl))
                 return LocalRedirect(returnUrl);
