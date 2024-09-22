@@ -84,6 +84,10 @@ namespace DiscussionMicroservice.Api.Controllers
 
             discussion.UsersIncreasedRating.Add(model.UserNameIncreasedBy);
             discussion.Rating += 1;
+
+            context.Discussions.Update(discussion);
+            await context.SaveChangesAsync();
+
             return Ok();
         }
 
@@ -99,6 +103,10 @@ namespace DiscussionMicroservice.Api.Controllers
 
             discussion.UsersDecreasedRating.Add(model.UserNameDecreasedBy);
             discussion.Rating -= 1;
+
+            context.Discussions.Update(discussion);
+            await context.SaveChangesAsync();
+
             return Ok();
         }
     }
