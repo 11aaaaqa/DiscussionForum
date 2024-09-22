@@ -1,4 +1,5 @@
 ﻿using DiscussionMicroservice.Api.Database;
+using DiscussionMicroservice.Api.DTOs;
 using DiscussionMicroservice.Api.Models;
 using MassTransit;
 using MassTransit.Transports.Fabric;
@@ -72,22 +73,22 @@ namespace DiscussionMicroservice.Api.Controllers
         }
 
         [Route("IncreaseDiscussionRatingByOne")]
-        [HttpPut]
-        public async Task<IActionResult> IncreaseDiscussionRatingByOneAsync(Guid discussionId, string userNameIncreasedBy)
+        [HttpPatch]
+        public async Task<IActionResult> IncreaseDiscussionRatingByOneAsync([FromBody] IncreaseDiscussionRatingByOneDto model)
         {
-            var discussion = await context.Discussions.SingleOrDefaultAsync(x => x.Id == discussionId);
+            var discussion = await context.Discussions.SingleOrDefaultAsync(x => x.Id == model.DiscussionId);
             if(discussion is null) return BadRequest();
 
-            var isUserAlreadyIncreased = discussion.UsersIncreasedRating.Contains(userNameIncreasedBy);
+            var isUserAlreadyIncreased = discussion.UsersIncreasedRating.Contains(model.UserNameIncreasedBy);
             if (isUserAlreadyIncreased) return BadRequest();
 
-            discussion.UsersIncreasedRating.Add(userNameIncreasedBy);
+            discussion.UsersIncreasedRating.Add(model.UserNameIncreasedBy);
             discussion.Rating += 1;
             return Ok();
         }
 
         [Route("DecreaseDiscussionRatingByOne")]
-        [HttpPut]
+        [HttpPatch]
         public async Task<IActionResult> DecreaseDiscussionRatingByOneAsync(Guid discussionId, string userNameDecreasedBy)
         {
             var discussion = await context.Discussions.SingleOrDefaultAsync(x => x.Id == discussionId);
