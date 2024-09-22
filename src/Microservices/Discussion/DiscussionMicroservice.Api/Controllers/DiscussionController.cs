@@ -70,5 +70,20 @@ namespace DiscussionMicroservice.Api.Controllers
 
             return Ok();
         }
+
+        [Route("IncreaseDiscussionRatingByOne")]
+        [HttpPut]
+        public async Task<IActionResult> IncreaseDiscussionRatingByOneAsync(Guid discussionId, string userNameIncreasedBy)
+        {
+            var discussion = await context.Discussions.SingleOrDefaultAsync(x => x.Id == discussionId);
+            if(discussion is null) return BadRequest();
+
+            var isUserAlreadyIncreased = discussion.UsersIncreasedRating.Contains(userNameIncreasedBy);
+            if (isUserAlreadyIncreased) return BadRequest();
+
+            discussion.UsersIncreasedRating.Add(userNameIncreasedBy);
+            discussion.Rating += 1;
+            return Ok();
+        }
     }
 }
