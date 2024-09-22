@@ -190,5 +190,29 @@ namespace DiscussionMicroservice.IntegrationTests
             var suggestedDiscussions = await response.Content.ReadFromJsonAsync<List<SuggestedDiscussion>>();
             Assert.Equal(1, suggestedDiscussions.Count);
         }
+
+        [Fact]
+        public async Task IncreaseDiscussionRatingByOneAsync_ReturnsBadRequest()
+        {
+            Guid discussionId = Guid.NewGuid();
+            string userNameIncreasedBy = "TestUserName";
+            using StringContent jsonContent = new(JsonSerializer.Serialize(new { discussionId, userNameIncreasedBy }),
+                Encoding.UTF8, "application/json");
+            var response = await client.PatchAsync("api/Discussion/IncreaseDiscussionRatingByOne", jsonContent);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task IncreaseDiscussionRatingByOneAsync_ReturnsOk()
+        {
+            var discussionId = new Guid("8077167c-d724-4258-8451-b617dc4bdfec");
+            string userNameIncreasedBy = "TestUserName";
+            using StringContent jsonContent = new(JsonSerializer.Serialize(new { discussionId, userNameIncreasedBy }),
+                Encoding.UTF8, "application/json");
+            var response = await client.PatchAsync("api/Discussion/IncreaseDiscussionRatingByOne", jsonContent);
+
+            response.EnsureSuccessStatusCode();
+        }
     }
 }
