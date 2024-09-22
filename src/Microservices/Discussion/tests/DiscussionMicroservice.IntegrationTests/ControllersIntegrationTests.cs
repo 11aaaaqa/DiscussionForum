@@ -214,5 +214,29 @@ namespace DiscussionMicroservice.IntegrationTests
 
             response.EnsureSuccessStatusCode();
         }
+
+        [Fact]
+        public async Task DecreaseDiscussionRatingByOneAsync_ReturnsBadRequest()
+        {
+            Guid discussionId = Guid.NewGuid();
+            string userNameDecreasedBy = "TestUserName";
+            using StringContent jsonContent = new(JsonSerializer.Serialize(new { discussionId, userNameDecreasedBy }),
+                Encoding.UTF8, "application/json");
+            var response = await client.PatchAsync("api/Discussion/DecreaseDiscussionRatingByOne", jsonContent);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task DecreaseDiscussionRatingByOneAsync_ReturnsOk()
+        {
+            var discussionId = new Guid("8077167c-d724-4258-8451-b617dc4bdfec");
+            string userNameDecreasedBy = "TestUserName";
+            using StringContent jsonContent = new(JsonSerializer.Serialize(new { discussionId, userNameDecreasedBy }),
+                Encoding.UTF8, "application/json");
+            var response = await client.PatchAsync("api/Discussion/DecreaseDiscussionRatingByOne", jsonContent);
+
+            response.EnsureSuccessStatusCode();
+        }
     }
 }
