@@ -161,5 +161,23 @@ namespace Web.MVC.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> DecreaseDiscussionRatingByOne(Guid discussionId, string returnUrl)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            using StringContent jsonContent = new(
+                JsonSerializer.Serialize(new { discussionId, userNameDecreasedBy = User.Identity.Name }),
+                Encoding.UTF8, "application/json");
+            var response = await httpClient.PatchAsync(
+                $"http://discussion-microservice-api:8080/api/Discussion/DecreaseDiscussionRatingByOne", jsonContent);
+            if (!response.IsSuccessStatusCode) return View("RatingIsAlreadyDecreased", model: Request.Path);
+
+            if (!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
