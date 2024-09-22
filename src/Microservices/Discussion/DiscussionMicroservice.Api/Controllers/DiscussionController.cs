@@ -89,15 +89,15 @@ namespace DiscussionMicroservice.Api.Controllers
 
         [Route("DecreaseDiscussionRatingByOne")]
         [HttpPatch]
-        public async Task<IActionResult> DecreaseDiscussionRatingByOneAsync(Guid discussionId, string userNameDecreasedBy)
+        public async Task<IActionResult> DecreaseDiscussionRatingByOneAsync([FromBody] DecreaseDiscussionRatingByOneMethodDto model)
         {
-            var discussion = await context.Discussions.SingleOrDefaultAsync(x => x.Id == discussionId);
+            var discussion = await context.Discussions.SingleOrDefaultAsync(x => x.Id == model.DiscussionId);
             if (discussion is null) return BadRequest();
 
-            var isUserAlreadyDecreased = discussion.UsersDecreasedRating.Contains(userNameDecreasedBy);
+            var isUserAlreadyDecreased = discussion.UsersDecreasedRating.Contains(model.UserNameDecreasedBy);
             if (isUserAlreadyDecreased) return BadRequest();
 
-            discussion.UsersDecreasedRating.Add(userNameDecreasedBy);
+            discussion.UsersDecreasedRating.Add(model.UserNameDecreasedBy);
             discussion.Rating -= 1;
             return Ok();
         }
