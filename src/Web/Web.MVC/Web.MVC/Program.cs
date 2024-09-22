@@ -31,6 +31,7 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddTransient<IReportService, SuggestionsService>();
 builder.Services.AddTransient<ISuggestionService, SuggestionsService>();
+builder.Services.AddTransient<ICheckUserService, CheckUserService>();
 
 builder.Services.AddHttpClient();
 builder.Services.AddCors();
