@@ -85,5 +85,20 @@ namespace DiscussionMicroservice.Api.Controllers
             discussion.Rating += 1;
             return Ok();
         }
+
+        [Route("DecreaseDiscussionRatingByOne")]
+        [HttpPut]
+        public async Task<IActionResult> DecreaseDiscussionRatingByOneAsync(Guid discussionId, string userNameDecreasedBy)
+        {
+            var discussion = await context.Discussions.SingleOrDefaultAsync(x => x.Id == discussionId);
+            if (discussion is null) return BadRequest();
+
+            var isUserAlreadyDecreased = discussion.UsersDecreasedRating.Contains(userNameDecreasedBy);
+            if (isUserAlreadyDecreased) return BadRequest();
+
+            discussion.UsersDecreasedRating.Add(userNameDecreasedBy);
+            discussion.Rating -= 1;
+            return Ok();
+        }
     }
 }
