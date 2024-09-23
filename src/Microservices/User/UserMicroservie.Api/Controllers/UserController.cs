@@ -92,7 +92,7 @@ namespace UserMicroservice.Api.Controllers
             Ok(await banService.IsUserBannedAsync(userId, banTypes));
 
         [Route("BanUserByUserId/{userId}")]
-        [HttpPost]
+        [HttpPatch]
         public async Task<IActionResult> BanUserByIdAsync(Guid userId, [FromBody] BanDto model)
         {
             await banService.BanUserAsync(userId, model.Reason, model.BanType, model.ForDays);
@@ -100,7 +100,7 @@ namespace UserMicroservice.Api.Controllers
         }
 
         [Route("BanUserByUserName/{userName}")]
-        [HttpPost]
+        [HttpPatch]
         public async Task<IActionResult> BanUserByUserNameAsync(string userName, [FromBody] BanDto model)
         {
             await banService.BanUserAsync(userName, model.Reason, model.BanType, model.ForDays);
@@ -108,7 +108,7 @@ namespace UserMicroservice.Api.Controllers
         }
 
         [Route("UnbanUserByUserId/{userId}")]
-        [HttpPost]
+        [HttpPatch]
         public async Task<IActionResult> UnbanUserByUserIdAsync(Guid userId)
         {
             await banService.UnbanUserAsync(userId);
@@ -116,7 +116,7 @@ namespace UserMicroservice.Api.Controllers
         }
 
         [Route("UnbanUserByUserName/{userName}")]
-        [HttpPost]
+        [HttpPatch]
         public async Task<IActionResult> UnbanUserByUserNameAsync(string userName)
         {
             await banService.UnbanUserAsync(userName);
@@ -124,7 +124,7 @@ namespace UserMicroservice.Api.Controllers
         }
 
         [Route("ChangeUserName/{userId}")]
-        [HttpPost]
+        [HttpPatch]
         public async Task<IActionResult> ChangeUserNameAsync(Guid userId, [FromBody] string newUserName)
         {
             var isChanged = await changeUserName.ChangeUserNameAsync(userId, newUserName);
