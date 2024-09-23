@@ -1,4 +1,5 @@
-﻿using CommentMicroservice.Api.Models;
+﻿using CommentMicroservice.Api.DTOs;
+using CommentMicroservice.Api.Models;
 using CommentMicroservice.Api.Services.Repository;
 using MassTransit;
 using MessageBus.Messages;
@@ -67,9 +68,12 @@ namespace CommentMicroservice.Api.Controllers
 
         [Route("CreateComment")]
         [HttpPost]
-        public async Task<IActionResult> CreateCommentAsync([FromBody] Comment model)
+        public async Task<IActionResult> CreateCommentAsync([FromBody] CreateCommentDto model)
         {
-            var createdComment = await repository.CreateAsync(model);
+            var createdComment = await repository.CreateAsync(new Comment
+            {
+                Content = model.Content, CreatedBy = model.CreatedBy, CreatedDate = DateTime.UtcNow, DiscussionId = model.DiscussionId, Id = Guid.NewGuid()
+            });
 
             await publishEndpoint.Publish<ICommentCreated>(new
             {
