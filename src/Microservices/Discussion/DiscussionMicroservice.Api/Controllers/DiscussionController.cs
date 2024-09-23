@@ -107,5 +107,33 @@ namespace DiscussionMicroservice.Api.Controllers
 
             return Ok();
         }
+
+        [Route("CreateDiscussion")]
+        [HttpPost]
+        public async Task<IActionResult> CreateDiscussionAsync([FromBody] CreateDiscussionDto model)
+        {
+            var discussion = new Discussion
+            {
+                Content = model.Content,
+                CreatedBy = model.CreatedBy,
+                Title = model.Title,
+                TopicName = model.TopicName,
+                Id = Guid.NewGuid(),
+                CreatedAt = DateOnly.FromDateTime(DateTime.Now),
+                Rating = 0,
+                UsersDecreasedRating = new List<string>(),
+                UsersIncreasedRating = new List<string>()
+            };
+            await context.Discussions.AddAsync(discussion);
+            await context.SaveChangesAsync();
+
+            await publishEndpoint.Publish<ISuggestedDiscussionAccepted>(new
+            {
+                AcceptedDiscussionId = discussion.Id,
+                discussion.CreatedBy,
+                TopicName = discussion.TopicName
+            });
+            return Ok(discussion.Id);
+        }
     }
 }
