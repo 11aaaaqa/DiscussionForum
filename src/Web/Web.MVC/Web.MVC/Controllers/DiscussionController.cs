@@ -127,20 +127,33 @@ namespace Web.MVC.Controllers
 
                 var discussionId = id;
                 model.CreatedBy = User.Identity.Name;
-                using StringContent jsonContent = new(JsonSerializer.Serialize(new
-                {
-                    model.CreatedBy,
-                    model.Content,
-                    DiscussionId = discussionId
-                }), Encoding.UTF8, "application/json");
 
-                var response = await httpClient.PostAsync("http://comment-microservice-api:8080/api/SuggestComment/Suggest", jsonContent);
-                if (response.StatusCode == HttpStatusCode.OK)
+                var isAllowedToDirectlyCreateComment = await checkUserService.HasUserCreatedSpecifiedCommentsCount(User.Identity.Name, 7);
+                if (!isAllowedToDirectlyCreateComment)
                 {
-                    return View("ThanksForComment", discussionId);
+                    using StringContent jsonContent = new(JsonSerializer.Serialize(new
+                    {
+                        model.CreatedBy,
+                        model.Content,
+                        DiscussionId = discussionId
+                    }), Encoding.UTF8, "application/json");
+
+                    var response = await httpClient.PostAsync("http://comment-microservice-api:8080/api/SuggestComment/Suggest", jsonContent);
+                    if (response.IsSuccessStatusCode)
+                        return View("ThanksForComment", discussionId);
+                    
+                    return View("SomethingWentWrong", discussionId);
                 }
-                ModelState.AddModelError(string.Empty, "Что-то пошло не так, попробуйте еще раз");
-                return View("SomethingWentWrong", discussionId);
+                else
+                {
+                    using StringContent jsonContent = new(JsonSerializer.Serialize(new
+                    { discussionId, model.CreatedBy, model.Content }), Encoding.UTF8, "application/json");
+                    var response = await httpClient.PostAsync(
+                        "http://comment-microservice-api:8080/api/Comment/CreateComment", jsonContent);
+                    if (!response.IsSuccessStatusCode)
+                        return View("SomethingWentWrong", discussionId);
+                    return LocalRedirect($"/discussions/{id}");
+                }
             }
             return View("SomethingWentWrong", id);
         }
