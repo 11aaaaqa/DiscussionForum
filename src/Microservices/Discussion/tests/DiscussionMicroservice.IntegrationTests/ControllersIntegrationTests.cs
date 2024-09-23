@@ -238,5 +238,21 @@ namespace DiscussionMicroservice.IntegrationTests
 
             response.EnsureSuccessStatusCode();
         }
+
+        [Fact]
+        public async Task CreateDiscussionAsync_ReturnsOkWithCreatedDiscussionId()
+        {
+            var model = new CreateDiscussionDto
+            {
+                Content = "TestContentX", CreatedBy = "TestCreatedByX", Title = "TestTitleX",
+                TopicName = "TestTopicNameX"
+            };
+            using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("api/Discussion/CreateDiscussion", jsonContent);
+
+            response.EnsureSuccessStatusCode();
+            var createdDiscussionId = await response.Content.ReadFromJsonAsync<Guid>();
+            Assert.NotNull(createdDiscussionId);
+        }
     }
 }
