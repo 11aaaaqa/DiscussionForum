@@ -8,16 +8,19 @@ using Web.MVC.DTOs.Comment;
 using Web.MVC.DTOs.Discussion;
 using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ApiResponses.CommentsResponses;
+using Web.MVC.Services;
 
 namespace Web.MVC.Controllers
 {
     public class DiscussionController : Controller
     {
+        private readonly ICheckUserService checkUserService;
         private readonly IHttpClientFactory httpClientFactory;
 
-        public DiscussionController(IHttpClientFactory httpClientFactory)
+        public DiscussionController(IHttpClientFactory httpClientFactory, ICheckUserService checkUserService)
         {
             this.httpClientFactory = httpClientFactory;
+            this.checkUserService = checkUserService;
         }
 
         [Authorize]
@@ -43,15 +46,30 @@ namespace Web.MVC.Controllers
                 var isUserBanned = await isUserBannedResponse.Content.ReadFromJsonAsync<bool>();
                 if (isUserBanned) return View("DiscussionBanned");
 
-                using StringContent jsonContent = new
-                    (JsonSerializer.Serialize(new { model.Title, model.Content, CreatedBy = User.Identity.Name}), Encoding.UTF8, "application/json");
-
-                var response = await httpClient.PostAsync(
-                    $"http://discussion-microservice-api:8080/api/SuggestDiscussion/SuggestToCreate?topicName={model.TopicName}",
-                    jsonContent);
-                if (response.StatusCode == HttpStatusCode.OK)
+                var isUserAchieveNeededCreatedDiscussions =
+                    await checkUserService.HasUserCreatedSpecifiedDiscussionsCount(User.Identity.Name, 3);
+                if (!isUserAchieveNeededCreatedDiscussions)
                 {
-                    return View("Thanks");
+                    using StringContent jsonContent = new
+                        (JsonSerializer.Serialize(new { model.Title, model.Content, CreatedBy = User.Identity.Name }), Encoding.UTF8, "application/json");
+
+                    var response = await httpClient.PostAsync(
+                        $"http://discussion-microservice-api:8080/api/SuggestDiscussion/SuggestToCreate?topicName={model.TopicName}",
+                        jsonContent);
+                    if (response.StatusCode == HttpStatusCode.OK)
+                        return View("Thanks");
+                }
+                else
+                {
+                    using StringContent jsonContent = new(JsonSerializer.Serialize(new { model.Title, model.TopicName, model.Content,
+                            CreatedBy = User.Identity.Name }), Encoding.UTF8, "application/json");
+                    var response = await httpClient.PostAsync(
+                        "http://discussion-microservice-api:8080/api/Discussion/CreateDiscussion",
+                        jsonContent);
+                    if (!response.IsSuccessStatusCode) return View("ActionError");
+
+                    var discussionId = await response.Content.ReadFromJsonAsync<Guid>();
+                    return LocalRedirect($"/discussions/{discussionId}");
                 }
 
                 return View("ActionError");
