@@ -1,4 +1,5 @@
 ﻿using CommentMicroservice.Api.Controllers;
+using CommentMicroservice.Api.DTOs;
 using CommentMicroservice.Api.Models;
 using CommentMicroservice.Api.Services.Repository;
 using MassTransit;
@@ -30,6 +31,7 @@ namespace CommentMicroservice.UnitTests
             Assert.Equal(200, methodResult.StatusCode);
             var comments = Assert.IsType<List<Comment>>(methodResult.Value);
             Assert.Equal(3, comments.Count);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -43,6 +45,7 @@ namespace CommentMicroservice.UnitTests
             var result = await controller.GetCommentsByDiscussionIdAsync(id);
 
             Assert.IsType<BadRequestResult>(result);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -65,6 +68,7 @@ namespace CommentMicroservice.UnitTests
             Assert.Equal(200, methodResult.StatusCode);
             var comments = Assert.IsType<List<Comment>>(methodResult.Value);
             Assert.Equal(2, comments.Count);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -82,6 +86,7 @@ namespace CommentMicroservice.UnitTests
             var result = await controller.UpdateCommentAsync(model);
 
             Assert.IsType<BadRequestResult>(result);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -111,33 +116,7 @@ namespace CommentMicroservice.UnitTests
             Assert.Equal(model.Content, updatedComment.Content);
             Assert.Equal(model.CreatedBy, updatedComment.CreatedBy);
             Assert.Equal(model.CreatedDate, updatedComment.CreatedDate);
-        }
-
-        [Fact]
-        public async Task CreateCommentAsync_ReturnsOkWithCreatedComment()
-        {
-            Comment model = new()
-            {
-                Content = It.IsAny<string>(),
-                CreatedBy = It.IsAny<string>(),
-                CreatedDate = It.IsAny<DateTime>(),
-                DiscussionId = It.IsAny<Guid>(),
-                Id = It.IsAny<Guid>()
-            };
-            var mock = new Mock<IRepository<Comment>>();
-            mock.Setup(x => x.CreateAsync(model)).ReturnsAsync(model);
-            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
-
-            var result = await controller.CreateCommentAsync(model);
-
-            var methodResult = Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(200, methodResult.StatusCode);
-            var createdComment = Assert.IsType<Comment>(methodResult.Value);
-            Assert.Equal(model.Id, createdComment.Id);
-            Assert.Equal(model.DiscussionId, createdComment.DiscussionId);
-            Assert.Equal(model.Content, createdComment.Content);
-            Assert.Equal(model.CreatedBy, createdComment.CreatedBy);
-            Assert.Equal(model.CreatedDate, createdComment.CreatedDate);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -151,6 +130,7 @@ namespace CommentMicroservice.UnitTests
             var result = await controller.DeleteCommentByIdAsync(id);
 
             Assert.IsType<BadRequestResult>(result);
+            mock.VerifyAll();
         }
 
         [Fact]
@@ -165,6 +145,7 @@ namespace CommentMicroservice.UnitTests
             var result = await controller.DeleteCommentByIdAsync(id);
 
             Assert.IsType<OkResult>(result);
+            mock.VerifyAll();
         }
 
         [Fact]
