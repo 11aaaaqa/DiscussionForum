@@ -117,15 +117,17 @@ namespace Web.MVC.Controllers
         }
 
         [Authorize]
+        [Route("[controller]/ChangeUserName")]
         [HttpGet]
-        public IActionResult ChangeUserName()
+        public IActionResult ChangeUserName(string? returnUrl, Guid userId)
         {
-            return View();
+            return View(new ChangeUserNameDto{ReturnUrl = returnUrl, UserId = userId});
         }
 
         [Authorize]
+        [Route("[controller]/ChangeUserName")]
         [HttpPost]
-        public async Task<IActionResult> ChangeUserName(ChangeUserNameDto model, string returnUrl, Guid userId)
+        public async Task<IActionResult> ChangeUserName(ChangeUserNameDto model)
         {
             if (ModelState.IsValid)
             {
@@ -133,13 +135,13 @@ namespace Web.MVC.Controllers
                     new(JsonSerializer.Serialize(new { newUserName = model.NewUserName}), Encoding.UTF8, "application/json");
                 using HttpClient httpClient = httpClientFactory.CreateClient();
                 var response = await httpClient.PatchAsync(
-                    $"http://user-microservice-api:8080/api/profile/User/ChangeUserName/{userId}", jsonContent);
+                    $"http://user-microservice-api:8080/api/profile/User/ChangeUserName/{model.UserId}", jsonContent);
                 if (!response.IsSuccessStatusCode) return View("ActionError");
 
-                if (!string.IsNullOrEmpty(returnUrl))
-                    return LocalRedirect(returnUrl);
+                if (!string.IsNullOrEmpty(model.ReturnUrl))
+                    return LocalRedirect(model.ReturnUrl);
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction($"/User/{model.NewUserName}");
             }
             return View(model);
         }
