@@ -17,6 +17,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
+    x.AddConsumer<UserNameChangedTopicConsumer>();
     x.AddConsumer<DiscussionDeletedTopicConsumer>();
     x.AddConsumer<DiscussionAddedTopicConsumer>();
     x.UsingRabbitMq((context, config) =>
