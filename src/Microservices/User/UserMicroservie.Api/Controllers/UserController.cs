@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MassTransit;
+using MessageBus.Messages;
+using Microsoft.AspNetCore.Mvc;
 using UserMicroservice.Api.DTOs;
 using UserMicroservice.Api.Models;
 using UserMicroservice.Api.Services.Ban;
@@ -13,12 +15,15 @@ namespace UserMicroservice.Api.Controllers
         private readonly IUserService<User> userService;
         private readonly IBanService<User> banService;
         private readonly IChangeUserName changeUserName;
+        private readonly IPublishEndpoint publishEndpoint;
 
-        public UserController(IUserService<User> userService, IBanService<User> banService, IChangeUserName changeUserName)
+        public UserController(IUserService<User> userService, IBanService<User> banService, IChangeUserName changeUserName,
+            IPublishEndpoint publishEndpoint)
         {
             this.banService = banService;
             this.userService = userService;
             this.changeUserName = changeUserName;
+            this.publishEndpoint = publishEndpoint;
         }
 
         [Route("GetUserByUserName/{userName}")]
@@ -127,9 +132,17 @@ namespace UserMicroservice.Api.Controllers
         [HttpPatch]
         public async Task<IActionResult> ChangeUserNameAsync(Guid userId, [FromBody] string newUserName)
         {
+            var user = await userService.GetUserByIdAsync(userId);
+            if (user == null) return BadRequest();
             var isChanged = await changeUserName.ChangeUserNameAsync(userId, newUserName);
             if (isChanged)
+            {
+                await publishEndpoint.Publish<IUserNameChanged>(new
+                {
+                    OldUserName = user.UserName, NewUserName = newUserName
+                });
                 return Ok();
+            }
             return BadRequest();
         }
 
