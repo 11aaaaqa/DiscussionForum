@@ -2,6 +2,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RegisterMicroservice.Api.Database;
+using RegisterMicroservice.Api.MessageBus.Consumers;
 using RegisterMicroservice.Api.Models.UserModels;
 using RegisterMicroservice.Api.Services;
 
@@ -29,6 +30,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumer<UserNameChangedRegisterConsumer>();
     x.SetKebabCaseEndpointNameFormatter();
     x.UsingRabbitMq((context, config) =>
     {
