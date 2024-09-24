@@ -8,5 +8,8 @@ namespace Web.MVC.DTOs.User
         [StringLength(30, ErrorMessage = "Максимальная длина имени пользователя - 30 символов")]
         [Display(Name = "Новое имя пользователя")]
         public string NewUserName { get; set; }
+
+        public string? ReturnUrl { get; set; }
+        public Guid UserId { get; set; }
     }
 }
