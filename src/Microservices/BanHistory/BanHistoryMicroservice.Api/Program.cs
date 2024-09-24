@@ -13,6 +13,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(
 builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
+    x.AddConsumer<UserNameChangedBanHistoryConsumer>();
     x.AddConsumer<UserBannedByUserNameBanHistoryConsumer>();
     x.AddConsumer<UserBannedByUserIdBanHistoryConsumer>();
     x.UsingRabbitMq((context, config) =>
