@@ -1,7 +1,8 @@
 ﻿@model Web.MVC.DTOs.User.ChangeUserNameDto
 
+<h3>Сменить имя</h3>
 <form method="post">
-    <div asp-validation-summary="All"></div>
+    <div asp-validation-summary="ModelOnly"></div>
     <div>
         <label asp-for="NewUserName"></label><br />
         <input asp-for="NewUserName" />
