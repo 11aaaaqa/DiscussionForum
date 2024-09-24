@@ -1,4 +1,5 @@
 using CommentMicroservice.Api.Database;
+using CommentMicroservice.Api.MessageBus.Consumers;
 using CommentMicroservice.Api.Models;
 using CommentMicroservice.Api.Services.Repository;
 using MassTransit;
@@ -14,6 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumer<UserNameChangedCommentConsumer>();
     x.SetKebabCaseEndpointNameFormatter();
     x.UsingRabbitMq((context, config) =>
     {
