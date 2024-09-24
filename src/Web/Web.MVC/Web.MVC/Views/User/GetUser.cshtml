@@ -118,9 +118,7 @@
         </div>
         <div>
             <h3>Настройки пользователя</h3>
-            <a asp-action="ChangeUserName" asp-controller="User" asp-route-returnUrl="@Context.Request.Path" asp-route-userId="@Model.Id">
-                изменить имя
-            </a>
+            <a asp-action="ChangeUserName" asp-controller="User" asp-route-returnUrl="@string.Empty" asp-route-userId="@Model.Id">изменить имя</a>
         </div>
     }
 </div>
