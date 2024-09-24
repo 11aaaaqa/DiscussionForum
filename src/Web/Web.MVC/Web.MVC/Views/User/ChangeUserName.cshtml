@@ -1,11 +1,11 @@
 ﻿@model Web.MVC.DTOs.User.ChangeUserNameDto
 
-<div>
+<form method="post">
     <div asp-validation-summary="All"></div>
     <div>
-        <label asp-for="NewUserName"></label><br/>
-        <input asp-for="NewUserName"/>
+        <label asp-for="NewUserName"></label><br />
+        <input asp-for="NewUserName" />
         <span asp-validation-for="NewUserName"></span>
     </div>
-    <input type="submit" value="изменить"/>
-</div>
+    <input type="submit" value="изменить" />
+</form>
