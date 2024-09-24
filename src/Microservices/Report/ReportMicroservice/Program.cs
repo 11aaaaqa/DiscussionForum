@@ -1,6 +1,7 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using ReportMicroservice.Api.Database;
+using ReportMicroservice.Api.MessageBus.Consumers;
 using ReportMicroservice.Api.Models;
 using ReportMicroservice.Api.Services;
 using ReportMicroservice.Api.Services.MessageBusConsumers;
@@ -16,6 +17,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
+    x.AddConsumer<UserNameChangedReportConsumer>();
     x.AddConsumer<DiscussionDeletedReportConsumer>();
     x.AddConsumer<CommentDeletedReportConsumer>();
     x.UsingRabbitMq((context, config) =>
