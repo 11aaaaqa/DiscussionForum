@@ -1,4 +1,5 @@
 using DiscussionMicroservice.Api.Database;
+using DiscussionMicroservice.Api.MessageBus.Consumers;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumer<UserNameChangedDiscussionConsumer>();
     x.SetKebabCaseEndpointNameFormatter();
     x.UsingRabbitMq((context, config) =>
     {
