@@ -1,5 +1,8 @@
 ﻿using System.Text;
+using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.MVC.DTOs.User;
 using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ApiResponses.CommentsResponses;
 using Web.MVC.Models.ApiResponses.Discussion;
@@ -111,6 +114,34 @@ namespace Web.MVC.Controllers
                 #endregion
             }
             return View(user);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult ChangeUserName()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> ChangeUserName(ChangeUserNameDto model, string returnUrl, Guid userId)
+        {
+            if (ModelState.IsValid)
+            {
+                using StringContent jsonContent =
+                    new(JsonSerializer.Serialize(new { newUserName = model.NewUserName}), Encoding.UTF8, "application/json");
+                using HttpClient httpClient = httpClientFactory.CreateClient();
+                var response = await httpClient.PatchAsync(
+                    $"http://user-microservice-api:8080/api/profile/User/ChangeUserName/{userId}", jsonContent);
+                if (!response.IsSuccessStatusCode) return View("ActionError");
+
+                if (!string.IsNullOrEmpty(returnUrl))
+                    return LocalRedirect(returnUrl);
+
+                return RedirectToAction("Index", "Home");
+            }
+            return View(model);
         }
     }
 }
