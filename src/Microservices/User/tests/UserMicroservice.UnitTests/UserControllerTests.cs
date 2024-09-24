@@ -358,33 +358,55 @@ namespace UserMicroservice.UnitTests
         [Fact]
         public async Task ChangeUserNameAsync_ReturnsBadRequest()
         {
-            var userId = It.IsAny<Guid>();
-            var newUserName = It.IsAny<string>();
-            var mock = new Mock<IChangeUserName>();
-            mock.Setup(x => x.ChangeUserNameAsync(userId, newUserName)).ReturnsAsync(false);
-            var controller = new UserController(new Mock<IUserService<User>>().Object,
-                new Mock<IBanService<User>>().Object, mock.Object, new Mock<IPublishEndpoint>().Object);
+            var userId = Guid.NewGuid();
+            string newUserName = It.IsAny<string>();
+            var mock = new Mock<IUserService<User>>();
+            mock.Setup(x => x.GetUserByIdAsync(userId)).ReturnsAsync((User?)null);
+            var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object, new Mock<IChangeUserName>().Object,
+                new Mock<IPublishEndpoint>().Object);
 
             var result = await controller.ChangeUserNameAsync(userId, newUserName);
 
             Assert.IsType<BadRequestResult>(result);
-            mock.VerifyAll();
+            mock.Verify(x => x.GetUserByIdAsync(userId));
+        }
+        [Fact]
+        public async Task ChangeUserNameAsync_ReturnsBadRequestToo()
+        {
+            var userId = Guid.NewGuid();
+            string newUserName = It.IsAny<string>();
+            var userMock = new Mock<IUserService<User>>();
+            var changeUserNameMock = new Mock<IChangeUserName>();
+            userMock.Setup(x => x.GetUserByIdAsync(userId)).ReturnsAsync(new User{UserName = It.IsAny<string>(), Id = userId});
+            changeUserNameMock.Setup(x => x.ChangeUserNameAsync(userId, newUserName)).ReturnsAsync(false);
+            var controller = new UserController(userMock.Object, new Mock<IBanService<User>>().Object, changeUserNameMock.Object,
+                new Mock<IPublishEndpoint>().Object);
+
+            var result = await controller.ChangeUserNameAsync(userId, newUserName);
+
+            Assert.IsType<BadRequestResult>(result);
+            userMock.VerifyAll();
+            changeUserNameMock.VerifyAll();
         }
 
         [Fact]
         public async Task ChangeUserNameAsync_ReturnsOk()
         {
             var userId = It.IsAny<Guid>();
-            var newUserName = It.IsAny<string>();
-            var mock = new Mock<IChangeUserName>();
-            mock.Setup(x => x.ChangeUserNameAsync(userId, newUserName)).ReturnsAsync(true);
-            var controller = new UserController(new Mock<IUserService<User>>().Object,
-                new Mock<IBanService<User>>().Object, mock.Object, new Mock<IPublishEndpoint>().Object);
+            string newUserName = It.IsAny<string>();
+            var userMock = new Mock<IUserService<User>>();
+            var changeUserNameMock = new Mock<IChangeUserName>();
+            userMock.Setup(x => x.GetUserByIdAsync(userId))
+                .ReturnsAsync(new User { Id = userId, UserName = It.IsAny<string>() });
+            changeUserNameMock.Setup(x => x.ChangeUserNameAsync(userId, newUserName)).ReturnsAsync(true);
+            var controller = new UserController(userMock.Object, new Mock<IBanService<User>>().Object, changeUserNameMock.Object, 
+                new Mock<IPublishEndpoint>().Object);
 
             var result = await controller.ChangeUserNameAsync(userId, newUserName);
 
             Assert.IsType<OkResult>(result);
-            mock.VerifyAll();
+            userMock.VerifyAll();
+            changeUserNameMock.VerifyAll();
         }
 
         [Theory]
