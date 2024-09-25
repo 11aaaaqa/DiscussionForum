@@ -134,16 +134,22 @@ namespace Web.MVC.Controllers
             if (ModelState.IsValid)
             {
                 using HttpClient httpClient = httpClientFactory.CreateClient();
+
+                var existsResponse = await httpClient.GetAsync(
+                    $"http://user-microservice-api:8080/api/profile/User/IsNormalizedUserNameAlreadyExists/{model.NewUserName}");
+                if (!existsResponse.IsSuccessStatusCode) return View("ActionError");
+                bool exists = await existsResponse.Content.ReadFromJsonAsync<bool>();
+                if (exists)
+                {
+                    ModelState.AddModelError(string.Empty, "Имя уже занято");
+                    return View(model);
+                }
+
                 using StringContent jsonContent =
                     new(JsonSerializer.Serialize(new { model.NewUserName, model.UserId }), Encoding.UTF8, "application/json");
 
                 var response = await httpClient.PatchAsync(
                     $"http://user-microservice-api:8080/api/profile/User/ChangeUserName", jsonContent);
-                if (response.StatusCode == HttpStatusCode.InternalServerError)
-                {
-                    ModelState.AddModelError(string.Empty, "Имя уже занято");
-                    return View(model);
-                }
                 if (!response.IsSuccessStatusCode) return View("ActionError");
 
                 var authResponse = await httpClient.GetAsync(
