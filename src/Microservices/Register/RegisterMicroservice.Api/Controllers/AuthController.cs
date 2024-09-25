@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
-using Npgsql.Internal;
 using RegisterMicroservice.Api.Constants;
 using RegisterMicroservice.Api.DTOs.Auth;
 using RegisterMicroservice.Api.DTOs.ResetPassword;
