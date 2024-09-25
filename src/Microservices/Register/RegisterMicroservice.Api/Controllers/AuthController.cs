@@ -146,7 +146,7 @@ namespace RegisterMicroservice.Api.Controllers
         [Route("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto model)
         {
-            var user = await userManager.FindByEmailAsync(model.Email);
+            var user = await userManager.Users.SingleOrDefaultAsync(x => x.Email == model.Email);
             if (user == null)
             {
                 return BadRequest("Пользователя с такой эл. почтой не существует");
