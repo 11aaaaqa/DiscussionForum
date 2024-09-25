@@ -37,8 +37,6 @@ namespace RegisterMicroservice.Api.Database
                 .Ignore(x => x.LockoutEnabled)
                 .Ignore(x => x.LockoutEnd)
                 .Ignore(x => x.AccessFailedCount)
-                .Ignore(x => x.NormalizedUserName)
-                .Ignore(x => x.NormalizedEmail)
                 .ToTable("Users");
         }
     }
