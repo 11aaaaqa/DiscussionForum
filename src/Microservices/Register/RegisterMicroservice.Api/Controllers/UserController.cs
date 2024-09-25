@@ -42,11 +42,9 @@ namespace RegisterMicroservice.Api.Controllers
         [HttpGet("GetByUserName")]
         public async Task<IActionResult> GetUserByUserNameAsync(string userName)
         {
-            var user = await userManager.FindByNameAsync(userName.ToUpper());
+            var user = await userManager.Users.SingleOrDefaultAsync(x => x.UserName == userName);
             if (user == null)
-            {
                 return BadRequest("Пользователя с таким именем не существует");
-            }
 
             return Ok(user);
         }
@@ -54,25 +52,21 @@ namespace RegisterMicroservice.Api.Controllers
         [HttpGet("GetByUserNameOrEmail")]
         public async Task<IActionResult> GetUserByUserNameOrEmailAsync(string userNameOrEmail)
         {
-            var userNameUser = await userManager.FindByNameAsync(userNameOrEmail.ToUpper());
-            var emailUser = await userManager.FindByEmailAsync(userNameOrEmail);
+            var userNameUser = await userManager.Users.SingleOrDefaultAsync(x => x.UserName == userNameOrEmail);
+            var emailUser = await userManager.Users.SingleOrDefaultAsync(x => x.Email == userNameOrEmail);
             var user = userNameUser ?? emailUser;
             if (user == null)
-            {
                 return BadRequest("Пользователя с таким именем не существует");
-            }
-
+            
             return Ok(user);
         }
 
         [HttpGet("GetByEmail")]
         public async Task<IActionResult> GetUserByEmailAsync(string email)
         {
-            var user = await userManager.FindByEmailAsync(email);
+            var user = await userManager.Users.SingleOrDefaultAsync(x => x.Email == email);
             if (user == null)
-            {
                 return BadRequest("Пользователя с такой почтой не существует");
-            }
 
             return Ok(user);
         }
