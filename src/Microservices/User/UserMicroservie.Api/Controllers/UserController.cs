@@ -16,14 +16,16 @@ namespace UserMicroservice.Api.Controllers
         private readonly IBanService<User> banService;
         private readonly IChangeUserName changeUserName;
         private readonly IPublishEndpoint publishEndpoint;
+        private readonly ICheckForNormalized checkForNormalized;
 
         public UserController(IUserService<User> userService, IBanService<User> banService, IChangeUserName changeUserName,
-            IPublishEndpoint publishEndpoint)
+            IPublishEndpoint publishEndpoint, ICheckForNormalized checkForNormalized)
         {
             this.banService = banService;
             this.userService = userService;
             this.changeUserName = changeUserName;
             this.publishEndpoint = publishEndpoint;
+            this.checkForNormalized = checkForNormalized;
         }
 
         [Route("GetUserByUserName/{userName}")]
@@ -182,6 +184,14 @@ namespace UserMicroservice.Api.Controllers
                 BannedUntil = user.BannedUntil,
                 IsBanned = true
             });
+        }
+
+        [Route("IsNormalizedUserNameAlreadyExists/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> IsNormalizedUserNameAlreadyExistsAsync(string userName)
+        {
+            var isExist = await checkForNormalized.IsNormalizedUserNameAlreadyExists(userName);
+            return Ok(isExist);
         }
     }
 }
