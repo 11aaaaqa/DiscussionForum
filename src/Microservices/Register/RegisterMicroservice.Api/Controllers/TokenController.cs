@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RegisterMicroservice.Api.Database;
 using RegisterMicroservice.Api.Models.Jwt;
 using RegisterMicroservice.Api.Models.UserModels;
 using RegisterMicroservice.Api.Services;
@@ -15,12 +16,15 @@ namespace RegisterMicroservice.Api.Controllers
         private readonly UserManager<User> userManager;
         private readonly ITokenService tokenService;
         private readonly ILogger<TokenController> logger;
+        private readonly ApplicationDbContext context;
 
-        public TokenController(UserManager<User> userManager, ITokenService tokenService, ILogger<TokenController> logger)
+        public TokenController(UserManager<User> userManager, ITokenService tokenService, ILogger<TokenController> logger,
+            ApplicationDbContext context)
         {
             this.userManager = userManager;
             this.tokenService = tokenService;
             this.logger = logger;
+            this.context = context;
         }
 
         [HttpPost]
@@ -45,7 +49,8 @@ namespace RegisterMicroservice.Api.Controllers
 
             user.RefreshToken = newRefreshToken;
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMonths(2);
-            await userManager.UpdateAsync(user);
+            context.Users.Update(user);
+            await context.SaveChangesAsync();
             return Ok(new AuthenticatedResponse
             {
                 Token = newAccessToken
@@ -64,7 +69,8 @@ namespace RegisterMicroservice.Api.Controllers
 
             user.RefreshToken = null;
             user.RefreshTokenExpiryTime = new DateTime();
-            await userManager.UpdateAsync(user);
+            context.Users.Update(user);
+            await context.SaveChangesAsync();
             return Ok();
         }
     }
