@@ -3,7 +3,7 @@ using UserMicroservice.Api.Database;
 
 namespace UserMicroservice.Api.Services.User
 {
-    public class UserService : IUserService<Models.User>, IChangeUserName
+    public class UserService : IUserService<Models.User>, IChangeUserName, ICheckForNormalized
     {
         private readonly ApplicationDbContext context;
 
@@ -58,6 +58,13 @@ namespace UserMicroservice.Api.Services.User
             user.UserName = newUserName;
             context.Users.Update(user);
             await context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> IsNormalizedUserNameAlreadyExists(string userName)
+        {
+            var user = await context.Users.SingleOrDefaultAsync(x => x.UserName.ToUpper() == userName.ToUpper());
+            if (user is null) return false;
             return true;
         }
     }
