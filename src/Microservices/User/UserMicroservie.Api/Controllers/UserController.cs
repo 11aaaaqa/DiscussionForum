@@ -128,18 +128,20 @@ namespace UserMicroservice.Api.Controllers
             return Ok();
         }
 
-        [Route("ChangeUserName/{userId}")]
+        [Route("ChangeUserName")]
         [HttpPatch]
-        public async Task<IActionResult> ChangeUserNameAsync(Guid userId, [FromBody] string newUserName)
+        public async Task<IActionResult> ChangeUserNameAsync([FromBody] ChangeUserNameDto model)
         {
-            var user = await userService.GetUserByIdAsync(userId);
+            var user = await userService.GetUserByIdAsync(model.UserId);
             if (user == null) return BadRequest();
-            var isChanged = await changeUserName.ChangeUserNameAsync(userId, newUserName);
+
+            string oldUserName = user.UserName;
+            var isChanged = await changeUserName.ChangeUserNameAsync(model.UserId, model.NewUserName);
             if (isChanged)
             {
                 await publishEndpoint.Publish<IUserNameChanged>(new
                 {
-                    OldUserName = user.UserName, NewUserName = newUserName
+                    OldUserName = oldUserName, model.NewUserName
                 });
                 return Ok();
             }
