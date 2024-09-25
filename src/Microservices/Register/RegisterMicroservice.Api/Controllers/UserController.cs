@@ -6,6 +6,7 @@ using RegisterMicroservice.Api.DTOs.Auth;
 using RegisterMicroservice.Api.Models.UserModels;
 using RegisterMicroservice.Api.Services;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace RegisterMicroservice.Api.Controllers
 {
@@ -120,7 +121,7 @@ namespace RegisterMicroservice.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> AuthUserByUserName(string userName)
         {
-            var user = await userManager.FindByNameAsync(userName.ToUpper());
+            var user = await userManager.Users.SingleOrDefaultAsync(x => x.UserName == userName);
 
             var userRoles = await userManager.GetRolesAsync(user);
 

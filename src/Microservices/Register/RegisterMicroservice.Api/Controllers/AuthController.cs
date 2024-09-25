@@ -4,6 +4,7 @@ using MassTransit;
 using MessageBus.Messages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MimeKit;
 using Npgsql.Internal;
 using RegisterMicroservice.Api.Constants;
@@ -38,8 +39,8 @@ namespace RegisterMicroservice.Api.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody]LoginDto model)
         {
-            var emailUser = await userManager.FindByEmailAsync(model.UserNameOrEmail);
-            var userNameUser = await userManager.FindByNameAsync(model.UserNameOrEmail.ToUpper());
+            var emailUser = await userManager.Users.SingleOrDefaultAsync(x => x.Email == model.UserNameOrEmail);
+            var userNameUser = await userManager.Users.SingleOrDefaultAsync(x => x.UserName == model.UserNameOrEmail);
             var user = emailUser ?? userNameUser;
 
             if (user == null || !await userManager.CheckPasswordAsync(user,model.Password))
