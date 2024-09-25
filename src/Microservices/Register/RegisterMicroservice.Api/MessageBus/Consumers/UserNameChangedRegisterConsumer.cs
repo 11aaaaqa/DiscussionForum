@@ -17,7 +17,6 @@ namespace RegisterMicroservice.Api.MessageBus.Consumers
         {
             var userWithOldUserName = await databaseContext.Users.SingleAsync(x => x.UserName == context.Message.OldUserName);
             userWithOldUserName.UserName = context.Message.NewUserName;
-            userWithOldUserName.NormalizedUserName = context.Message.NewUserName.ToUpper();
             await databaseContext.SaveChangesAsync();
         }
     }
