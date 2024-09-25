@@ -1,6 +1,7 @@
 ﻿using GeneralClassesLib.ApiResponses;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RegisterMicroservice.Api.Models.Jwt;
 using RegisterMicroservice.Api.Models.UserModels;
 using RegisterMicroservice.Api.Services;
@@ -32,7 +33,7 @@ namespace RegisterMicroservice.Api.Controllers
             var principal = tokenService.GetPrincipalFromExpiredToken(accessToken);
             var userName = principal.Identity.Name;
             
-            var user = await userManager.FindByNameAsync(userName);
+            var user = await userManager.Users.SingleOrDefaultAsync(x => x.UserName == userName);
 
             if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
@@ -55,7 +56,7 @@ namespace RegisterMicroservice.Api.Controllers
         [Route("revoke")]
         public async Task<IActionResult> Revoke(string userName)
         {
-            var user = await userManager.FindByNameAsync(userName);
+            var user = await userManager.Users.SingleOrDefaultAsync(x => x.UserName == userName);
             if (user is null)
             {
                 return BadRequest("Invalid request");
