@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
 using System.Text.Json;
 using System.Web;
 using GeneralClassesLib.ApiResponses;
@@ -139,6 +140,11 @@ namespace Web.MVC.Controllers
 
                 var response = await httpClient.PatchAsync(
                     $"http://user-microservice-api:8080/api/profile/User/ChangeUserName", jsonContent);
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    ModelState.AddModelError(string.Empty, "Имя уже занято");
+                    return View(model);
+                }
                 if (!response.IsSuccessStatusCode) return View("ActionError");
 
                 var authResponse = await httpClient.GetAsync(
@@ -151,13 +157,15 @@ namespace Web.MVC.Controllers
                 if (!string.IsNullOrEmpty(model.ReturnUrl))
                     return LocalRedirect(model.ReturnUrl);
 
-                return RedirectToAction($"/User/{HttpUtility.UrlDecode(model.NewUserName)}");
+                return LocalRedirect($"/User/{model.NewUserName}");
             }
             return View(model);
         }
 
         private void AuthenticateUser(string jwtToken)
         {
+            Request.Cookies.TryGetValue("accessToken", out string? isCookiesExist);
+            if(isCookiesExist is not null) Response.Cookies.Delete("accessToken");
             Response.Cookies.Append("accessToken", jwtToken, new CookieOptions
             {
                 Expires = DateTimeOffset.UtcNow.AddMonths(2),
