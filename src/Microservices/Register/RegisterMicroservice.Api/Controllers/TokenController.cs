@@ -16,15 +16,12 @@ namespace RegisterMicroservice.Api.Controllers
         private readonly UserManager<User> userManager;
         private readonly ITokenService tokenService;
         private readonly ILogger<TokenController> logger;
-        private readonly ApplicationDbContext context;
 
-        public TokenController(UserManager<User> userManager, ITokenService tokenService, ILogger<TokenController> logger,
-            ApplicationDbContext context)
+        public TokenController(UserManager<User> userManager, ITokenService tokenService, ILogger<TokenController> logger)
         {
             this.userManager = userManager;
             this.tokenService = tokenService;
             this.logger = logger;
-            this.context = context;
         }
 
         [HttpPost]
@@ -49,8 +46,7 @@ namespace RegisterMicroservice.Api.Controllers
 
             user.RefreshToken = newRefreshToken;
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMonths(2);
-            context.Users.Update(user);
-            await context.SaveChangesAsync();
+            await userManager.UpdateAsync(user);
             return Ok(new AuthenticatedResponse
             {
                 Token = newAccessToken
@@ -69,8 +65,7 @@ namespace RegisterMicroservice.Api.Controllers
 
             user.RefreshToken = null;
             user.RefreshTokenExpiryTime = new DateTime();
-            context.Users.Update(user);
-            await context.SaveChangesAsync();
+            await userManager.UpdateAsync(user);
             return Ok();
         }
     }

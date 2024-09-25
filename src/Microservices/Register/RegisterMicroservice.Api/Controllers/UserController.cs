@@ -86,12 +86,11 @@ namespace RegisterMicroservice.Api.Controllers
         public async Task<IActionResult> UpdateUser([FromBody]User user)
         {
             var result = await userManager.UpdateAsync(user);
-            if (result.Succeeded)
-            {
-                return Ok(user);
-            }
+            if (!result.Succeeded)
+                return BadRequest();
+            
 
-            return BadRequest("Такого пользователя не существует");
+            return Ok(user);
         }
 
         [HttpPost("SendEmailConfirmationLink")]
