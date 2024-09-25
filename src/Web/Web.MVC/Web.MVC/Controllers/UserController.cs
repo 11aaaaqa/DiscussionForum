@@ -1,5 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
+using System.Web;
+using GeneralClassesLib.ApiResponses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.MVC.DTOs.User;
@@ -131,19 +133,38 @@ namespace Web.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                using StringContent jsonContent =
-                    new(JsonSerializer.Serialize(new { newUserName = model.NewUserName}), Encoding.UTF8, "application/json");
                 using HttpClient httpClient = httpClientFactory.CreateClient();
+                using StringContent jsonContent =
+                    new(JsonSerializer.Serialize(new { model.NewUserName, model.UserId }), Encoding.UTF8, "application/json");
+
                 var response = await httpClient.PatchAsync(
-                    $"http://user-microservice-api:8080/api/profile/User/ChangeUserName/{model.UserId}", jsonContent);
+                    $"http://user-microservice-api:8080/api/profile/User/ChangeUserName", jsonContent);
                 if (!response.IsSuccessStatusCode) return View("ActionError");
+
+                var authResponse = await httpClient.GetAsync(
+                    $"http://register-microservice-api:8080/api/User/AuthUserByUserName?userName={model.NewUserName}");
+                if (!authResponse.IsSuccessStatusCode) return View("ActionError");
+
+                var authenticated = await authResponse.Content.ReadFromJsonAsync<AuthenticatedResponse>();
+                AuthenticateUser(authenticated!.Token);
 
                 if (!string.IsNullOrEmpty(model.ReturnUrl))
                     return LocalRedirect(model.ReturnUrl);
 
-                return RedirectToAction($"/User/{model.NewUserName}");
+                return RedirectToAction($"/User/{HttpUtility.UrlDecode(model.NewUserName)}");
             }
             return View(model);
+        }
+
+        private void AuthenticateUser(string jwtToken)
+        {
+            Response.Cookies.Append("accessToken", jwtToken, new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddMonths(2),
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict,
+                Secure = true
+            });
         }
     }
 }
