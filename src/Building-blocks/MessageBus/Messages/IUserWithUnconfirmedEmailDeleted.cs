@@ -2,6 +2,6 @@
 {
     public interface IUserWithUnconfirmedEmailDeleted
     {
-        public Guid AspNetUserId { get; set; }
+        public string AspNetUserId { get; set; }
     }
 }
