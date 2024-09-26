@@ -1,3 +1,5 @@
+using Hangfire;
+using Hangfire.PostgreSql;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +26,13 @@ builder.Services.AddIdentity<User, IdentityRole>(x =>
         x.SignIn.RequireConfirmedEmail = true;
     })
     .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+builder.Services.AddHangfire(x =>
+{
+    x.UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UsePostgreSqlStorage(x => x.UseNpgsqlConnection(builder.Configuration["Database:HangfireConnectionString"]));
+});
+builder.Services.AddHangfireServer();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -42,6 +51,7 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddTransient<UserDeleteService>();
 
 var app = builder.Build();
 
@@ -51,6 +61,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHangfireDashboard();
 app.MapControllers();
 
 app.Run();
