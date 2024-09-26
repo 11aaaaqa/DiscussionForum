@@ -7,6 +7,7 @@ using RegisterMicroservice.Api.Models.UserModels;
 using RegisterMicroservice.Api.Services;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using RegisterMicroservice.Api.DTOs;
 
 namespace RegisterMicroservice.Api.Controllers
 {
@@ -140,6 +141,19 @@ namespace RegisterMicroservice.Api.Controllers
             {
                 Token = accessToken
             });
+        }
+
+        [Route("ChangePassword")]
+        [HttpPost]
+        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordDto model)
+        {
+            var user = await userManager.FindByIdAsync(model.UserId.ToString());
+            if (user is null) return NotFound();
+            
+            var isPasswordChanged = await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            if (!isPasswordChanged.Succeeded) return BadRequest();
+
+            return Ok();
         }
     }
 }
