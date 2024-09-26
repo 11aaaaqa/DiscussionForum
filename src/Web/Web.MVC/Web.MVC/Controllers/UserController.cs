@@ -167,6 +167,43 @@ namespace Web.MVC.Controllers
             return View(model);
         }
 
+        [Authorize]
+        [Route("[controller]/ChangePassword")]
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [Route("[controller]/ChangePassword")]
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDto model, Guid userId, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                model.UserId = userId;
+                using HttpClient httpClient = httpClientFactory.CreateClient();
+                using StringContent jsonContent =
+                    new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+                var response = await httpClient.PatchAsync(
+                    "http://register-microservice-api:8080/api/User/ChangePassword", jsonContent);
+                if (response.StatusCode == HttpStatusCode.NotFound) return View("ActionError");
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    ModelState.AddModelError(string.Empty, "Старый пароль неверный");
+                    return View(model);
+                }
+                if (!response.IsSuccessStatusCode) return View("ActionError");
+
+                if (!string.IsNullOrEmpty(returnUrl))
+                    return LocalRedirect(returnUrl);
+
+                return RedirectToAction("Index", "Home");
+            }
+            return View(model);
+        }
+
         private void AuthenticateUser(string jwtToken)
         {
             Request.Cookies.TryGetValue("accessToken", out string? isCookiesExist);
