@@ -35,6 +35,7 @@
     <_ContentIncludedByDefault Remove="Views\Report\AddReport.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Report\GetReport.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Topic\Topic.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\User\ChangePassword.cshtml" />
     <_ContentIncludedByDefault Remove="Views\User\ChangeUserName.cshtml" />
     <_ContentIncludedByDefault Remove="Views\User\GetUser.cshtml" />
   </ItemGroup>
@@ -81,6 +82,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\User\ChangeUserName.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\User\ChangePassword.cshtml" />
   </ItemGroup>
 
 </Project>
