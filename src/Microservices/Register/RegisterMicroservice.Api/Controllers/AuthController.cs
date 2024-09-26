@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using GeneralClassesLib.ApiResponses;
+using Hangfire;
 using MassTransit;
 using MessageBus.Messages;
 using Microsoft.AspNetCore.Identity;
@@ -23,15 +24,19 @@ namespace RegisterMicroservice.Api.Controllers
         private readonly ITokenService tokenService;
         private readonly IEmailSender emailSender;
         private readonly IPublishEndpoint publishEndpoint;
+        private readonly IBackgroundJobClient backgroundJobClient;
+        private readonly UserDeleteService userDeleteService;
 
         public AuthController(UserManager<User> userManager, ITokenService tokenService, ILogger<AuthController> logger,IEmailSender emailSender,
-            IPublishEndpoint publishEndpoint)
+            IPublishEndpoint publishEndpoint, IBackgroundJobClient backgroundJobClient, UserDeleteService userDeleteService)
         {
             this.userManager = userManager;
             this.logger = logger;
             this.tokenService = tokenService;
             this.emailSender = emailSender;
             this.publishEndpoint = publishEndpoint;
+            this.backgroundJobClient = backgroundJobClient;
+            this.userDeleteService = userDeleteService;
         }
 
         [HttpPost]
@@ -110,6 +115,13 @@ namespace RegisterMicroservice.Api.Controllers
                 UserName = user.UserName
             });
 
+            //var jobId = 
+            //    backgroundJobClient.Schedule(() => userDeleteService.DeleteUnconfirmedUser(user.Id), TimeSpan.FromDays(5)); ////todo
+            var jobId =
+                backgroundJobClient.Schedule(() => userDeleteService.DeleteUnconfirmedUser(user.Id), TimeSpan.FromMinutes(2));
+            user.HangfireDelayedJobId = jobId;
+            await userManager.UpdateAsync(user);
+
             logger.LogInformation("Email was sent, register method ends working");
 
             return Ok("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
@@ -136,6 +148,10 @@ namespace RegisterMicroservice.Api.Controllers
                 logger.LogCritical("Email wasn't confirmed, end method");
                 return BadRequest();
             }
+
+            backgroundJobClient.Delete(user.HangfireDelayedJobId);
+            user.HangfireDelayedJobId = null;
+            await userManager.UpdateAsync(user);
 
             logger.LogInformation("Email is successfully confirmed, end method");
 
