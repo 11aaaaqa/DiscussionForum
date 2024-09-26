@@ -6,5 +6,6 @@ namespace RegisterMicroservice.Api.Models.UserModels
     {
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
+        public string? HangfireDelayedJobId { get; set; }
     }
 }
