@@ -24,7 +24,7 @@ namespace UserMicroservice.UnitTests
                 CommentsIds = It.IsAny<List<Guid>>(), BannedFor = It.IsAny<string>(), BannedUntil = It.IsAny<DateTime>(), AspNetUserId = It.IsAny<string>()
             });
             var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.GetUserByUserNameAsync(userName);
 
@@ -43,7 +43,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IUserService<User>>();
             mock.Setup(x => x.GetUserByUserName(userName)).ReturnsAsync((User?)null);
             var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.GetUserByUserNameAsync(userName);
 
@@ -74,7 +74,7 @@ namespace UserMicroservice.UnitTests
                 AspNetUserId = It.IsAny<string>()
             });
             var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.GetUserByIdAsync(userId);
 
@@ -93,7 +93,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IUserService<User>>();
             mock.Setup(x => x.GetUserByIdAsync(userId)).ReturnsAsync((User?)null);
             var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.GetUserByIdAsync(userId);
 
@@ -111,7 +111,7 @@ namespace UserMicroservice.UnitTests
                 Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()
             });
             var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.GetCreatedDiscussionsIdsByUserIdAsync(userId);
 
@@ -130,7 +130,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IUserService<User>>();
             mock.Setup(x => x.GetCreatedDiscussionsIdsByUserIdAsync(userId)).ReturnsAsync((List<Guid>?)null);
             var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.GetCreatedDiscussionsIdsByUserIdAsync(userId);
 
@@ -148,7 +148,7 @@ namespace UserMicroservice.UnitTests
                 Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()
             });
             var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.GetSuggestedDiscussionsIdsByUserIdAsync(userId);
 
@@ -167,7 +167,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IUserService<User>>();
             mock.Setup(x => x.GetSuggestedDiscussionsIdsByUserIdAsync(userId)).ReturnsAsync((List<Guid>?)null);
             var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.GetSuggestedDiscussionsIdsByUserIdAsync(userId);
 
@@ -185,7 +185,7 @@ namespace UserMicroservice.UnitTests
                 Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()
             });
             var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.GetSuggestedCommentsIdsByUserIdAsync(userId);
 
@@ -204,7 +204,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IUserService<User>>();
             mock.Setup(x => x.GetSuggestedCommentsIdsByUserIdAsync(userId)).ReturnsAsync((List<Guid>?)null);
             var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.GetSuggestedCommentsIdsByUserIdAsync(userId);
 
@@ -222,7 +222,7 @@ namespace UserMicroservice.UnitTests
                 Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()
             });
             var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.GetCommentsIdsByUserIdAsync(userId);
 
@@ -241,7 +241,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IUserService<User>>();
             mock.Setup(x => x.GetCommentsIdsByUserIdAsync(userId)).ReturnsAsync((List<Guid>?)null);
             var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.GetCommentsIdsByUserIdAsync(userId);
 
@@ -256,7 +256,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IBanService<User>>();
             mock.Setup(x => x.IsUserBannedAsync(userId)).ReturnsAsync(false);
             var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.IsUserBannedAsync(userId);
 
@@ -275,7 +275,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IBanService<User>>();
             mock.Setup(x => x.IsUserBannedAsync(userId)).ReturnsAsync(true);
             var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.IsUserBannedAsync(userId);
 
@@ -297,7 +297,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IBanService<User>>();
             mock.Setup(x => x.BanUserAsync(userId, reason, banType, forDays));
             var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.BanUserByIdAsync(userId,
                 new BanDto { BanType = banType, ForDays = forDays, Reason = reason });
@@ -316,7 +316,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IBanService<User>>();
             mock.Setup(x => x.BanUserAsync(userName, reason, banType, forDays));
             var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.BanUserByUserNameAsync(userName,
                 new BanDto { BanType = banType, ForDays = forDays, Reason = reason });
@@ -332,7 +332,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IBanService<User>>();
             mock.Setup(x => x.UnbanUserAsync(userId));
             var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.UnbanUserByUserIdAsync(userId);
 
@@ -347,7 +347,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IBanService<User>>();
             mock.Setup(x => x.UnbanUserAsync(userName));
             var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.UnbanUserByUserNameAsync(userName);
 
@@ -368,7 +368,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IUserService<User>>();
             mock.Setup(x => x.GetUserByIdAsync(userId)).ReturnsAsync((User?)null);
             var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object, new Mock<IChangeUserName>().Object,
-                new Mock<IPublishEndpoint>().Object);
+                new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.ChangeUserNameAsync(model);
 
@@ -389,7 +389,7 @@ namespace UserMicroservice.UnitTests
             userMock.Setup(x => x.GetUserByIdAsync(userId)).ReturnsAsync(new User{UserName = It.IsAny<string>(), Id = userId});
             changeUserNameMock.Setup(x => x.ChangeUserNameAsync(userId, newUserName)).ReturnsAsync(false);
             var controller = new UserController(userMock.Object, new Mock<IBanService<User>>().Object, changeUserNameMock.Object,
-                new Mock<IPublishEndpoint>().Object);
+                new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.ChangeUserNameAsync(model);
 
@@ -414,7 +414,7 @@ namespace UserMicroservice.UnitTests
                 .ReturnsAsync(new User { Id = userId, UserName = It.IsAny<string>() });
             changeUserNameMock.Setup(x => x.ChangeUserNameAsync(userId, newUserName)).ReturnsAsync(true);
             var controller = new UserController(userMock.Object, new Mock<IBanService<User>>().Object, changeUserNameMock.Object, 
-                new Mock<IPublishEndpoint>().Object);
+                new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.ChangeUserNameAsync(model);
 
@@ -432,7 +432,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IBanService<User>>();
             mock.Setup(x => x.IsUserBannedAsync(userName)).ReturnsAsync(isBanned);
             var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.IsUserBannedAsync(userName);
 
@@ -454,7 +454,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IBanService<User>>();
             mock.Setup(x => x.IsUserBannedAsync(userName, banTypes)).ReturnsAsync(isBanned);
             var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.IsUserBannedAsync(userName, banTypes);
 
@@ -476,7 +476,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IBanService<User>>();
             mock.Setup(x => x.IsUserBannedAsync(userId, banTypes)).ReturnsAsync(isBanned);
             var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.IsUserBannedAsync(userId, banTypes);
 
@@ -495,7 +495,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IBanService<User>>();
             mock.Setup(x => x.IsUserBannedAsync(userName)).ReturnsAsync(false);
             var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.UserBanInfoByUserNameAsync(userName);
 
@@ -517,7 +517,7 @@ namespace UserMicroservice.UnitTests
             banMock.Setup(x => x.IsUserBannedAsync(userName)).ReturnsAsync(true);
             userMock.Setup(x => x.GetUserByUserName(userName)).ReturnsAsync((User?)null);
             var controller = new UserController(userMock.Object, banMock.Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.UserBanInfoByUserNameAsync(userName);
 
@@ -539,7 +539,7 @@ namespace UserMicroservice.UnitTests
             banMock.Setup(x => x.IsUserBannedAsync(userName)).ReturnsAsync(true);
             userMock.Setup(x => x.GetUserByUserName(userName)).ReturnsAsync(returnUser);
             var controller = new UserController(userMock.Object, banMock.Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.UserBanInfoByUserNameAsync(userName);
 
@@ -563,7 +563,7 @@ namespace UserMicroservice.UnitTests
             var mock = new Mock<IBanService<User>>();
             mock.Setup(x => x.IsUserBannedAsync(userId)).ReturnsAsync(false);
             var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.UserBanInfoByUserIdAsync(userId);
 
@@ -585,7 +585,7 @@ namespace UserMicroservice.UnitTests
             banMock.Setup(x => x.IsUserBannedAsync(userId)).ReturnsAsync(true);
             userMock.Setup(x => x.GetUserByIdAsync(userId)).ReturnsAsync((User?)null);
             var controller = new UserController(userMock.Object, banMock.Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.UserBanInfoByUserIdAsync(userId);
 
@@ -611,7 +611,7 @@ namespace UserMicroservice.UnitTests
             banMock.Setup(x => x.IsUserBannedAsync(userId)).ReturnsAsync(true);
             userMock.Setup(x => x.GetUserByIdAsync(userId)).ReturnsAsync(returnUser);
             var controller = new UserController(userMock.Object, banMock.Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object);
+                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.UserBanInfoByUserIdAsync(userId);
 
