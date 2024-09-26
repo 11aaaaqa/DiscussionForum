@@ -144,7 +144,7 @@ namespace RegisterMicroservice.Api.Controllers
         }
 
         [Route("ChangePassword")]
-        [HttpPost]
+        [HttpPatch]
         public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordDto model)
         {
             var user = await userManager.FindByIdAsync(model.UserId.ToString());
