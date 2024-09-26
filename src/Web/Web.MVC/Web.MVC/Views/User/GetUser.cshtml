@@ -24,7 +24,7 @@
             if (User.Identity.Name != Model.UserName)
             { 
                 <br/><br/> <a asp-controller="Moderator" asp-action="BanUser" asp-route-userName="@Model.UserName" asp-route-returnUrl="@Context.Request.Path"
-                             >отстранить пользователя</a>
+                           >отстранить пользователя</a>
             }
 
         }
@@ -118,7 +118,10 @@
         </div>
         <div>
             <h3>Настройки пользователя</h3>
-            <a asp-action="ChangeUserName" asp-controller="User" asp-route-returnUrl="@string.Empty" asp-route-userId="@Model.Id">изменить имя</a>
+            <a asp-action="ChangeUserName" asp-controller="User" asp-route-returnUrl="@string.Empty" asp-route-userId="@Model.Id">изменить имя</a><br/>
+            <a asp-controller="User" asp-action="ChangePassword" asp-route-returnUrl="@Context.Request.Path" asp-route-userId="@Model.AspNetUserId">
+                изменить пароль
+            </a>
         </div>
     }
 </div>
