@@ -56,7 +56,15 @@ app.UseStatusCodePages(context =>
     var response = context.HttpContext.Response;
     if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
     {
-        var returnUrl = context.HttpContext.Request.Path + context.HttpContext.Request.QueryString;
+        string returnUrl;
+        if (context.HttpContext.Request.QueryString.HasValue)
+        {
+            returnUrl = context.HttpContext.Request.Path + context.HttpContext.Request.QueryString;
+        }
+        else
+        {
+            returnUrl = context.HttpContext.Request.Path;
+        }
         var encodedReturnUrl = HttpUtility.UrlEncode(returnUrl);
         response.Redirect($"/Auth/Login?returnUrl={encodedReturnUrl}");
     }
