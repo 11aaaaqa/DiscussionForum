@@ -24,19 +24,17 @@ namespace RegisterMicroservice.Api.Controllers
         private readonly ITokenService tokenService;
         private readonly IEmailSender emailSender;
         private readonly IPublishEndpoint publishEndpoint;
-        private readonly IBackgroundJobClient backgroundJobClient;
-        private readonly UserDeleteService userDeleteService;
+        private readonly IUserService userService;
 
         public AuthController(UserManager<User> userManager, ITokenService tokenService, ILogger<AuthController> logger,IEmailSender emailSender,
-            IPublishEndpoint publishEndpoint, IBackgroundJobClient backgroundJobClient, UserDeleteService userDeleteService)
+            IPublishEndpoint publishEndpoint, IUserService userService)
         {
             this.userManager = userManager;
             this.logger = logger;
             this.tokenService = tokenService;
             this.emailSender = emailSender;
             this.publishEndpoint = publishEndpoint;
-            this.backgroundJobClient = backgroundJobClient;
-            this.userDeleteService = userDeleteService;
+            this.userService = userService;
         }
 
         [HttpPost]
@@ -114,11 +112,9 @@ namespace RegisterMicroservice.Api.Controllers
                 UserId = user.Id,
                 UserName = user.UserName
             });
-
-            //var jobId = 
-            //    backgroundJobClient.Schedule(() => userDeleteService.DeleteUnconfirmedUser(user.Id), TimeSpan.FromDays(5)); ////todo
-            var jobId =
-                backgroundJobClient.Schedule(() => userDeleteService.DeleteUnconfirmedUser(user.Id), TimeSpan.FromMinutes(2));
+            
+            string userId = user.Id;
+            var jobId = BackgroundJob.Schedule(() => userService.DeleteUnconfirmedUser(userId), TimeSpan.FromDays(3));
             user.HangfireDelayedJobId = jobId;
             await userManager.UpdateAsync(user);
 
@@ -149,7 +145,7 @@ namespace RegisterMicroservice.Api.Controllers
                 return BadRequest();
             }
 
-            backgroundJobClient.Delete(user.HangfireDelayedJobId);
+            BackgroundJob.Delete(user.HangfireDelayedJobId);
             user.HangfireDelayedJobId = null;
             await userManager.UpdateAsync(user);
 
