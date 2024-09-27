@@ -7,6 +7,7 @@ using RegisterMicroservice.Api.Models.UserModels;
 using RegisterMicroservice.Api.Services;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using RegisterMicroservice.Api.Constants;
 using RegisterMicroservice.Api.DTOs;
 using RegisterMicroservice.Api.DTOs.User;
 
@@ -20,13 +21,16 @@ namespace RegisterMicroservice.Api.Controllers
         private readonly ILogger<AuthController> logger;
         private readonly IEmailSender emailSender;
         private readonly ITokenService tokenService;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public UserController(UserManager<User> userManager, ILogger<AuthController> logger, IEmailSender emailSender, ITokenService tokenService)
+        public UserController(UserManager<User> userManager, ILogger<AuthController> logger, IEmailSender emailSender, ITokenService tokenService,
+            RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.logger = logger;
             this.emailSender = emailSender;
             this.tokenService = tokenService;
+            this.roleManager = roleManager;
         }
 
         [HttpGet("GetById")]
@@ -157,17 +161,31 @@ namespace RegisterMicroservice.Api.Controllers
             return Ok();
         }
 
-        [Route("AddUserToRole")]
+        [Route("AddUserToRoles")]
         [HttpPost]
-        public async Task<IActionResult> AddUserToRoleAsync([FromBody]AddUserToRoleDto model)
+        public async Task<IActionResult> AddUserToRolesAsync([FromBody]AddUserToRoleDto model)
         {
             var user = await userManager.FindByIdAsync(model.UserId);
             if (user is null) return NotFound();
 
-            var result = await userManager.AddToRoleAsync(user, model.RoleName);
-            if (!result.Succeeded)
-                return BadRequest();
-
+            if (model.RoleNames.Count == 0)
+            {
+                var allRoles = await roleManager.Roles.ToListAsync();
+                foreach (var role in allRoles)
+                {
+                    if(role.Name != UserRoleConstants.UserRole)
+                        await userManager.RemoveFromRoleAsync(user, role.Name);
+                }
+            }
+            else
+            {
+                foreach (var roleName in model.RoleNames)
+                {
+                    if (!await userManager.IsInRoleAsync(user, roleName))
+                        await userManager.AddToRoleAsync(user, roleName);
+                }
+            }
+            
             return Ok();
         }
     }
