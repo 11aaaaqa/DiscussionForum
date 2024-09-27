@@ -28,9 +28,7 @@ builder.Services.AddIdentity<User, IdentityRole>(x =>
     .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 builder.Services.AddHangfire(x =>
 {
-    x.UseSimpleAssemblyNameTypeSerializer()
-        .UseRecommendedSerializerSettings()
-        .UsePostgreSqlStorage(x => x.UseNpgsqlConnection(builder.Configuration["Database:HangfireConnectionString"]));
+    x.UsePostgreSqlStorage(c => c.UseNpgsqlConnection(builder.Configuration["Database:HangfireConnectionString"]));
 });
 builder.Services.AddHangfireServer();
 builder.Services.AddControllers();
@@ -51,7 +49,7 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
-builder.Services.AddTransient<UserDeleteService>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 var app = builder.Build();
 
