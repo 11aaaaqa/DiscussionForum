@@ -8,6 +8,7 @@ using RegisterMicroservice.Api.Services;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using RegisterMicroservice.Api.DTOs;
+using RegisterMicroservice.Api.DTOs.User;
 
 namespace RegisterMicroservice.Api.Controllers
 {
@@ -152,6 +153,20 @@ namespace RegisterMicroservice.Api.Controllers
             
             var isPasswordChanged = await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
             if (!isPasswordChanged.Succeeded) return BadRequest();
+
+            return Ok();
+        }
+
+        [Route("AddUserToRole")]
+        [HttpPost]
+        public async Task<IActionResult> AddUserToRoleAsync([FromBody]AddUserToRoleDto model)
+        {
+            var user = await userManager.FindByIdAsync(model.UserId);
+            if (user is null) return NotFound();
+
+            var result = await userManager.AddToRoleAsync(user, model.RoleName);
+            if (!result.Succeeded)
+                return BadRequest();
 
             return Ok();
         }
