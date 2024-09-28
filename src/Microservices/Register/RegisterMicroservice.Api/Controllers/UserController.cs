@@ -194,16 +194,5 @@ namespace RegisterMicroservice.Api.Controllers
             
             return Ok();
         }
-
-        [Route("GetUserRoles/{userId}")]
-        [HttpGet]
-        public async Task<IActionResult> GetUserRolesAsync(string userId)
-        {
-            var user = await userManager.FindByIdAsync(userId);
-            if (user is null) return NotFound();
-
-            var roles = await userManager.GetRolesAsync(user);
-            return Ok(roles);
-        }
     }
 }
