@@ -161,6 +161,16 @@ namespace RegisterMicroservice.Api.Controllers
             return Ok();
         }
 
+        [Route("GetUserRolesByUserId/{userId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetUserRolesByUserIdAsync(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user is null) return NotFound();
+            var roles = await userManager.GetRolesAsync(user);
+            return Ok(roles);
+        }
+
         [Route("AddUserToRoles")]
         [HttpPost]
         public async Task<IActionResult> AddUserToRolesAsync([FromBody]AddUserToRoleDto model)
@@ -179,10 +189,19 @@ namespace RegisterMicroservice.Api.Controllers
             }
             else
             {
-                foreach (var roleName in model.RoleNames)
+                var allRoles = await roleManager.Roles.ToListAsync();
+                var userRole = allRoles.Single(x => x.Name == UserRoleConstants.UserRole);
+                allRoles.Remove(userRole);
+                foreach (var role in allRoles)
                 {
-                    if (!await userManager.IsInRoleAsync(user, roleName))
-                        await userManager.AddToRoleAsync(user, roleName);
+                    if (model.RoleNames.Contains(role.Name) && !await userManager.IsInRoleAsync(user, role.Name))
+                        await userManager.AddToRoleAsync(user, role.Name);
+                    else if (model.RoleNames.Contains(role.Name) && await userManager.IsInRoleAsync(user, role.Name))
+                        continue;
+                    else
+                    {
+                        await userManager.RemoveFromRoleAsync(user, role.Name);
+                    }
                 }
             }
             
