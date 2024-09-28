@@ -77,15 +77,15 @@ namespace RegisterMicroservice.Api.Controllers
             return Ok(user);
         }
 
+        [Route("DeleteUserById/{uid}")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteUserById(string uid)
+        public async Task<IActionResult> DeleteUserByIdAsync(string uid)
         {
             var result = await userManager.DeleteAsync(new User { Id = uid });
             if (result.Succeeded)
-            {
                 return Ok();
-            }
-            return BadRequest("Пользователя с таким именем не существует");
+            
+            return BadRequest();
         }
 
         [HttpPut]
