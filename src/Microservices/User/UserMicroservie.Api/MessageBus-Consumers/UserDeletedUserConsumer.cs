@@ -5,15 +5,15 @@ using UserMicroservice.Api.Database;
 
 namespace UserMicroservice.Api.MessageBus_Consumers
 {
-    public class UserWithUnconfirmedEmailDeletedUserConsumer : IConsumer<IUserWithUnconfirmedEmailDeleted>
+    public class UserDeletedUserConsumer : IConsumer<IUserDeleted>
     {
         private readonly ApplicationDbContext databaseContext;
 
-        public UserWithUnconfirmedEmailDeletedUserConsumer(ApplicationDbContext databaseContext)
+        public UserDeletedUserConsumer(ApplicationDbContext databaseContext)
         {
             this.databaseContext  = databaseContext;
         }
-        public async Task Consume(ConsumeContext<IUserWithUnconfirmedEmailDeleted> context)
+        public async Task Consume(ConsumeContext<IUserDeleted> context)
         {
             var user = await databaseContext.Users.SingleOrDefaultAsync(x =>
                 x.AspNetUserId == context.Message.AspNetUserId);

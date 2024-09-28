@@ -1,6 +1,6 @@
 ﻿namespace MessageBus.Messages
 {
-    public interface IUserWithUnconfirmedEmailDeleted
+    public interface IUserDeleted
     {
         public string AspNetUserId { get; set; }
     }

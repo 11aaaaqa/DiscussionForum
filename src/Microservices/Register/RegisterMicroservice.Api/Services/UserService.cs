@@ -19,7 +19,7 @@ namespace RegisterMicroservice.Api.Services
         {
             var user = userManager.Users.Single(x => x.Id == userId);
             userManager.DeleteAsync(user);
-            publishEndpoint.Publish<IUserWithUnconfirmedEmailDeleted>(new
+            publishEndpoint.Publish<IUserDeleted>(new
             {
                 AspNetUserId = userId
             });
