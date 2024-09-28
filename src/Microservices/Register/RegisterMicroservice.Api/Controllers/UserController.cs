@@ -81,18 +81,6 @@ namespace RegisterMicroservice.Api.Controllers
             return Ok(user);
         }
 
-        [Route("DeleteUserById/{uid}")]
-        [HttpDelete]
-        public async Task<IActionResult> DeleteUserByIdAsync(string uid)
-        {
-            var result = await userManager.DeleteAsync(new User { Id = uid });
-            if (!result.Succeeded)
-                return BadRequest();
-
-            await publishEndpoint.Publish<IUserDeleted>(new { AspNetUserId = uid });
-            return Ok();
-        }
-
         [HttpPut]
         public async Task<IActionResult> UpdateUser([FromBody]User user)
         {
