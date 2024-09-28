@@ -4,6 +4,7 @@ using System.Text.Json;
 using GeneralClassesLib.ApiResponses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.MVC.Constants;
 using Web.MVC.DTOs.User;
 using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ApiResponses.CommentsResponses;
@@ -63,6 +64,22 @@ namespace Web.MVC.Controllers
 
             var comments = await createdCommentsResponse.Content.ReadFromJsonAsync<List<CommentResponse>>();
             ViewBag.Comments = comments;
+
+            #endregion
+
+            #region GettingUserRoles
+
+            var userRolesResponse = await httpClient.GetAsync($"http://register-microservice-api:8080/api/User/GetUserRolesByUserId/{user.AspNetUserId}");
+            if (!userRolesResponse.IsSuccessStatusCode) return View("ActionError");
+            var userRoles = await userRolesResponse.Content.ReadFromJsonAsync<List<string>>();
+            if (userRoles.Contains(UserRoleConstants.AdminRole))
+                ViewBag.UserRole = UserRoleConstants.AdminRole;
+            else if (userRoles.Contains(UserRoleConstants.ModeratorRole))
+                ViewBag.UserRole = UserRoleConstants.ModeratorRole;
+            else
+            {
+                ViewBag.UserRole = UserRoleConstants.UserRole;
+            }
 
             #endregion
 
