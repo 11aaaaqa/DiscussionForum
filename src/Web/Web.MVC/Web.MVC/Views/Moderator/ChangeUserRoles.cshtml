@@ -1,0 +1,17 @@
+﻿@model List<Web.MVC.DTOs.Moderator.CheckBoxUserRoleDto>
+
+<h3>Назначить роли</h3>
+<form method="post">
+    <div>
+        @for (var index = 0; index < Model.Count; index++)
+        {
+            <input type="checkbox" asp-for="@Model[index].IsChecked" />
+            <label asp-for="@Model[index].IsChecked">
+                @Model[index].RoleName
+            </label>
+            <input type="hidden" asp-for="@Model[index].RoleName" />
+            <br/>
+        }
+    </div>
+    <input type="submit" value="подтвердить"/>
+</form>
