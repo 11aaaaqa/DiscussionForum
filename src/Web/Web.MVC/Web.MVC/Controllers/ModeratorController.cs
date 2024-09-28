@@ -466,5 +466,55 @@ namespace Web.MVC.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangeUserRoles(string aspNetUserId)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync($"http://register-microservice-api:8080/api/User/GetUserRolesByUserId/{aspNetUserId}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+            var roles = await response.Content.ReadFromJsonAsync<List<string>>();
+
+            var model = new List<CheckBoxUserRoleDto>
+            {
+                 new(){IsChecked = false, RoleName = UserRoleConstants.AdminRole},
+                 new(){IsChecked = false, RoleName = UserRoleConstants.ModeratorRole}
+            };
+            foreach (var role in roles)
+            {
+                switch (role)
+                {
+                    case UserRoleConstants.AdminRole:
+                        model[0].IsChecked = true;
+                        break;
+                    case UserRoleConstants.ModeratorRole:
+                        model[1].IsChecked = true;
+                        break;
+                }
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeUserRoles(string aspNetUserId, string returnUrl, List<CheckBoxUserRoleDto> userRoles)
+        {
+            var selectedUserRolesCheckBox = userRoles.Where(x => x.IsChecked).ToList();
+            var selectedUserRoles = new List<string>();
+            foreach (var selectedUserRoleCheckBox in selectedUserRolesCheckBox)
+            {
+                selectedUserRoles.Add(selectedUserRoleCheckBox.RoleName);
+            }
+
+            using StringContent jsonContent = new(JsonSerializer.Serialize(new { RoleNames = selectedUserRoles, UserId = aspNetUserId}),
+                Encoding.UTF8, "application/json");
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.PostAsync("http://register-microservice-api:8080/api/User/AddUserToRoles", jsonContent);
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            if (!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
