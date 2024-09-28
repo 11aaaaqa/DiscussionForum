@@ -6,8 +6,6 @@ using RegisterMicroservice.Api.DTOs.Auth;
 using RegisterMicroservice.Api.Models.UserModels;
 using RegisterMicroservice.Api.Services;
 using System.Security.Claims;
-using MassTransit;
-using MessageBus.Messages;
 using Microsoft.EntityFrameworkCore;
 using RegisterMicroservice.Api.Constants;
 using RegisterMicroservice.Api.DTOs;
@@ -20,21 +18,17 @@ namespace RegisterMicroservice.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserManager<User> userManager;
-        private readonly ILogger<AuthController> logger;
         private readonly IEmailSender emailSender;
         private readonly ITokenService tokenService;
         private readonly RoleManager<IdentityRole> roleManager;
-        private readonly IPublishEndpoint publishEndpoint;
 
-        public UserController(UserManager<User> userManager, ILogger<AuthController> logger, IEmailSender emailSender, ITokenService tokenService,
-            RoleManager<IdentityRole> roleManager, IPublishEndpoint publishEndpoint)
+        public UserController(UserManager<User> userManager, IEmailSender emailSender, ITokenService tokenService,
+            RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
-            this.logger = logger;
             this.emailSender = emailSender;
             this.tokenService = tokenService;
             this.roleManager = roleManager;
-            this.publishEndpoint = publishEndpoint;
         }
 
         [HttpGet("GetById")]
