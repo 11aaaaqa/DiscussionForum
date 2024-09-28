@@ -24,7 +24,8 @@
             if (User.Identity.Name != Model.UserName)
             { 
                 <br/><br/> <a asp-controller="Moderator" asp-action="BanUser" asp-route-userName="@Model.UserName" asp-route-returnUrl="@Context.Request.Path"
-                           >отстранить пользователя</a>
+                           >отстранить пользователя</a><br/>
+                <a asp-controller="Moderator" asp-action="ChangeUserRoles" asp-route-returnUrl="@Context.Request.Path" asp-route-aspNetUserId="@Model.AspNetUserId">назначить роль</a>
             }
 
         }
