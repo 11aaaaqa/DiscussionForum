@@ -194,5 +194,14 @@ namespace RegisterMicroservice.Api.Controllers
             
             return Ok();
         }
+
+        [Route("GetAllUsers")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsersAsync([FromQuery] UserParameters userParameters)
+        {
+            var users = await userManager.Users.Skip((userParameters.PageNumber - 1) * userParameters.PageSize)
+                .Take(userParameters.PageSize).ToListAsync();
+            return Ok(users);
+        }
     }
 }
