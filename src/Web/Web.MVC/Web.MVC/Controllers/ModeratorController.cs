@@ -534,6 +534,7 @@ namespace Web.MVC.Controllers
             var doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
 
             ViewBag.DoesNextPageExist = doesExist;
+            ViewBag.CurrentPageNumber = pageNumber;
 
             return View(users);
         }
