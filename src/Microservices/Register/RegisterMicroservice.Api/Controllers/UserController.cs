@@ -203,5 +203,16 @@ namespace RegisterMicroservice.Api.Controllers
                 .Take(userParameters.PageSize).ToListAsync();
             return Ok(users);
         }
+
+        [Route("DoesNextUsersPageExist")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextUsersPageExistAsync([FromQuery] UserParameters userParameters)
+        {
+            int totalUsersCount = await userManager.Users.CountAsync();
+            int totalGettingUsersCount = userParameters.PageSize * userParameters.PageNumber;
+            int pageStartCount = totalGettingUsersCount - userParameters.PageSize;
+            bool doesExist = (totalUsersCount > pageStartCount);
+            return Ok(doesExist);
+        }
     }
 }
