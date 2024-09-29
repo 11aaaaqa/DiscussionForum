@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Web.MVC.Constants;
 using Web.MVC.DTOs.Moderator;
 using Web.MVC.Models.ApiResponses;
+using Web.MVC.Models.ApiResponses.ApNetUserResponses;
 using Web.MVC.Models.ApiResponses.CommentsResponses;
 using Web.MVC.Models.ApiResponses.CustUserResponses;
 using Web.MVC.Models.ApiResponses.Discussion;
@@ -515,6 +516,26 @@ namespace Web.MVC.Controllers
                 return LocalRedirect(returnUrl);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Users(int pageNumber, int pageSize)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://register-microservice-api:8080/api/User/GetAllUsers?pageNumber={pageNumber}&pageSize={pageSize}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var users = await response.Content.ReadFromJsonAsync<List<AspNetUserResponse>>();
+
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"http://register-microservice-api:8080/api/User/DoesNextUsersPageExist?pageNumber={pageNumber}&pageSize={pageSize}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+            var doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+
+            ViewBag.DoesNextPageExist = doesExist;
+
+            return View(users);
         }
     }
 }
