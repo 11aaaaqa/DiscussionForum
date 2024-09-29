@@ -535,6 +535,7 @@ namespace Web.MVC.Controllers
 
             ViewBag.DoesNextPageExist = doesExist;
             ViewBag.CurrentPageNumber = pageNumber;
+            ViewBag.CurrentPageSize = pageSize;
 
             return View(users);
         }
