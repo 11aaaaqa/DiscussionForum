@@ -1,0 +1,25 @@
+﻿@model List<Web.MVC.Models.ApiResponses.ApNetUserResponses.AspNetUserResponse>
+
+
+<h3>Пользователи</h3>
+<table>
+    <tr><th>Имя пользователя</th><th>Почта</th><th>Подтверждена почта</th></tr>
+    @foreach (var user in Model)
+    {
+        <tr><th>@user.UserName</th><th>@user.Email</th><th>@user.EmailConfirmed</th></tr>
+    }
+</table>
+
+@if (ViewBag.CurrentPageNumber != 1)
+{
+    <a asp-controller="Moderator" asp-action="Users" asp-route-pageNumber="@ViewBag.CurrentPageNumber - 1" asp-route-pageSize="@ViewBag.CurrentPageSize">
+        < Назад
+    </a>
+}
+@if (ViewBag.DoesNextPageExist)
+{
+    <a asp-controller="Moderator" asp-action="Users" asp-route-pageNumber="@ViewBag.CurrentPageNumber + 1" asp-route-pageSize="@ViewBag.CurrentPageSize">
+        Вперед >
+    </a>
+}
+    

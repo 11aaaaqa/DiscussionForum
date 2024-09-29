@@ -33,6 +33,7 @@
     <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedComments.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedDiscussion.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedDiscussions.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Moderator\Users.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Report\AddReport.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Report\GetReport.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Topic\Topic.cshtml" />
@@ -91,6 +92,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Moderator\ChangeUserRoles.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Moderator\Users.cshtml" />
   </ItemGroup>
 
 </Project>
