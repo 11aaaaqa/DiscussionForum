@@ -204,6 +204,40 @@ namespace RegisterMicroservice.Api.Controllers
             return Ok(users);
         }
 
+        [Route("GetAllUsersSearching")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsersAsync([FromQuery] UserParameters userParameters, string searchingString)
+        {
+            var usersSearchingUserName = await userManager.Users.Where(x => x.UserName.Contains(searchingString))
+                .Skip((userParameters.PageNumber - 1) * (userParameters.PageSize / 2)).Take(userParameters.PageSize / 2)
+                .ToListAsync();
+            var usersSearchingEmail = await userManager.Users.Where(x => x.Email.Contains(searchingString))
+                .Skip((userParameters.PageNumber - 1) * (userParameters.PageSize / 2)).Take(userParameters.PageSize / 2)
+                .ToListAsync();
+
+            var eventualUsers = usersSearchingUserName;
+            foreach (var userSearchingEmail in usersSearchingEmail)
+            {
+                if(!eventualUsers.Contains(userSearchingEmail))
+                    eventualUsers.Add(userSearchingEmail);
+            }
+            return Ok(eventualUsers);
+        }
+
+        [Route("DoesNextUsersPageSearchingExist")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextUsersPageExistAsync([FromQuery] UserParameters userParameters, string searchingString)
+        {
+            int totalUsersWithSearchingUserNameCount = await userManager.Users.Where(x => x.UserName.Contains(searchingString)).CountAsync();
+            var generalUsersCount = await userManager.Users.Where(x => x.UserName.Contains(searchingString))
+                .Where(x => x.Email.Contains(searchingString)).CountAsync();
+            int totalUsersWithSearchingEmailCount = await userManager.Users.Where(x => x.Email.Contains(searchingString)).CountAsync();
+            int totalGettingUsersCount = userParameters.PageSize * userParameters.PageNumber;
+            int pageStartCount = totalGettingUsersCount - userParameters.PageSize;
+            bool doesExist = (totalUsersWithSearchingUserNameCount + totalUsersWithSearchingEmailCount - generalUsersCount > pageStartCount);
+            return Ok(doesExist);
+        }
+
         [Route("DoesNextUsersPageExist")]
         [HttpGet]
         public async Task<IActionResult> DoesNextUsersPageExistAsync([FromQuery] UserParameters userParameters)
