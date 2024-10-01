@@ -529,12 +529,13 @@ namespace Web.MVC.Controllers
             var users = await response.Content.ReadFromJsonAsync<List<AspNetUserResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://register-microservice-api:8080/api/User/DoesNextUsersPageExist?pageNumber={pageNumber}&pageSize={pageSize}");
+                $"http://register-microservice-api:8080/api/User/DoesNextUsersPageExist?pageNumber={pageNumber + 1}&pageSize={pageSize}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
             var doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
 
             ViewBag.DoesNextPageExist = doesExist;
-            ViewBag.CurrentPageNumber = pageNumber;
+            ViewBag.NextPageNumber = pageNumber + 1;
+            ViewBag.PreviousPageNumber = pageNumber - 1;
             ViewBag.CurrentPageSize = pageSize;
 
             return View(users);
