@@ -8,6 +8,12 @@
 }
 else
 {
+    <form method="get">
+        <input name="searchingQuery" placeholder="Поиск"/>
+        <input type="hidden" name="pageNumber" value="1"/>
+        <input type="hidden" name="pageSize" value="@ViewBag.CurrentPageSize" />
+        <input type="submit" value="найти"/>
+    </form>
     <table>
         <tr><th>Имя пользователя</th><th>Почта</th><th>Подтверждена почта</th><th>Назначить роль</th></tr>
         @foreach (var user in Model)
