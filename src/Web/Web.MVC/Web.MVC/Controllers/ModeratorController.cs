@@ -519,19 +519,38 @@ namespace Web.MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Users(int pageNumber, int pageSize)
+        public async Task<IActionResult> Users(int pageNumber, int pageSize, string? searchingQuery)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
-            var response = await httpClient.GetAsync(
+            bool doesExist;
+            List<AspNetUserResponse>? users;
+            if (searchingQuery is null)
+            {
+                var response = await httpClient.GetAsync(
                 $"http://register-microservice-api:8080/api/User/GetAllUsers?pageNumber={pageNumber}&pageSize={pageSize}");
-            if (!response.IsSuccessStatusCode) return View("ActionError");
+                if (!response.IsSuccessStatusCode) return View("ActionError");
 
-            var users = await response.Content.ReadFromJsonAsync<List<AspNetUserResponse>>();
+                users = await response.Content.ReadFromJsonAsync<List<AspNetUserResponse>>();
 
-            var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://register-microservice-api:8080/api/User/DoesNextUsersPageExist?pageNumber={pageNumber + 1}&pageSize={pageSize}");
-            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
-            var doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+                var doesNextPageExistResponse = await httpClient.GetAsync(
+                    $"http://register-microservice-api:8080/api/User/DoesNextUsersPageExist?pageNumber={pageNumber + 1}&pageSize={pageSize}");
+                if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+                doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+            }
+            else
+            {
+                var response = await httpClient.GetAsync(
+                    $"http://register-microservice-api:8080/api/User/GetAllUsersSearching?pageNumber={pageNumber}&pageSize={pageSize}&searchingString={searchingQuery}");
+                if (!response.IsSuccessStatusCode) return View("ActionError");
+
+                users = await response.Content.ReadFromJsonAsync<List<AspNetUserResponse>>();
+
+                var doesNextPageExistResponse = await httpClient.GetAsync(
+                    $"http://register-microservice-api:8080/api/User/DoesNextUsersPageSearchingExist?pageNumber={pageNumber + 1}&pageSize={pageSize}&searchingString={searchingQuery}");
+                if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+                doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+            }
 
             ViewBag.DoesNextPageExist = doesExist;
             ViewBag.NextPageNumber = pageNumber + 1;
