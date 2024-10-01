@@ -9,10 +9,19 @@
 else
 {
     <table>
-        <tr><th>Имя пользователя</th><th>Почта</th><th>Подтверждена почта</th></tr>
+        <tr><th>Имя пользователя</th><th>Почта</th><th>Подтверждена почта</th><th>Назначить роль</th></tr>
         @foreach (var user in Model)
         {
-            <tr><th>@user.UserName</th><th>@user.Email</th><th>@user.EmailConfirmed</th></tr>
+            if (Context.Request.QueryString.HasValue)
+            {
+                var returnUrl = Context.Request.Path + Context.Request.QueryString;
+                <tr><th><a asp-controller="User" asp-action="GetUser" asp-route-userName="@user.UserName">@user.UserName</a></th><th>@user.Email</th><th>@user.EmailConfirmed</th><th><a asp-action="ChangeUserRoles" asp-controller="Moderator" asp-route-returnUrl="@returnUrl" asp-route-aspNetUserId="@user.Id">назначить роль</a></th></tr>
+            }
+            else
+            {
+                <tr><th><a asp-controller="User" asp-action="GetUser" asp-route-userName="@user.UserName">@user.UserName</a></th><th>@user.Email</th><th>@user.EmailConfirmed</th><th><a asp-action="ChangeUserRoles" asp-controller="Moderator" asp-route-returnUrl="@Context.Request.Path" asp-route-aspNetUserId="@user.Id">назначить роль</a></th></tr>
+            }
+            
         }
     </table>
 }
