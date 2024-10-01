@@ -226,14 +226,14 @@ namespace Web.MVC.Controllers
                 {
                     using StringContent jsonContent =
                         new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
-                    var response = await httpClient.PostAsync(
+                    var response = await httpClient.PatchAsync(
                         $"http://user-microservice-api:8080/api/profile/User/BanUserByUserName/{userName}", jsonContent);
                     if (!response.IsSuccessStatusCode) return View("ActionError");
                 }
                 else
                 {
                     using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
-                    var response = await httpClient.PostAsync(
+                    var response = await httpClient.PatchAsync(
                         $"http://user-microservice-api:8080/api/profile/User/BanUserByUserId/{userId}", jsonContent);
                     if (!response.IsSuccessStatusCode) return View("ActionError");
                 }
@@ -307,14 +307,14 @@ namespace Web.MVC.Controllers
                 {
                     using StringContent jsonContent =
                         new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
-                    var response = await httpClient.PostAsync(
+                    var response = await httpClient.PatchAsync(
                         $"http://user-microservice-api:8080/api/profile/User/BanUserByUserName/{userName}", jsonContent);
                     if (!response.IsSuccessStatusCode) return View("ActionError");
                 }
                 else
                 {
                     using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
-                    var response = await httpClient.PostAsync(
+                    var response = await httpClient.PatchAsync(
                         $"http://user-microservice-api:8080/api/profile/User/BanUserByUserId/{userId}", jsonContent);
                     if (!response.IsSuccessStatusCode) return View("ActionError");
                 }
