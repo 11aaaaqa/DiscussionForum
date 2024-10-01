@@ -12,12 +12,12 @@ services:
        environment:
         - ASPNETCORE_ENVIRONMENT=Development
         - ASPNETCORE_URLS=https://+:8081;http://+:8080
-        - ASPNETCORE_Kestrel__Certificates__Default__Password=Shi8Gb6vPznq
-        - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/httpscertificate.pfx
+        - ASPNETCORE_HTTPS_PORT=1213
        depends_on:
          - register-microservice-api
        volumes:
-         - ~/.aspnet/https:/https:ro
+         - ${APPDATA}/Microsoft/UserSecrets/:/root/.microsoft/usersecrets
+         - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https/
 
     register-microservice-api:
       image: ${DOCKER_REGISTRY-}register-microservice-api
