@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TopicMicroservice.Api.DTOs;
 using TopicMicroservice.Api.Models;
 using TopicMicroservice.Api.Services.Repository;
