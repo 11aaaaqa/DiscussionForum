@@ -33,16 +33,37 @@ else
 }
 
 
+
 @if (ViewBag.PreviousPageNumber != 0 && Model.Count != 0)
 {
-    <a asp-controller="Moderator" asp-action="Users" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.CurrentPageSize">
-        &lt; Назад
-    </a>
+    @if (ViewBag.SearchingQuery is null)
+    {
+        <a asp-controller="Moderator" asp-action="Users" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.CurrentPageSize">
+            &lt; Назад
+        </a>
+    }
+    else
+    {
+        <a asp-controller="Moderator" asp-action="Users" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.CurrentPageSize"
+           asp-route-searchingQuery="@ViewBag.SearchingQuery">
+            &lt; Назад
+        </a>
+    }
 }
 @if (ViewBag.DoesNextPageExist && Model.Count != 0)
 {
-    <a asp-controller="Moderator" asp-action="Users" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.CurrentPageSize">
-        Вперед &gt;
-    </a>
+    @if (ViewBag.SearchingQuery is null)
+    {
+        <a asp-controller="Moderator" asp-action="Users" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.CurrentPageSize">
+            Вперед &gt;
+        </a>
+    }
+    else
+    {
+        <a asp-controller="Moderator" asp-action="Users" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.CurrentPageSize"
+           asp-route-searchingQuery="@ViewBag.SearchingQuery">
+            Вперед &gt;
+        </a>
+    }
 }
     
