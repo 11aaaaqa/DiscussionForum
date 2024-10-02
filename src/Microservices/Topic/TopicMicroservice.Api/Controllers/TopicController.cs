@@ -20,7 +20,8 @@ namespace TopicMicroservice.Api.Controllers
 
         [Route("GetAll")]
         [HttpGet]
-        public async Task<IActionResult> GetAllTopicsAsync() => Ok(await topicRepository.GetAllAsync());
+        public async Task<IActionResult> GetAllTopicsAsync([FromQuery] TopicParameters topicParameters) 
+            => Ok(await topicRepository.GetAllAsync(topicParameters.PageSize, topicParameters.PageNumber));
 
         [Route("GetByName")]
         [HttpGet]
