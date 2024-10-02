@@ -13,7 +13,11 @@ namespace TopicMicroservice.Api.Services.Repository
             this.context = context;
         }
 
-        public async Task<List<Topic>> GetAllAsync() => await context.Topics.ToListAsync();
+        public async Task<List<Topic>> GetAllAsync(int pageSize, int pageNumber)
+        {
+            var topics = await context.Topics.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            return topics;
+        }
 
         public async Task<Topic?> GetByIdAsync(Guid id) => await context.Topics.SingleOrDefaultAsync(x => x.Id == id);
 
