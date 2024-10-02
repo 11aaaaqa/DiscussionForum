@@ -2,7 +2,7 @@
 {
     public class UserSearchingTypeConstants
     {
-        public const string UserNameSearchingType = "UserName";
-        public const string EmailSearchingType = "Email";
+        public const string UserNameSearchingType = "Имя пользователя";
+        public const string EmailSearchingType = "Почта";
     }
 }
