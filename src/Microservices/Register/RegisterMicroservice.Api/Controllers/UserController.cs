@@ -226,15 +226,35 @@ namespace RegisterMicroservice.Api.Controllers
                 } 
                 default:
                     return BadRequest();
-                
             }
         }
 
         [Route("DoesNextUsersPageSearchingExist")]
         [HttpGet]
-        public async Task<IActionResult> DoesNextUsersPageExistAsync([FromQuery] UserParameters userParameters, string searchingString)
+        public async Task<IActionResult> DoesNextUsersPageExistAsync([FromQuery] UserParameters userParameters, string searchingString, string searchingType)
         {
-           
+            switch (searchingType)
+            {
+                case FindUsersSearchingTypeConstants.EmailSearchingType:
+                {
+                    int totalUsersCount =
+                        await userManager.Users.Where(x => x.Email.Contains(searchingString)).CountAsync();
+                    int totalGettingUsersCount = userParameters.PageSize * userParameters.PageNumber;
+                    int pageStartCount = totalGettingUsersCount - userParameters.PageSize;
+                    bool doesExist = (totalUsersCount > pageStartCount);
+                    return Ok(doesExist);
+                    }
+                case FindUsersSearchingTypeConstants.UserNameSearchingType:
+                {
+                    int totalUsersCount = await userManager.Users.Where(x => x.UserName.Contains(searchingString)).CountAsync();
+                    int totalGettingUsersCount = userParameters.PageSize * userParameters.PageNumber;
+                    int pageStartCount = totalGettingUsersCount - userParameters.PageSize;
+                    bool doesExist = (totalUsersCount > pageStartCount);
+                    return Ok(doesExist);
+                    }
+                default:
+                    return BadRequest();
+            }
         }
 
         [Route("DoesNextUsersPageExist")]
