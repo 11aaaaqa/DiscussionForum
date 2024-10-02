@@ -551,6 +551,7 @@ namespace Web.MVC.Controllers
 
                 doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
                 ViewBag.SearchingQuery = searchingQuery;
+                ViewBag.SearchingType = searchingType;
             }
 
             ViewBag.DoesNextPageExist = doesExist;
