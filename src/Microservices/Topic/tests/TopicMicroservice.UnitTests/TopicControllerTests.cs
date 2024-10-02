@@ -19,15 +19,16 @@ namespace TopicMicroservice.UnitTests
         [Fact]
         public async Task GetAllTopicsAsync_ReturnsOkWithTopics()
         {
+            var topicParameters = new TopicParameters { PageNumber = It.IsAny<int>(), PageSize = It.IsAny<int>()};
             var mock = new Mock<IRepository<Topic>>();
-            mock.Setup(x => x.GetAllAsync()).ReturnsAsync(new List<Topic>
+            mock.Setup(x => x.GetAllAsync(topicParameters.PageSize, topicParameters.PageNumber)).ReturnsAsync(new List<Topic>
             {
                 new() { Id = Guid.NewGuid(), Name = "test", PostsCount = 0 },
                 new() { Id = Guid.NewGuid(), Name = "test2", PostsCount = 12 }
             });
             var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
 
-            var result = await controller.GetAllTopicsAsync();
+            var result = await controller.GetAllTopicsAsync(topicParameters);
 
             var methodResult = Assert.IsType<OkObjectResult>(result);
             var topics = Assert.IsAssignableFrom<List<Topic>>(methodResult.Value);
