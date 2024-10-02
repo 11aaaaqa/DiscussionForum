@@ -1,5 +1,5 @@
 ﻿@model List<Web.MVC.Models.ApiResponses.ApNetUserResponses.AspNetUserResponse>
-
+@using Web.MVC.Constants
 
 <h3>Пользователи</h3>
 @if (Model.Count == 0)
@@ -8,10 +8,15 @@
 }
 else
 {
+    var searchingTypes = new SelectList(new List<string>
+    {
+        UserSearchingTypeConstants.UserNameSearchingType, UserSearchingTypeConstants.EmailSearchingType
+    }, UserSearchingTypeConstants.UserNameSearchingType);
     <form method="get">
         <input name="searchingQuery" placeholder="Поиск"/>
         <input type="hidden" name="pageNumber" value="1"/>
         <input type="hidden" name="pageSize" value="@ViewBag.CurrentPageSize" />
+        <select name="searchingType" asp-items="@searchingTypes"></select>
         <input type="submit" value="найти"/>
     </form>
     <table>
