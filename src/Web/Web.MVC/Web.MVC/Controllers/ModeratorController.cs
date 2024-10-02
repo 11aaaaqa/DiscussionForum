@@ -550,6 +550,7 @@ namespace Web.MVC.Controllers
                 if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
                 doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+                ViewBag.SearchingQuery = searchingQuery;
             }
 
             ViewBag.DoesNextPageExist = doesExist;
