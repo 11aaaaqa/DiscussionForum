@@ -21,15 +21,26 @@ namespace Web.MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Topics()
+        public async Task<IActionResult> Topics(int pageSize, int pageNumber)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://topic-microservice-api:8080/api/Topic/GetAll?pageSize={pageSize}&pageNumber={pageNumber}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+            var topics = await response.Content.ReadFromJsonAsync<List<TopicResponse>>();
 
-            var result = await httpClient.GetAsync("http://topic-microservice-api:8080/api/Topic/GetAll");
+            var doesExistResponse = await httpClient.GetAsync(
+                $"http://topic-microservice-api:8080/api/Topic/DoesNextTopicsPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+            if (!doesExistResponse.IsSuccessStatusCode) return View("ActionError");
 
-            var content = await result.Content.ReadFromJsonAsync<List<TopicResponse>>();
+            var doesExist = await doesExistResponse.Content.ReadFromJsonAsync<bool>();
 
-            return View(content);
+            ViewBag.DoesNextPageExist = doesExist;
+            ViewBag.NextPageNumber = pageNumber + 1;
+            ViewBag.PreviousPageNumber = pageNumber - 1;
+            ViewBag.PageSize = pageSize;
+
+            return View(topics);
         }
 
         [Route("topics/{topicName}")]
