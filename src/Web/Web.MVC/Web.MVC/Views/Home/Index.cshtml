@@ -4,7 +4,7 @@
 
 <div class="text-center">
 
-<a asp-controller="Topic" asp-action="Topics">Форум</a>    
+<a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="1" asp-route-pageSize="20">Форум</a>    
 
 @if (User.Identity.IsAuthenticated)
 {
