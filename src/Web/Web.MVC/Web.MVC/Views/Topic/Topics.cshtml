@@ -3,6 +3,12 @@
 <div class="text-center">
     <h3>Темы</h3>
     <a asp-action="SuggestTopic" asp-controller="Topic">Предложить тему</a><br/>
+    <form method="get">
+        <input name="searchingQuery" placeholder="Поиск" />
+        <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
+        <input type="hidden" name="pageNumber" value="1"/>
+        <input type="submit" value="найти"/>
+    </form>
     @foreach (var topic in Model)
     {
         <a href="~/topics/@topic.Name">@topic.Name</a>
