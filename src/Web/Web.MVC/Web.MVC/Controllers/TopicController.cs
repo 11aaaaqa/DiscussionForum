@@ -21,19 +21,37 @@ namespace Web.MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Topics(int pageSize, int pageNumber)
+        public async Task<IActionResult> Topics(int pageSize, int pageNumber, string? searchingQuery)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
-            var response = await httpClient.GetAsync(
-                $"http://topic-microservice-api:8080/api/Topic/GetAll?pageSize={pageSize}&pageNumber={pageNumber}");
-            if (!response.IsSuccessStatusCode) return View("ActionError");
-            var topics = await response.Content.ReadFromJsonAsync<List<TopicResponse>>();
+            List<TopicResponse> topics;
+            bool doesExist;
+            if (searchingQuery is null)
+            {
+                var response = await httpClient.GetAsync(
+                    $"http://topic-microservice-api:8080/api/Topic/GetAll?pageSize={pageSize}&pageNumber={pageNumber}");
+                if (!response.IsSuccessStatusCode) return View("ActionError");
+                topics = await response.Content.ReadFromJsonAsync<List<TopicResponse>>();
 
-            var doesExistResponse = await httpClient.GetAsync(
-                $"http://topic-microservice-api:8080/api/Topic/DoesNextTopicsPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
-            if (!doesExistResponse.IsSuccessStatusCode) return View("ActionError");
+                var doesExistResponse = await httpClient.GetAsync(
+                    $"http://topic-microservice-api:8080/api/Topic/DoesNextTopicsPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+                if (!doesExistResponse.IsSuccessStatusCode) return View("ActionError");
 
-            var doesExist = await doesExistResponse.Content.ReadFromJsonAsync<bool>();
+                doesExist = await doesExistResponse.Content.ReadFromJsonAsync<bool>();
+            }
+            else
+            {
+                var response = await httpClient.GetAsync(
+                    $"http://topic-microservice-api:8080/api/Topic/FindTopics?pageSize={pageSize}&pageNumber={pageNumber}&searchingString={searchingQuery}");
+                if (!response.IsSuccessStatusCode) return View("ActionError");
+                topics = await response.Content.ReadFromJsonAsync<List<TopicResponse>>();
+
+                var doesExistResponse = await httpClient.GetAsync(
+                    $"http://topic-microservice-api:8080/api/Topic/DoesNextTopicsPageExistSearching?pageSize={pageSize}&pageNumber={pageNumber + 1}&searchingString={searchingQuery}");
+                if (!doesExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+                doesExist = await doesExistResponse.Content.ReadFromJsonAsync<bool>();
+            }
 
             ViewBag.DoesNextPageExist = doesExist;
             ViewBag.NextPageNumber = pageNumber + 1;
