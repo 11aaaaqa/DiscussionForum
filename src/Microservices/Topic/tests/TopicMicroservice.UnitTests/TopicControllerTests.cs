@@ -252,5 +252,29 @@ namespace TopicMicroservice.UnitTests
             Assert.False(existingResult);
             mock.VerifyAll();
         }
+
+        [Fact]
+        public async Task FindTopicsAsync_ReturnsOkWithTopicsWhichNamesContainSearchingString()
+        {
+            int pageNumber = 2;
+            int pageSize = 2;
+            string searchingString = "test";
+            var mock = new Mock<IRepository<Topic>>();
+            mock.Setup(x => x.GetAllAsync(pageSize, pageNumber, searchingString)).ReturnsAsync(new List<Topic>
+            {
+                new (){Name = "teststetest"}, new (){Name = "123yaltestf"}
+            });
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object,
+                new Mock<ITopicService>().Object);
+
+            var result =
+                await controller.FindTopicsAsync(new TopicParameters { PageSize = pageSize, PageNumber = pageNumber },
+                    searchingString);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            var topics = Assert.IsType<List<Topic>>(methodResult.Value);
+            Assert.Equal(2, topics.Count);
+        }
     }
 }
