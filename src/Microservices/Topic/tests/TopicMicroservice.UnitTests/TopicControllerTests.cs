@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using TopicMicroservice.Api.Controllers;
 using TopicMicroservice.Api.DTOs;
 using TopicMicroservice.Api.Models;
+using TopicMicroservice.Api.Services;
 using TopicMicroservice.Api.Services.Repository;
 
 namespace TopicMicroservice.UnitTests
@@ -26,7 +21,7 @@ namespace TopicMicroservice.UnitTests
                 new() { Id = Guid.NewGuid(), Name = "test", PostsCount = 0 },
                 new() { Id = Guid.NewGuid(), Name = "test2", PostsCount = 12 }
             });
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
 
             var result = await controller.GetAllTopicsAsync(topicParameters);
 
@@ -41,7 +36,7 @@ namespace TopicMicroservice.UnitTests
         {
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByNameAsync("incorrectName")).ReturnsAsync((Topic?)null);
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
 
             var result = await controller.GetTopicByNameAsync("incorrectName");
 
@@ -54,7 +49,7 @@ namespace TopicMicroservice.UnitTests
         {
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByNameAsync("correctName")).ReturnsAsync(new Topic{Id = Guid.NewGuid(), Name = "correctName", PostsCount = It.IsAny<uint>()});
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
 
             var result = await controller.GetTopicByNameAsync("correctName");
 
@@ -69,7 +64,7 @@ namespace TopicMicroservice.UnitTests
         {
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByIdAsync(new Guid("741ba091-7d2c-4c26-8247-f538c217c473"))).ReturnsAsync((Topic?)null);
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
 
             var result = await controller.GetTopicByIdAsync(new Guid("741ba091-7d2c-4c26-8247-f538c217c473"));
 
@@ -82,7 +77,7 @@ namespace TopicMicroservice.UnitTests
         {
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByIdAsync(new Guid("741ba091-7d2c-4c26-8247-f538c217c473"))).ReturnsAsync(new Topic{ Id = new Guid("741ba091-7d2c-4c26-8247-f538c217c473"), Name = It.IsAny<string>(), PostsCount = It.IsAny<uint>() });
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
 
             var result = await controller.GetTopicByIdAsync(new Guid("741ba091-7d2c-4c26-8247-f538c217c473"));
 
@@ -98,7 +93,7 @@ namespace TopicMicroservice.UnitTests
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByNameAsync("existingName")).ReturnsAsync(new Topic
                 { Id = It.IsAny<Guid>(), Name = "existingName", PostsCount = It.IsAny<uint>() });
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
 
             var result = await controller.CreateTopicAsync(new TopicDto { Name = "existingName" });
 
@@ -112,7 +107,7 @@ namespace TopicMicroservice.UnitTests
             var model = new TopicDto { Name = "notExistingName" };
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByNameAsync(model.Name)).ReturnsAsync((Topic?)null);
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
 
             var result = await controller.CreateTopicAsync(model);
             
@@ -130,7 +125,7 @@ namespace TopicMicroservice.UnitTests
             };
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByIdAsync(model.Id)).ReturnsAsync((Topic?)null);
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
 
             var result = await controller.UpdateTopicAsync(model);
 
@@ -154,7 +149,7 @@ namespace TopicMicroservice.UnitTests
                 Name = It.IsAny<string>(), PostsCount = It.IsAny<uint>()
             });
             mock.Setup(x => x.UpdateAsync(model)).ReturnsAsync(model);
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
 
             var result = await controller.UpdateTopicAsync(model);
 
@@ -170,7 +165,7 @@ namespace TopicMicroservice.UnitTests
             var id = new Guid("e4d0f8d1-c73b-4d65-9952-72331581fe50");
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync((Topic?)null);
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
 
             var result = await controller.DeleteTopicByIdAsync(id);
 
@@ -186,7 +181,7 @@ namespace TopicMicroservice.UnitTests
             mock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(new Topic
                 { Id = id, Name = It.IsAny<string>(), PostsCount = It.IsAny<uint>() });
             mock.Setup(x => x.DeleteByIdAsync(id));
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
 
             var result = await controller.DeleteTopicByIdAsync(id);
 
@@ -200,7 +195,7 @@ namespace TopicMicroservice.UnitTests
             string name = "notExistingName";
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByNameAsync(name)).ReturnsAsync((Topic?)null);
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
 
             var result = await controller.DeleteTopicByNameAsync(name);
 
@@ -216,11 +211,45 @@ namespace TopicMicroservice.UnitTests
             mock.Setup(x => x.GetByNameAsync(name)).ReturnsAsync(new Topic
                 { Id = It.IsAny<Guid>(), Name = name, PostsCount = It.IsAny<uint>() });
             mock.Setup(x => x.DeleteByNameAsync(name));
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
 
             var result = await controller.DeleteTopicByNameAsync(name);
 
             Assert.IsType<OkResult>(result);
+            mock.VerifyAll();
+        }
+
+        [Fact]
+        public async Task DoesNextTopicsPageExistAsync_ReturnsOkWithTrue()
+        {
+            var topicParameters = new TopicParameters { PageSize = It.IsAny<int>(), PageNumber = It.IsAny<int>() };
+            var mock = new Mock<ITopicService>();
+            mock.Setup(x => x.DoesAllTopicsHaveNextPage(topicParameters.PageSize, topicParameters.PageNumber)).ReturnsAsync(true);
+            var controller = new TopicController(new Mock<IRepository<Topic>>().Object, new Mock<ILogger<TopicController>>().Object, mock.Object);
+
+            var result = await controller.DoesNextTopicsPageExistAsync(topicParameters);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            var existingResult = Assert.IsType<bool>(methodResult.Value);
+            Assert.True(existingResult);
+            mock.VerifyAll();
+        }
+
+        [Fact]
+        public async Task DoesNextTopicsPageExistAsync_ReturnsOkWithFalse()
+        {
+            var topicParameters = new TopicParameters { PageSize = It.IsAny<int>(), PageNumber = It.IsAny<int>() };
+            var mock = new Mock<ITopicService>();
+            mock.Setup(x => x.DoesAllTopicsHaveNextPage(topicParameters.PageSize, topicParameters.PageNumber)).ReturnsAsync(false);
+            var controller = new TopicController(new Mock<IRepository<Topic>>().Object, new Mock<ILogger<TopicController>>().Object, mock.Object);
+
+            var result = await controller.DoesNextTopicsPageExistAsync(topicParameters);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            var existingResult = Assert.IsType<bool>(methodResult.Value);
+            Assert.False(existingResult);
             mock.VerifyAll();
         }
     }
