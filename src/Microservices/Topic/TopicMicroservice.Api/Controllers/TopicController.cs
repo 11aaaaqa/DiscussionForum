@@ -30,6 +30,11 @@ namespace TopicMicroservice.Api.Controllers
             return Ok(exist);
         }
 
+        [Route("FindTopics")]
+        [HttpGet]
+        public async Task<IActionResult> FindTopicsAsync([FromQuery] TopicParameters topicParameters, string searchingString)
+            => Ok(await topicRepository.GetAllAsync(topicParameters.PageSize, topicParameters.PageNumber, searchingString));
+
         [Route("GetAll")]
         [HttpGet]
         public async Task<IActionResult> GetAllTopicsAsync([FromQuery] TopicParameters topicParameters) 
