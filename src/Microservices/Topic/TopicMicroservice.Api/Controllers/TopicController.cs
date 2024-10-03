@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TopicMicroservice.Api.DTOs;
 using TopicMicroservice.Api.Models;
+using TopicMicroservice.Api.Services;
 using TopicMicroservice.Api.Services.Repository;
 
 namespace TopicMicroservice.Api.Controllers
@@ -10,12 +11,23 @@ namespace TopicMicroservice.Api.Controllers
     public class TopicController : ControllerBase
     {
         private readonly IRepository<Topic> topicRepository;
+        private readonly ITopicService topicService;
         private readonly ILogger<TopicController> logger;
 
-        public TopicController(IRepository<Topic> topicRepository, ILogger<TopicController> logger)
+        public TopicController(IRepository<Topic> topicRepository, ILogger<TopicController> logger, ITopicService topicService)
         {
             this.topicRepository = topicRepository;
             this.logger = logger;
+            this.topicService = topicService;
+        }
+
+        [Route("DoesNextTopicsPageExist")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextTopicsPageExistAsync([FromQuery] TopicParameters topicParameters)
+        {
+            var exist = await topicService.DoesAllTopicsHaveNextPage(topicParameters.PageSize,
+                topicParameters.PageNumber);
+            return Ok(exist);
         }
 
         [Route("GetAll")]
