@@ -30,6 +30,15 @@ namespace TopicMicroservice.Api.Controllers
             return Ok(exist);
         }
 
+        [Route("DoesNextTopicsPageExistSearching")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextTopicsPageExistSearchingAsync([FromQuery] TopicParameters topicParameters, string searchingString)
+        {
+            var exist = await topicService.DoesAllTopicsHaveNextPage(topicParameters.PageSize,
+                topicParameters.PageNumber, searchingString);
+            return Ok(exist);
+        }
+
         [Route("FindTopics")]
         [HttpGet]
         public async Task<IActionResult> FindTopicsAsync([FromQuery] TopicParameters topicParameters, string searchingString)
