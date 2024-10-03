@@ -57,6 +57,7 @@ namespace Web.MVC.Controllers
             ViewBag.NextPageNumber = pageNumber + 1;
             ViewBag.PreviousPageNumber = pageNumber - 1;
             ViewBag.PageSize = pageSize;
+            ViewBag.SearchingQuery = searchingQuery;
 
             return View(topics);
         }
