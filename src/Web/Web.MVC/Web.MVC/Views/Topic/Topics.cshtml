@@ -16,15 +16,35 @@
     }
     @if (ViewBag.PreviousPageNumber != 0 && Model.Count != 0)
     {
-        <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize">
-            Назад
-        </a>
+        @if (ViewBag.SearchingQuery is null)
+        {
+            <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize">
+                Назад
+            </a>
+        }
+        else
+        {
+            <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize"
+               asp-route-searchingQuery="@ViewBag.SearchingQuery">
+                Назад
+            </a>
+        }
     }
     @if (ViewBag.DoesNextPageExist && Model.Count != 0)
     {
-        <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize">
-            Вперед
-        </a>
+        @if (ViewBag.SearchingQuery is null)
+        {
+            <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize">
+                Вперед
+            </a>
+        }
+        else
+        {
+            <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize"
+               asp-route-searchingQuery="@ViewBag.SearchingQuery">
+                Вперед
+            </a>
+        }
     }
 </div>
 
