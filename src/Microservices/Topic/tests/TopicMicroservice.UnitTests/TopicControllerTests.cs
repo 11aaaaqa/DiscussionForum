@@ -276,5 +276,50 @@ namespace TopicMicroservice.UnitTests
             var topics = Assert.IsType<List<Topic>>(methodResult.Value);
             Assert.Equal(2, topics.Count);
         }
+
+        [Fact]
+        public async Task DoesNextTopicsPageExistSearchingAsync_ReturnsOkWithTrue()
+        {
+            int pageSize = 2;
+            int pageNumber = 3;
+            string searchingString = "test";
+            var mock = new Mock<ITopicService>();
+            mock.Setup(x => x.DoesAllTopicsHaveNextPage(pageSize, pageNumber, searchingString)).ReturnsAsync(true);
+            var controller = new TopicController(new Mock<IRepository<Topic>>().Object, new Mock<ILogger<TopicController>>().Object,
+                mock.Object);
+
+            var result = await controller.DoesNextTopicsPageExistSearchingAsync(new TopicParameters
+            {
+                PageSize = pageSize, PageNumber = pageNumber
+            }, searchingString);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            var doesExist = Assert.IsType<bool>(methodResult.Value);
+            Assert.True(doesExist);
+        }
+
+        [Fact]
+        public async Task DoesNextTopicsPageExistSearchingAsync_ReturnsOkWithFalse()
+        {
+            int pageSize = 2;
+            int pageNumber = 3;
+            string searchingString = "test";
+            var mock = new Mock<ITopicService>();
+            mock.Setup(x => x.DoesAllTopicsHaveNextPage(pageSize, pageNumber, searchingString)).ReturnsAsync(false);
+            var controller = new TopicController(new Mock<IRepository<Topic>>().Object, new Mock<ILogger<TopicController>>().Object,
+                mock.Object);
+
+            var result = await controller.DoesNextTopicsPageExistSearchingAsync(new TopicParameters
+            {
+                PageSize = pageSize,
+                PageNumber = pageNumber
+            }, searchingString);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            var doesExist = Assert.IsType<bool>(methodResult.Value);
+            Assert.False(doesExist);
+        }
     }
 }
