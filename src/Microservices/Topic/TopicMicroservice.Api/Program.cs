@@ -2,6 +2,7 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using TopicMicroservice.Api.Database;
 using TopicMicroservice.Api.Models;
+using TopicMicroservice.Api.Services;
 using TopicMicroservice.Api.Services.MessageBus_Consumers;
 using TopicMicroservice.Api.Services.Repository;
 
@@ -29,6 +30,7 @@ builder.Services.AddMassTransit(x =>
 });
 
 builder.Services.AddTransient<IRepository<Topic>, TopicRepository>();
+builder.Services.AddTransient<ITopicService, TopicService>();
 
 var app = builder.Build();
 
