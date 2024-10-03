@@ -2,6 +2,7 @@
 {
     public interface IRepository<TModel>
     {
+        Task<List<TModel>> GetAllAsync(int pageSize, int pageNumber, string searchingString);
         Task<List<TModel>> GetAllAsync(int pageSize, int pageNumber);
         Task<TModel?> GetByIdAsync(Guid id);
         Task<TModel?> GetByNameAsync(string name);

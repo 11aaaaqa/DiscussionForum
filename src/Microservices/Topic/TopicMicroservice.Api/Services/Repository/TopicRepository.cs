@@ -13,6 +13,13 @@ namespace TopicMicroservice.Api.Services.Repository
             this.context = context;
         }
 
+        public async Task<List<Topic>> GetAllAsync(int pageSize, int pageNumber, string searchingString)
+        {
+            var topics = await context.Topics.Where(x => x.Name.Contains(searchingString))
+                .Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            return topics;
+        }
+
         public async Task<List<Topic>> GetAllAsync(int pageSize, int pageNumber)
         {
             var topics = await context.Topics.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
