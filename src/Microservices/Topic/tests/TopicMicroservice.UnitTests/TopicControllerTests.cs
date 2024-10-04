@@ -18,8 +18,8 @@ namespace TopicMicroservice.UnitTests
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetAllAsync(topicParameters.PageSize, topicParameters.PageNumber)).ReturnsAsync(new List<Topic>
             {
-                new() { Id = Guid.NewGuid(), Name = "test", PostsCount = 0 },
-                new() { Id = Guid.NewGuid(), Name = "test2", PostsCount = 12 }
+                new() { Id = Guid.NewGuid(), Name = "test", PostsCount = 0, CreatedAt = DateTime.UtcNow},
+                new() { Id = Guid.NewGuid(), Name = "test2", PostsCount = 12, CreatedAt = DateTime.UtcNow }
             });
             var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
 
