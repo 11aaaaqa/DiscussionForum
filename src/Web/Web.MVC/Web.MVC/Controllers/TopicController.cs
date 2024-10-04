@@ -130,6 +130,18 @@ namespace Web.MVC.Controllers
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var topics = await response.Content.ReadFromJsonAsync<List<TopicModel>>();
+
+            var doesExistResponse = await httpClient.GetAsync(
+                $"http://topic-microservice-api:8080/api/Topic/DoesNextTopicsPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+            if (!doesExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesExist = await doesExistResponse.Content.ReadFromJsonAsync<bool>();
+
+            ViewBag.PreviousPageNumber = pageNumber - 1;
+            ViewBag.NextPageNumber = pageNumber + 1;
+            ViewBag.PageSize = pageSize;
+            ViewBag.DoesNextPageExist = doesExist;
+
             return View(topics);
         }
 
@@ -142,6 +154,18 @@ namespace Web.MVC.Controllers
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var topics = await response.Content.ReadFromJsonAsync<List<TopicModel>>();
+
+            var doesExistResponse = await httpClient.GetAsync(
+                $"http://topic-microservice-api:8080/api/Topic/DoesNextTopicsPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+            if (!doesExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesExist = await doesExistResponse.Content.ReadFromJsonAsync<bool>();
+
+            ViewBag.PreviousPageNumber = pageNumber - 1;
+            ViewBag.NextPageNumber = pageNumber + 1;
+            ViewBag.PageSize = pageSize;
+            ViewBag.DoesNextPageExist = doesExist;
+
             return View(topics);
         }
     }
