@@ -40,7 +40,7 @@ namespace DiscussionMicroservice.IntegrationTests
         public async Task GetDiscussionsByTopicName_ReturnsOkWithListOfDiscussions()
         {
             var topicName = "TestTopicName";
-            var response = await client.GetAsync($"api/Discussion/GetDiscussionsByTopicName?topicName={topicName}");
+            var response = await client.GetAsync($"api/Discussion/GetDiscussionsByTopicName?topicName={topicName}&pageSize=3&pageNumber=1");
 
             response.EnsureSuccessStatusCode();
             var discussions = await response.Content.ReadFromJsonAsync<List<Discussion>>();
