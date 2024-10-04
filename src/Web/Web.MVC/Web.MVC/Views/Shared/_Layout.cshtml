@@ -30,6 +30,12 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Report" asp-action="Reports" asp-route-reportType="@ReportTypeConstants.CommentType">CommentsReports</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Topic" asp-action="GetAllTopicsSortedByNovelty" asp-route-pageNumber="1" asp-route-pageSize="15">Новые темы</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Topic" asp-action="GetAllTopicsSortedByPopularity" asp-route-pageNumber="1" asp-route-pageSize="15">Популярные темы</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Moderator" asp-action="Users" asp-route-pageNumber="1" asp-route-pageSize="30">Все пользователи</a>
                         </li>
                     </ul>
