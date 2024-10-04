@@ -40,13 +40,28 @@ namespace DiscussionMicroservice.IntegrationTests
         public async Task GetDiscussionsByTopicName_ReturnsOkWithListOfDiscussions()
         {
             var topicName = "TestTopicName";
-            var response = await client.GetAsync($"api/Discussion/GetDiscussionsByTopicName?topicName={topicName}&pageSize=3&pageNumber=1");
+            var response = await client.GetAsync($"api/Discussion/GetDiscussionsByTopicName?topicName={topicName}&pageSize=5&pageNumber=1");
 
             response.EnsureSuccessStatusCode();
             var discussions = await response.Content.ReadFromJsonAsync<List<Discussion>>();
-            Assert.Equal(2, discussions.Count);
+            Assert.Equal(3, discussions.Count);
             Assert.Equal(topicName, discussions[0].TopicName);
             Assert.Equal(topicName, discussions[1].TopicName);
+            Assert.Equal(topicName, discussions[2].TopicName);
+        }
+
+        [Fact]
+        public async Task FindDiscussionsByTopicNameBySearchingString_ReturnsOkWithListOfDiscussions()
+        {
+            var topicName = "TestTopicName";
+            string searchingString = "Title3";
+            var response = await client.GetAsync(
+                $"api/Discussion/FindDiscussionsByTopicNameBySearchingString?topicName={topicName}&pageSize=5&pageNumber=1&searchingString={searchingString}");
+
+            response.EnsureSuccessStatusCode();
+            var discussions = await response.Content.ReadFromJsonAsync<List<Discussion>>();
+            Assert.Single(discussions);
+            Assert.Equal(topicName, discussions[0].TopicName);
         }
 
         [Fact]
