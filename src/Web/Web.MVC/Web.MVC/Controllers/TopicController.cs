@@ -20,6 +20,7 @@ namespace Web.MVC.Controllers
             this.httpClientFactory = httpClientFactory;
         }
 
+        [Route("topics")]
         [HttpGet]
         public async Task<IActionResult> Topics(int pageSize, int pageNumber, string? searchingQuery)
         {
@@ -82,6 +83,7 @@ namespace Web.MVC.Controllers
             return View("ActionError");
         }
 
+        [Route("topics/suggest")]
         [Authorize]
         [HttpGet]
         public IActionResult SuggestTopic()
@@ -89,6 +91,7 @@ namespace Web.MVC.Controllers
             return View();
         }
 
+        [Route("topics/suggest")]
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> SuggestTopic(TopicDto model)
@@ -121,6 +124,7 @@ namespace Web.MVC.Controllers
             return View(model);
         }
 
+        [Route("topics/new-topics")]
         [HttpGet]
         public async Task<IActionResult> GetAllTopicsSortedByNovelty(int pageNumber, int pageSize)
         {
@@ -145,6 +149,7 @@ namespace Web.MVC.Controllers
             return View(topics);
         }
 
+        [Route("topics/popular-topics")]
         [HttpGet]
         public async Task<IActionResult> GetAllTopicsSortedByPopularity(int pageNumber, int pageSize)
         {
