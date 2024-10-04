@@ -23,8 +23,15 @@ namespace DiscussionMicroservice.Api.Controllers
 
         [Route("GetDiscussionsByTopicName")]
         [HttpGet]
-        public async Task<IActionResult> GetDiscussionsByTopicNameAsync(string topicName) =>
-            Ok(await context.Discussions.Where(x => x.TopicName == topicName).ToListAsync());
+        public async Task<IActionResult> GetDiscussionsByTopicNameAsync(
+            [FromQuery] DiscussionParameters discussionParameters, string topicName)
+        {
+            var discussions = await context.Discussions.Where(x => x.TopicName == topicName)
+                .Skip(discussionParameters.PageSize * (discussionParameters.PageNumber - 1))
+                .Take(discussionParameters.PageSize).ToListAsync();
+            return Ok(discussions);
+        }
+            
 
         [Route("GetDiscussionById")]
         [HttpGet]
