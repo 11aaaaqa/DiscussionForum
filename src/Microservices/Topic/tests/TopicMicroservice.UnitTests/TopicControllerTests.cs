@@ -339,5 +339,49 @@ namespace TopicMicroservice.UnitTests
             var doesExist = Assert.IsType<bool>(methodResult.Value);
             Assert.False(doesExist);
         }
+
+        [Fact]
+        public async Task GetAllTopicsSortedByPopularityAsync_ReturnsOkWithTopics()
+        {
+            var topicParameters = new TopicParameters { PageSize = 3, PageNumber = 5 };
+            var mock = new Mock<IGetTopicsService>();
+            mock.Setup(x => x.GetAllTopicSortedByPopularity(topicParameters)).ReturnsAsync(new List<Topic>
+            {
+                new (){Name = "test213", PostsCount = 123, CreatedAt = DateTime.UtcNow, Id = Guid.NewGuid()},
+                new (){Name = "test123", PostsCount = 2, CreatedAt = DateTime.UtcNow, Id = Guid.NewGuid()},
+                new (){Name = "test123123", PostsCount = 12333, CreatedAt = DateTime.UtcNow, Id = Guid.NewGuid()}
+            });
+            var controller = new TopicController(new Mock<IRepository<Topic>>().Object, new Mock<ILogger<TopicController>>().Object, 
+                new Mock<ITopicService>().Object, mock.Object);
+
+            var result = await controller.GetAllTopicsSortedByPopularityAsync(topicParameters);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            var topics = Assert.IsType<List<Topic>>(methodResult.Value);
+            Assert.Equal(topicParameters.PageSize, topics.Count);
+        }
+
+        [Fact]
+        public async Task GetAllTopicsSortedByNoveltyAsync_ReturnsOkWithTopics()
+        {
+            var topicParameters = new TopicParameters { PageSize = 3, PageNumber = 5 };
+            var mock = new Mock<IGetTopicsService>();
+            mock.Setup(x => x.GetAllTopicSortedByNovelty(topicParameters)).ReturnsAsync(new List<Topic>
+            {
+                new (){Name = "test213", PostsCount = 2, CreatedAt = DateTime.UtcNow, Id = Guid.NewGuid()},
+                new (){Name = "test123", PostsCount = 1, CreatedAt = DateTime.UtcNow, Id = Guid.NewGuid()},
+                new (){Name = "test123123", PostsCount = 1, CreatedAt = DateTime.UtcNow, Id = Guid.NewGuid()}
+            });
+            var controller = new TopicController(new Mock<IRepository<Topic>>().Object, new Mock<ILogger<TopicController>>().Object,
+                new Mock<ITopicService>().Object, mock.Object);
+
+            var result = await controller.GetAllTopicsSortedByNoveltyAsync(topicParameters);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            var topics = Assert.IsType<List<Topic>>(methodResult.Value);
+            Assert.Equal(topicParameters.PageSize, topics.Count);
+        }
     }
 }
