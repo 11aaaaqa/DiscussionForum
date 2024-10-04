@@ -120,5 +120,29 @@ namespace Web.MVC.Controllers
             }
             return View(model);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllTopicsSortedByNovelty(int pageNumber, int pageSize)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://topic-microservice-api:8080/api/Topic/GetAllTopicsSortedByNovelty?pageNumber={pageNumber}&pageSize={pageSize}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var topics = await response.Content.ReadFromJsonAsync<List<TopicModel>>();
+            return View(topics);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllTopicsSortedByPopularity(int pageNumber, int pageSize)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://topic-microservice-api:8080/api/Topic/GetAllTopicsSortedByPopularity?pageNumber={pageNumber}&pageSize={pageSize}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var topics = await response.Content.ReadFromJsonAsync<List<TopicModel>>();
+            return View(topics);
+        }
     }
 }
