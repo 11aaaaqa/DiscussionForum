@@ -64,7 +64,7 @@ namespace TopicMicroservice.Api.Controllers
         {
             var topic = await context.SuggestedTopics.SingleAsync(x => x.Id == id);
             context.SuggestedTopics.Remove(topic);
-            await context.Topics.AddAsync(new Topic{Id = topic.Id, Name = topic.Name, PostsCount = topic.PostsCount});
+            await context.Topics.AddAsync(new Topic{Id = topic.Id, Name = topic.Name, PostsCount = topic.PostsCount, CreatedAt = DateTime.UtcNow});
             await context.SaveChangesAsync();
             logger.LogInformation("Suggested topic was successfully accepted");
             return Ok();
