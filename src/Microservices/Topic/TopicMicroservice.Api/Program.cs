@@ -31,6 +31,7 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddTransient<IRepository<Topic>, TopicRepository>();
 builder.Services.AddTransient<ITopicService, TopicService>();
+builder.Services.AddTransient<IGetTopicsService, TopicService>();
 
 var app = builder.Build();
 
