@@ -21,7 +21,8 @@ namespace TopicMicroservice.UnitTests
                 new() { Id = Guid.NewGuid(), Name = "test", PostsCount = 0, CreatedAt = DateTime.UtcNow},
                 new() { Id = Guid.NewGuid(), Name = "test2", PostsCount = 12, CreatedAt = DateTime.UtcNow }
             });
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object,
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.GetAllTopicsAsync(topicParameters);
 
@@ -36,7 +37,8 @@ namespace TopicMicroservice.UnitTests
         {
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByNameAsync("incorrectName")).ReturnsAsync((Topic?)null);
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object,
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.GetTopicByNameAsync("incorrectName");
 
@@ -49,7 +51,8 @@ namespace TopicMicroservice.UnitTests
         {
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByNameAsync("correctName")).ReturnsAsync(new Topic{Id = Guid.NewGuid(), Name = "correctName", PostsCount = It.IsAny<uint>()});
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object, 
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.GetTopicByNameAsync("correctName");
 
@@ -64,7 +67,8 @@ namespace TopicMicroservice.UnitTests
         {
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByIdAsync(new Guid("741ba091-7d2c-4c26-8247-f538c217c473"))).ReturnsAsync((Topic?)null);
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object,
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.GetTopicByIdAsync(new Guid("741ba091-7d2c-4c26-8247-f538c217c473"));
 
@@ -77,7 +81,8 @@ namespace TopicMicroservice.UnitTests
         {
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByIdAsync(new Guid("741ba091-7d2c-4c26-8247-f538c217c473"))).ReturnsAsync(new Topic{ Id = new Guid("741ba091-7d2c-4c26-8247-f538c217c473"), Name = It.IsAny<string>(), PostsCount = It.IsAny<uint>() });
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object, 
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.GetTopicByIdAsync(new Guid("741ba091-7d2c-4c26-8247-f538c217c473"));
 
@@ -93,7 +98,8 @@ namespace TopicMicroservice.UnitTests
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByNameAsync("existingName")).ReturnsAsync(new Topic
                 { Id = It.IsAny<Guid>(), Name = "existingName", PostsCount = It.IsAny<uint>() });
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object,
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.CreateTopicAsync(new TopicDto { Name = "existingName" });
 
@@ -107,7 +113,8 @@ namespace TopicMicroservice.UnitTests
             var model = new TopicDto { Name = "notExistingName" };
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByNameAsync(model.Name)).ReturnsAsync((Topic?)null);
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object,
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.CreateTopicAsync(model);
             
@@ -125,7 +132,8 @@ namespace TopicMicroservice.UnitTests
             };
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByIdAsync(model.Id)).ReturnsAsync((Topic?)null);
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object,
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.UpdateTopicAsync(model);
 
@@ -149,7 +157,8 @@ namespace TopicMicroservice.UnitTests
                 Name = It.IsAny<string>(), PostsCount = It.IsAny<uint>()
             });
             mock.Setup(x => x.UpdateAsync(model)).ReturnsAsync(model);
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object,
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.UpdateTopicAsync(model);
 
@@ -165,7 +174,8 @@ namespace TopicMicroservice.UnitTests
             var id = new Guid("e4d0f8d1-c73b-4d65-9952-72331581fe50");
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync((Topic?)null);
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object,
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.DeleteTopicByIdAsync(id);
 
@@ -181,7 +191,8 @@ namespace TopicMicroservice.UnitTests
             mock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(new Topic
                 { Id = id, Name = It.IsAny<string>(), PostsCount = It.IsAny<uint>() });
             mock.Setup(x => x.DeleteByIdAsync(id));
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object,
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.DeleteTopicByIdAsync(id);
 
@@ -195,7 +206,8 @@ namespace TopicMicroservice.UnitTests
             string name = "notExistingName";
             var mock = new Mock<IRepository<Topic>>();
             mock.Setup(x => x.GetByNameAsync(name)).ReturnsAsync((Topic?)null);
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object,
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.DeleteTopicByNameAsync(name);
 
@@ -211,7 +223,8 @@ namespace TopicMicroservice.UnitTests
             mock.Setup(x => x.GetByNameAsync(name)).ReturnsAsync(new Topic
                 { Id = It.IsAny<Guid>(), Name = name, PostsCount = It.IsAny<uint>() });
             mock.Setup(x => x.DeleteByNameAsync(name));
-            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object);
+            var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object, new Mock<ITopicService>().Object,
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.DeleteTopicByNameAsync(name);
 
@@ -225,7 +238,8 @@ namespace TopicMicroservice.UnitTests
             var topicParameters = new TopicParameters { PageSize = It.IsAny<int>(), PageNumber = It.IsAny<int>() };
             var mock = new Mock<ITopicService>();
             mock.Setup(x => x.DoesAllTopicsHaveNextPage(topicParameters.PageSize, topicParameters.PageNumber)).ReturnsAsync(true);
-            var controller = new TopicController(new Mock<IRepository<Topic>>().Object, new Mock<ILogger<TopicController>>().Object, mock.Object);
+            var controller = new TopicController(new Mock<IRepository<Topic>>().Object, new Mock<ILogger<TopicController>>().Object, mock.Object,
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.DoesNextTopicsPageExistAsync(topicParameters);
 
@@ -242,7 +256,8 @@ namespace TopicMicroservice.UnitTests
             var topicParameters = new TopicParameters { PageSize = It.IsAny<int>(), PageNumber = It.IsAny<int>() };
             var mock = new Mock<ITopicService>();
             mock.Setup(x => x.DoesAllTopicsHaveNextPage(topicParameters.PageSize, topicParameters.PageNumber)).ReturnsAsync(false);
-            var controller = new TopicController(new Mock<IRepository<Topic>>().Object, new Mock<ILogger<TopicController>>().Object, mock.Object);
+            var controller = new TopicController(new Mock<IRepository<Topic>>().Object, new Mock<ILogger<TopicController>>().Object, mock.Object,
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.DoesNextTopicsPageExistAsync(topicParameters);
 
@@ -265,7 +280,8 @@ namespace TopicMicroservice.UnitTests
                 new (){Name = "teststetest"}, new (){Name = "123yaltestf"}
             });
             var controller = new TopicController(mock.Object, new Mock<ILogger<TopicController>>().Object,
-                new Mock<ITopicService>().Object);
+                new Mock<ITopicService>().Object,
+                new Mock<IGetTopicsService>().Object);
 
             var result =
                 await controller.FindTopicsAsync(new TopicParameters { PageSize = pageSize, PageNumber = pageNumber },
@@ -286,7 +302,8 @@ namespace TopicMicroservice.UnitTests
             var mock = new Mock<ITopicService>();
             mock.Setup(x => x.DoesAllTopicsHaveNextPage(pageSize, pageNumber, searchingString)).ReturnsAsync(true);
             var controller = new TopicController(new Mock<IRepository<Topic>>().Object, new Mock<ILogger<TopicController>>().Object,
-                mock.Object);
+                mock.Object,
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.DoesNextTopicsPageExistSearchingAsync(new TopicParameters
             {
@@ -308,7 +325,8 @@ namespace TopicMicroservice.UnitTests
             var mock = new Mock<ITopicService>();
             mock.Setup(x => x.DoesAllTopicsHaveNextPage(pageSize, pageNumber, searchingString)).ReturnsAsync(false);
             var controller = new TopicController(new Mock<IRepository<Topic>>().Object, new Mock<ILogger<TopicController>>().Object,
-                mock.Object);
+                mock.Object,
+                new Mock<IGetTopicsService>().Object);
 
             var result = await controller.DoesNextTopicsPageExistSearchingAsync(new TopicParameters
             {
