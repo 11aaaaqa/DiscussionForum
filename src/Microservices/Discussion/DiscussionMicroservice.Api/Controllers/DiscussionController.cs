@@ -31,7 +31,19 @@ namespace DiscussionMicroservice.Api.Controllers
                 .Take(discussionParameters.PageSize).ToListAsync();
             return Ok(discussions);
         }
-            
+
+        [Route("FindDiscussionsByTopicNameBySearchingString")]
+        [HttpGet]
+        public async Task<IActionResult> FindDiscussionsByTopicNameAsync(
+            [FromQuery] DiscussionParameters discussionParameters, string topicName, string searchingString)
+        {
+            var discussions = await context.Discussions.Where(x => x.TopicName == topicName)
+                .Where(x => x.Title.Contains(searchingString))
+                .Skip(discussionParameters.PageSize * (discussionParameters.PageNumber - 1))
+                .Take(discussionParameters.PageSize).ToListAsync();
+            return Ok(discussions);
+        }
+
 
         [Route("GetDiscussionById")]
         [HttpGet]
