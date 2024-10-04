@@ -36,6 +36,8 @@
     <_ContentIncludedByDefault Remove="Views\Moderator\Users.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Report\AddReport.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Report\GetReport.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Topic\GetAllTopicsSortedByNovelty.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Topic\GetAllTopicsSortedByPopularity.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Topic\Topic.cshtml" />
     <_ContentIncludedByDefault Remove="Views\User\ChangePassword.cshtml" />
     <_ContentIncludedByDefault Remove="Views\User\ChangeUserName.cshtml" />
@@ -96,6 +98,14 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Moderator\Users.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Topic\GetAllTopicsSortedByNovelty.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Topic\GetAllTopicsSortedByPopularity.cshtml" />
   </ItemGroup>
 
 </Project>

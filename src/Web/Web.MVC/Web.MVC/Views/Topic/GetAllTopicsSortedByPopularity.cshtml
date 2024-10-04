@@ -1,0 +1,23 @@
+﻿@model List<Web.MVC.Models.ApiResponses.TopicModel>
+
+<div class="text-center">
+    <h3>Популярные темы</h3>
+    <a asp-action="SuggestTopic" asp-controller="Topic">Предложить тему</a><br />
+    @foreach (var topic in Model)
+    {
+        <a href="~/topics/@topic.Name">@topic.Name</a>
+        <p>Постов: @topic.PostsCount</p>
+    }
+    @if (ViewBag.PreviousPageNumber != 0 && Model.Count != 0)
+    {
+        <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize">
+            Назад
+        </a>
+    }
+    @if (ViewBag.DoesNextPageExist && Model.Count != 0)
+    {
+        <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize">
+            Вперед
+        </a>
+    }
+</div>
