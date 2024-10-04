@@ -13,12 +13,15 @@ namespace TopicMicroservice.Api.Controllers
         private readonly IRepository<Topic> topicRepository;
         private readonly ITopicService topicService;
         private readonly ILogger<TopicController> logger;
+        private readonly IGetTopicsService getTopicsService;
 
-        public TopicController(IRepository<Topic> topicRepository, ILogger<TopicController> logger, ITopicService topicService)
+        public TopicController(IRepository<Topic> topicRepository, ILogger<TopicController> logger, ITopicService topicService,
+            IGetTopicsService getTopicsService)
         {
             this.topicRepository = topicRepository;
             this.logger = logger;
             this.topicService = topicService;
+            this.getTopicsService = getTopicsService;
         }
 
         [Route("DoesNextTopicsPageExist")]
@@ -133,6 +136,22 @@ namespace TopicMicroservice.Api.Controllers
             }
             logger.LogError("Topic wasn't deleted because current topic name doesn't exist");
             return BadRequest("Темы с таким названием не существует");
+        }
+
+        [Route("GetAllTopicsSortedByPopularity")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllTopicsSortedByPopularityAsync([FromQuery] TopicParameters topicParameters)
+        {
+            var topics = await getTopicsService.GetAllTopicSortedByPopularity(topicParameters);
+            return Ok(topics);
+        }
+
+        [Route("GetAllTopicsSortedByNovelty")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllTopicsSortedByNoveltyAsync([FromQuery] TopicParameters topicParameters)
+        {
+            var topics = await getTopicsService.GetAllTopicSortedByNovelty(topicParameters);
+            return Ok(topics);
         }
     }
 }
