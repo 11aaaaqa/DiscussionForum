@@ -1,5 +1,6 @@
 using DiscussionMicroservice.Api.Database;
 using DiscussionMicroservice.Api.MessageBus.Consumers;
+using DiscussionMicroservice.Api.Services;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,8 @@ builder.Services.AddMassTransit(x =>
         config.ConfigureEndpoints(context);
     });
 });
+
+builder.Services.AddTransient<IGetAllDiscussionsService, GetAllDiscussionsService>();
 
 var app = builder.Build();
 
