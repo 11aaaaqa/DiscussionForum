@@ -1,6 +1,7 @@
 ﻿using DiscussionMicroservice.Api.Database;
 using DiscussionMicroservice.Api.DTOs;
 using DiscussionMicroservice.Api.Models;
+using DiscussionMicroservice.Api.Services;
 using MassTransit;
 using MessageBus.Messages;
 using Microsoft.AspNetCore.Mvc;
@@ -12,13 +13,15 @@ namespace DiscussionMicroservice.Api.Controllers
     [ApiController]
     public class DiscussionController : ControllerBase
     {
+        private readonly IGetAllDiscussionsService getAllDiscussionsService;
         private readonly ApplicationDbContext context;
         private readonly IPublishEndpoint publishEndpoint;
 
-        public DiscussionController(ApplicationDbContext context, IPublishEndpoint publishEndpoint)
+        public DiscussionController(ApplicationDbContext context, IPublishEndpoint publishEndpoint, IGetAllDiscussionsService getAllDiscussionsService)
         {
             this.context = context;
             this.publishEndpoint = publishEndpoint;
+            this.getAllDiscussionsService = getAllDiscussionsService;
         }
 
         [Route("GetDiscussionsByTopicName")]
@@ -176,6 +179,24 @@ namespace DiscussionMicroservice.Api.Controllers
                 TopicName = discussion.TopicName
             });
             return Ok(discussion.Id);
+        }
+
+        [Route("GetAllDiscussionsSortedByNovelty")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllDiscussionsSortedByNoveltyAsync([FromQuery] DiscussionParameters discussionParameters, string topicName)
+        {
+            var discussions =
+                await getAllDiscussionsService.GetAllDiscussionsSortedByNovelty(discussionParameters, topicName);
+            return Ok(discussions);
+        }
+
+        [Route("GetAllDiscussionsSortedByPopularity")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllDiscussionsSortedByPopularityAsync([FromQuery] DiscussionParameters discussionParameters, string topicName)
+        {
+            var discussions =
+                await getAllDiscussionsService.GetAllDiscussionsSortedByPopularity(discussionParameters, topicName);
+            return Ok(discussions);
         }
     }
 }
