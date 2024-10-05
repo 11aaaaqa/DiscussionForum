@@ -65,19 +65,51 @@ namespace Web.MVC.Controllers
 
         [Route("topics/{topicName}")] //be careful, route is sensitive, views <a> tags refer to this by href=""
         [HttpGet]
-        public async Task<IActionResult> Topic(string topicName)
+        public async Task<IActionResult> Topic(string topicName, int pageNumber, int pageSize, string? searchingQuery)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
             var response =
                 await httpClient.GetAsync($"http://topic-microservice-api:8080/api/Topic/GetByName?name={topicName}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
-
             var topic = await response.Content.ReadFromJsonAsync<TopicResponse>();
-            var discussionResponse = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/GetDiscussionsByTopicName?topicName={topic.Name}");
-            var discussions = await discussionResponse.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
-            var discussionViewModel = new DiscussionViewModel { Discussions = discussions, TopicName = topicName };
+            DiscussionViewModel discussionViewModel;
+            bool doesNextPageExist;
+
+            if (searchingQuery is null)
+            {
+                var discussionResponse = await httpClient.GetAsync(
+                    $"http://discussion-microservice-api:8080/api/Discussion/GetDiscussionsByTopicName?topicName={topic.Name}&pageSize={pageSize}&pageNumber={pageNumber}");
+                if (!discussionResponse.IsSuccessStatusCode) return View("ActionError");
+                var discussions = await discussionResponse.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
+                discussionViewModel = new DiscussionViewModel { Discussions = discussions, TopicName = topicName };
+
+                var doesNextPageExistResponse = await httpClient.GetAsync(
+                    $"http://discussion-microservice-api:8080/api/Discussion/DoesNextDiscussionsPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}&topicName={topic.Name}");
+                if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+                doesNextPageExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+            }
+            else
+            {
+                var discussionResponse = await httpClient.GetAsync(
+                    $"http://discussion-microservice-api:8080/api/Discussion/FindDiscussionsByTopicNameBySearchingString?topicName={topic.Name}&pageSize={pageSize}&pageNumber={pageNumber}&searchingString={searchingQuery}");
+                if (!discussionResponse.IsSuccessStatusCode) return View("ActionError");
+                var discussions = await discussionResponse.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
+                discussionViewModel = new DiscussionViewModel { Discussions = discussions, TopicName = topicName };
+
+                var doesNextPageExistResponse = await httpClient.GetAsync(
+                    $"http://discussion-microservice-api:8080/api/Discussion/DoesNextDiscussionsPageExistSearching?pageSize={pageSize}&pageNumber={pageNumber + 1}&searchingQuery={searchingQuery}&topicName={topic.Name}");
+                if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+                doesNextPageExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+            }
+
+            ViewBag.DoesNextPageExist = doesNextPageExist;
+            ViewBag.CurrentPageNumber = pageNumber;
+            ViewBag.NextPageNumber = pageNumber + 1;
+            ViewBag.PreviousPageNumber = pageNumber - 1;
+            ViewBag.SearchingQuery = searchingQuery;
+            ViewBag.PageSize = pageSize;
+
             return View(discussionViewModel);
         }
 
