@@ -293,5 +293,33 @@ namespace DiscussionMicroservice.IntegrationTests
             var doesExist = await response.Content.ReadFromJsonAsync<bool>();
             Assert.False(doesExist);
         }
+
+        [Fact]
+        public async Task DoesNextDiscussionsPageExistSearchingAsync_ReturnsOkWithTrue()
+        {
+            int pageSize = 1;
+            int pageNumber = 2;
+            var searchingQuery = "TestTitle3";
+            var response = await client.GetAsync(
+                $"api/Discussion/DoesNextDiscussionsPageExistSearching?pageSize={pageSize}&pageNumber={pageNumber}&searchingQuery={searchingQuery}");
+
+            response.EnsureSuccessStatusCode();
+            var doesExist = await response.Content.ReadFromJsonAsync<bool>();
+            Assert.True(doesExist);
+        }
+
+        [Fact]
+        public async Task DoesNextDiscussionsPageExistSearchingAsync_ReturnsOkWithFalse()
+        {
+            int pageSize = 1;
+            int pageNumber = 2;
+            var searchingQuery = "TestTitle2";
+            var response = await client.GetAsync(
+                $"api/Discussion/DoesNextDiscussionsPageExistSearching?pageSize={pageSize}&pageNumber={pageNumber}&searchingQuery={searchingQuery}");
+
+            response.EnsureSuccessStatusCode();
+            var doesExist = await response.Content.ReadFromJsonAsync<bool>();
+            Assert.False(doesExist);
+        }
     }
 }
