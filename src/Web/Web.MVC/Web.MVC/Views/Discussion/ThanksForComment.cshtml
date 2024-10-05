@@ -2,6 +2,6 @@
 
 <div class="text-center">
     <h3>Спасибо за оставленный комментарий, в ближайшее время модерация его рассмотрит, следите за статусом проверки в профиле</h3>
-    <a href="~/discussions/@Model">к обсуждению</a>
+    <a asp-action="GetDiscussion" asp-controller="Discussion" asp-route-id="@Model">к обсуждению</a>
     <a asp-controller="Home" asp-action="Index">на главную</a>
 </div>
