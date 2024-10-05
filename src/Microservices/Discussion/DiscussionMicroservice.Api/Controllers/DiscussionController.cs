@@ -47,7 +47,7 @@ namespace DiscussionMicroservice.Api.Controllers
 
         [Route("DoesNextDiscussionsPageExistSearching")]
         [HttpGet]
-        public async Task<IActionResult> DoesNextDiscussionsPageExistSearchingAsync(DiscussionParameters discussionParameters, string searchingQuery)
+        public async Task<IActionResult> DoesNextDiscussionsPageExistSearchingAsync([FromQuery]DiscussionParameters discussionParameters, string searchingQuery)
         {
             int totalDiscussionsCount = await context.Discussions.Where(x => x.Title.Contains(searchingQuery)).CountAsync();
             int totalGettingDiscussionsCount = discussionParameters.PageSize * discussionParameters.PageNumber;
@@ -58,7 +58,7 @@ namespace DiscussionMicroservice.Api.Controllers
 
         [Route("DoesNextDiscussionsPageExist")]
         [HttpGet]
-        public async Task<IActionResult> DoesNextDiscussionsPageExistAsync(DiscussionParameters discussionParameters)
+        public async Task<IActionResult> DoesNextDiscussionsPageExistAsync([FromQuery]DiscussionParameters discussionParameters)
         {
             int totalDiscussionsCount = await context.Discussions.CountAsync();
             int totalGettingDiscussionsCount = discussionParameters.PageSize * discussionParameters.PageNumber;
