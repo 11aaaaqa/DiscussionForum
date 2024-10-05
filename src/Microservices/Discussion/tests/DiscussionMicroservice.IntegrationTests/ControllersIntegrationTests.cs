@@ -273,9 +273,11 @@ namespace DiscussionMicroservice.IntegrationTests
         [Fact]
         public async Task DoesNextDiscussionsPageExistAsync_ReturnsOkWithTrue()
         {
-            int pageSize = 2;
+            string topicName = "TestTopicName";
+            int pageSize = 1;
             int pageNumber = 2;
-            var response = await client.GetAsync($"api/Discussion/DoesNextDiscussionsPageExist?pageSize={pageSize}&pageNumber={pageNumber}");
+            var response = await client.GetAsync(
+                $"api/Discussion/DoesNextDiscussionsPageExist?pageSize={pageSize}&pageNumber={pageNumber}&topicName={topicName}");
 
             response.EnsureSuccessStatusCode();
             var doesExist = await response.Content.ReadFromJsonAsync<bool>();
@@ -285,9 +287,11 @@ namespace DiscussionMicroservice.IntegrationTests
         [Fact]
         public async Task DoesNextDiscussionsPageExistAsync_ReturnsOkWithFalse()
         {
+            string topicName = "TestTopicName";
             int pageSize = 5;
             int pageNumber = 2;
-            var response = await client.GetAsync($"api/Discussion/DoesNextDiscussionsPageExist?pageSize={pageSize}&pageNumber={pageNumber}");
+            var response = await client.GetAsync(
+                $"api/Discussion/DoesNextDiscussionsPageExist?pageSize={pageSize}&pageNumber={pageNumber}&topicName={topicName}");
 
             response.EnsureSuccessStatusCode();
             var doesExist = await response.Content.ReadFromJsonAsync<bool>();
@@ -297,11 +301,12 @@ namespace DiscussionMicroservice.IntegrationTests
         [Fact]
         public async Task DoesNextDiscussionsPageExistSearchingAsync_ReturnsOkWithTrue()
         {
+            string topicName = "TestTopicName";
             int pageSize = 1;
             int pageNumber = 2;
-            var searchingQuery = "TestTitle3";
+            var searchingQuery = "TestTitle";
             var response = await client.GetAsync(
-                $"api/Discussion/DoesNextDiscussionsPageExistSearching?pageSize={pageSize}&pageNumber={pageNumber}&searchingQuery={searchingQuery}");
+                $"api/Discussion/DoesNextDiscussionsPageExistSearching?pageSize={pageSize}&pageNumber={pageNumber}&searchingQuery={searchingQuery}&topicName={topicName}");
 
             response.EnsureSuccessStatusCode();
             var doesExist = await response.Content.ReadFromJsonAsync<bool>();
@@ -311,11 +316,12 @@ namespace DiscussionMicroservice.IntegrationTests
         [Fact]
         public async Task DoesNextDiscussionsPageExistSearchingAsync_ReturnsOkWithFalse()
         {
+            string topicName = "TestTopicName";
             int pageSize = 1;
             int pageNumber = 2;
-            var searchingQuery = "TestTitle2";
+            var searchingQuery = "TestTitle3";
             var response = await client.GetAsync(
-                $"api/Discussion/DoesNextDiscussionsPageExistSearching?pageSize={pageSize}&pageNumber={pageNumber}&searchingQuery={searchingQuery}");
+                $"api/Discussion/DoesNextDiscussionsPageExistSearching?pageSize={pageSize}&pageNumber={pageNumber}&searchingQuery={searchingQuery}&topicName={topicName}");
 
             response.EnsureSuccessStatusCode();
             var doesExist = await response.Content.ReadFromJsonAsync<bool>();
