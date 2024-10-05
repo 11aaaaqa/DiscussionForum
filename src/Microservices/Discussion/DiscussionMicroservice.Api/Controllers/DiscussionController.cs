@@ -3,6 +3,7 @@ using DiscussionMicroservice.Api.DTOs;
 using DiscussionMicroservice.Api.Models;
 using MassTransit;
 using MessageBus.Messages;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,6 +45,27 @@ namespace DiscussionMicroservice.Api.Controllers
             return Ok(discussions);
         }
 
+        [Route("DoesNextDiscussionsPageExistSearching")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextDiscussionsPageExistSearchingAsync(DiscussionParameters discussionParameters, string searchingQuery)
+        {
+            int totalDiscussionsCount = await context.Discussions.Where(x => x.Title.Contains(searchingQuery)).CountAsync();
+            int totalGettingDiscussionsCount = discussionParameters.PageSize * discussionParameters.PageNumber;
+            int pageStartCount = totalGettingDiscussionsCount - discussionParameters.PageSize;
+            bool doesExist = (totalDiscussionsCount > pageStartCount);
+            return Ok(doesExist);
+        }
+
+        [Route("DoesNextDiscussionsPageExist")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextDiscussionsPageExistAsync(DiscussionParameters discussionParameters)
+        {
+            int totalDiscussionsCount = await context.Discussions.CountAsync();
+            int totalGettingDiscussionsCount = discussionParameters.PageSize * discussionParameters.PageNumber;
+            int pageStartCount = totalGettingDiscussionsCount - discussionParameters.PageSize;
+            bool doesExist = (totalDiscussionsCount > pageStartCount);
+            return Ok(doesExist);
+        }
 
         [Route("GetDiscussionById")]
         [HttpGet]
