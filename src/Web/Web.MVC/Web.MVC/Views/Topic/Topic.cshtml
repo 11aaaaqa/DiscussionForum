@@ -2,6 +2,13 @@
 
 <h3>Обсуждения</h3>
 <a asp-controller="Discussion" asp-action="SuggestDiscussion" asp-route-topicName="@Model.TopicName">создать обсуждение</a>
+<form method="get">
+    <input name="searchingQuery" placeholder="Поиск" />
+    <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
+    <input type="hidden" name="pageNumber" value="1" />
+    <input type="hidden" name="topicName" value="@Model.TopicName" />
+    <input type="submit" value="найти"/>
+</form>
 <div>
     @foreach (var discussion in Model.Discussions)
     {
@@ -11,3 +18,38 @@
         <h6>Дата создания: @discussion.CreatedAt</h6>
     }
 </div>
+
+@if (ViewBag.PreviousPageNumber != 0 && Model.Discussions.Count != 0)
+{
+    @if (ViewBag.SearchingQuery is null)
+    {
+        <a asp-controller="Topic" asp-action="Topic" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize"
+           asp-route-topicName="@Model.TopicName">
+            Назад
+        </a>
+    }
+    else
+    {
+        <a asp-controller="Topic" asp-action="Topic" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize"
+           asp-route-searchingQuery="@ViewBag.SearchingQuery" asp-route-topicName="@Model.TopicName">
+            Назад
+        </a>
+    }
+}
+@if (ViewBag.DoesNextPageExist && Model.Discussions.Count != 0)
+{
+    @if (ViewBag.SearchingQuery is null)
+    {
+        <a asp-controller="Topic" asp-action="Topic" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize"
+           asp-route-topicName="@Model.TopicName">
+            Вперед
+        </a>
+    }
+    else
+    {
+        <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize"
+           asp-route-searchingQuery="@ViewBag.SearchingQuery" asp-route-topicName="@Model.TopicName">
+            Вперед
+        </a>
+    }
+}

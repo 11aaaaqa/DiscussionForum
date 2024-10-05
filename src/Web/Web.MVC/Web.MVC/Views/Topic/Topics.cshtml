@@ -11,7 +11,8 @@
     </form>
     @foreach (var topic in Model)
     {
-        <a href="~/topics/@topic.Name">@topic.Name</a>
+        @* <a href="~/topics/@topic.Name">@topic.Name</a> *@
+        <a asp-controller="Topic" asp-action="Topic" asp-route-topicName="@topic.Name" asp-route-pageNumber="1" asp-route-pageSize="20">@topic.Name</a>
         <p>Постов: @topic.PostsCount</p>
     }
     @if (ViewBag.PreviousPageNumber != 0 && Model.Count != 0)
