@@ -3,7 +3,6 @@ using DiscussionMicroservice.Api.DTOs;
 using DiscussionMicroservice.Api.Models;
 using MassTransit;
 using MessageBus.Messages;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
