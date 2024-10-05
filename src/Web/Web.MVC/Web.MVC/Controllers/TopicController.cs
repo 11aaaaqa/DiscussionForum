@@ -63,7 +63,7 @@ namespace Web.MVC.Controllers
             return View(topics);
         }
 
-        [Route("topics/{topicName}")] //be careful, route is sensitive, views <a> tags refer to this by href=""
+        [Route("topics/{topicName}")]
         [HttpGet]
         public async Task<IActionResult> Topic(string topicName, int pageNumber, int pageSize, string? searchingQuery)
         {
