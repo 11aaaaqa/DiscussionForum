@@ -224,7 +224,7 @@ namespace Web.MVC.Controllers
             var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/DoesNextDiscussionsPageExist?pageSize={pageSize}&pageNumber={pageNumber}");
+                $"http://discussion-microservice-api:8080/api/Discussion/DoesNextAllDiscussionsPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
