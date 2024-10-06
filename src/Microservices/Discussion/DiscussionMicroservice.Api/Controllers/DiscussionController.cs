@@ -183,19 +183,46 @@ namespace DiscussionMicroservice.Api.Controllers
 
         [Route("GetAllDiscussionsSortedByNovelty")]
         [HttpGet]
-        public async Task<IActionResult> GetAllDiscussionsSortedByNoveltyAsync([FromQuery] DiscussionParameters discussionParameters, string topicName)
+        public async Task<IActionResult> GetAllDiscussionsSortedByNoveltyAsync([FromQuery] DiscussionParameters discussionParameters)
         {
             var discussions =
-                await getAllDiscussionsService.GetAllDiscussionsSortedByNovelty(discussionParameters, topicName);
+                await getAllDiscussionsService.GetAllDiscussionsSortedByNovelty(discussionParameters);
             return Ok(discussions);
         }
 
-        [Route("GetAllDiscussionsSortedByPopularity")]
+        [Route("GetAllDiscussionsSortedByPopularityForToday")]
         [HttpGet]
-        public async Task<IActionResult> GetAllDiscussionsSortedByPopularityAsync([FromQuery] DiscussionParameters discussionParameters, string topicName)
+        public async Task<IActionResult> GetAllDiscussionsSortedByPopularityForTodayAsync([FromQuery] DiscussionParameters discussionParameters)
         {
             var discussions =
-                await getAllDiscussionsService.GetAllDiscussionsSortedByPopularity(discussionParameters, topicName);
+                await getAllDiscussionsService.GetAllDiscussionsSortedByPopularityForToday(discussionParameters);
+            return Ok(discussions);
+        }
+
+        [Route("GetAllDiscussionsSortedByPopularityForWeek")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllDiscussionsSortedByPopularityForWeekAsync([FromQuery] DiscussionParameters discussionParameters)
+        {
+            var discussions =
+                await getAllDiscussionsService.GetAllDiscussionsSortedByPopularityForWeek(discussionParameters);
+            return Ok(discussions);
+        }
+
+        [Route("GetAllDiscussionsSortedByPopularityForMonth")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllDiscussionsSortedByPopularityForMonthAsync([FromQuery] DiscussionParameters discussionParameters)
+        {
+            var discussions =
+                await getAllDiscussionsService.GetAllDiscussionsSortedByPopularityForMonth(discussionParameters);
+            return Ok(discussions);
+        }
+
+        [Route("GetAllDiscussionsSortedByPopularityForAllTime")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllDiscussionsSortedByPopularityForAllTimeAsync([FromQuery] DiscussionParameters discussionParameters)
+        {
+            var discussions =
+                await getAllDiscussionsService.GetAllDiscussionsSortedByPopularityForAllTime(discussionParameters);
             return Ok(discussions);
         }
     }
