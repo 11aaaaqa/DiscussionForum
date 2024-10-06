@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Discussion\GetDiscussionsSortedByPopularityForToday.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\BanUserAndDeleteSuggestion.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\ChangeUserRoles.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\GetReportsByUserName.cshtml" />
@@ -106,6 +107,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Topic\GetAllTopicsSortedByPopularity.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Discussion\GetDiscussionsSortedByPopularityForToday.cshtml" />
   </ItemGroup>
 
 </Project>
