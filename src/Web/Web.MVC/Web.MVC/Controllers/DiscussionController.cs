@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Web.MVC.Constants;
 using Web.MVC.DTOs.Comment;
 using Web.MVC.DTOs.Discussion;
+using Web.MVC.Models;
 using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ApiResponses.CommentsResponses;
 using Web.MVC.Services;
@@ -209,6 +210,30 @@ namespace Web.MVC.Controllers
                 return LocalRedirect(returnUrl);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [Route("discussions/new")]
+        [HttpGet]
+        public async Task<IActionResult> GetDiscussionsSortedByNovelty(int pageNumber, int pageSize)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/Discussion/GetAllDiscussionsSortedByNovelty?pageSize={pageSize}&pageNumber={pageNumber}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
+
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/Discussion/DoesNextDiscussionsPageExist?pageSize={pageSize}&pageNumber={pageNumber}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+
+            return View(new GetDiscussionsViewModel
+            {
+                PageSize = pageSize, CurrentPageNumber = pageNumber, DoesNextPageExist = doesExist,
+                NextPageNumber = pageNumber + 1, PreviousPageNumber = pageNumber - 1, Discussions = discussions
+            });
         }
     }
 }
