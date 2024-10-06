@@ -263,5 +263,89 @@ namespace Web.MVC.Controllers
                 Discussions = discussions
             });
         }
+
+        [Route("discussions/top/week")]
+        [HttpGet]
+        public async Task<IActionResult> GetDiscussionsSortedByPopularityForWeek(int pageNumber, int pageSize)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/Discussion/GetAllDiscussionsSortedByPopularityForWeek?pageSize={pageSize}&pageNumber={pageNumber}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
+
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/Discussion/DoesNextDiscussionsForWeekPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+
+            return View(new GetDiscussionsViewModel
+            {
+                PageSize = pageSize,
+                CurrentPageNumber = pageNumber,
+                DoesNextPageExist = doesExist,
+                NextPageNumber = pageNumber + 1,
+                PreviousPageNumber = pageNumber - 1,
+                Discussions = discussions
+            });
+        }
+
+        [Route("discussions/top/month")]
+        [HttpGet]
+        public async Task<IActionResult> GetDiscussionsSortedByPopularityForMonth(int pageNumber, int pageSize)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/Discussion/GetAllDiscussionsSortedByPopularityForMonth?pageSize={pageSize}&pageNumber={pageNumber}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
+
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/Discussion/DoesNextDiscussionsForMonthPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+
+            return View(new GetDiscussionsViewModel
+            {
+                PageSize = pageSize,
+                CurrentPageNumber = pageNumber,
+                DoesNextPageExist = doesExist,
+                NextPageNumber = pageNumber + 1,
+                PreviousPageNumber = pageNumber - 1,
+                Discussions = discussions
+            });
+        }
+
+        [Route("discussions/top/all-time")]
+        [HttpGet]
+        public async Task<IActionResult> GetDiscussionsSortedByPopularityForAllTime(int pageNumber, int pageSize)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/Discussion/GetAllDiscussionsSortedByPopularityForAllTime?pageSize={pageSize}&pageNumber={pageNumber}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
+
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/Discussion/DoesNextAllDiscussionsPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+
+            return View(new GetDiscussionsViewModel
+            {
+                PageSize = pageSize,
+                CurrentPageNumber = pageNumber,
+                DoesNextPageExist = doesExist,
+                NextPageNumber = pageNumber + 1,
+                PreviousPageNumber = pageNumber - 1,
+                Discussions = discussions
+            });
+        }
     }
 }
