@@ -26,6 +26,7 @@ builder.Services.AddMassTransit(x =>
 });
 
 builder.Services.AddTransient<IGetAllDiscussionsService, GetAllDiscussionsService>();
+builder.Services.AddTransient<ICheckForNextDiscussionsPageExisting, CheckForNextDiscussionsPageExistingService>();
 
 var app = builder.Build();
 
