@@ -181,6 +181,17 @@ namespace DiscussionMicroservice.Api.Controllers
             return Ok(discussion.Id);
         }
 
+        [Route("DoesNextAllDiscussionsPageExist")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextDiscussionsPageExistAsync([FromQuery] DiscussionParameters discussionParameters)
+        {
+            int totalDiscussionsCount = await context.Discussions.CountAsync();
+            int totalGettingDiscussionsCount = discussionParameters.PageSize * discussionParameters.PageNumber;
+            int pageStartCount = totalGettingDiscussionsCount - discussionParameters.PageSize;
+            bool doesExist = (totalDiscussionsCount > pageStartCount);
+            return Ok(doesExist);
+        }
+
         [Route("GetAllDiscussionsSortedByNovelty")]
         [HttpGet]
         public async Task<IActionResult> GetAllDiscussionsSortedByNoveltyAsync([FromQuery] DiscussionParameters discussionParameters)
