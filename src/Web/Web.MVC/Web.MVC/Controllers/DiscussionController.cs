@@ -235,5 +235,33 @@ namespace Web.MVC.Controllers
                 NextPageNumber = pageNumber + 1, PreviousPageNumber = pageNumber - 1, Discussions = discussions
             });
         }
+
+        [Route("discussions/top/today")]
+        [HttpGet]
+        public async Task<IActionResult> GetDiscussionsSortedByPopularityForToday(int pageNumber, int pageSize)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/Discussion/GetAllDiscussionsSortedByPopularityForToday?pageSize={pageSize}&pageNumber={pageNumber}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
+
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/Discussion/DoesNextDiscussionsForTodayPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+
+            return View(new GetDiscussionsViewModel
+            {
+                PageSize = pageSize,
+                CurrentPageNumber = pageNumber,
+                DoesNextPageExist = doesExist,
+                NextPageNumber = pageNumber + 1,
+                PreviousPageNumber = pageNumber - 1,
+                Discussions = discussions
+            });
+        }
     }
 }
