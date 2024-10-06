@@ -240,5 +240,23 @@ namespace DiscussionMicroservice.Api.Controllers
                 await getAllDiscussionsService.GetAllDiscussionsSortedByPopularityForAllTime(discussionParameters);
             return Ok(discussions);
         }
+
+        [Route("DoesNextDiscussionsForWeekPageExist")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextDiscussionsForWeekPageExistAsync([FromQuery] DiscussionParameters discussionParameters)
+        {
+            var doesExist =
+                await checkForNextPageExisting.DoesNextDiscussionsForWeekPageExistAsync(discussionParameters);
+            return Ok(doesExist);
+        }
+
+        [Route("DoesNextDiscussionsForMonthPageExist")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextDiscussionsForMonthPageExistAsync([FromQuery] DiscussionParameters discussionParameters)
+        {
+            var doesExist =
+                await checkForNextPageExisting.DoesNextDiscussionsForMonthPageExistAsync(discussionParameters);
+            return Ok(doesExist);
+        }
     }
 }
