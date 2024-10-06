@@ -1,0 +1,22 @@
+﻿@model GetDiscussionsViewModel
+
+<h3>Новые обсуждения</h3>
+
+@foreach (var discussion in Model.Discussions)
+{
+    <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@discussion.Id">@discussion.Title</a>
+    <h6>Создано: @discussion.CreatedBy</h6>
+    <h6>Рейтинг: @discussion.Rating</h6>
+    <h6>Дата создания: @discussion.CreatedAt</h6>
+}
+
+@if (Model.PreviousPageNumber != 0 && Model.Discussions.Count != 0)
+{
+    <a asp-controller="Discussion" asp-action="GetDiscussionsSortedByNovelty" asp-route-pageNumber="@Model.PreviousPageNumber"
+       asp-route-pageSize="@Model.PageSize">Назад</a>
+}
+@if (Model.DoesNextPageExist && Model.Discussions.Count != 0)
+{
+    <a asp-controller="Discussion" asp-action="GetDiscussionsSortedByNovelty" asp-route-pageNumber="@Model.NextPageNumber"
+       asp-route-pageSize="@Model.PageSize">Вперед</a>
+}
