@@ -192,6 +192,17 @@ namespace DiscussionMicroservice.Api.Controllers
             return Ok(doesExist);
         }
 
+        [Route("DoesNextDiscussionsForTodayPageExist")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextDiscussionsForTodayPageExistAsync([FromQuery] DiscussionParameters discussionParameters)
+        {
+            int totalDiscussionsCount = await context.Discussions.Where(x => x.CreatedAt == DateOnly.FromDateTime(DateTime.UtcNow)).CountAsync();
+            int totalGettingDiscussionsCount = discussionParameters.PageSize * discussionParameters.PageNumber;
+            int pageStartCount = totalGettingDiscussionsCount - discussionParameters.PageSize;
+            bool doesExist = (totalDiscussionsCount > pageStartCount);
+            return Ok(doesExist);
+        }
+
         [Route("GetAllDiscussionsSortedByNovelty")]
         [HttpGet]
         public async Task<IActionResult> GetAllDiscussionsSortedByNoveltyAsync([FromQuery] DiscussionParameters discussionParameters)
