@@ -14,14 +14,17 @@ namespace DiscussionMicroservice.Api.Controllers
     public class DiscussionController : ControllerBase
     {
         private readonly IGetAllDiscussionsService getAllDiscussionsService;
+        private readonly ICheckForNextDiscussionsPageExisting checkForNextPageExisting;
         private readonly ApplicationDbContext context;
         private readonly IPublishEndpoint publishEndpoint;
 
-        public DiscussionController(ApplicationDbContext context, IPublishEndpoint publishEndpoint, IGetAllDiscussionsService getAllDiscussionsService)
+        public DiscussionController(ApplicationDbContext context, IPublishEndpoint publishEndpoint, IGetAllDiscussionsService getAllDiscussionsService,
+            ICheckForNextDiscussionsPageExisting checkForNextPageExisting)
         {
             this.context = context;
             this.publishEndpoint = publishEndpoint;
             this.getAllDiscussionsService = getAllDiscussionsService;
+            this.checkForNextPageExisting = checkForNextPageExisting;
         }
 
         [Route("GetDiscussionsByTopicName")]
@@ -52,11 +55,8 @@ namespace DiscussionMicroservice.Api.Controllers
         public async Task<IActionResult> DoesNextDiscussionsPageExistSearchingAsync([FromQuery]DiscussionParameters discussionParameters, string searchingQuery,
             string topicName)
         {
-            int totalDiscussionsCount = await context.Discussions.Where(x => x.TopicName == topicName)
-                .Where(x => x.Title.Contains(searchingQuery)).CountAsync();
-            int totalGettingDiscussionsCount = discussionParameters.PageSize * discussionParameters.PageNumber;
-            int pageStartCount = totalGettingDiscussionsCount - discussionParameters.PageSize;
-            bool doesExist = (totalDiscussionsCount > pageStartCount);
+            bool doesExist = await checkForNextPageExisting.DoesNextDiscussionsPageExistSearchingAsync(
+                discussionParameters, searchingQuery, topicName);
             return Ok(doesExist);
         }
 
@@ -64,10 +64,8 @@ namespace DiscussionMicroservice.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> DoesNextDiscussionsPageExistAsync([FromQuery]DiscussionParameters discussionParameters, string topicName)
         {
-            int totalDiscussionsCount = await context.Discussions.Where(x => x.TopicName == topicName).CountAsync();
-            int totalGettingDiscussionsCount = discussionParameters.PageSize * discussionParameters.PageNumber;
-            int pageStartCount = totalGettingDiscussionsCount - discussionParameters.PageSize;
-            bool doesExist = (totalDiscussionsCount > pageStartCount);
+            bool doesExist =
+                await checkForNextPageExisting.DoesNextDiscussionsPageExistAsync(discussionParameters, topicName);
             return Ok(doesExist);
         }
 
@@ -185,10 +183,7 @@ namespace DiscussionMicroservice.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> DoesNextDiscussionsPageExistAsync([FromQuery] DiscussionParameters discussionParameters)
         {
-            int totalDiscussionsCount = await context.Discussions.CountAsync();
-            int totalGettingDiscussionsCount = discussionParameters.PageSize * discussionParameters.PageNumber;
-            int pageStartCount = totalGettingDiscussionsCount - discussionParameters.PageSize;
-            bool doesExist = (totalDiscussionsCount > pageStartCount);
+            bool doesExist = await checkForNextPageExisting.DoesNextAllDiscussionsPageExistAsync(discussionParameters);
             return Ok(doesExist);
         }
 
@@ -196,10 +191,8 @@ namespace DiscussionMicroservice.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> DoesNextDiscussionsForTodayPageExistAsync([FromQuery] DiscussionParameters discussionParameters)
         {
-            int totalDiscussionsCount = await context.Discussions.Where(x => x.CreatedAt == DateOnly.FromDateTime(DateTime.UtcNow)).CountAsync();
-            int totalGettingDiscussionsCount = discussionParameters.PageSize * discussionParameters.PageNumber;
-            int pageStartCount = totalGettingDiscussionsCount - discussionParameters.PageSize;
-            bool doesExist = (totalDiscussionsCount > pageStartCount);
+            bool doesExist =
+                await checkForNextPageExisting.DoesNextDiscussionsForTodayPageExistAsync(discussionParameters);
             return Ok(doesExist);
         }
 
