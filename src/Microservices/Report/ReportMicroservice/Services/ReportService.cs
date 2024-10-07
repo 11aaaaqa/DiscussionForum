@@ -4,7 +4,7 @@ using ReportMicroservice.Api.Models;
 
 namespace ReportMicroservice.Api.Services
 {
-    public class ReportService : IReportService<Report>
+    public class ReportService : IReportService<Report>, IPaginationService
     {
         private readonly ApplicationDbContext context;
 
@@ -55,6 +55,14 @@ namespace ReportMicroservice.Api.Services
             
             context.Reports.Remove(report);
             await context.SaveChangesAsync();
+        }
+
+        public async Task<bool> DoesNextReportsPageExistAsync(int pageSize, int pageNumber)
+        {
+            int totalReportsCount = await context.Reports.CountAsync();
+            int totalRequestedCount = pageSize * pageNumber;
+            int requestedStartCount = totalRequestedCount - pageSize;
+            return (totalReportsCount > requestedStartCount);
         }
     }
 }
