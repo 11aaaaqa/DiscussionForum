@@ -12,8 +12,9 @@ namespace ReportMicroservice.UnitTests
         [Fact]
         public async Task GetAllReportsAsync_ReturnsOkWithListOfReports()
         {
+            var reportParameters = new ReportParameters { PageNumber = 1, PageSize = 3 };
             var mock = new Mock<IReportService<Report>>();
-            mock.Setup(x => x.GetAllReportsAsync()).ReturnsAsync(new List<Report>
+            mock.Setup(x => x.GetAllReportsAsync(reportParameters)).ReturnsAsync(new List<Report>
             {
                 new()
                 {
@@ -32,16 +33,16 @@ namespace ReportMicroservice.UnitTests
                     ReportType = It.IsAny<string>(), ReportedDiscussionId = It.IsAny<Guid>()
                 }
             });
-            var controller = new ReportController(mock.Object);
+            var controller = new ReportController(mock.Object, new Mock<IPaginationService>().Object);
 
-            var result = await controller.GetAllReportsAsync();
+            var result = await controller.GetAllReportsAsync(reportParameters);
 
             var methodResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, methodResult.StatusCode);
             Assert.NotNull(methodResult.Value);
             var reports = Assert.IsType<List<Report>>(methodResult.Value);
             Assert.Equal(3, reports.Count);
-            mock.Verify(x => x.GetAllReportsAsync());
+            mock.Verify(x => x.GetAllReportsAsync(reportParameters));
         }
 
         [Fact]
@@ -50,7 +51,7 @@ namespace ReportMicroservice.UnitTests
             var id = It.IsAny<Guid>();
             var mock = new Mock<IReportService<Report>>();
             mock.Setup(x => x.GetReportByIdAsync(id)).ReturnsAsync((Report?)null);
-            var controller = new ReportController(mock.Object);
+            var controller = new ReportController(mock.Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.GetReportByIdAsync(id);
 
@@ -64,7 +65,7 @@ namespace ReportMicroservice.UnitTests
             var id = It.IsAny<Guid>();
             var mock = new Mock<IReportService<Report>>();
             mock.Setup(x => x.GetReportByIdAsync(id)).ReturnsAsync(new Report { Id = id });
-            var controller = new ReportController(mock.Object);
+            var controller = new ReportController(mock.Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.GetReportByIdAsync(id);
 
@@ -82,7 +83,7 @@ namespace ReportMicroservice.UnitTests
             string userName = It.IsAny<string>();
             var mock = new Mock<IReportService<Report>>();
             mock.Setup(x => x.DeleteReportsByUserName(userName));
-            var controller = new ReportController(mock.Object);
+            var controller = new ReportController(mock.Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.DeleteReportsByUserNameAsync(userName);
 
@@ -101,7 +102,7 @@ namespace ReportMicroservice.UnitTests
                 UserNameReportedBy = It.IsAny<string>()
             };
             var mock = new Mock<IReportService<Report>>();
-            var controller = new ReportController(mock.Object);
+            var controller = new ReportController(mock.Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.CreateReportAsync(model);
 
@@ -116,7 +117,7 @@ namespace ReportMicroservice.UnitTests
             var reportType = It.IsAny<string>();
             var mock = new Mock<IReportService<Report>>();
             mock.Setup(x => x.GetReportsByReportType(reportType)).ReturnsAsync((List<Report>?)null);
-            var controller = new ReportController(mock.Object);
+            var controller = new ReportController(mock.Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.GetReportsByReportTypeAsync(reportType);
 
@@ -142,7 +143,7 @@ namespace ReportMicroservice.UnitTests
                     UserNameReportedBy = It.IsAny<string>(), ReportedDiscussionContent = It.IsAny<string>(), ReportedDiscussionTitle = It.IsAny<string>()
                 }
             });
-            var controller = new ReportController(mock.Object);
+            var controller = new ReportController(mock.Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.GetReportsByReportTypeAsync(reportType);
 
@@ -160,7 +161,7 @@ namespace ReportMicroservice.UnitTests
             var reportType = It.IsAny<string>();
             var mock = new Mock<IReportService<Report>>();
             mock.Setup(x => x.GetReportsByReportType(reportType)).ReturnsAsync(new List<Report>());
-            var controller = new ReportController(mock.Object);
+            var controller = new ReportController(mock.Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.GetReportsByReportTypeAsync(reportType);
 
@@ -178,7 +179,7 @@ namespace ReportMicroservice.UnitTests
             var reportId = It.IsAny<Guid>();
             var mock = new Mock<IReportService<Report>>();
             mock.Setup(x => x.DeleteReportById(reportId));
-            var controller = new ReportController(mock.Object);
+            var controller = new ReportController(mock.Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.DeleteReportByIdAsync(reportId);
 
@@ -195,7 +196,7 @@ namespace ReportMicroservice.UnitTests
             {
                 new(){UserNameReportedBy = userName}, new(){UserNameReportedBy = userName},new(){UserNameReportedBy = userName}
             });
-            var controller = new ReportController(mock.Object);
+            var controller = new ReportController(mock.Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.GetReportsByUserNameAsync(userName);
 
