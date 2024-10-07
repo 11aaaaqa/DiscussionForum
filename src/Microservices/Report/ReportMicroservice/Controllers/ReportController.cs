@@ -74,9 +74,9 @@ namespace ReportMicroservice.Api.Controllers
 
         [Route("GetReportsByReportType/{reportType}")]
         [HttpGet]
-        public async Task<IActionResult> GetReportsByReportTypeAsync(string reportType)
+        public async Task<IActionResult> GetReportsByReportTypeAsync(string reportType, [FromQuery] ReportParameters reportParameters)
         {
-            var reports = await reportService.GetReportsByReportType(reportType);
+            var reports = await reportService.GetReportsByReportType(reportType, reportParameters);
             if (reports is null)
                 return BadRequest();
             return Ok(reports);
@@ -92,7 +92,7 @@ namespace ReportMicroservice.Api.Controllers
 
         [Route("GetReportsByUserName/{userName}")]
         [HttpGet]
-        public async Task<IActionResult> GetReportsByUserNameAsync(string userName) =>
-            Ok(await reportService.GetByUserNameAsync(userName));
+        public async Task<IActionResult> GetReportsByUserNameAsync(string userName, [FromQuery] ReportParameters reportParameters) =>
+            Ok(await reportService.GetByUserNameAsync(userName, reportParameters));
     }
 }
