@@ -114,23 +114,25 @@ namespace ReportMicroservice.UnitTests
         [Fact]
         public async Task GetReportsByReportTypeAsync_ReturnsBadRequest()
         {
+            var reportParameters = new ReportParameters { PageSize = 3, PageNumber = 1 };
             var reportType = It.IsAny<string>();
             var mock = new Mock<IReportService<Report>>();
-            mock.Setup(x => x.GetReportsByReportType(reportType)).ReturnsAsync((List<Report>?)null);
+            mock.Setup(x => x.GetReportsByReportType(reportType, reportParameters)).ReturnsAsync((List<Report>?)null);
             var controller = new ReportController(mock.Object, new Mock<IPaginationService>().Object);
 
-            var result = await controller.GetReportsByReportTypeAsync(reportType);
+            var result = await controller.GetReportsByReportTypeAsync(reportType, reportParameters);
 
             Assert.IsType<BadRequestResult>(result);
-            mock.Verify(x => x.GetReportsByReportType(reportType));
+            mock.Verify(x => x.GetReportsByReportType(reportType, reportParameters));
         }
 
         [Fact]
         public async Task GetReportsByReportTypeAsync_ReturnsOkWithListOfReports()
         {
+            var reportParameters = new ReportParameters { PageSize = 2, PageNumber = 1 };
             var reportType = It.IsAny<string>();
             var mock = new Mock<IReportService<Report>>();
-            mock.Setup(x => x.GetReportsByReportType(reportType)).ReturnsAsync(new List<Report>
+            mock.Setup(x => x.GetReportsByReportType(reportType, reportParameters)).ReturnsAsync(new List<Report>
             {
                 new()
                 {
@@ -145,32 +147,33 @@ namespace ReportMicroservice.UnitTests
             });
             var controller = new ReportController(mock.Object, new Mock<IPaginationService>().Object);
 
-            var result = await controller.GetReportsByReportTypeAsync(reportType);
+            var result = await controller.GetReportsByReportTypeAsync(reportType, reportParameters);
 
             var methodResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, methodResult.StatusCode);
             Assert.NotNull(methodResult.Value);
             var reports = Assert.IsType<List<Report>>(methodResult.Value);
             Assert.Equal(2, reports.Count);
-            mock.Verify(x => x.GetReportsByReportType(reportType));
+            mock.Verify(x => x.GetReportsByReportType(reportType, reportParameters));
         }
 
         [Fact]
         public async Task GetReportsByReportTypeAsync_ReturnsOkWithListOfReportsThatContainsZeroObjects()
         {
+            var reportParameters = new ReportParameters { PageSize = 3, PageNumber = 1 };
             var reportType = It.IsAny<string>();
             var mock = new Mock<IReportService<Report>>();
-            mock.Setup(x => x.GetReportsByReportType(reportType)).ReturnsAsync(new List<Report>());
+            mock.Setup(x => x.GetReportsByReportType(reportType, reportParameters)).ReturnsAsync(new List<Report>());
             var controller = new ReportController(mock.Object, new Mock<IPaginationService>().Object);
 
-            var result = await controller.GetReportsByReportTypeAsync(reportType);
+            var result = await controller.GetReportsByReportTypeAsync(reportType, reportParameters);
 
             var methodResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, methodResult.StatusCode);
             Assert.NotNull(methodResult.Value);
             var reports = Assert.IsType<List<Report>>(methodResult.Value);
             Assert.Empty(reports);
-            mock.Verify(x => x.GetReportsByReportType(reportType));
+            mock.Verify(x => x.GetReportsByReportType(reportType, reportParameters));
         }
 
         [Fact]
@@ -190,21 +193,22 @@ namespace ReportMicroservice.UnitTests
         [Fact]
         public async Task GetReportsByUserNameAsync_ReturnsOkWithListIfReportsWithSpecifiedCreatedByUserName()
         {
+            var reportParameters = new ReportParameters { PageSize = 3, PageNumber = 1 };
             var userName = It.IsAny<string>();
             var mock = new Mock<IReportService<Report>>();
-            mock.Setup(x => x.GetByUserNameAsync(userName)).ReturnsAsync(new List<Report>
+            mock.Setup(x => x.GetByUserNameAsync(userName, reportParameters)).ReturnsAsync(new List<Report>
             {
                 new(){UserNameReportedBy = userName}, new(){UserNameReportedBy = userName},new(){UserNameReportedBy = userName}
             });
             var controller = new ReportController(mock.Object, new Mock<IPaginationService>().Object);
 
-            var result = await controller.GetReportsByUserNameAsync(userName);
+            var result = await controller.GetReportsByUserNameAsync(userName, reportParameters);
 
             var methodResult = Assert.IsType<OkObjectResult>(result);
             Assert.NotNull(methodResult.Value);
             var reports = Assert.IsType<List<Report>>(methodResult.Value);
             Assert.Equal(3, reports.Count);
-            mock.Verify(x => x.GetByUserNameAsync(userName));
+            mock.Verify(x => x.GetByUserNameAsync(userName, reportParameters));
         }
 
         [Fact]
