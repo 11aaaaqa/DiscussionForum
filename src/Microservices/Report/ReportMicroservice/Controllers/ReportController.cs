@@ -18,7 +18,8 @@ namespace ReportMicroservice.Api.Controllers
 
         [Route("GetAllReports")]
         [HttpGet]
-        public async Task<IActionResult> GetAllReportsAsync() => Ok(await reportService.GetAllReportsAsync());
+        public async Task<IActionResult> GetAllReportsAsync([FromQuery] ReportParameters reportParameters) => 
+            Ok(await reportService.GetAllReportsAsync(reportParameters));
 
         [Route("GetReportById/{id}")]
         [HttpGet]
