@@ -10,6 +10,7 @@ namespace ReportMicroservice.Api.Controllers
     public class ReportController : ControllerBase
     {
         private readonly IReportService<Report> reportService;
+        private readonly IPaginationService paginationService;
 
         public ReportController(IReportService<Report> reportService)
         {
@@ -20,6 +21,16 @@ namespace ReportMicroservice.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllReportsAsync([FromQuery] ReportParameters reportParameters) => 
             Ok(await reportService.GetAllReportsAsync(reportParameters));
+
+        [Route("")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextPageExist([FromQuery] ReportParameters reportParameters)
+        {
+            var doesExist =
+                await paginationService.DoesNextReportsPageExistAsync(reportParameters.PageSize,
+                    reportParameters.PageNumber);
+            return Ok(doesExist);
+        }
 
         [Route("GetReportById/{id}")]
         [HttpGet]
