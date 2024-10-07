@@ -23,9 +23,9 @@ namespace ReportMicroservice.Api.Controllers
         public async Task<IActionResult> GetAllReportsAsync([FromQuery] ReportParameters reportParameters) => 
             Ok(await reportService.GetAllReportsAsync(reportParameters));
 
-        [Route("")]
+        [Route("DoesNextPageExist")]
         [HttpGet]
-        public async Task<IActionResult> DoesNextPageExist([FromQuery] ReportParameters reportParameters)
+        public async Task<IActionResult> DoesNextPageExistAsync([FromQuery] ReportParameters reportParameters)
         {
             var doesExist =
                 await paginationService.DoesNextReportsPageExistAsync(reportParameters.PageSize,
