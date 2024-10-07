@@ -221,7 +221,7 @@ namespace ReportMicroservice.UnitTests
             var controller = new ReportController(new Mock<IReportService<Report>>().Object, mock.Object);
 
             var result = await controller.DoesNextPageExistAsync(new ReportParameters
-                { PageSize = pageSize, PageNumber = pageNumber });
+            { PageSize = pageSize, PageNumber = pageNumber });
 
             var methodResult = Assert.IsType<OkObjectResult>(result);
             Assert.NotNull(methodResult.Value);
@@ -239,7 +239,7 @@ namespace ReportMicroservice.UnitTests
             var controller = new ReportController(new Mock<IReportService<Report>>().Object, mock.Object);
 
             var result = await controller.DoesNextPageExistAsync(new ReportParameters
-                { PageSize = pageSize, PageNumber = pageNumber });
+            { PageSize = pageSize, PageNumber = pageNumber });
 
             var methodResult = Assert.IsType<OkObjectResult>(result);
             Assert.NotNull(methodResult.Value);
