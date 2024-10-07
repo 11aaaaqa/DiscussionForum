@@ -24,8 +24,14 @@ namespace ReportMicroservice.Api.Services
         public async Task<Report?> GetReportByIdAsync(Guid reportId) =>
             await context.Reports.SingleOrDefaultAsync(x => x.Id == reportId);
 
-        public async Task<List<Report>> GetByUserNameAsync(string userName)
-            => await context.Reports.Where(x => x.UserNameReportedBy == userName).ToListAsync();
+        public async Task<List<Report>> GetByUserNameAsync(string userName, ReportParameters reportParameters)
+        {
+            var reports = await context.Reports.Where(x => x.UserNameReportedBy == userName)
+                .Skip(reportParameters.PageSize * (reportParameters.PageNumber - 1))
+                .Take(reportParameters.PageSize)
+                .ToListAsync();
+            return reports;
+        }
 
         public async Task<Report> CreateReportAsync(Report model)
         {
@@ -45,8 +51,14 @@ namespace ReportMicroservice.Api.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task<List<Report>?> GetReportsByReportType(string reportType) =>
-            await context.Reports.Where(x => x.ReportType == reportType).ToListAsync();
+        public async Task<List<Report>?> GetReportsByReportType(string reportType, ReportParameters reportParameters)
+        {
+            var reports =  await context.Reports.Where(x => x.ReportType == reportType)
+                .Skip(reportParameters.PageSize * (reportParameters.PageNumber - 1))
+                .Take(reportParameters.PageSize)
+                .ToListAsync();
+            return reports;
+        }
 
         public async Task DeleteReportById(Guid reportId)
         {
