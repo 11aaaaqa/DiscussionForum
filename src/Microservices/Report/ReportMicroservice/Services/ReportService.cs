@@ -76,5 +76,21 @@ namespace ReportMicroservice.Api.Services
             int requestedStartCount = totalRequestedCount - pageSize;
             return (totalReportsCount > requestedStartCount);
         }
+
+        public async Task<bool> DoesNextReportsByUserNamePageExistAsync(int pageSize, int pageNumber, string userName)
+        {
+            int totalReportsCount = await context.Reports.Where(x => x.UserNameReportedBy == userName).CountAsync();
+            int totalRequestedCount = pageSize * pageNumber;
+            int requestedStartCount = totalRequestedCount - pageSize;
+            return (totalReportsCount > requestedStartCount);
+        }
+
+        public async Task<bool> DoesNextReportsByReportTypePageExistAsync(int pageSize, int pageNumber, string reportType)
+        {
+            int totalReportsCount = await context.Reports.Where(x => x.ReportType == reportType).CountAsync();
+            int totalRequestedCount = pageSize * pageNumber;
+            int requestedStartCount = totalRequestedCount - pageSize;
+            return (totalReportsCount > requestedStartCount);
+        }
     }
 }
