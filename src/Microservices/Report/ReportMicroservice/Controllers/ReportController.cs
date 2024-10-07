@@ -33,6 +33,26 @@ namespace ReportMicroservice.Api.Controllers
             return Ok(doesExist);
         }
 
+        [Route("DoesNextPageByUserNameExist")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextPageByUserNameExistAsync([FromQuery] ReportParameters reportParameters, string userName)
+        {
+            var doesExist =
+                await paginationService.DoesNextReportsByUserNamePageExistAsync(reportParameters.PageSize,
+                    reportParameters.PageNumber, userName);
+            return Ok(doesExist);
+        }
+
+        [Route("DoesNextPageByReportTypeExist")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextPageByReportTypeExistAsync([FromQuery] ReportParameters reportParameters, string reportType)
+        {
+            var doesExist =
+                await paginationService.DoesNextReportsByReportTypePageExistAsync(reportParameters.PageSize,
+                    reportParameters.PageNumber, reportType);
+            return Ok(doesExist);
+        }
+
         [Route("GetReportById/{id}")]
         [HttpGet]
         public async Task<IActionResult> GetReportByIdAsync(Guid id)
