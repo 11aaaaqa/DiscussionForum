@@ -29,6 +29,7 @@ builder.Services.AddMassTransit(x =>
 });
 
 builder.Services.AddTransient<IReportService<Report>, ReportService>();
+builder.Services.AddTransient<IPaginationService, ReportService>();
 
 var app = builder.Build();
 
