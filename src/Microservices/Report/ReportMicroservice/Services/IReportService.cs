@@ -4,7 +4,7 @@ namespace ReportMicroservice.Api.Services
 {
     public interface IReportService<TModel>
     {
-        Task<List<TModel>> GetAllReportsAsync();
+        Task<List<TModel>> GetAllReportsAsync(ReportParameters reportParameters);
         Task<TModel?> GetReportByIdAsync(Guid reportId);
         Task<List<TModel>> GetByUserNameAsync(string userName);
         Task<Report> CreateReportAsync(TModel model);

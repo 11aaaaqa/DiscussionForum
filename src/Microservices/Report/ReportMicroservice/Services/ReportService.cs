@@ -13,7 +13,12 @@ namespace ReportMicroservice.Api.Services
             this.context = context;
         }
 
-        public async Task<List<Report>> GetAllReportsAsync() => await context.Reports.ToListAsync();
+        public async Task<List<Report>> GetAllReportsAsync(ReportParameters reportParameters)
+        {
+            var reports = await context.Reports.Skip(reportParameters.PageSize * (reportParameters.PageNumber - 1))
+                .Take(reportParameters.PageSize).ToListAsync();
+            return reports;
+        }
 
 
         public async Task<Report?> GetReportByIdAsync(Guid reportId) =>
