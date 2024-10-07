@@ -12,9 +12,10 @@ namespace ReportMicroservice.Api.Controllers
         private readonly IReportService<Report> reportService;
         private readonly IPaginationService paginationService;
 
-        public ReportController(IReportService<Report> reportService)
+        public ReportController(IReportService<Report> reportService, IPaginationService paginationService)
         {
             this.reportService = reportService;
+            this.paginationService = paginationService;
         }
 
         [Route("GetAllReports")]
