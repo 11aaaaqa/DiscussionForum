@@ -206,5 +206,41 @@ namespace ReportMicroservice.UnitTests
             Assert.Equal(3, reports.Count);
             mock.Verify(x => x.GetByUserNameAsync(userName));
         }
+
+        [Fact]
+        public async Task DoesNextPageExistAsync_ReturnsOkWithTrue()
+        {
+            int pageSize = 20;
+            int pageNumber = 5;
+            var mock = new Mock<IPaginationService>();
+            mock.Setup(x => x.DoesNextReportsPageExistAsync(pageSize, pageNumber)).ReturnsAsync(true);
+            var controller = new ReportController(new Mock<IReportService<Report>>().Object, mock.Object);
+
+            var result = await controller.DoesNextPageExistAsync(new ReportParameters
+                { PageSize = pageSize, PageNumber = pageNumber });
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            bool doesExist = Assert.IsType<bool>(methodResult.Value);
+            Assert.True(doesExist);
+        }
+
+        [Fact]
+        public async Task DoesNextPageExistAsync_ReturnsOkWithFalse()
+        {
+            int pageSize = 20;
+            int pageNumber = 5;
+            var mock = new Mock<IPaginationService>();
+            mock.Setup(x => x.DoesNextReportsPageExistAsync(pageSize, pageNumber)).ReturnsAsync(false);
+            var controller = new ReportController(new Mock<IReportService<Report>>().Object, mock.Object);
+
+            var result = await controller.DoesNextPageExistAsync(new ReportParameters
+                { PageSize = pageSize, PageNumber = pageNumber });
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(methodResult.Value);
+            bool doesExist = Assert.IsType<bool>(methodResult.Value);
+            Assert.False(doesExist);
+        }
     }
 }
