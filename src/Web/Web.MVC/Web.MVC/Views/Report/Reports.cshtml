@@ -26,14 +26,14 @@
     }
 </div>
 
-@if (ViewBag.PreviousPageNumber != 0 && Model.Reports.Count != 0)
+@if (Model.PreviousPageNumber != 0 && Model.Reports.Count != 0)
 {
     <a asp-controller="Report" asp-action="Reports" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize"
        asp-route-reportType="@Model.ReportType">
         Назад
     </a>
 }
-@if (ViewBag.DoesNextPageExist && Model.Reports.Count != 0)
+@if (Model.DoesNextPageExist && Model.Reports.Count != 0)
 {
     <a asp-controller="Report" asp-action="Reports" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize"
        asp-route-reportType="@Model.ReportType">
