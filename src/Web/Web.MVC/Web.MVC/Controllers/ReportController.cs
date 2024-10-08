@@ -93,7 +93,7 @@ namespace Web.MVC.Controllers
             var reports = await response.Content.ReadFromJsonAsync<List<ReportApiResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://report-microservice-api:8080/api/Report/DoesNextPageByReportTypeExist?reportType={reportType}&pageSize={pageSize}&pageNumber={pageNumber}");
+                $"http://report-microservice-api:8080/api/Report/DoesNextPageByReportTypeExist?reportType={reportType}&pageSize={pageSize}&pageNumber={pageNumber + 1}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             var doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
