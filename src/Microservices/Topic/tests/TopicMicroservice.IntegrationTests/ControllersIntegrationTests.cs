@@ -81,10 +81,11 @@ namespace TopicMicroservice.IntegrationTests
         [Fact]
         public async Task GetAllSuggestedTopicsAsync_ReturnsOkWithListOfTopics()
         {
-            var response = await client.GetAsync("api/SuggestTopic/GetAllSuggestedTopics");
+            var response = await client.GetAsync("api/SuggestTopic/GetAllSuggestedTopics?pageSize=5&pageNumber=1");
             response.EnsureSuccessStatusCode();
             var topics = await response.Content.ReadFromJsonAsync<List<Topic>>();
             Assert.NotNull(topics);
+            Assert.NotEmpty(topics);
         }
 
         [Fact]
