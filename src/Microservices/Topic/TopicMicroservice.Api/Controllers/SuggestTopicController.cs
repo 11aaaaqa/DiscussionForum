@@ -94,8 +94,15 @@ namespace TopicMicroservice.Api.Controllers
 
         [Route("GetSuggestedTopicsByUserName/{userName}")]
         [HttpGet]
-        public async Task<IActionResult> GetSuggestedTopicsByUserNameAsync(string userName) =>
-            Ok(await context.SuggestedTopics.Where(x => x.SuggestedBy == userName).ToListAsync());
+        public async Task<IActionResult> GetSuggestedTopicsByUserNameAsync(string userName, [FromQuery] TopicParameters topicParameters)
+        {
+            var suggestedTopics = await context.SuggestedTopics
+                .Where(x => x.SuggestedBy == userName)
+                .Skip(topicParameters.PageSize * (topicParameters.PageNumber - 1))
+                .Take(topicParameters.PageSize)
+                .ToListAsync();
+            return Ok(suggestedTopics);
+        }
 
         [Route("DeleteAllSuggestedTopicsByUserName/{userName}")]
         [HttpDelete]
