@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.MVC.Constants;
 using Web.MVC.DTOs.Report;
+using Web.MVC.Models;
 using Web.MVC.Models.ApiRequests;
 using Web.MVC.Models.ApiResponses.CustUserResponses;
 using Web.MVC.Models.ApiResponses.ReportResponses;
@@ -82,15 +83,26 @@ namespace Web.MVC.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Reports(string reportType)
+        public async Task<IActionResult> Reports(string reportType, int pageNumber, int pageSize)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://report-microservice-api:8080/api/Report/GetReportsByReportType/{reportType}");
+                $"http://report-microservice-api:8080/api/Report/GetReportsByReportType/{reportType}?pageNumber={pageNumber}&pageSize={pageSize}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var reports = await response.Content.ReadFromJsonAsync<List<ReportApiResponse>>();
-            return View(reports);
+
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"http://report-microservice-api:8080/api/Report/DoesNextPageByReportTypeExist?reportType={reportType}&pageSize={pageSize}&pageNumber={pageNumber}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            var doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+
+            return View(new GetReportsViewModel
+            {
+                PageSize = pageSize, CurrentPageNumber = pageNumber, NextPageNumber = pageNumber + 1, PreviousPageNumber = pageNumber - 1,
+                Reports = reports, DoesNextPageExist = doesExist, ReportType = reportType
+            });
         }
 
         [Route("reports/{reportId}")]
