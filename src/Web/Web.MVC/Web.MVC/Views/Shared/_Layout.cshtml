@@ -24,10 +24,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Report" asp-action="Reports" asp-route-reportType="@ReportTypeConstants.DiscussionType">DiscussionReports</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Report" asp-action="Reports" asp-route-reportType="@ReportTypeConstants.DiscussionType" asp-route-pageNumber="1" asp-route-pageSize="20">DiscussionReports</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Report" asp-action="Reports" asp-route-reportType="@ReportTypeConstants.CommentType">CommentsReports</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Report" asp-action="Reports" asp-route-reportType="@ReportTypeConstants.CommentType" asp-route-pageNumber="1" asp-route-pageSize="20">CommentsReports</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Topic" asp-action="GetAllTopicsSortedByNovelty" asp-route-pageNumber="1" asp-route-pageSize="15">Новые темы</a>
