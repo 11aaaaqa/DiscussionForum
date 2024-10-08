@@ -4,6 +4,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Web.MVC.Constants;
 using Web.MVC.DTOs.Moderator;
+using Web.MVC.Models;
 using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ApiResponses.ApNetUserResponses;
 using Web.MVC.Models.ApiResponses.CommentsResponses;
@@ -442,16 +443,27 @@ namespace Web.MVC.Controllers
 
         [Route("ReportsByUser/{userName}")]
         [HttpGet]
-        public async Task<IActionResult> GetReportsByUserName(string userName)
+        public async Task<IActionResult> GetReportsByUserName(string userName, int pageNumber, int pageSize)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://report-microservice-api:8080/api/Report/GetReportsByUserName/{userName}");
+                $"http://report-microservice-api:8080/api/Report/GetReportsByUserName/{userName}?pageNumber={pageNumber}&pageSize={pageSize}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             ViewBag.ReportedByUserName = userName;
             var reports = await response.Content.ReadFromJsonAsync<List<ReportApiResponse>>();
-            return View(reports);
+
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"http://report-microservice-api:8080/api/Report/DoesNextPageByUserNameExist?userName={userName}&pageNumber={pageNumber + 1}&pageSize={pageSize}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+
+            return View(new GetReportsViewModel
+            {
+                PageSize = pageSize, CurrentPageNumber = pageNumber, DoesNextPageExist = doesExist, NextPageNumber = pageNumber + 1, 
+                PreviousPageNumber = pageNumber - 1, Reports = reports
+            });
         }
 
         [HttpPost]
