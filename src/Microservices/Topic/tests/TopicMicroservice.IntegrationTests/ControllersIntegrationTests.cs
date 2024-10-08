@@ -112,7 +112,7 @@ namespace TopicMicroservice.IntegrationTests
         public async Task GetSuggestedTopicsByUserNameAsync_ReturnsOkWitListOfSuggestedTopicsWithSpecifiedUser()
         {
             string userName = "TestSuggestedBy1";
-            var response = await client.GetAsync($"api/SuggestTopic/GetSuggestedTopicsByUserName/{userName}");
+            var response = await client.GetAsync($"api/SuggestTopic/GetSuggestedTopicsByUserName/{userName}?pageNumber=1&pageSize=2");
             response.EnsureSuccessStatusCode();
             var suggestedTopics = await response.Content.ReadFromJsonAsync<List<SuggestedTopic>>();
             Assert.Equal(2, suggestedTopics.Count);
