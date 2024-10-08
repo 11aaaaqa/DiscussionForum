@@ -89,6 +89,26 @@ namespace TopicMicroservice.IntegrationTests
         }
 
         [Fact]
+        public async Task DoesNextSuggestedTopicsPageExistAsync_ReturnsOkWithTrue()
+        {
+            var response =
+                await client.GetAsync("api/SuggestTopic/DoesNextSuggestedTopicsPageExist?pageNumber=2&pageSize=1");
+            response.EnsureSuccessStatusCode();
+            bool doesExist = await response.Content.ReadFromJsonAsync<bool>();
+            Assert.True(doesExist);
+        }
+
+        [Fact]
+        public async Task DoesNextSuggestedTopicsPageExistAsync_ReturnsOkWithFalse()
+        {
+            var response =
+                await client.GetAsync("api/SuggestTopic/DoesNextSuggestedTopicsPageExist?pageNumber=3&pageSize=20");
+            response.EnsureSuccessStatusCode();
+            bool doesExist = await response.Content.ReadFromJsonAsync<bool>();
+            Assert.False(doesExist);
+        }
+
+        [Fact]
         public async Task GetSuggestedTopicsByUserNameAsync_ReturnsOkWitListOfSuggestedTopicsWithSpecifiedUser()
         {
             string userName = "TestSuggestedBy1";
