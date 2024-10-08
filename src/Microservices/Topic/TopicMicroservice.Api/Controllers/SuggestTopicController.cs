@@ -72,8 +72,14 @@ namespace TopicMicroservice.Api.Controllers
 
         [Route("GetAllSuggestedTopics")]
         [HttpGet]
-        public async Task<IActionResult> GetAllSuggestedTopicsAsync() =>
-            Ok(await context.SuggestedTopics.ToListAsync());
+        public async Task<IActionResult> GetAllSuggestedTopicsAsync([FromQuery] TopicParameters topicParameters)
+        {
+            var topics = await context.SuggestedTopics
+                .Skip(topicParameters.PageSize * (topicParameters.PageNumber - 1))
+                .Take(topicParameters.PageSize)
+                .ToListAsync();
+            return Ok(topics);
+        }
 
         [Route("GetSuggestedTopicsByUserName/{userName}")]
         [HttpGet]
