@@ -104,6 +104,17 @@ namespace TopicMicroservice.Api.Controllers
             return Ok(suggestedTopics);
         }
 
+        [Route("DoesNextSuggestedTopicsByUserNamePageExist/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextSuggestedTopicsByUserNamePageExistAsync([FromQuery] TopicParameters topicParameters, string userName)
+        {
+            int totalSuggestedTopicsCount = await context.SuggestedTopics.Where(x => x.SuggestedBy == userName).CountAsync();
+            int totalRequestedSuggestedTopicsCount = topicParameters.PageSize * topicParameters.PageNumber;
+            int startedRequestedSuggestedTopicsCount = totalRequestedSuggestedTopicsCount - topicParameters.PageSize;
+            bool doesExist = (totalSuggestedTopicsCount > startedRequestedSuggestedTopicsCount);
+            return Ok(doesExist);
+        }
+
         [Route("DeleteAllSuggestedTopicsByUserName/{userName}")]
         [HttpDelete]
         public async Task<IActionResult> DeleteAllSuggestedTopicsByUserNameAsync(string userName)
