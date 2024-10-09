@@ -1,10 +1,23 @@
 ﻿@using System.Web
-@model List<Web.MVC.Models.ApiResponses.Discussion.DiscussionResponse>
+@model Web.MVC.Models.ViewModels.UserViewModels.GetSuggestedDiscussionsViewModel
 
 <div class="text-center">
     <h3>Предложенные обсуждения</h3>
-    @foreach (var suggestedDiscussion in Model)
+    @foreach (var suggestedDiscussion in Model.SuggestedDiscussions)
     {
         <a href="~/SuggestedDiscussions/@suggestedDiscussion.Id?returnUrl=@HttpUtility.UrlEncode(Context.Request.Path + Context.Request.QueryString)">@suggestedDiscussion.Title</a><br/>
     }
 </div>
+
+@if (Model.PreviousPageNumber != 0)
+{
+    <a asp-controller="Moderator" asp-action="SuggestedDiscussions" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize">
+        Назад
+    </a>
+}
+@if (Model.DoesNextPageExist && Model.SuggestedDiscussions.Count != 0)
+{
+    <a asp-controller="Moderator" asp-action="SuggestedDiscussions" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize">
+        Вперед
+    </a>
+}
