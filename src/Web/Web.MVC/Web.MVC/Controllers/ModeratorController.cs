@@ -12,7 +12,6 @@ using Web.MVC.Models.ApiResponses.CustUserResponses;
 using Web.MVC.Models.ApiResponses.Discussion;
 using Web.MVC.Models.ApiResponses.ReportResponses;
 using Web.MVC.Services;
-using DiscussionResponse = Web.MVC.Models.ApiResponses.DiscussionResponse;
 
 namespace Web.MVC.Controllers
 {

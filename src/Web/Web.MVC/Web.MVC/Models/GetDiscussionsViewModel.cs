@@ -1,4 +1,4 @@
-﻿using Web.MVC.Models.ApiResponses;
+﻿using Web.MVC.Models.ApiResponses.Discussion;
 
 namespace Web.MVC.Models
 {

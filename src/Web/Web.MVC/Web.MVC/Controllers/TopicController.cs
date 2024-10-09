@@ -7,6 +7,7 @@ using Web.MVC.Constants;
 using Web.MVC.DTOs.Topic;
 using Web.MVC.Models;
 using Web.MVC.Models.ApiResponses;
+using Web.MVC.Models.ApiResponses.Discussion;
 using StringContent = System.Net.Http.StringContent;
 
 namespace Web.MVC.Controllers

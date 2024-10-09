@@ -7,8 +7,8 @@ using Web.MVC.Constants;
 using Web.MVC.DTOs.Comment;
 using Web.MVC.DTOs.Discussion;
 using Web.MVC.Models;
-using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ApiResponses.CommentsResponses;
+using Web.MVC.Models.ApiResponses.Discussion;
 using Web.MVC.Services;
 
 namespace Web.MVC.Controllers
