@@ -11,6 +11,7 @@ using Web.MVC.Models.ApiResponses.CommentsResponses;
 using Web.MVC.Models.ApiResponses.CustUserResponses;
 using Web.MVC.Models.ApiResponses.Discussion;
 using Web.MVC.Models.ApiResponses.ReportResponses;
+using Web.MVC.Models.ViewModels.UserViewModels;
 using Web.MVC.Services;
 
 namespace Web.MVC.Controllers
@@ -80,17 +81,27 @@ namespace Web.MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SuggestedDiscussions()
+        public async Task<IActionResult> SuggestedDiscussions(int pageSize, int pageNumber)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
             var response = await httpClient.GetAsync(
-                    "http://discussion-microservice-api:8080/api/SuggestDiscussion/GetAllSuggestedDiscussions");
-
+                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/GetAllSuggestedDiscussions?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
-            return View(discussions);
+
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/DoesNextAllSuggestedDiscussionsPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+
+            return View(new GetSuggestedDiscussionsViewModel
+            {
+                PageSize = pageSize, CurrentPageNumber = pageNumber, DoesNextPageExist = doesExist,NextPageNumber = pageNumber + 1,
+                PreviousPageNumber = pageNumber - 1, SuggestedDiscussions = discussions
+            });
         }
 
         [HttpPost]
