@@ -2,9 +2,9 @@
 
 namespace Web.MVC.Models.ViewModels.UserViewModels
 {
-    public class GetUsersCreatedDiscussionsViewModel
+    public class GetSuggestedDiscussionsViewModel
     {
-        public List<DiscussionResponse> CreatedDiscussions { get; set; }
+        public List<DiscussionResponse> SuggestedDiscussions { get; set; }
         public int PageSize { get; set; }
         public int CurrentPageNumber { get; set; }
         public int PreviousPageNumber { get; set; }
