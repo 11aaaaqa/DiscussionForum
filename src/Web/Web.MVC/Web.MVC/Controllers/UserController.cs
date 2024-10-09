@@ -137,35 +137,35 @@ namespace Web.MVC.Controllers
 
         [Route("users/{userName}/created-discussions")]
         [HttpGet]
-        public async Task<IActionResult> GetUsersCreatedDiscussions()
+        public async Task<IActionResult> GetUsersCreatedDiscussions(string userName, int pageSize, int pageNumber)
         {
             return View();
         }
 
         [Route("users/{userName}/created-comments")]
         [HttpGet]
-        public async Task<IActionResult> GetUsersCreatedComments()
+        public async Task<IActionResult> GetUsersCreatedComments(string userName, int pageSize, int pageNumber)
         {
             return View();
         }
 
         [Route("users/{userName}/suggested-discussions")]
         [HttpGet]
-        public async Task<IActionResult> GetUsersSuggestedDiscussions()
+        public async Task<IActionResult> GetUsersSuggestedDiscussions(string userName, int pageSize, int pageNumber)
         {
             return View();
         }
 
         [Route("users/{userName}/suggested-comments")]
         [HttpGet]
-        public async Task<IActionResult> GetUsersSuggestedComments()
+        public async Task<IActionResult> GetUsersSuggestedComments(string userName, int pageSize, int pageNumber)
         {
             return View();
         }
 
         [Route("users/{userName}/suggested-topics")]
         [HttpGet]
-        public async Task<IActionResult> GetUsersSuggestedTopics()
+        public async Task<IActionResult> GetUsersSuggestedTopics(string userName, int pageSize, int pageNumber)
         {
             return View();
         }
