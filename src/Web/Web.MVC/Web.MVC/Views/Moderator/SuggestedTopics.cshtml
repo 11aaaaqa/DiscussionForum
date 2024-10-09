@@ -1,18 +1,40 @@
 ﻿@using Web.MVC.Constants
-@model List<Web.MVC.Models.ApiResponses.TopicResponse>
+@model GetSuggestedTopicViewModel
 
 <div class="text-center">
     <h3>Предложенные темы</h3>
     <table>
         <tr><th>Название</th><th>Принять</th><th>Отклонить</th><th>Отстранить предлагающего</th></tr> 
-        @foreach (var suggestedTopic in Model)
+        @foreach (var suggestedTopic in Model.SuggestedTopics)
         {
+            string returnUrl;
+            if (Context.Request.QueryString.HasValue)
+            {
+                returnUrl = Context.Request.Path + Context.Request.QueryString;
+            }
+            else
+            {
+                returnUrl = Context.Request.Path;
+            }
             <tr>
                 <td>@suggestedTopic.Name</td>
-                <td><form method="post" asp-action="AcceptSuggestedTopic" asp-controller="Moderator" asp-route-id=@suggestedTopic.Id asp-route-returnUrl="@Context.Request.Path"><input type="submit" value="принять"/></form></td>
-                <td><form method="post" asp-controller="Moderator" asp-action="RejectSuggestedTopic" asp-route-id=@suggestedTopic.Id asp-route-returnUrl="@Context.Request.Path"><input type="submit" value="отклонить"/></form></td>
-                <td><a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion" asp-route-returnUrl="@Context.Request.Path" asp-route-userName="@suggestedTopic.SuggestedBy" asp-route-suggestionDeleteId="@suggestedTopic.Id" asp-route-suggestionDeleteType="@BanTypeConstants.TopicBanType">остранить и отклонить предложение</a></td>
+                <td><form method="post" asp-action="AcceptSuggestedTopic" asp-controller="Moderator" asp-route-id=@suggestedTopic.Id asp-route-returnUrl="@returnUrl"><input type="submit" value="принять"/></form></td>
+                <td><form method="post" asp-controller="Moderator" asp-action="RejectSuggestedTopic" asp-route-id=@suggestedTopic.Id asp-route-returnUrl="@returnUrl"><input type="submit" value="отклонить" /></form></td>
+                <td><a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion" asp-route-returnUrl="@returnUrl" asp-route-userName="@suggestedTopic.SuggestedBy" asp-route-suggestionDeleteId="@suggestedTopic.Id" asp-route-suggestionDeleteType="@BanTypeConstants.TopicBanType">остранить и отклонить предложение</a></td>
             </tr>
         }
     </table>
 </div>
+
+@if (Model.PreviousPageNumber != 0)
+{
+    <a asp-controller="Moderator" asp-action="SuggestedTopics" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize">
+        Назад
+    </a>
+}
+@if (Model.DoesNextPageExist && Model.SuggestedTopics.Count != 0)
+{
+    <a asp-controller="Moderator" asp-action="SuggestedTopics" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize">
+        Вперед
+    </a>
+}
