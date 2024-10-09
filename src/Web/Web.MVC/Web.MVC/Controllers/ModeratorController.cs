@@ -30,15 +30,26 @@ namespace Web.MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SuggestedTopics()
+        public async Task<IActionResult> SuggestedTopics(int pageSize, int pageNumber)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
-            var response = await httpClient.GetAsync("http://topic-microservice-api:8080/api/SuggestTopic/GetAllSuggestedTopics");
+            var response = await httpClient.GetAsync(
+                $"http://topic-microservice-api:8080/api/SuggestTopic/GetAllSuggestedTopics?pageSize={pageSize}&pageNumber={pageNumber}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+            var suggestedTopics = await response.Content.ReadFromJsonAsync<List<TopicResponse>>();
 
-            var content = await response.Content.ReadFromJsonAsync<List<TopicResponse>>();
+            var doesNextSuggestedTopicsPageExist = await httpClient.GetAsync(
+                $"http://topic-microservice-api:8080/api/SuggestTopic/DoesNextSuggestedTopicsPageExist?pageNumber={pageNumber + 1}&pageSize={pageSize}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
 
-            return View(content);
+            bool doesExist = await doesNextSuggestedTopicsPageExist.Content.ReadFromJsonAsync<bool>();
+
+            return View(new GetSuggestedTopicViewModel
+            {
+                PageSize = pageSize, NextPageNumber = pageNumber + 1, DoesNextPageExist = doesExist, CurrentPageNumber = pageNumber,
+                PreviousPageNumber = pageNumber - 1, SuggestedTopics = suggestedTopics
+            });
         }
 
         [HttpPost]
