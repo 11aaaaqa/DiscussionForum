@@ -47,7 +47,25 @@ namespace DiscussionMicroservice.Api.Controllers
 
         [Route("GetAllSuggestedDiscussions")]
         [HttpGet]
-        public async Task<IActionResult> GetAllSuggestedDiscussionsAsync() => Ok(await context.SuggestedDiscussions.ToListAsync());
+        public async Task<IActionResult> GetAllSuggestedDiscussionsAsync([FromQuery] DiscussionParameters discussionParameters)
+        {
+            var suggestedDiscussions = await context.SuggestedDiscussions
+                .Skip(discussionParameters.PageSize * (discussionParameters.PageNumber - 1))
+                .Take(discussionParameters.PageSize)
+                .ToListAsync();
+            return Ok(suggestedDiscussions);
+        }
+
+        [Route("DoesNextAllSuggestedDiscussionsPageExist")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextAllSuggestedDiscussionsPageExistAsync([FromQuery] DiscussionParameters discussionsParameters)
+        {
+            int totalSuggestedDiscussionsCount = await context.SuggestedDiscussions.CountAsync();
+            int totalRequestedSuggestedDiscussionsCount = discussionsParameters.PageSize * discussionsParameters.PageNumber;
+            int startedRequestedSuggestedDiscussionsCount = totalRequestedSuggestedDiscussionsCount - discussionsParameters.PageSize;
+            bool doesExist = (totalSuggestedDiscussionsCount > startedRequestedSuggestedDiscussionsCount);
+            return Ok(doesExist);
+        }
 
         [Route("RejectSuggestedDiscussion/{id}")]
         [HttpDelete]
