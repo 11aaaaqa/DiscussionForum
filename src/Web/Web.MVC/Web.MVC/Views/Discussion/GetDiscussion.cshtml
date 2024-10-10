@@ -36,7 +36,7 @@
     </form>
 </div>
 <div>
-    @if (ViewBag.Comments is null)
+    @if (ViewBag.Comments is null || ViewBag.Comments.Count == 0)
     {
         <p>Ещё никто не оставил комментарий под этим обсуждением :(</p>
     }
