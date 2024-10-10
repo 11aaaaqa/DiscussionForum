@@ -12,7 +12,9 @@
 <div>
     @foreach (var discussion in Model.Discussions)
     {
-        <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@discussion.Id">@discussion.Title</a>
+        <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@discussion.Id" asp-route-pageNumber="1" asp-route-pageSize="20">
+            @discussion.Title
+        </a>
         <h6>Создано: @discussion.CreatedBy</h6>
         <h6>Рейтинг: @discussion.Rating</h6>
         <h6>Дата создания: @discussion.CreatedAt</h6>
