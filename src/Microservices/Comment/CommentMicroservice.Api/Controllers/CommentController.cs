@@ -1,5 +1,6 @@
 ﻿using CommentMicroservice.Api.DTOs;
 using CommentMicroservice.Api.Models;
+using CommentMicroservice.Api.Services;
 using CommentMicroservice.Api.Services.Repository;
 using MassTransit;
 using MessageBus.Messages;
@@ -13,17 +14,27 @@ namespace CommentMicroservice.Api.Controllers
     {
         private readonly IRepository<Comment> repository;
         private readonly IPublishEndpoint publishEndpoint;
+        private readonly IPaginationService paginationService;
 
-        public CommentController(IRepository<Comment> repository, IPublishEndpoint publishEndpoint)
+        public CommentController(IRepository<Comment> repository, IPublishEndpoint publishEndpoint, IPaginationService paginationService)
         {
             this.repository = repository;
             this.publishEndpoint = publishEndpoint;
+            this.paginationService = paginationService;
         }
 
         [Route("GetAllComments")]
         [HttpGet]
         public async Task<IActionResult> GetAllCommentsAsync([FromQuery]CommentParameters commentParameters) => 
             Ok(await repository.GetAllAsync(commentParameters));
+
+        [Route("")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextAllCommentsPageExist([FromQuery] CommentParameters commentParameters)
+        {
+            bool doesExist = await paginationService.DoesNextCommentsPageExistAsync(commentParameters);
+            return Ok(doesExist);
+        }
 
         [Route("GetCommentsByDiscussionId/{discussionId}")]
         public async Task<IActionResult> GetCommentsByDiscussionIdAsync(Guid discussionId, [FromQuery] CommentParameters commentParameters)
