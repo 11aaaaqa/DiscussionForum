@@ -61,3 +61,17 @@
     }
 </div>
 
+@if (ViewBag.PreviousPageNumber != 0)
+{
+    <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize"
+       asp-route-id="@ViewBag.DiscussionId">
+        Назад
+    </a>
+}
+@if (ViewBag.DoesNextCommentsPageExist && ViewBag.Comments.Count != 0)
+{
+    <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize"
+       asp-route-id="@ViewBag.DiscussionId">
+        Вперед
+    </a>
+}
