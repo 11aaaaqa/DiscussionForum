@@ -1,10 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Web.MVC.Constants
-@model List<Web.MVC.Models.ApiResponses.CommentsResponses.SuggestedCommentResponse>
+@model Web.MVC.Models.ViewModels.ModeratorViewModels.SuggestedCommentsViewModel
 
 <div class="text-center">
     <h3>Предложенные комментарии</h3>
-    @foreach (var suggestedComment in Model)
+    @foreach (var suggestedComment in Model.SuggestedComments)
     {
         <p>@suggestedComment.Content</p>
         <form method="post" asp-controller="Moderator" asp-action="AcceptSuggestedComment" asp-route-id="@suggestedComment.Id"
@@ -22,3 +22,16 @@
         </a>
     }
 </div>
+
+@if (Model.PreviousPageNumber != 0)
+{
+    <a asp-controller="Moderator" asp-action="SuggestedComments" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize">
+        Назад
+    </a>
+}
+@if (Model.DoesNextPageExist && Model.SuggestedComments.Count != 0)
+{
+    <a asp-controller="Moderator" asp-action="SuggestedComments" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize">
+        Вперед
+    </a>
+}
