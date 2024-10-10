@@ -1,6 +1,7 @@
 using CommentMicroservice.Api.Database;
 using CommentMicroservice.Api.MessageBus.Consumers;
 using CommentMicroservice.Api.Models;
+using CommentMicroservice.Api.Services;
 using CommentMicroservice.Api.Services.Repository;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,7 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddTransient<IRepository<Comment>, CommentRepository>();
 builder.Services.AddTransient<IRepository<SuggestedComment>, SuggestCommentRepository>();
+builder.Services.AddTransient<IPaginationService, PaginationService>();
 
 var app = builder.Build();
 
