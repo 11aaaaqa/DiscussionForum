@@ -22,14 +22,13 @@ namespace CommentMicroservice.Api.Services.Repository
             return comments;
         } 
 
-        public async Task<List<Comment>?> GetByDiscussionIdAsync(Guid id)
+        public async Task<List<Comment>> GetByDiscussionIdAsync(Guid id, CommentParameters commentParameters)
         {
-            var discussion = await context.Comments.FirstOrDefaultAsync(x => x.DiscussionId == id);
-            if (discussion is null)
-            {
-                return null;
-            }
-            return await context.Comments.Where(x => x.DiscussionId == id).ToListAsync();
+            var comments = await context.Comments.Where(x => x.DiscussionId == id)
+                .Skip(commentParameters.PageSize * (commentParameters.PageNumber - 1))
+                .Take(commentParameters.PageSize)
+                .ToListAsync();
+            return comments;
         }
 
         public async Task<List<Comment>> GetByIds(params Guid[] ids)
