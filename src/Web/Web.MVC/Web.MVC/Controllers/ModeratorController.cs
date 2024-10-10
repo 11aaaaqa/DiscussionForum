@@ -11,6 +11,7 @@ using Web.MVC.Models.ApiResponses.CommentsResponses;
 using Web.MVC.Models.ApiResponses.CustUserResponses;
 using Web.MVC.Models.ApiResponses.Discussion;
 using Web.MVC.Models.ApiResponses.ReportResponses;
+using Web.MVC.Models.ViewModels.ModeratorViewModels;
 using Web.MVC.Models.ViewModels.UserViewModels;
 using Web.MVC.Services;
 
@@ -151,16 +152,26 @@ namespace Web.MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SuggestedComments()
+        public async Task<IActionResult> SuggestedComments(int pageSize, int pageNumber)
         {
             using var httpClient = httpClientFactory.CreateClient();
-            var response = await httpClient.GetAsync("http://comment-microservice-api:8080/api/SuggestComment/GetAllSuggestedComments");
-            if (response.IsSuccessStatusCode)
+            var response = await httpClient.GetAsync(
+                $"http://comment-microservice-api:8080/api/SuggestComment/GetAllSuggestedComments?pageSize={pageSize}&pageNumber={pageNumber}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+            
+            var suggestedComments = await response.Content.ReadFromJsonAsync<List<SuggestedCommentResponse>>();
+
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"http://comment-microservice-api:8080/api/SuggestComment/DoesNextSuggestedCommentsPageExist?pageNumber={pageNumber + 1}&pageSize={pageSize}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+
+            return View(new SuggestedCommentsViewModel
             {
-                var suggestedComments = await response.Content.ReadFromJsonAsync<List<SuggestedCommentResponse>>();
-                return View(suggestedComments);
-            }
-            return View("ActionError");
+                SuggestedComments = suggestedComments, PageSize = pageSize, CurrentPageNumber = pageNumber, DoesNextPageExist = doesExist,
+                NextPageNumber = pageNumber + 1, PreviousPageNumber = pageNumber - 1
+            });
         }
 
         [HttpPost]
