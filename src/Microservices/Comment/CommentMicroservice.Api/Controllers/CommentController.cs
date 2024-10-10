@@ -22,7 +22,8 @@ namespace CommentMicroservice.Api.Controllers
 
         [Route("GetAllComments")]
         [HttpGet]
-        public async Task<IActionResult> GetAllCommentsAsync() => Ok(await repository.GetAllAsync());
+        public async Task<IActionResult> GetAllCommentsAsync([FromQuery]CommentParameters commentParameters) => 
+            Ok(await repository.GetAllAsync(commentParameters));
 
         [Route("GetCommentsByDiscussionId/{discussionId}")]
         public async Task<IActionResult> GetCommentsByDiscussionIdAsync(Guid discussionId)

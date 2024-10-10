@@ -1,5 +1,6 @@
 ﻿using CommentMicroservice.Api.DTOs;
 using CommentMicroservice.Api.Models;
+using CommentMicroservice.Api.Services;
 using CommentMicroservice.Api.Services.Repository;
 using MassTransit;
 using MessageBus.Messages;
@@ -14,18 +15,29 @@ namespace CommentMicroservice.Api.Controllers
         private readonly IRepository<SuggestedComment> suggestCommentRepository;
         private readonly IRepository<Comment> commentRepository;
         private readonly IPublishEndpoint publishEndpoint;
+        private readonly IPaginationService paginationService;
 
         public SuggestCommentController(IRepository<SuggestedComment> suggestCommentRepository, IRepository<Comment> commentRepository,
-            IPublishEndpoint publishEndpoint)
+            IPublishEndpoint publishEndpoint, IPaginationService paginationService)
         {
             this.suggestCommentRepository = suggestCommentRepository;
             this.commentRepository = commentRepository;
             this.publishEndpoint = publishEndpoint;
+            this.paginationService = paginationService;
         }
 
         [Route("GetAllSuggestedComments")]
         [HttpGet]
-        public async Task<IActionResult> GetAllSuggestedCommentsAsync() => Ok(await suggestCommentRepository.GetAllAsync());
+        public async Task<IActionResult> GetAllSuggestedCommentsAsync([FromQuery]CommentParameters commentParameters) => 
+            Ok(await suggestCommentRepository.GetAllAsync(commentParameters));
+
+        [Route("DoesNextSuggestedCommentsPageExist")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextSuggestedCommentsPageExistAsync([FromQuery] CommentParameters commentParameters)
+        {
+            var doesExist = await paginationService.DoesNextSuggestedCommentsPageExistAsync(commentParameters);
+            return Ok(doesExist);
+        }
 
         [Route("Suggest")]
         [HttpPost]
