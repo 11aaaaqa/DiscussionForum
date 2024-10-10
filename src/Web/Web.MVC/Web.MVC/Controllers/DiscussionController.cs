@@ -81,32 +81,38 @@ namespace Web.MVC.Controllers
 
         [HttpGet]
         [Route("discussions/{id}")]
-        public async Task<IActionResult> GetDiscussion(Guid id)
+        public async Task<IActionResult> GetDiscussion(Guid id, int pageSize, int pageNumber)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
             var response =
                 await httpClient.GetAsync(
                     $"http://discussion-microservice-api:8080/api/Discussion/GetDiscussionById?id={id}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
 
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                var discussion = await response.Content.ReadFromJsonAsync<DiscussionResponse>();
-                ViewBag.Content = discussion.Content; ViewBag.CreatedAt = discussion.CreatedAt; ViewBag.CreatedBy = discussion.CreatedBy;
-                ViewBag.Rating = discussion.Rating; ViewBag.Title = discussion.Title; ViewBag.DiscussionId = id;
+            var discussion = await response.Content.ReadFromJsonAsync<DiscussionResponse>();
+            ViewBag.Content = discussion.Content; ViewBag.CreatedAt = discussion.CreatedAt; ViewBag.CreatedBy = discussion.CreatedBy;
+            ViewBag.Rating = discussion.Rating; ViewBag.Title = discussion.Title; ViewBag.DiscussionId = id;
 
-                var getCommentsResponse = await httpClient.GetAsync(
-                    $"http://comment-microservice-api:8080/api/Comment/GetCommentsByDiscussionId/{id}");
-                if (getCommentsResponse.IsSuccessStatusCode)
-                {
-                    var comments = await getCommentsResponse.Content.ReadFromJsonAsync<List<CommentResponse>>();
-                    ViewBag.Comments = comments;
-                }
+            var getCommentsResponse = await httpClient.GetAsync(
+                $"http://comment-microservice-api:8080/api/Comment/GetCommentsByDiscussionId/{id}?pageNumber={pageNumber}&pageSize={pageSize}");
+            if (!getCommentsResponse.IsSuccessStatusCode) return View("ActionError");
 
-                return View();
-            }
+            var comments = await getCommentsResponse.Content.ReadFromJsonAsync<List<CommentResponse>>();
+            ViewBag.Comments = comments;
 
-            return View("ActionError");
+            var doesNextCommentsPageExistResponse = await httpClient.GetAsync(
+                $"http://comment-microservice-api:8080/api/Comment/DoesNextCommentsByDiscussionIdPageExist/{id}?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+            if (!doesNextCommentsPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesNextCommentsPageExist = await doesNextCommentsPageExistResponse.Content.ReadFromJsonAsync<bool>();
+            ViewBag.DoesNextCommentsPageExist = doesNextCommentsPageExist;
+            ViewBag.PageSize = pageSize;
+            ViewBag.CurrentPageNumber = pageNumber;
+            ViewBag.NextPageNumber = pageNumber + 1;
+            ViewBag.PreviousPageNumber = pageNumber - 1;
+
+            return View();
         }
 
         [Authorize]
