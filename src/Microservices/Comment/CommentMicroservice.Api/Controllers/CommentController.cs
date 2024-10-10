@@ -43,6 +43,14 @@ namespace CommentMicroservice.Api.Controllers
             return Ok(comments);
         }
 
+        [Route("DoesNextCommentsByDiscussionIdPageExist/{discussionId}")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextCommentsByDiscussionIdPageExistAsync(Guid discussionId, [FromQuery] CommentParameters commentParameters)
+        {
+            bool doesExist =
+                await paginationService.DoesNextCommentsByDiscussionIdPageExistAsync(commentParameters, discussionId);
+            return Ok(doesExist);
+        }
 
         [Route("UpdateComment")]
         [HttpPut]
