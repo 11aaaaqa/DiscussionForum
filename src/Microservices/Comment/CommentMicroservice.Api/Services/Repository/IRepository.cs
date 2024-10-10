@@ -1,8 +1,10 @@
-﻿namespace CommentMicroservice.Api.Services.Repository
+﻿using CommentMicroservice.Api.Models;
+
+namespace CommentMicroservice.Api.Services.Repository
 {
     public interface IRepository<TModel>
     {
-        Task<List<TModel>> GetAllAsync();
+        Task<List<TModel>> GetAllAsync(CommentParameters commentParameters);
         Task<List<TModel>?> GetByDiscussionIdAsync(Guid id);
         Task<List<TModel>> GetByIds(params Guid[] ids);
         Task<List<TModel>> GetByUserName(string userName);

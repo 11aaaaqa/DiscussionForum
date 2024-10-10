@@ -13,7 +13,14 @@ namespace CommentMicroservice.Api.Services.Repository
             this.context = context;
         }
 
-        public async Task<List<SuggestedComment>> GetAllAsync() => await context.SuggestedComments.ToListAsync();
+        public async Task<List<SuggestedComment>> GetAllAsync(CommentParameters commentParameters)
+        {
+            var comments = await context.SuggestedComments
+                .Skip(commentParameters.PageSize * (commentParameters.PageNumber - 1))
+                .Take(commentParameters.PageSize)
+                .ToListAsync();
+            return comments;
+        } 
 
         public async Task<List<SuggestedComment>?> GetByDiscussionIdAsync(Guid id)
         {
