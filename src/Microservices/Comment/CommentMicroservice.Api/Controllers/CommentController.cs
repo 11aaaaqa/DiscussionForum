@@ -28,9 +28,9 @@ namespace CommentMicroservice.Api.Controllers
         public async Task<IActionResult> GetAllCommentsAsync([FromQuery]CommentParameters commentParameters) => 
             Ok(await repository.GetAllAsync(commentParameters));
 
-        [Route("")]
+        [Route("DoesNextAllCommentsPageExist")]
         [HttpGet]
-        public async Task<IActionResult> DoesNextAllCommentsPageExist([FromQuery] CommentParameters commentParameters)
+        public async Task<IActionResult> DoesNextAllCommentsPageExistAsync([FromQuery] CommentParameters commentParameters)
         {
             bool doesExist = await paginationService.DoesNextCommentsPageExistAsync(commentParameters);
             return Ok(doesExist);
@@ -42,6 +42,7 @@ namespace CommentMicroservice.Api.Controllers
             var comments = await repository.GetByDiscussionIdAsync(discussionId, commentParameters);
             return Ok(comments);
         }
+
 
         [Route("UpdateComment")]
         [HttpPut]
