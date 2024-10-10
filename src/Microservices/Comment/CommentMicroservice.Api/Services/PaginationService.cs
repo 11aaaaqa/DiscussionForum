@@ -27,5 +27,13 @@ namespace CommentMicroservice.Api.Services
             int startRequestedSuggestedCommentsCount = totalRequestedSuggestedCommentsCount - commentParameters.PageSize;
             return (totalSuggestedCommentsCount > startRequestedSuggestedCommentsCount);
         }
+
+        public async Task<bool> DoesNextCommentsByDiscussionIdPageExistAsync(CommentParameters commentParameters, Guid discussionsId)
+        {
+            int totalSuggestedCommentsCount = await context.Comments.Where(x => x.DiscussionId == discussionsId).CountAsync();
+            int totalRequestedSuggestedCommentsCount = commentParameters.PageSize * commentParameters.PageNumber;
+            int startRequestedSuggestedCommentsCount = totalRequestedSuggestedCommentsCount - commentParameters.PageSize;
+            return (totalSuggestedCommentsCount > startRequestedSuggestedCommentsCount);
+        }
     }
 }
