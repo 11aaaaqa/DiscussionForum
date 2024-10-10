@@ -1,5 +1,6 @@
 ﻿using CommentMicroservice.Api.Controllers;
 using CommentMicroservice.Api.Models;
+using CommentMicroservice.Api.Services;
 using CommentMicroservice.Api.Services.Repository;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
@@ -13,8 +14,9 @@ namespace CommentMicroservice.UnitTests
         [Fact]
         public async Task GetAllSuggestedCommentsAsync_ReturnsOkWithSuggestedComments()
         {
+            var commentParameters = new CommentParameters { PageSize = 3, PageNumber = 2};
             var mock = new Mock<IRepository<SuggestedComment>>();
-            mock.Setup(x => x.GetAllAsync()).ReturnsAsync(new List<SuggestedComment>
+            mock.Setup(x => x.GetAllAsync(commentParameters)).ReturnsAsync(new List<SuggestedComment>
             {
                 new() {Id = It.IsAny<Guid>(), Content = It.IsAny<string>(), CreatedBy = It.IsAny<string>(),
                     CreatedDate = It.IsAny<DateTime>(), DiscussionId = It.IsAny<Guid>()},
@@ -24,9 +26,9 @@ namespace CommentMicroservice.UnitTests
                     CreatedDate = It.IsAny<DateTime>(), DiscussionId = It.IsAny<Guid>()}
             });
             var controller = new SuggestCommentController(mock.Object, new Mock<IRepository<Comment>>().Object,
-                new Mock<IPublishEndpoint>().Object);
+                new Mock<IPublishEndpoint>().Object, new Mock<IPaginationService>().Object);
 
-            var result = await controller.GetAllSuggestedCommentsAsync();
+            var result = await controller.GetAllSuggestedCommentsAsync(commentParameters);
 
             var methodResult = Assert.IsType<OkObjectResult>(result);
             var comments = Assert.IsType<List<SuggestedComment>>(methodResult.Value);
@@ -47,7 +49,7 @@ namespace CommentMicroservice.UnitTests
                 new(){Id = ids[0]}, new (){Id = ids[1]}, new(){Id = ids[2]}
             });
             var controller = new SuggestCommentController(mock.Object, new Mock<IRepository<Comment>>().Object,
-                new Mock<IPublishEndpoint>().Object);
+                new Mock<IPublishEndpoint>().Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.GetSuggestedCommentsByIdsAsync(ids);
 
@@ -68,7 +70,7 @@ namespace CommentMicroservice.UnitTests
                 new (){CreatedBy = userName}, new (){ CreatedBy = userName}
             });
             var controller = new SuggestCommentController(mock.Object, new Mock<IRepository<Comment>>().Object,
-                new Mock<IPublishEndpoint>().Object);
+                new Mock<IPublishEndpoint>().Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.GetSuggestedCommentsByUserNameAsync(userName);
 
@@ -86,7 +88,7 @@ namespace CommentMicroservice.UnitTests
             var mock = new Mock<IRepository<SuggestedComment>>();
             mock.Setup(x => x.DeleteByUserNameAsync(userName));
             var controller = new SuggestCommentController(mock.Object, new Mock<IRepository<Comment>>().Object,
-                new Mock<IPublishEndpoint>().Object);
+                new Mock<IPublishEndpoint>().Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.DeleteAllSuggestedCommentsByUserNameAsync(userName);
 

@@ -1,6 +1,6 @@
 ﻿using CommentMicroservice.Api.Controllers;
-using CommentMicroservice.Api.DTOs;
 using CommentMicroservice.Api.Models;
+using CommentMicroservice.Api.Services;
 using CommentMicroservice.Api.Services.Repository;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
@@ -13,8 +13,9 @@ namespace CommentMicroservice.UnitTests
         [Fact]
         public async Task GetAllCommentsAsync_ReturnsOkWithListOfComments()
         {
+            var commentParameters = new CommentParameters { PageSize = 3, PageNumber = 2 };
             var mock = new Mock<IRepository<Comment>>();
-            mock.Setup(x => x.GetAllAsync()).ReturnsAsync(new List<Comment>
+            mock.Setup(x => x.GetAllAsync(commentParameters)).ReturnsAsync(new List<Comment>
             {
                 new (){Content = It.IsAny<string>(), CreatedBy = It.IsAny<string>(), CreatedDate = It.IsAny<DateTime>(),
                     DiscussionId = It.IsAny<Guid>(),Id = It.IsAny<Guid>()},
@@ -23,9 +24,9 @@ namespace CommentMicroservice.UnitTests
                 new (){Content = It.IsAny<string>(), CreatedBy = It.IsAny<string>(), CreatedDate = It.IsAny<DateTime>(),
                     DiscussionId = It.IsAny<Guid>(),Id = It.IsAny<Guid>()}
             });
-            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object, new Mock<IPaginationService>().Object);
 
-            var result = await controller.GetAllCommentsAsync();
+            var result = await controller.GetAllCommentsAsync(commentParameters);
 
             var methodResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, methodResult.StatusCode);
@@ -35,34 +36,21 @@ namespace CommentMicroservice.UnitTests
         }
 
         [Fact]
-        public async Task GetCommentsByDiscussionIdAsync_ReturnsBadRequest()
-        {
-            var id = It.IsAny<Guid>();
-            var mock = new Mock<IRepository<Comment>>();
-            mock.Setup(x => x.GetByDiscussionIdAsync(id)).ReturnsAsync((List<Comment>?)null);
-            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
-
-            var result = await controller.GetCommentsByDiscussionIdAsync(id);
-
-            Assert.IsType<BadRequestResult>(result);
-            mock.VerifyAll();
-        }
-
-        [Fact]
         public async Task GetCommentsByDiscussionIdAsync_ReturnsOkWithListOfComments()
         {
+            var commentParameters = new CommentParameters { PageSize = 2, PageNumber = 5};
             var discussionId = It.IsAny<Guid>();
             var mock = new Mock<IRepository<Comment>>();
-            mock.Setup(x => x.GetByDiscussionIdAsync(discussionId)).ReturnsAsync(new List<Comment>
+            mock.Setup(x => x.GetByDiscussionIdAsync(discussionId, commentParameters)).ReturnsAsync(new List<Comment>
             {
                 new(){DiscussionId = discussionId, Id=It.IsAny<Guid>(), CreatedBy = It.IsAny<string>(),
                     Content = It.IsAny<string>(), CreatedDate = It.IsAny<DateTime>()},
                 new(){DiscussionId = discussionId, Id=It.IsAny<Guid>(), CreatedBy = It.IsAny<string>(),
                     Content = It.IsAny<string>(), CreatedDate = It.IsAny<DateTime>()}
             });
-            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object, new Mock<IPaginationService>().Object);
 
-            var result = await controller.GetCommentsByDiscussionIdAsync(discussionId);
+            var result = await controller.GetCommentsByDiscussionIdAsync(discussionId, commentParameters);
 
             var methodResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, methodResult.StatusCode);
@@ -81,7 +69,7 @@ namespace CommentMicroservice.UnitTests
             };
             var mock = new Mock<IRepository<Comment>>();
             mock.Setup(x => x.GetByIdAsync(model.Id)).ReturnsAsync((Comment?)null);
-            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.UpdateCommentAsync(model);
 
@@ -104,7 +92,7 @@ namespace CommentMicroservice.UnitTests
                 DiscussionId = It.IsAny<Guid>(), Id = model.Id
             });
             mock.Setup(x => x.UpdateAsync(model)).ReturnsAsync(model);
-            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.UpdateCommentAsync(model);
 
@@ -125,7 +113,7 @@ namespace CommentMicroservice.UnitTests
             var id = It.IsAny<Guid>();
             var mock = new Mock<IRepository<Comment>>();
             mock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync((Comment?)null);
-            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.DeleteCommentByIdAsync(id);
 
@@ -140,7 +128,7 @@ namespace CommentMicroservice.UnitTests
             var mock = new Mock<IRepository<Comment>>();
             mock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(new Comment { Id = id, CreatedBy = It.IsAny<string>()});
             mock.Setup(x => x.DeleteByIdAsync(id));
-            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.DeleteCommentByIdAsync(id);
 
@@ -157,7 +145,7 @@ namespace CommentMicroservice.UnitTests
             {
                 new Comment{Id = id1}, new Comment{Id = id2}, new Comment{Id = id3}
             });
-            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object);
+            var controller = new CommentController(mock.Object, new Mock<IPublishEndpoint>().Object, new Mock<IPaginationService>().Object);
 
             var result = await controller.GetCommentsByIdsAsync(id1, id2, id3);
 
