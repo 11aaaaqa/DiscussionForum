@@ -107,5 +107,22 @@ namespace CommentMicroservice.Api.Controllers
             var comments = await repository.GetByIds(ids);
             return Ok(comments);
         }
+
+        [Route("GetCommentsByUserName/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> GetCommentsByUserNameAsync(string userName, [FromQuery] CommentParameters commentParameters)
+        {
+            var comments = await repository.GetByUserNameAsync(userName, commentParameters);
+            return Ok(comments);
+        }
+
+        [Route("DoesNextCommentsByUserNamePageExist/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextCommentsByUserNamePageExistAsync(string userName, [FromQuery] CommentParameters commentParameters)
+        {
+            bool doesExist =
+                await paginationService.DoesNextCommentsByUserNamePageExistAsync(userName, commentParameters);
+            return Ok(doesExist);
+        }
     }
 }
