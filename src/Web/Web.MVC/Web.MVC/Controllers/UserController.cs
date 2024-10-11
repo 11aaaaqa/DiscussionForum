@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.MVC.Constants;
 using Web.MVC.DTOs.User;
+using Web.MVC.Models;
 using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ApiResponses.CommentsResponses;
 using Web.MVC.Models.ApiResponses.Discussion;
@@ -139,7 +140,24 @@ namespace Web.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsersCreatedDiscussions(string userName, int pageSize, int pageNumber)
         {
-            return View();
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/Discussion/GetDiscussionsByUserName/{userName}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
+
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/Discussion/DoesNextDiscussionsByUserNamePageExist/{userName}?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+
+            return View(new GetDiscussionsViewModel
+            {
+                PageSize = pageSize, CurrentPageNumber = pageNumber, Discussions = discussions, DoesNextPageExist = doesExist,
+                PreviousPageNumber = pageNumber - 1, NextPageNumber = pageNumber + 1
+            });
         }
 
         [Route("users/{userName}/created/comments")]
