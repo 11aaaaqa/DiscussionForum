@@ -258,5 +258,26 @@ namespace DiscussionMicroservice.Api.Controllers
                 await checkForNextPageExisting.DoesNextDiscussionsForMonthPageExistAsync(discussionParameters);
             return Ok(doesExist);
         }
+
+        [Route("GetDiscussionsByUserName/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> GetDiscussionsByUserNameAsync(string userName, [FromQuery] DiscussionParameters discussionParameters)
+        {
+            var discussions = await context.Discussions.Where(x => x.CreatedBy == userName)
+                .Skip(discussionParameters.PageSize * (discussionParameters.PageNumber - 1))
+                .Take(discussionParameters.PageSize).ToListAsync();
+            return Ok(discussions);
+        }
+
+        [Route("DoesNextDiscussionsByUserNamePageExist/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextDiscussionsByUserNamePageExistAsync(string userName, [FromQuery] DiscussionParameters discussionParameters)
+        {
+            int totalDiscussionsCount = await context.Discussions.Where(x => x.CreatedBy == userName).CountAsync();
+            int totalRequestedDiscussions = discussionParameters.PageSize * discussionParameters.PageNumber;
+            int startRequestedDiscussionsCount = totalRequestedDiscussions - discussionParameters.PageSize;
+            bool doesExist = totalDiscussionsCount > startRequestedDiscussionsCount;
+            return Ok(doesExist);
+        }
     }
 }
