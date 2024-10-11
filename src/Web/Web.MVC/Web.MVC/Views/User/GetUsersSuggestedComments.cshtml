@@ -1,0 +1,38 @@
+﻿@model Web.MVC.Models.ViewModels.ModeratorViewModels.SuggestedCommentsViewModel
+
+<div>
+    <h3>Предложенные комментарии</h3>
+    @if (Model.SuggestedComments is null || Model.SuggestedComments.Count == 0)
+    {
+        <p>Предложенных комментариев нет</p>
+    }
+    else
+    {
+        foreach (var suggestedComment in Model.SuggestedComments)
+        {
+            <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@suggestedComment.DiscussionId" asp-route-pageNumber="1"
+               asp-route-pageSize="20">@suggestedComment.Content</a>
+            @* <a href="~/discussions/@suggestedComment.DiscussionId">@suggestedComment.Content</a> *@
+            <p>Статус: На рассмотрении</p>
+            <form method="post" asp-controller="SuggestComment" asp-action="DeleteSuggestedComment" asp-route-returnUrl="@Context.Request.Path"
+                  asp-route-suggestedCommentId="@suggestedComment.Id">
+                <input type="submit" value="удалить"/>
+            </form>
+        }
+    }
+</div>
+
+@if (Model.PreviousPageNumber != 0)
+{
+    <a asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize"
+       asp-route-userName="@ViewBag.UserName">
+        Назад
+    </a>
+}
+@if (Model.DoesNextPageExist && Model.SuggestedComments.Count != 0)
+{
+    <a asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize"
+       asp-route-userName="@ViewBag.UserName">
+        Вперед
+    </a>
+}
