@@ -39,6 +39,8 @@
     </div>
     @if (User.Identity.Name == @Model.UserName)
     {
+        <br/><br/> <a asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
+                      asp-route-userName="@Model.UserName">предложенные комментарии</a>
         <div>
             <h3>Предложенные обсуждения</h3>
             @if (ViewBag.SuggestedDiscussions is null || ViewBag.SuggestedDiscussions.Count == 0)
@@ -51,25 +53,6 @@
                 {
                     <a href="~/MySuggestions/@suggestedDiscussion.Id">@suggestedDiscussion.Title</a>
                     <p>Статус: На рассмотрении</p>
-                }
-            }
-        </div>
-        <div>
-            <h3>Предложенные комментарии</h3>
-            @if (ViewBag.SuggestedComments is null || ViewBag.SuggestedComments.Count == 0)
-            {
-                <p>Предложенных комментариев нет</p>
-            }
-            else
-            {
-                foreach (var suggestedComment in ViewBag.SuggestedComments)
-                {
-                    <a href="~/discussions/@suggestedComment.DiscussionId">@suggestedComment.Content</a>
-                    <p>Статус: На рассмотрении</p>
-                    <form method="post" asp-controller="SuggestComment" asp-action="DeleteSuggestedComment" asp-route-returnUrl="@Context.Request.Path"
-                          asp-route-suggestedCommentId="@suggestedComment.Id">
-                        <input type="submit" value="удалить"/>
-                    </form>
                 }
             }
         </div>
