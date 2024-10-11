@@ -1,0 +1,35 @@
+﻿@model Web.MVC.Models.ViewModels.UserViewModels.GetCommentsViewModel
+
+<div>
+    @if (Model.Comments is null || Model.Comments.Count == 0)
+    {
+        <h3>Комментарии ещё не созданы</h3>
+    }
+    else
+    {
+        <h3>Созданные комментарии</h3>
+        foreach (var comment in Model.Comments)
+        {
+            <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@comment.DiscussionId" asp-route-pageNumber="1" asp-route-pageSize="20">
+                @comment.Content
+            </a>
+            @* <a href="~/discussions/@comment.DiscussionId">@comment.Content</a> *@
+            <p>Создано: @comment.CreatedDate</p>
+        }
+    }
+</div>
+
+@if (Model.PreviousPageNumber != 0)
+{
+    <a asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize"
+       asp-route-userName="@ViewBag.UserName">
+        Назад
+    </a>
+}
+@if (Model.DoesNextPageExist && Model.Comments.Count != 0)
+{
+    <a asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize"
+       asp-route-userName="@ViewBag.UserName">
+        Вперед
+    </a>
+}

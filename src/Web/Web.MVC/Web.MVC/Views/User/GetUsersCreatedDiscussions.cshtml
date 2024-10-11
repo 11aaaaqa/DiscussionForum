@@ -1,0 +1,36 @@
+﻿@model GetDiscussionsViewModel
+
+<div>
+    @if (Model.Discussions is null || Model.Discussions.Count == 0)
+    {
+        <h3>Обсуждения ещё не созданы</h3>
+    }
+    else
+    {
+        <h3>Созданные обсуждения</h3>
+        foreach (var discussion in Model.Discussions)
+        {
+            <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@discussion.Id" asp-route-pageNumber="1" asp-route-pageSize="20">
+                @discussion.Title
+            </a>
+            @* <a href="~/discussions/@discussion.Id">@discussion.Title</a> *@
+            <p>Создано: @discussion.CreatedAt</p>
+            <p>Рейтинг: @discussion.Rating</p>
+        }
+    }
+</div>
+
+@if (Model.PreviousPageNumber != 0)
+{
+    <a asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize"
+       asp-route-userName="@ViewBag.UserName">
+        Назад
+    </a>
+}
+@if (Model.DoesNextPageExist && Model.Discussions.Count != 0)
+{
+    <a asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize"
+       asp-route-userName="@ViewBag.UserName">
+        Вперед
+    </a>
+}

@@ -44,6 +44,8 @@
     <_ContentIncludedByDefault Remove="Views\User\ChangePassword.cshtml" />
     <_ContentIncludedByDefault Remove="Views\User\ChangeUserName.cshtml" />
     <_ContentIncludedByDefault Remove="Views\User\GetUser.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\User\GetUsersCreatedComments.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\User\GetUsersCreatedDiscussions.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -112,6 +114,14 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Discussion\GetDiscussionsSortedByPopularityForWeek.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\User\GetUsersCreatedDiscussions.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\User\GetUsersCreatedComments.cshtml" />
   </ItemGroup>
 
 </Project>
