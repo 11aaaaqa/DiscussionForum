@@ -12,7 +12,6 @@
         {
             <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@suggestedComment.DiscussionId" asp-route-pageNumber="1"
                asp-route-pageSize="20">@suggestedComment.Content</a>
-            @* <a href="~/discussions/@suggestedComment.DiscussionId">@suggestedComment.Content</a> *@
             <p>Статус: На рассмотрении</p>
             <form method="post" asp-controller="SuggestComment" asp-action="DeleteSuggestedComment" asp-route-returnUrl="@Context.Request.Path"
                   asp-route-suggestedCommentId="@suggestedComment.Id">
