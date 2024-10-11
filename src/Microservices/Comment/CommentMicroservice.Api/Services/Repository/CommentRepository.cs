@@ -20,7 +20,15 @@ namespace CommentMicroservice.Api.Services.Repository
                 .Take(commentParameters.PageSize)
                 .ToListAsync();
             return comments;
-        } 
+        }
+
+        public async Task<List<Comment>> GetByUserNameAsync(string userName, CommentParameters commentParameters)
+        {
+            var comments = await context.Comments.Where(x => x.CreatedBy == userName)
+                .Skip(commentParameters.PageSize * (commentParameters.PageNumber - 1))
+                .Take(commentParameters.PageSize).ToListAsync();
+            return comments;
+        }
 
         public async Task<List<Comment>> GetByDiscussionIdAsync(Guid id, CommentParameters commentParameters)
         {
@@ -42,9 +50,6 @@ namespace CommentMicroservice.Api.Services.Repository
             }
             return comments;
         }
-
-        public async Task<List<Comment>> GetByUserName(string userName) =>
-            await context.Comments.Where(x => x.CreatedBy == userName).ToListAsync();
 
         public async Task<Comment?> GetByIdAsync(Guid id) =>
             await context.Comments.SingleOrDefaultAsync(x => x.Id == id);
