@@ -31,36 +31,11 @@
 
         }
     </div>
-    <div>
-        @if (ViewBag.Discussions is null || ViewBag.Discussions.Count == 0)
-        {
-            <h3>Обсуждения ещё не созданы</h3>
-        }
-        else
-        {
-            <h3>Созданные обсуждения</h3>
-            foreach (var discussion in ViewBag.Discussions)
-            {
-                <a href="~/discussions/@discussion.Id">@discussion.Title</a>
-                <p>Создано: @discussion.CreatedAt</p>
-                <p>Рейтинг: @discussion.Rating</p>
-            }
-        }
-    </div>
-    <div>
-        @if (ViewBag.Comments is null || ViewBag.Comments.Count == 0)
-        {
-            <h3>Комментарии ещё не созданы</h3>
-        }
-        else
-        {
-            <h3>Созданные комментарии</h3>
-            foreach (var comment in ViewBag.Comments)
-            {
-                <a href="~/discussions/@comment.DiscussionId">@comment.Content</a>
-                <p>Создано: @comment.CreatedDate</p>
-            }
-        }
+    <div class="text-center">
+        <br /><br /><a asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-userName="@Model.UserName" asp-route-pageNumber="1"
+                       asp-route-pageSize="20">созданные обсуждения</a><br/>
+        <a asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="1" asp-route-pageSize="20" asp-route-userName="@Model.UserName"
+           >созданные комментарии</a>
     </div>
     @if (User.Identity.Name == @Model.UserName)
     {
