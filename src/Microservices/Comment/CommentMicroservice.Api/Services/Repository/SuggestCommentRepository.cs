@@ -25,6 +25,7 @@ namespace CommentMicroservice.Api.Services.Repository
         public async Task<List<SuggestedComment>> GetByUserNameAsync(string userName, CommentParameters commentParameters)
         {
             var comments = await context.SuggestedComments.Where(x => x.CreatedBy == userName)
+                .OrderByDescending(x => x.CreatedDate)
                 .Skip(commentParameters.PageSize * (commentParameters.PageNumber - 1))
                 .Take(commentParameters.PageSize).ToListAsync();
             return comments;
