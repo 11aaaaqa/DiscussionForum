@@ -104,8 +104,17 @@ namespace CommentMicroservice.Api.Controllers
 
         [Route("GetSuggestedCommentsByUserName/{userName}")]
         [HttpGet]
-        public async Task<IActionResult> GetSuggestedCommentsByUserNameAsync(string userName)
-            => Ok(await suggestCommentRepository.GetByUserName(userName));
+        public async Task<IActionResult> GetSuggestedCommentsByUserNameAsync(string userName, [FromQuery] CommentParameters commentParameters)
+            => Ok(await suggestCommentRepository.GetByUserNameAsync(userName, commentParameters));
+
+        [Route("DoesNextSuggestedCommentsByUserNamePageExist/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextSuggestedCommentsByUserNamePageExistAsync(string userName, [FromQuery] CommentParameters commentParameters)
+        {
+            bool doesExist =
+                await paginationService.DoesNextSuggestedCommentsByUserNamePageExistAsync(userName, commentParameters);
+            return Ok(doesExist);
+        }
 
         [Route("DeleteAllSuggestedCommentsByUserName/{userName}")]
         [HttpDelete]
