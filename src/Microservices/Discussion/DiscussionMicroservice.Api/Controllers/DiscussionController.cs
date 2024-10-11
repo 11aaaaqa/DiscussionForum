@@ -264,6 +264,7 @@ namespace DiscussionMicroservice.Api.Controllers
         public async Task<IActionResult> GetDiscussionsByUserNameAsync(string userName, [FromQuery] DiscussionParameters discussionParameters)
         {
             var discussions = await context.Discussions.Where(x => x.CreatedBy == userName)
+                .OrderByDescending(x => x.CreatedAt)
                 .Skip(discussionParameters.PageSize * (discussionParameters.PageNumber - 1))
                 .Take(discussionParameters.PageSize).ToListAsync();
             return Ok(discussions);
