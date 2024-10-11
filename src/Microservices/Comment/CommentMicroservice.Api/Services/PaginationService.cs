@@ -20,6 +20,14 @@ namespace CommentMicroservice.Api.Services
             return (totalCommentsCount > startRequestedCommentsCount);
         }
 
+        public async Task<bool> DoesNextCommentsByUserNamePageExistAsync(string userName, CommentParameters commentParameters)
+        {
+            int totalCommentsCount = await context.Comments.Where(x => x.CreatedBy == userName).CountAsync();
+            int totalRequestedCommentsCount = commentParameters.PageSize * commentParameters.PageNumber;
+            int startRequestedCommentsCount = totalRequestedCommentsCount - commentParameters.PageSize;
+            return (totalCommentsCount > startRequestedCommentsCount);
+        }
+
         public async Task<bool> DoesNextSuggestedCommentsPageExistAsync(CommentParameters commentParameters)
         {
             int totalSuggestedCommentsCount = await context.SuggestedComments.CountAsync();
