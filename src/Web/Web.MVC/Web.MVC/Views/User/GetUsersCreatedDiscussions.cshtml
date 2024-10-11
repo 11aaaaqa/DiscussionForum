@@ -13,7 +13,6 @@
             <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@discussion.Id" asp-route-pageNumber="1" asp-route-pageSize="20">
                 @discussion.Title
             </a>
-            @* <a href="~/discussions/@discussion.Id">@discussion.Title</a> *@
             <p>Создано: @discussion.CreatedAt</p>
             <p>Рейтинг: @discussion.Rating</p>
         }
