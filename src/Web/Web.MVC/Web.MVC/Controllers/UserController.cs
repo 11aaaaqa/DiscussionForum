@@ -10,6 +10,7 @@ using Web.MVC.Models;
 using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ApiResponses.CommentsResponses;
 using Web.MVC.Models.ApiResponses.Discussion;
+using Web.MVC.Models.ViewModels.ModeratorViewModels;
 using Web.MVC.Models.ViewModels.UserViewModels;
 using DiscussionResponse = Web.MVC.Models.ApiResponses.Discussion.DiscussionResponse;
 using UserResponse = Web.MVC.Models.ApiResponses.CustUserResponses.UserResponse;
@@ -198,7 +199,26 @@ namespace Web.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsersSuggestedComments(string userName, int pageSize, int pageNumber)
         {
-            return View();
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://comment-microservice-api:8080/api/SuggestComment/GetSuggestedCommentsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var suggestedComments = await response.Content.ReadFromJsonAsync<List<SuggestedCommentResponse>>();
+
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"http://comment-microservice-api:8080/api/SuggestComment/DoesNextSuggestedCommentsByUserNamePageExist/{userName}?pageNumber={pageNumber + 1}&pageSize={pageSize}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+            
+            ViewBag.UserName = userName;
+
+            return View(new SuggestedCommentsViewModel
+            {
+                PageSize = pageSize, DoesNextPageExist = doesExist, CurrentPageNumber = pageNumber, NextPageNumber = pageNumber + 1,
+                PreviousPageNumber = pageNumber - 1, SuggestedComments = suggestedComments
+            });
         }
 
         [Route("users/{userName}/suggested/topics")]
