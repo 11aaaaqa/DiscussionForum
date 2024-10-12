@@ -43,26 +43,8 @@
                       asp-route-userName="@Model.UserName">предложенные комментарии</a>
         <br/> <a asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@Model.UserName" asp-route-pageNumber="1"
                  asp-route-pageSize="20">предложенные обсуждения</a>
-        <div>
-            <h3>Предложенные темы</h3>
-            @if (ViewBag.SuggestedTopics is null || ViewBag.SuggestedTopics.Count == 0)
-            {
-                <p>Предложенных тем нет</p>
-            }
-            else
-            {
-                foreach (var suggestedTopic in ViewBag.SuggestedTopics)
-                {
-                    <h6>@suggestedTopic.Name</h6>
-                    <p>Статус: На рассмотрении</p>
-                    <form method="post" asp-controller="SuggestTopic" asp-action="DeleteSuggestedTopicById"
-                          asp-route-returnUrl="@Context.Request.Path"
-                          asp-route-id="@suggestedTopic.Id">
-                        <input type="submit" value="удалить" />
-                    </form>
-                }
-            }
-        </div>
+        <br/> <a asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="1" asp-route-pageSize="20"
+                 asp-route-userName="@Model.UserName">предложенные темы</a>
         <div>
             <h3>Настройки пользователя</h3>
             <a asp-action="ChangeUserName" asp-controller="User" asp-route-returnUrl="@string.Empty" asp-route-userId="@Model.Id">изменить имя</a><br/>
