@@ -8,12 +8,21 @@
     }
     else
     {
+        string returnUrl;
+        if (Context.Request.QueryString.HasValue)
+        {
+            returnUrl = Context.Request.Path + Context.Request.QueryString;
+        }
+        else
+        {
+            returnUrl = Context.Request.Path;
+        }
         foreach (var suggestedComment in Model.SuggestedComments)
         {
             <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@suggestedComment.DiscussionId" asp-route-pageNumber="1"
                asp-route-pageSize="20">@suggestedComment.Content</a>
             <p>Статус: На рассмотрении</p>
-            <form method="post" asp-controller="SuggestComment" asp-action="DeleteSuggestedComment" asp-route-returnUrl="@Context.Request.Path"
+            <form method="post" asp-controller="SuggestComment" asp-action="DeleteSuggestedComment" asp-route-returnUrl="@returnUrl"
                   asp-route-suggestedCommentId="@suggestedComment.Id">
                 <input type="submit" value="удалить"/>
             </form>

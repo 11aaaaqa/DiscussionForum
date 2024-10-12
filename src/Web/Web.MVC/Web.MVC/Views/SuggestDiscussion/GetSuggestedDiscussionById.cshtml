@@ -2,7 +2,7 @@
 
 <h3>@Model.Title</h3>
 <p>@Model.Content</p>
-<form method="post" asp-controller="SuggestDiscussion" asp-action="DeleteSuggestedDiscussion" asp-route-returnUrl="~/User/@User.Identity.Name"
+<form method="post" asp-controller="SuggestDiscussion" asp-action="DeleteSuggestedDiscussion" asp-route-returnUrl="~/user/@User.Identity.Name"
       asp-route-suggestedDiscussionId="@Model.Id">
     <input type="submit" value="удалить предложение"/>
 </form>

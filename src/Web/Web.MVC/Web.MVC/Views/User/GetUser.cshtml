@@ -18,15 +18,24 @@
         }
         @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
         {
+            string returnUrl;
+            if (Context.Request.QueryString.HasValue)
+            {
+                returnUrl = Context.Request.Path + Context.Request.QueryString;
+            }
+            else
+            {
+                returnUrl = Context.Request.Path;
+            }
             <a href="~/SuggestedTopics/@Model.UserName">предложенные темы</a><br/>
             <a href="~/Suggestions/Discussions/@Model.UserName">предложенные обсуждения</a><br/>
             <a href="~/Suggestions/Comments/@Model.UserName">предложенные комментарии</a><br/>
             <a href="~/ReportsByUser/@Model.UserName?pageNumber=1&pageSize=20">жалобы</a>
             if (User.Identity.Name != Model.UserName)
             { 
-                <br/><br/> <a asp-controller="Moderator" asp-action="BanUser" asp-route-userName="@Model.UserName" asp-route-returnUrl="@Context.Request.Path"
+                <br/><br/> <a asp-controller="Moderator" asp-action="BanUser" asp-route-userName="@Model.UserName" asp-route-returnUrl="@returnUrl"
                            >отстранить пользователя</a><br/>
-                <a asp-controller="Moderator" asp-action="ChangeUserRoles" asp-route-returnUrl="@Context.Request.Path" asp-route-aspNetUserId="@Model.AspNetUserId">назначить роль</a>
+                <a asp-controller="Moderator" asp-action="ChangeUserRoles" asp-route-returnUrl="@returnUrl" asp-route-aspNetUserId="@Model.AspNetUserId">назначить роль</a>
             }
 
         }
@@ -39,6 +48,15 @@
     </div>
     @if (User.Identity.Name == @Model.UserName)
     {
+        string returnUrl;
+        if (Context.Request.QueryString.HasValue)
+        {
+            returnUrl = Context.Request.Path + Context.Request.QueryString;
+        }
+        else
+        {
+            returnUrl = Context.Request.Path;
+        }
         <br/><br/> <a asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
                       asp-route-userName="@Model.UserName">предложенные комментарии</a>
         <br/> <a asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@Model.UserName" asp-route-pageNumber="1"
@@ -48,7 +66,7 @@
         <div>
             <h3>Настройки пользователя</h3>
             <a asp-action="ChangeUserName" asp-controller="User" asp-route-returnUrl="@string.Empty" asp-route-userId="@Model.Id">изменить имя</a><br/>
-            <a asp-controller="User" asp-action="ChangePassword" asp-route-returnUrl="@Context.Request.Path" asp-route-userId="@Model.AspNetUserId">
+            <a asp-controller="User" asp-action="ChangePassword" asp-route-returnUrl="@returnUrl" asp-route-userId="@Model.AspNetUserId">
                 изменить пароль
             </a>
         </div>
