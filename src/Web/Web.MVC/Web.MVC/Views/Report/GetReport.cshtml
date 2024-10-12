@@ -3,41 +3,56 @@
 @model Web.MVC.Models.ApiResponses.ReportResponses.ReportApiResponse
 
 <div class="text-center">
-    @if (Model.ReportType == ReportTypeConstants.DiscussionType)
+    @if (true)
     {
-        <h3>@Model.ReportedDiscussionTitle</h3>
-        <p>@Model.ReportedDiscussionContent</p>
-        <p>Reported by: @@@Model.UserNameReportedBy</p>
-        <p>Причина: @Model.Reason</p>
-        <a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion"
-           asp-route-returnUrl="@ViewBag.ReturnUrl" asp-route-userName="@Model.UserNameReportedBy"
-           asp-route-suggestionDeleteId="@Model.Id" asp-route-suggestionDeleteType="@BanTypeConstants.ReportBanType">
-            остранить пожаловавшегося пользователя и удалить жалобу
-        </a><br/>
-        <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@Context.Request.Path" asp-route-userId="@Model.UserIdReportedTo">
-            отстранить пользователя
-        </a>
-        <form method="post" asp-controller="Discussion" asp-action="DeleteDiscussion" asp-route-discussionId="@Model.ReportedDiscussionId"
-              asp-route-reportType="@Model.ReportType" asp-route-returnUrl="@ViewBag.ReturnUrl">
-            <input type="submit" value="удалить обсуждение и жалобу"/>
-        </form>
+        string returnUrl;
+        if (Context.Request.QueryString.HasValue)
+        {
+            returnUrl = Context.Request.Path + Context.Request.QueryString;
+        }
+        else
+        {
+            returnUrl = Context.Request.Path;
+        }
+        @if (Model.ReportType == ReportTypeConstants.DiscussionType)
+        {
+            <h3>@Model.ReportedDiscussionTitle</h3>
+            <p>@Model.ReportedDiscussionContent</p>
+            <p>Reported by: @@@Model.UserNameReportedBy</p>
+            <p>Причина: @Model.Reason</p>
+            <a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion"
+                asp-route-returnUrl="@ViewBag.ReturnUrl" asp-route-userName="@Model.UserNameReportedBy"
+                asp-route-suggestionDeleteId="@Model.Id" asp-route-suggestionDeleteType="@BanTypeConstants.ReportBanType">
+                остранить пожаловавшегося пользователя и удалить жалобу
+            </a>
+            <br/>
+            <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@returnUrl" asp-route-userId="@Model.UserIdReportedTo">
+                отстранить пользователя
+            </a>
+            <form method="post" asp-controller="Discussion" asp-action="DeleteDiscussion" asp-route-discussionId="@Model.ReportedDiscussionId"
+                asp-route-reportType="@Model.ReportType" asp-route-returnUrl="@ViewBag.ReturnUrl">
+                <input type="submit" value="удалить обсуждение и жалобу"/>
+            </form>
+        }
+        else
+        {
+            <h3>@Model.ReportedCommentContent</h3>
+            <p>Reported by: @@@Model.UserNameReportedBy</p>
+            <p>Причина: @Model.Reason</p>
+            <a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion"
+                asp-route-returnUrl="@ViewBag.ReturnUrl" asp-route-userName="@Model.UserNameReportedBy"
+                asp-route-suggestionDeleteId="@Model.Id" asp-route-suggestionDeleteType="@BanTypeConstants.ReportBanType">
+                остранить пожаловавшегося пользователя и удалить жалобу
+            </a>
+            <br/>
+            <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@returnUrl" asp-route-userId="@Model.UserIdReportedTo">
+                отстранить пользователя
+            </a>
+            <form method="post" asp-controller="Comment" asp-action="DeleteComment"
+                asp-route-returnUrl="@ViewBag.ReturnUrl" asp-route-id="@Model.ReportedCommentId">
+                <input type="submit" value="удалить комментарий и жалобу"/>
+            </form>
+        }
     }
-    else
-    {
-        <h3>@Model.ReportedCommentContent</h3>
-        <p>Reported by: @@@Model.UserNameReportedBy</p>
-        <p>Причина: @Model.Reason</p>
-        <a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion"
-           asp-route-returnUrl="@ViewBag.ReturnUrl" asp-route-userName="@Model.UserNameReportedBy"
-           asp-route-suggestionDeleteId="@Model.Id" asp-route-suggestionDeleteType="@BanTypeConstants.ReportBanType">
-            остранить пожаловавшегося пользователя и удалить жалобу
-        </a> <br />
-        <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@Context.Request.Path" asp-route-userId="@Model.UserIdReportedTo">
-            отстранить пользователя
-        </a>
-        <form method="post" asp-controller="Comment" asp-action="DeleteComment"
-              asp-route-returnUrl="@ViewBag.ReturnUrl" asp-route-id="@Model.ReportedCommentId">
-            <input type="submit" value="удалить комментарий и жалобу" />
-        </form>
-    }
+    
 </div>
