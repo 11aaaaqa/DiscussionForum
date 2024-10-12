@@ -9,11 +9,20 @@
     }
     else
     {
-        <form method="post" asp-controller="Moderator" asp-action="DeleteAllReportsByUserName" asp-route-returnUrl="@Context.Request.Path"
+        string returnUrl;
+        if (Context.Request.QueryString.HasValue)
+        {
+            returnUrl = Context.Request.Path + Context.Request.QueryString;
+        }
+        else
+        {
+            returnUrl = Context.Request.Path;
+        }
+        <form method="post" asp-controller="Moderator" asp-action="DeleteAllReportsByUserName" asp-route-returnUrl="@returnUrl"
               asp-route-userName="@ViewBag.ReportedByUserName">
             <input type="submit" value="удалить все жалобы"/>
         </form>
-        <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@Context.Request.Path" asp-route-userName="@ViewBag.ReportedByUserName"
+        <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@returnUrl" asp-route-userName="@ViewBag.ReportedByUserName"
         >отстранить пользователя</a>
         <table>
             <tr><th>От пользователя</th><th>Причина</th><th>Тип</th></tr>

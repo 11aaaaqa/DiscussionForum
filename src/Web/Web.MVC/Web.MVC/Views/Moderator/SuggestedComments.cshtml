@@ -4,23 +4,36 @@
 
 <div class="text-center">
     <h3>Предложенные комментарии</h3>
-    @foreach (var suggestedComment in Model.SuggestedComments)
+    @if (true)
     {
-        <p>@suggestedComment.Content</p>
-        <form method="post" asp-controller="Moderator" asp-action="AcceptSuggestedComment" asp-route-id="@suggestedComment.Id"
-              asp-route-returnUrl="@Context.Request.Path">
-            <input type="submit" value="принять"/>
-        </form>
-        <form method="post" asp-controller="Moderator" asp-action="RejectSuggestedComment" asp-route-id="@suggestedComment.Id"
-              asp-route-returnUrl="@Context.Request.Path">
-            <input type="submit" value="отклонить"/>
-        </form>
-        <a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion"
-           asp-route-returnUrl="@Context.Request.Path" asp-route-userName="@suggestedComment.CreatedBy"
-           asp-route-suggestionDeleteId="@suggestedComment.Id" asp-route-suggestionDeleteType="@BanTypeConstants.CommentBanType">
-            остранить и отклонить предложение
-        </a>
+        string returnUrl;
+        if (Context.Request.QueryString.HasValue)
+        {
+            returnUrl = Context.Request.Path + Context.Request.QueryString;
+        }
+        else
+        {
+            returnUrl = Context.Request.Path;
+        }
+        @foreach (var suggestedComment in Model.SuggestedComments)
+        {
+            <p>@suggestedComment.Content</p>
+            <form method="post" asp-controller="Moderator" asp-action="AcceptSuggestedComment" asp-route-id="@suggestedComment.Id"
+                asp-route-returnUrl="@returnUrl">
+                <input type="submit" value="принять"/>
+            </form>
+            <form method="post" asp-controller="Moderator" asp-action="RejectSuggestedComment" asp-route-id="@suggestedComment.Id"
+                asp-route-returnUrl="@returnUrl">
+                <input type="submit" value="отклонить"/>
+            </form>
+            <a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion"
+             asp-route-returnUrl="@returnUrl" asp-route-userName="@suggestedComment.CreatedBy"
+             asp-route-suggestionDeleteId="@suggestedComment.Id" asp-route-suggestionDeleteType="@BanTypeConstants.CommentBanType">
+              остранить и отклонить предложение
+            </a>
+        }
     }
+    
 </div>
 
 @if (Model.PreviousPageNumber != 0)
