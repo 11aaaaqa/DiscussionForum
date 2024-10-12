@@ -48,6 +48,7 @@
     <_ContentIncludedByDefault Remove="Views\User\GetUsersCreatedDiscussions.cshtml" />
     <_ContentIncludedByDefault Remove="Views\User\GetUsersSuggestedComments.cshtml" />
     <_ContentIncludedByDefault Remove="Views\User\GetUsersSuggestedDiscussions.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\User\GetUsersSuggestedTopics.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -132,6 +133,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\User\GetUsersSuggestedDiscussions.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\User\GetUsersSuggestedTopics.cshtml" />
   </ItemGroup>
 
 </Project>

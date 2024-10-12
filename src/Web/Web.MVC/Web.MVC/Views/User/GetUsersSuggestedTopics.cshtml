@@ -1,0 +1,37 @@
+﻿@model GetSuggestedTopicViewModel
+
+<div>
+    <h3>Предложенные темы</h3>
+    @if (Model.SuggestedTopics is null || Model.SuggestedTopics.Count == 0)
+    {
+        <p>Предложенных тем нет</p>
+    }
+    else
+    {
+        foreach (var suggestedTopic in Model.SuggestedTopics)
+        {
+            <h6>@suggestedTopic.Name</h6>
+            <p>Статус: На рассмотрении</p>
+            <form method="post" asp-controller="SuggestTopic" asp-action="DeleteSuggestedTopicById"
+                  asp-route-returnUrl="@Context.Request.Path"
+                  asp-route-id="@suggestedTopic.Id">
+                <input type="submit" value="удалить" />
+            </form>
+        }
+    }
+</div>
+
+@if (Model.PreviousPageNumber != 0)
+{
+    <a asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize"
+       asp-route-userName="@ViewBag.UserName">
+        Назад
+    </a>
+}
+@if (Model.DoesNextPageExist && Model.SuggestedTopics.Count != 0)
+{
+    <a asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize"
+       asp-route-userName="@ViewBag.UserName">
+        Вперед
+    </a>
+}
