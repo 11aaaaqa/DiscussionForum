@@ -221,7 +221,7 @@ namespace Web.MVC.Controllers
                 if (!string.IsNullOrEmpty(model.ReturnUrl))
                     return LocalRedirect(model.ReturnUrl);
 
-                return LocalRedirect($"/User/{model.NewUserName}");
+                return LocalRedirect($"/users/{model.NewUserName}");
             }
             return View(model);
         }
@@ -265,8 +265,7 @@ namespace Web.MVC.Controllers
 
         private void AuthenticateUser(string jwtToken)
         {
-            Request.Cookies.TryGetValue("accessToken", out string? isCookiesExist);
-            if(isCookiesExist is not null) Response.Cookies.Delete("accessToken");
+            Response.Cookies.Delete("accessToken");
             Response.Cookies.Append("accessToken", jwtToken, new CookieOptions
             {
                 Expires = DateTimeOffset.UtcNow.AddMonths(2),
