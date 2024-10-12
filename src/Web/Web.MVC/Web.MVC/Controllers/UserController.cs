@@ -192,7 +192,25 @@ namespace Web.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsersSuggestedDiscussions(string userName, int pageSize, int pageNumber)
         {
-            return View();
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/GetSuggestedDiscussionsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var suggestedDiscussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
+
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/DoesNextSuggestedDiscussionsByUserNamePageExist/{userName}?pageNumber={pageNumber + 1}&pageSize={pageSize}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+            ViewBag.UserName = userName;
+
+            return View(new GetSuggestedDiscussionsViewModel
+            {
+                PageSize = pageSize, CurrentPageNumber = pageNumber, DoesNextPageExist = doesExist, NextPageNumber = pageNumber + 1,
+                PreviousPageNumber = pageNumber - 1, SuggestedDiscussions = suggestedDiscussions
+            });
         }
 
         [Route("users/{userName}/suggested/comments")]
