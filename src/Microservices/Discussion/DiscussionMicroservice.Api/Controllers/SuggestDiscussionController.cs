@@ -136,10 +136,26 @@ namespace DiscussionMicroservice.Api.Controllers
 
         [Route("GetSuggestedDiscussionsByUserName/{userName}")]
         [HttpGet]
-        public async Task<IActionResult> GetSuggestedDiscussionsByUserNameAsync(string userName)
+        public async Task<IActionResult> GetSuggestedDiscussionsByUserNameAsync(string userName, [FromQuery] DiscussionParameters discussionParameters)
         {
-            var suggestedTopics = await context.SuggestedDiscussions.Where(x => x.CreatedBy == userName).ToListAsync();
+            var suggestedTopics = await context.SuggestedDiscussions.Where(x => x.CreatedBy == userName)
+                .OrderByDescending(x => x.CreatedAt)
+                .Skip(discussionParameters.PageSize * (discussionParameters.PageNumber - 1))
+                .Take(discussionParameters.PageSize)
+                .ToListAsync();
             return Ok(suggestedTopics);
+        }
+
+        [Route("DoesNextSuggestedDiscussionsByUserNamePageExist/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> DoesNextSuggestedDiscussionsByUserNamePageExistAsync(string userName, 
+            [FromQuery] DiscussionParameters discussionParameters)
+        {
+            int totalSuggestedDiscussionsCount = await context.SuggestedDiscussions.Where(x => x.CreatedBy == userName).CountAsync();
+            int totalRequestedSuggestedDiscussionsCount = discussionParameters.PageSize * discussionParameters.PageNumber;
+            int startedRequestedSuggestedDiscussionsCount = totalRequestedSuggestedDiscussionsCount - discussionParameters.PageSize;
+            bool doesExist = (totalSuggestedDiscussionsCount > startedRequestedSuggestedDiscussionsCount);
+            return Ok(doesExist);
         }
 
         [Route("DeleteAllSuggestedDiscussionsByUserName/{userName}")]
