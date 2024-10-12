@@ -4,6 +4,7 @@ using System.Text.Json;
 using GeneralClassesLib.ApiResponses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using Web.MVC.Constants;
 using Web.MVC.DTOs.User;
 using Web.MVC.Models;
@@ -216,7 +217,14 @@ namespace Web.MVC.Controllers
                 if (!authResponse.IsSuccessStatusCode) return View("ActionError");
 
                 var authenticated = await authResponse.Content.ReadFromJsonAsync<AuthenticatedResponse>();
-                AuthenticateUser(authenticated!.Token);
+                Response.Cookies.Delete("accessToken");
+                Response.Cookies.Append("accessToken", authenticated.Token, new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddMonths(2),
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict,
+                    Secure = true
+                });
 
                 if (!string.IsNullOrEmpty(model.ReturnUrl))
                     return LocalRedirect(model.ReturnUrl);
@@ -261,18 +269,6 @@ namespace Web.MVC.Controllers
                 return RedirectToAction("Index", "Home");
             }
             return View(model);
-        }
-
-        private void AuthenticateUser(string jwtToken)
-        {
-            Response.Cookies.Delete("accessToken");
-            Response.Cookies.Append("accessToken", jwtToken, new CookieOptions
-            {
-                Expires = DateTimeOffset.UtcNow.AddMonths(2),
-                HttpOnly = true,
-                SameSite = SameSiteMode.Strict,
-                Secure = true
-            });
         }
     }
 }
