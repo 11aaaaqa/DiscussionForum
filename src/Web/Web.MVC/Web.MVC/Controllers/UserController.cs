@@ -243,7 +243,26 @@ namespace Web.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsersSuggestedTopics(string userName, int pageSize, int pageNumber)
         {
-            return View();
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(
+                $"http://topic-microservice-api:8080/api/SuggestTopic/GetSuggestedTopicsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var suggestedTopics = await response.Content.ReadFromJsonAsync<List<TopicResponse>>();
+
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"http://topic-microservice-api:8080/api/SuggestTopic/DoesNextSuggestedTopicsByUserNamePageExist/{userName}?pageNumber={pageNumber + 1}&pageSize={pageSize}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+
+            ViewBag.UserName = userName;
+                 
+            return View(new GetSuggestedTopicViewModel
+            {
+                PageSize = pageSize, DoesNextPageExist = doesExist, CurrentPageNumber = pageNumber, NextPageNumber = pageNumber + 1, 
+                PreviousPageNumber = pageNumber - 1, SuggestedTopics = suggestedTopics
+            });
         }
 
         [Authorize]
