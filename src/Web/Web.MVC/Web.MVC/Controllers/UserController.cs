@@ -9,7 +9,6 @@ using Web.MVC.DTOs.User;
 using Web.MVC.Models;
 using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ApiResponses.CommentsResponses;
-using Web.MVC.Models.ApiResponses.Discussion;
 using Web.MVC.Models.ViewModels.ModeratorViewModels;
 using Web.MVC.Models.ViewModels.UserViewModels;
 using DiscussionResponse = Web.MVC.Models.ApiResponses.Discussion.DiscussionResponse;
