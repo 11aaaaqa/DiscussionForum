@@ -1,0 +1,35 @@
+﻿@model Web.MVC.Models.ViewModels.UserViewModels.GetSuggestedDiscussionsViewModel
+
+<div>
+    <h3>Предложенные обсуждения</h3>
+    @if (Model.SuggestedDiscussions is null || Model.SuggestedDiscussions.Count == 0)
+    {
+        <p>Предложенных обсуждений нет</p>
+    }
+    else
+    {
+        foreach (var suggestedDiscussion in Model.SuggestedDiscussions)
+        {
+            <a asp-controller="SuggestDiscussion" asp-action="GetSuggestedDiscussionById" asp-route-suggestedDiscussionId="@suggestedDiscussion.Id">
+                @suggestedDiscussion.Title
+            </a>
+            @* <a href="~/MySuggestions/@suggestedDiscussion.Id">@suggestedDiscussion.Title</a> *@
+            <p>Статус: На рассмотрении</p>
+        }
+    }
+</div>
+
+@if (Model.PreviousPageNumber != 0)
+{
+    <a asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize"
+       asp-route-userName="@ViewBag.UserName">
+        Назад
+    </a>
+}
+@if (Model.DoesNextPageExist && Model.SuggestedDiscussions.Count != 0)
+{
+    <a asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize"
+       asp-route-userName="@ViewBag.UserName">
+        Вперед
+    </a>
+}
