@@ -41,21 +41,8 @@
     {
         <br/><br/> <a asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
                       asp-route-userName="@Model.UserName">предложенные комментарии</a>
-        <div>
-            <h3>Предложенные обсуждения</h3>
-            @if (ViewBag.SuggestedDiscussions is null || ViewBag.SuggestedDiscussions.Count == 0)
-            {
-                <p>Предложенных обсуждений нет</p>
-            }
-            else
-            {
-                foreach (var suggestedDiscussion in ViewBag.SuggestedDiscussions)
-                {
-                    <a href="~/MySuggestions/@suggestedDiscussion.Id">@suggestedDiscussion.Title</a>
-                    <p>Статус: На рассмотрении</p>
-                }
-            }
-        </div>
+        <br/> <a asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@Model.UserName" asp-route-pageNumber="1"
+                 asp-route-pageSize="20">предложенные обсуждения</a>
         <div>
             <h3>Предложенные темы</h3>
             @if (ViewBag.SuggestedTopics is null || ViewBag.SuggestedTopics.Count == 0)
