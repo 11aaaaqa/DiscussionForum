@@ -18,7 +18,7 @@ namespace Web.MVC.Services
             if (!response.IsSuccessStatusCode) return false;
 
             var user = await response.Content.ReadFromJsonAsync<UserResponse>();
-            if (user.CreatedDiscussionsIds.Count >= discussionsCount) return true;
+            if (user.Posts >= discussionsCount) return true;
             return false;
         }
 
@@ -30,7 +30,7 @@ namespace Web.MVC.Services
             if (!response.IsSuccessStatusCode) return false;
 
             var user = await response.Content.ReadFromJsonAsync<UserResponse>();
-            if (user.CommentsIds.Count >= commentsCount) return true;
+            if (user.Answers >= commentsCount) return true;
             return false;
         }
     }

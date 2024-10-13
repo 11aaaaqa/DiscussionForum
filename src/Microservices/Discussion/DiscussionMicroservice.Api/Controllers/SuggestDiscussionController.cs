@@ -40,8 +40,6 @@ namespace DiscussionMicroservice.Api.Controllers
             await context.SuggestedDiscussions.AddAsync(suggestedDiscussion);
             await context.SaveChangesAsync();
 
-            await publishEndpoint.Publish<IUserSuggestedDiscussion>(new { SuggestedDiscussionId = suggestedDiscussion.Id, suggestedDiscussion.CreatedBy});
-
             return Ok();
         }
 
@@ -74,8 +72,6 @@ namespace DiscussionMicroservice.Api.Controllers
             var suggestedDiscussion = await context.SuggestedDiscussions.SingleAsync(x => x.Id == id);
             context.SuggestedDiscussions.Remove(suggestedDiscussion);
             await context.SaveChangesAsync();
-
-            await publishEndpoint.Publish<ISuggestedDiscussionRejected>(new { SuggestedDiscussionId = id, SuggestedBy = suggestedDiscussion.CreatedBy });
 
             return Ok();
         }

@@ -16,7 +16,6 @@ namespace UserMicroservice.Api.MessageBus_Consumers.CommentConsumers
         public async Task Consume(ConsumeContext<ICommentDeleted> context)
         {
             var user = await databaseContext.Users.SingleAsync(x => x.UserName == context.Message.CommentCreatedBy);
-            user.CommentsIds.Remove(context.Message.CommentId);
             user.Answers -= 1;
             databaseContext.Users.Update(user);
             await databaseContext.SaveChangesAsync();

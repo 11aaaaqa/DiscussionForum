@@ -19,9 +19,8 @@ namespace UserMicroservice.UnitTests
             mock.Setup(x => x.GetUserByUserName(userName)).ReturnsAsync(new User
             {
                 Id = It.IsAny<Guid>(), Answers = It.IsAny<uint>(), UserName = userName, RegisteredAt = It.IsAny<DateOnly>(),
-                Posts = It.IsAny<uint>(),BanType = It.IsAny<string>(), SuggestedDiscussionsIds = It.IsAny<List<Guid>>(),
-                SuggestedCommentsIds = It.IsAny<List<Guid>>(), IsBanned = It.IsAny<bool>(), CreatedDiscussionsIds = It.IsAny<List<Guid>>(),
-                CommentsIds = It.IsAny<List<Guid>>(), BannedFor = It.IsAny<string>(), BannedUntil = It.IsAny<DateTime>(), AspNetUserId = It.IsAny<string>()
+                Posts = It.IsAny<uint>(),BanType = It.IsAny<string>(), IsBanned = It.IsAny<bool>(),
+                BannedFor = It.IsAny<string>(), BannedUntil = It.IsAny<DateTime>(), AspNetUserId = It.IsAny<string>()
             });
             var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
                 new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
@@ -64,11 +63,7 @@ namespace UserMicroservice.UnitTests
                 RegisteredAt = It.IsAny<DateOnly>(),
                 Posts = It.IsAny<uint>(),
                 BanType = It.IsAny<string>(),
-                SuggestedDiscussionsIds = It.IsAny<List<Guid>>(),
-                SuggestedCommentsIds = It.IsAny<List<Guid>>(),
                 IsBanned = It.IsAny<bool>(),
-                CreatedDiscussionsIds = It.IsAny<List<Guid>>(),
-                CommentsIds = It.IsAny<List<Guid>>(),
                 BannedFor = It.IsAny<string>(),
                 BannedUntil = It.IsAny<DateTime>(),
                 AspNetUserId = It.IsAny<string>()
@@ -96,154 +91,6 @@ namespace UserMicroservice.UnitTests
                 new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.GetUserByIdAsync(userId);
-
-            Assert.IsType<BadRequestResult>(result);
-            mock.VerifyAll();
-        }
-
-        [Fact]
-        public async Task GetCreatedDiscussionsIdsByUserIdAsync_ReturnsOkWithListOfDiscussionIds()
-        {
-            var userId = It.IsAny<Guid>();
-            var mock = new Mock<IUserService<User>>();
-            mock.Setup(x => x.GetCreatedDiscussionsIdsByUserIdAsync(userId)).ReturnsAsync(new List<Guid>
-            {
-                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()
-            });
-            var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
-
-            var result = await controller.GetCreatedDiscussionsIdsByUserIdAsync(userId);
-
-            var methodResult = Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(200, methodResult.StatusCode);
-            Assert.NotNull(methodResult.Value);
-            var ids = Assert.IsType<List<Guid>>(methodResult.Value);
-            Assert.Equal(3, ids.Count);
-            mock.VerifyAll();
-        }
-
-        [Fact]
-        public async Task GetCreatedDiscussionsIdsByUserIdAsync_ReturnsBadRequest()
-        {
-            var userId = It.IsAny<Guid>();
-            var mock = new Mock<IUserService<User>>();
-            mock.Setup(x => x.GetCreatedDiscussionsIdsByUserIdAsync(userId)).ReturnsAsync((List<Guid>?)null);
-            var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
-
-            var result = await controller.GetCreatedDiscussionsIdsByUserIdAsync(userId);
-
-            Assert.IsType<BadRequestResult>(result);
-            mock.VerifyAll();
-        }
-
-        [Fact]
-        public async Task GetSuggestedDiscussionsIdsByUserIdAsync_ReturnsOkWithListOfSuggestedDiscussionIds()
-        {
-            var userId = It.IsAny<Guid>();
-            var mock = new Mock<IUserService<User>>();
-            mock.Setup(x => x.GetSuggestedDiscussionsIdsByUserIdAsync(userId)).ReturnsAsync(new List<Guid>
-            {
-                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()
-            });
-            var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
-
-            var result = await controller.GetSuggestedDiscussionsIdsByUserIdAsync(userId);
-
-            var methodResult = Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(200, methodResult.StatusCode);
-            Assert.NotNull(methodResult.Value);
-            var ids = Assert.IsType<List<Guid>>(methodResult.Value);
-            Assert.Equal(3, ids.Count);
-            mock.VerifyAll();
-        }
-
-        [Fact]
-        public async Task GetSuggestedDiscussionsIdsByUserIdAsync_ReturnsBadRequest()
-        {
-            var userId = It.IsAny<Guid>();
-            var mock = new Mock<IUserService<User>>();
-            mock.Setup(x => x.GetSuggestedDiscussionsIdsByUserIdAsync(userId)).ReturnsAsync((List<Guid>?)null);
-            var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
-
-            var result = await controller.GetSuggestedDiscussionsIdsByUserIdAsync(userId);
-
-            Assert.IsType<BadRequestResult>(result);
-            mock.VerifyAll();
-        }
-
-        [Fact]
-        public async Task GetSuggestedCommentsIdsByUserIdAsync_ReturnsOkWithListOfSuggestedCommentsIds()
-        {
-            var userId = It.IsAny<Guid>();
-            var mock = new Mock<IUserService<User>>();
-            mock.Setup(x => x.GetSuggestedCommentsIdsByUserIdAsync(userId)).ReturnsAsync(new List<Guid>
-            {
-                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()
-            });
-            var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
-
-            var result = await controller.GetSuggestedCommentsIdsByUserIdAsync(userId);
-
-            var methodResult = Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(200, methodResult.StatusCode);
-            Assert.NotNull(methodResult.Value);
-            var ids = Assert.IsType<List<Guid>>(methodResult.Value);
-            Assert.Equal(3, ids.Count);
-            mock.VerifyAll();
-        }
-
-        [Fact]
-        public async Task GetSuggestedCommentsIdsByUserIdAsync_ReturnsBadRequest()
-        {
-            var userId = It.IsAny<Guid>();
-            var mock = new Mock<IUserService<User>>();
-            mock.Setup(x => x.GetSuggestedCommentsIdsByUserIdAsync(userId)).ReturnsAsync((List<Guid>?)null);
-            var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
-
-            var result = await controller.GetSuggestedCommentsIdsByUserIdAsync(userId);
-
-            Assert.IsType<BadRequestResult>(result);
-            mock.VerifyAll();
-        }
-
-        [Fact]
-        public async Task GetCommentsIdsByUserIdAsync_ReturnsOkWithListOfCommentsIds()
-        {
-            var userId = It.IsAny<Guid>();
-            var mock = new Mock<IUserService<User>>();
-            mock.Setup(x => x.GetCommentsIdsByUserIdAsync(userId)).ReturnsAsync(new List<Guid>
-            {
-                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()
-            });
-            var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
-
-            var result = await controller.GetCommentsIdsByUserIdAsync(userId);
-
-            var methodResult = Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(200, methodResult.StatusCode);
-            Assert.NotNull(methodResult.Value);
-            var ids = Assert.IsType<List<Guid>>(methodResult.Value);
-            Assert.Equal(3, ids.Count);
-            mock.VerifyAll();
-        }
-
-        [Fact]
-        public async Task GetCommentsIdsByUserIdAsync_ReturnsBadRequest()
-        {
-            var userId = It.IsAny<Guid>();
-            var mock = new Mock<IUserService<User>>();
-            mock.Setup(x => x.GetCommentsIdsByUserIdAsync(userId)).ReturnsAsync((List<Guid>?)null);
-            var controller = new UserController(mock.Object, new Mock<IBanService<User>>().Object,
-                new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
-
-            var result = await controller.GetCommentsIdsByUserIdAsync(userId);
 
             Assert.IsType<BadRequestResult>(result);
             mock.VerifyAll();

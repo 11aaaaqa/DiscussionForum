@@ -48,46 +48,6 @@ namespace UserMicroservice.Api.Controllers
             return Ok(user);
         }
 
-        [Route("GetCreatedDiscussionsIdsByUserId/{userId}")]
-        [HttpGet]
-        public async Task<IActionResult> GetCreatedDiscussionsIdsByUserIdAsync(Guid userId)
-        {
-            var ids = await userService.GetCreatedDiscussionsIdsByUserIdAsync(userId);
-            if (ids is null) return BadRequest();
-
-            return Ok(ids);
-        }
-
-        [Route("GetSuggestedDiscussionsIdsByUserId/{userId}")]
-        [HttpGet]
-        public async Task<IActionResult> GetSuggestedDiscussionsIdsByUserIdAsync(Guid userId)
-        {
-            var ids = await userService.GetSuggestedDiscussionsIdsByUserIdAsync(userId);
-            if (ids is null) return BadRequest();
-
-            return Ok(ids);
-        }
-
-        [Route("GetSuggestedCommentsIdsByUserId/{userId}")]
-        [HttpGet]
-        public async Task<IActionResult> GetSuggestedCommentsIdsByUserIdAsync(Guid userId)
-        {
-            var ids = await userService.GetSuggestedCommentsIdsByUserIdAsync(userId);
-            if (ids is null) return BadRequest();
-
-            return Ok(ids);
-        }
-
-        [Route("GetCommentsIdsByUserId/{userId}")]
-        [HttpGet]
-        public async Task<IActionResult> GetCommentsIdsByUserIdAsync(Guid userId)
-        {
-            var ids = await userService.GetCommentsIdsByUserIdAsync(userId);
-            if (ids is null) return BadRequest();
-
-            return Ok(ids);
-        }
-
         [Route("IsUserBannedByUserName/{userName}")]
         [HttpGet]
         public async Task<IActionResult> IsUserBannedAsync(string userName, [FromQuery(Name = "banTypes[]")]params string[] banTypes) =>

@@ -23,12 +23,8 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<DiscussionDeletedUserConsumer>();
     x.AddConsumer<CommentDeletedUserConsumer>();
     x.AddConsumer<CommentCreatedUserConsumer>();
-    x.AddConsumer<SuggestedCommentRejectedUserConsumer>();
     x.AddConsumer<SuggestedCommentAcceptedUserConsumer>();
-    x.AddConsumer<UserSuggestedCommentUserConsumer>();
     x.AddConsumer<SuggestedDiscussionAcceptedUSerConsumer>();
-    x.AddConsumer<SuggestedDiscussionRejectedUserConsumer>();
-    x.AddConsumer<UserSuggestedDiscussionUserConsumer>();
     x.AddConsumer<UserRegisteredUserConsumer>();
     x.UsingRabbitMq((context, config) =>
     {
