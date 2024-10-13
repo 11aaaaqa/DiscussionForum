@@ -15,7 +15,7 @@ namespace TopicMicroservice.Api.Services.Repository
 
         public async Task<List<Topic>> GetAllAsync(int pageSize, int pageNumber, string searchingString)
         {
-            var topics = await context.Topics.Where(x => x.Name.Contains(searchingString))
+            var topics = await context.Topics.Where(x => x.Name.ToLower().Contains(searchingString.ToLower()))
                 .Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
             return topics;
         }

@@ -16,7 +16,7 @@ namespace DiscussionMicroservice.Api.Services
             string topicName)
         {
             int totalDiscussionsCount = await context.Discussions.Where(x => x.TopicName == topicName)
-                .Where(x => x.Title.Contains(searchingQuery)).CountAsync();
+                .Where(x => x.Title.ToLower().Contains(searchingQuery.ToLower())).CountAsync();
             int totalGettingDiscussionsCount = discussionParameters.PageSize * discussionParameters.PageNumber;
             int pageStartCount = totalGettingDiscussionsCount - discussionParameters.PageSize;
             bool doesExist = (totalDiscussionsCount > pageStartCount);

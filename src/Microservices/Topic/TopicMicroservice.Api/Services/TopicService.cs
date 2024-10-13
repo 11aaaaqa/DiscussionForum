@@ -22,7 +22,7 @@ namespace TopicMicroservice.Api.Services
 
         public async Task<bool> DoesAllTopicsHaveNextPage(int pageSize, int pageNumber, string searchingQuery)
         {
-            int totalTopicsCount = await context.Topics.Where(x => x.Name.Contains(searchingQuery)).CountAsync();
+            int totalTopicsCount = await context.Topics.Where(x => x.Name.ToLower().Contains(searchingQuery.ToLower())).CountAsync();
             int totalRequestedTopicsCount = pageNumber * pageSize;
             int startedOnCurrentPageTopicsCount = totalRequestedTopicsCount - pageSize;
             return (totalTopicsCount > startedOnCurrentPageTopicsCount);

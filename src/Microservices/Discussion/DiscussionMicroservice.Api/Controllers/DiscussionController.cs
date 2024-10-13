@@ -44,7 +44,7 @@ namespace DiscussionMicroservice.Api.Controllers
             [FromQuery] DiscussionParameters discussionParameters, string topicName, string searchingString)
         {
             var discussions = await context.Discussions.Where(x => x.TopicName == topicName)
-                .Where(x => x.Title.Contains(searchingString))
+                .Where(x => x.Title.ToLower().Contains(searchingString.ToLower()))
                 .Skip(discussionParameters.PageSize * (discussionParameters.PageNumber - 1))
                 .Take(discussionParameters.PageSize).ToListAsync();
             return Ok(discussions);
