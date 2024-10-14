@@ -35,6 +35,14 @@ namespace BanHistoryMicroservice.Api.Controllers
         public async Task<IActionResult> GetBansByBanTypeAsync(string banType, [FromQuery] BanHistoryParameters banHistoryParameters) =>
             Ok(await banService.GetByBanTypeAsync(banType, banHistoryParameters));
 
+        [Route("FindBans")]
+        [HttpGet]
+        public async Task<IActionResult> FindBansAsync([FromQuery] string searchingString, [FromQuery] BanHistoryParameters banHistoryParameters)
+        {
+            var bans = await banService.FindBansAsync(searchingString, banHistoryParameters);
+            return Ok(bans);
+        }
+
         [Route("GetBanById/{id}")]
         [HttpGet]
         public async Task<IActionResult> GetBanByIdAsync(Guid id)
