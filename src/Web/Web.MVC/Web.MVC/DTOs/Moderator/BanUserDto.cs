@@ -9,6 +9,7 @@ namespace Web.MVC.DTOs.Moderator
         public uint ForDays { get; set; }
 
         public string? BanType { get; set; }
+        public string? BannedBy { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "Максимальная длина поля \"Причина\" 100 символов")]

@@ -253,6 +253,7 @@ namespace Web.MVC.Controllers
                     return View("ActionError");
 
                 model.BanType = banType;
+                model.BannedBy = User.Identity.Name;
                 using HttpClient httpClient = httpClientFactory.CreateClient();
 
                 if (userId is null)
@@ -334,6 +335,7 @@ namespace Web.MVC.Controllers
                     return View("ActionError");
 
                 model.BanType = banType;
+                model.BannedBy = User.Identity.Name;
                 using HttpClient httpClient = httpClientFactory.CreateClient();
 
                 if (userId is null)
