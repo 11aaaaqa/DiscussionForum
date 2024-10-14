@@ -10,6 +10,7 @@ namespace BanHistoryMicroservice.Api.Services
         Task<List<TModel>> GetByUserNameAsync(string userName, BanHistoryParameters banHistoryParameters);
         Task<List<TModel>> GetByBanTypeAsync(string banType, BanHistoryParameters banHistoryParameters);
         Task<TModel?> GetByIdAsync(Guid id);
+        Task<TModel> CreateAsync(TModel model);
         Task DeleteAsync(Guid id);
         Task DeleteBansByUserId(Guid userId);
         Task DeleteBansByUserName(string userName);

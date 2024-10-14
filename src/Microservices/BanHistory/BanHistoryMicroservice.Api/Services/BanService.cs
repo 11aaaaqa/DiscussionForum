@@ -60,6 +60,13 @@ namespace BanHistoryMicroservice.Api.Services
             return bans;
         }
 
+        public async Task<Ban> CreateAsync(Ban model)
+        {
+            await context.Bans.AddAsync(model);
+            await context.SaveChangesAsync();
+            return model;
+        }
+
         public async Task<Ban?> GetByIdAsync(Guid id) => await context.Bans.SingleOrDefaultAsync(x => x.Id == id);
 
         public async Task DeleteAsync(Guid id)
