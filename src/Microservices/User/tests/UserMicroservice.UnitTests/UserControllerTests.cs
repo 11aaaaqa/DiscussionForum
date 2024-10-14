@@ -141,8 +141,9 @@ namespace UserMicroservice.UnitTests
             var reason = It.IsAny<string>();
             var banType = It.IsAny<string>();
             var forDays = It.IsAny<uint>();
+            var bannedBy = It.IsAny<string>();
             var mock = new Mock<IBanService<User>>();
-            mock.Setup(x => x.BanUserAsync(userId, reason, banType, forDays));
+            mock.Setup(x => x.BanUserAsync(userId, reason, banType, forDays, bannedBy));
             var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
                 new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
@@ -160,8 +161,9 @@ namespace UserMicroservice.UnitTests
             var reason = It.IsAny<string>();
             var banType = It.IsAny<string>();
             var forDays = It.IsAny<uint>();
+            var bannedBy = It.IsAny<string>();
             var mock = new Mock<IBanService<User>>();
-            mock.Setup(x => x.BanUserAsync(userName, reason, banType, forDays));
+            mock.Setup(x => x.BanUserAsync(userName, reason, banType, forDays, bannedBy));
             var controller = new UserController(new Mock<IUserService<User>>().Object, mock.Object,
                 new Mock<IChangeUserName>().Object, new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
