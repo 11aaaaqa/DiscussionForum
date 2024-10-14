@@ -8,5 +8,6 @@
         public string Reason { get; set; }
         public uint DurationInDays { get; set; }
         public string BanType { get; set; }
+        public string BannedBy { get; set; }
     }
 }
