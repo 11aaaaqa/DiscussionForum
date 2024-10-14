@@ -18,7 +18,8 @@ namespace BanHistoryMicroservice.Api.MessageBus.MessageBusConsumers
             await banService.CreateAsync(new Ban
             {
                 Id = Guid.NewGuid(), BanType = context.Message.BanType, DurationInDays = context.Message.DurationIdDays,
-                Reason = context.Message.Reason, UserId = context.Message.UserId, UserName = context.Message.UserName, BannedBy = context.Message.BannedBy
+                Reason = context.Message.Reason, UserId = context.Message.UserId, UserName = context.Message.UserName, BannedBy = context.Message.BannedBy,
+                BannedFrom = DateTime.UtcNow, BannedUntil = DateTime.UtcNow.AddDays(context.Message.DurationIdDays)
             });
         }
     }

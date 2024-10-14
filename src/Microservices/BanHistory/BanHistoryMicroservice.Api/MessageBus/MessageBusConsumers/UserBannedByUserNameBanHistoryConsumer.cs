@@ -19,7 +19,7 @@ namespace BanHistoryMicroservice.Api.MessageBus.MessageBusConsumers
             {
                 Id = Guid.NewGuid(), UserName = context.Message.UserName, Reason = context.Message.Reason,
                 BanType = context.Message.BanType, DurationInDays = context.Message.DurationIdDays, UserId = context.Message.UserId, 
-                BannedBy = context.Message.BannedBy
+                BannedBy = context.Message.BannedBy, BannedFrom = DateTime.UtcNow, BannedUntil = DateTime.UtcNow.AddDays(context.Message.DurationIdDays)
             });
         }
     }
