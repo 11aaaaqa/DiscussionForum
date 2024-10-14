@@ -74,7 +74,7 @@ namespace UserMicroservice.Api.Services.Ban
             return false;
         }
 
-        public async Task BanUserAsync(Guid userId, string reason, string banType, uint forDays)
+        public async Task BanUserAsync(Guid userId, string reason, string banType, uint forDays, string bannedBy)
         {
             var user = await context.Users.SingleOrDefaultAsync(x => x.Id == userId);
             if (user is null) return;
@@ -92,11 +92,12 @@ namespace UserMicroservice.Api.Services.Ban
                 Reason = reason,
                 BanType = banType,
                 DurationIdDays = forDays,
-                user.UserName
+                user.UserName,
+                BannedBy = bannedBy
             });
         }
 
-        public async Task BanUserAsync(string userName, string reason, string banType, uint forDays)
+        public async Task BanUserAsync(string userName, string reason, string banType, uint forDays, string bannedBy)
         {
             var user = await context.Users.SingleOrDefaultAsync(x => x.UserName == userName);
             if (user is null) return;
@@ -114,7 +115,8 @@ namespace UserMicroservice.Api.Services.Ban
                 Reason = reason,
                 BanType = banType,
                 DurationIdDays = forDays,
-                UserId = user.Id
+                UserId = user.Id,
+                BannedBy = bannedBy
             });
         }
 
