@@ -2,6 +2,7 @@ using BanHistoryMicroservice.Api.Database;
 using BanHistoryMicroservice.Api.MessageBus.MessageBusConsumers;
 using BanHistoryMicroservice.Api.Models;
 using BanHistoryMicroservice.Api.Services;
+using BanHistoryMicroservice.Api.Services.Pagination;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +30,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IBanService<Ban>, BanService>();
+builder.Services.AddTransient<IPaginationService, PaginationService>();
 
 var app = builder.Build();
 
