@@ -5,5 +5,6 @@
         public string Reason { get; set; }
         public string BanType { get; set; }
         public uint ForDays { get; set; }
+        public string BannedBy { get; set; }
     }
 }
