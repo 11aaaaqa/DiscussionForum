@@ -1,0 +1,57 @@
+﻿@model Web.MVC.Models.ViewModels.AdminViewModels.GetBansHistoryViewModel
+
+<div class="text-center">
+    <form method="get">
+        <input name="searchingQuery" placeholder="Поиск" />
+        <input name="pageSize" type="hidden" value="@Model.PageSize"/>
+        <input name="pageNumber" type="hidden" value="1"/>
+        <input type="submit" value="найти"/>
+    </form>
+    @if (Model.Bans.Count == 0)
+    {
+        <p>История банов пуста</p>
+    }
+    else
+    {
+        <table>            
+            <tr><th>Имя пользователя</th><th>Причина</th><th>Тип бана</th><th>Кем забанен</th><th>Забанен с</th><th>Забанен до</th><th>Длительность бана (в днях)</th></tr>
+            @foreach (var ban in Model.Bans)
+            {
+                <tr><td>@ban.UserName</td><td>@ban.Reason</td><td>@ban.BanType</td><td>@ban.BannedBy</td><td>@ban.BannedFrom</td><td>@ban.BannedUntil</td><td>@ban.DurationInDays</td></tr>
+            }
+        </table>
+    }
+    
+    @if (Model.PreviousPageNumber != 0 && Model.Bans.Count != 0)
+    {
+        @if (Model.SearchingQuery is null)
+        {
+            <a asp-controller="Admin" asp-action="GetBansHistory" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize">
+                Назад
+            </a>
+        }
+        else
+        {
+            <a asp-controller="Admin" asp-action="GetBansHistory" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize"
+               asp-route-searchingQuery="@Model.SearchingQuery">
+                Назад
+            </a>
+        }
+    }
+    @if (Model.DoesNextPageExist && Model.Bans.Count != 0)
+    {
+        @if (Model.SearchingQuery is null)
+        {
+            <a asp-controller="Admin" asp-action="GetBansHistory" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize">
+                Вперед
+            </a>
+        }
+        else
+        {
+            <a asp-controller="Admin" asp-action="GetBansHistory" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize"
+               asp-route-searchingQuery="@Model.SearchingQuery">
+                Вперед
+            </a>
+        }
+    }
+</div>
