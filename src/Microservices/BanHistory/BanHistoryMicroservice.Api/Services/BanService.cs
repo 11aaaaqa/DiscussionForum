@@ -15,7 +15,7 @@ namespace BanHistoryMicroservice.Api.Services
 
         public async Task<List<Ban>> GetAllBansAsync(BanHistoryParameters banHistoryParameters)
         {
-            var bans =  await context.Bans
+            var bans =  await context.Bans.OrderByDescending(x => x.BannedFrom)
                 .Skip(banHistoryParameters.PageSize * (banHistoryParameters.PageNumber - 1))
                 .Take(banHistoryParameters.PageSize)
                 .ToListAsync();
@@ -26,7 +26,7 @@ namespace BanHistoryMicroservice.Api.Services
         {
             var bans = await context.Bans.Where(x => x.UserName.ToLower().Contains(searchingString.ToLower()) |
                     x.BanType.ToLower().Contains(searchingString.ToLower()) | x.BannedBy.ToLower().Contains(searchingString.ToLower()) |
-                    x.Reason.ToLower().Contains(searchingString.ToLower()))
+                    x.Reason.ToLower().Contains(searchingString.ToLower())).OrderByDescending(x => x.BannedFrom)
                 .Skip(banHistoryParameters.PageSize * (banHistoryParameters.PageNumber - 1))
                 .Take(banHistoryParameters.PageSize)
                 .ToListAsync();
@@ -35,7 +35,7 @@ namespace BanHistoryMicroservice.Api.Services
 
         public async Task<List<Ban>> GetByUserIdAsync(Guid userId, BanHistoryParameters banHistoryParameters)
         {
-            var bans = await context.Bans.Where(x => x.UserId == userId)
+            var bans = await context.Bans.Where(x => x.UserId == userId).OrderByDescending(x => x.BannedFrom)
                 .Skip(banHistoryParameters.PageSize * (banHistoryParameters.PageNumber - 1))
                 .Take(banHistoryParameters.PageSize)
                 .ToListAsync();
@@ -44,7 +44,7 @@ namespace BanHistoryMicroservice.Api.Services
 
         public async Task<List<Ban>> GetByUserNameAsync(string userName, BanHistoryParameters banHistoryParameters)
         {
-            var bans = await context.Bans.Where(x => x.UserName == userName)
+            var bans = await context.Bans.Where(x => x.UserName == userName).OrderByDescending(x => x.BannedFrom)
                 .Skip(banHistoryParameters.PageSize * (banHistoryParameters.PageNumber - 1))
                 .Take(banHistoryParameters.PageSize)
                 .ToListAsync();
@@ -53,7 +53,7 @@ namespace BanHistoryMicroservice.Api.Services
 
         public async Task<List<Ban>> GetByBanTypeAsync(string banType, BanHistoryParameters banHistoryParameters)
         {
-            var bans = await context.Bans.Where(x => x.BanType == banType)
+            var bans = await context.Bans.Where(x => x.BanType == banType).OrderByDescending(x => x.BannedFrom)
                 .Skip(banHistoryParameters.PageSize * (banHistoryParameters.PageNumber - 1))
                 .Take(banHistoryParameters.PageSize)
                 .ToListAsync();
