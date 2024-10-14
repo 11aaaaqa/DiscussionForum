@@ -62,7 +62,7 @@ namespace UserMicroservice.Api.Controllers
         [HttpPatch]
         public async Task<IActionResult> BanUserByIdAsync(Guid userId, [FromBody] BanDto model)
         {
-            await banService.BanUserAsync(userId, model.Reason, model.BanType, model.ForDays);
+            await banService.BanUserAsync(userId, model.Reason, model.BanType, model.ForDays, model.BannedBy);
             return Ok();
         }
 
@@ -70,7 +70,7 @@ namespace UserMicroservice.Api.Controllers
         [HttpPatch]
         public async Task<IActionResult> BanUserByUserNameAsync(string userName, [FromBody] BanDto model)
         {
-            await banService.BanUserAsync(userName, model.Reason, model.BanType, model.ForDays);
+            await banService.BanUserAsync(userName, model.Reason, model.BanType, model.ForDays, model.BannedBy);
             return Ok();
         }
 
