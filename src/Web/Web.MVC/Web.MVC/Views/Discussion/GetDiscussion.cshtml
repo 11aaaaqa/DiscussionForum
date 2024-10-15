@@ -1,4 +1,5 @@
-﻿@model Web.MVC.DTOs.Comment.SuggestCommentDto
+﻿<link rel="stylesheet" href="~/css/BreakLargeLines.css"/>
+@model Web.MVC.DTOs.Comment.SuggestCommentDto
 
 <div>
     <h4>@ViewBag.Title</h4>
@@ -26,7 +27,7 @@
         </form>
     }
     
-    <p>@ViewBag.Content</p>
+    <p class="break-line">@ViewBag.Content</p>
     @if (User.Identity.Name != ViewBag.CreatedBy)
     {
         <a asp-action="AddReport" asp-controller="Report" asp-route-reportedUserName="@ViewBag.CreatedBy" asp-route-reportedDiscussionTitle="@ViewBag.Title"
