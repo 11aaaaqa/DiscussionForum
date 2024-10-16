@@ -101,7 +101,7 @@
     }
 </div>
 
-@if (ViewBag.PreviousPageNumber != 0)
+@if (ViewBag.PreviousPageNumber != 0 && ViewBag.Comments.Count != 0)
 {
     <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize"
        asp-route-id="@ViewBag.DiscussionId">
