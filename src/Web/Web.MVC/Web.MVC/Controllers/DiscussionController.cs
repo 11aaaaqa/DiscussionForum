@@ -118,7 +118,8 @@ namespace Web.MVC.Controllers
         [Authorize]
         [HttpPost]
         [Route("discussions/{id}")]
-        public async Task<IActionResult> SuggestComment(SuggestCommentDto model, Guid id)
+        public async Task<IActionResult> SuggestComment(SuggestCommentDto model, Guid id, Guid? repliedOnCommentId, string? repliedOnCommentCreatedBy,
+            string? repliedOnCommentContent)
         {
             if (ModelState.IsValid)
             {
@@ -140,6 +141,9 @@ namespace Web.MVC.Controllers
                 {
                     using StringContent jsonContent = new(JsonSerializer.Serialize(new
                     {
+                        RepliedOnCommentId = repliedOnCommentId,
+                        RepliedOnCommentCreatedBy = repliedOnCommentCreatedBy,
+                        RepliedOnCommentContent = repliedOnCommentContent,
                         model.CreatedBy,
                         model.Content,
                         DiscussionId = discussionId
@@ -154,12 +158,16 @@ namespace Web.MVC.Controllers
                 else
                 {
                     using StringContent jsonContent = new(JsonSerializer.Serialize(new
-                    { discussionId, model.CreatedBy, model.Content }), Encoding.UTF8, "application/json");
+                    {
+                        RepliedOnCommentId = repliedOnCommentId,
+                        RepliedOnCommentCreatedBy = repliedOnCommentCreatedBy,
+                        RepliedOnCommentContent = repliedOnCommentContent,
+                        discussionId, model.CreatedBy, model.Content }), Encoding.UTF8, "application/json");
                     var response = await httpClient.PostAsync(
                         "http://comment-microservice-api:8080/api/Comment/CreateComment", jsonContent);
                     if (!response.IsSuccessStatusCode)
                         return View("SomethingWentWrong", discussionId);
-                    return LocalRedirect($"/discussions/{id}");
+                    return LocalRedirect($"/discussions/{id}?pageSize=20&pageNumber=1");
                 }
             }
             return View("SomethingWentWrong", id);

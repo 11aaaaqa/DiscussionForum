@@ -64,6 +64,17 @@
                 returnUrl = Context.Request.Path;
             }
             <p>@comment.CreatedBy в @comment.CreatedDate</p>
+            if (comment.RepliedOnCommentId is not null)
+            {
+                <p>@comment.RepliedOnCommentCreatedBy:</p>
+                <p>"@comment.RepliedOnCommentContent"</p>
+            }
+
+            if (comment.RepliedOnCommentId is null && comment.RepliedOnCommentCreatedBy is not null)
+            {
+                <p>@comment.RepliedOnCommentCreatedBy:</p>
+                <p>Комменарий был удален</p>
+            }
             <p>@comment.Content</p>
             if (User.Identity.Name == comment.CreatedBy)
             {
@@ -73,6 +84,16 @@
             }
             else
             {
+                <form method="post" asp-controller="Discussion" asp-action="SuggestComment" asp-route-id="@ViewBag.DiscussionId"
+                      asp-route-repliedOnCommentContent="@comment.Content" asp-route-repliedOnCommentId="@comment.Id"
+                      asp-route-repliedOnCommentCreatedBy="@comment.CreatedBy">
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <div>
+                        <input asp-for="Content" placeholder="Ответить">
+                        <span asp-validation-for="Content"></span>
+                    </div>
+                    <input type="submit" value="отправить"/>
+                </form>
                 <a asp-action="AddReport" asp-controller="Report" asp-route-reportedUserName="@comment.CreatedBy"
                    asp-route-reportedCommentContent="@comment.Content" asp-route-reportedCommentId="@comment.Id">пожаловаться</a>
             }
