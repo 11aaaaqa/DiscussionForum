@@ -89,7 +89,9 @@ namespace CommentMicroservice.Api.Controllers
         {
             var createdComment = await repository.CreateAsync(new Comment
             {
-                Content = model.Content, CreatedBy = model.CreatedBy, CreatedDate = DateTime.UtcNow, DiscussionId = model.DiscussionId, Id = Guid.NewGuid()
+                Content = model.Content, CreatedBy = model.CreatedBy, CreatedDate = DateTime.UtcNow, DiscussionId = model.DiscussionId, Id = Guid.NewGuid(),
+                RepliedOnCommentContent = model.RepliedOnCommentContent, RepliedOnCommentCreatedBy = model.RepliedOnCommentCreatedBy,
+                RepliedOnCommentId = model.RepliedOnCommentId
             });
 
             await publishEndpoint.Publish<ICommentCreated>(new

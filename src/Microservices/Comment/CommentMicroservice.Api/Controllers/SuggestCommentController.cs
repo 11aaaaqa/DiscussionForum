@@ -46,7 +46,8 @@ namespace CommentMicroservice.Api.Controllers
             var suggestedComment = await suggestCommentRepository.CreateAsync(new SuggestedComment
             {
                 Content = model.Content, CreatedBy = model.CreatedBy, DiscussionId = model.DiscussionId,
-                CreatedDate = DateTime.UtcNow, Id = Guid.NewGuid()
+                CreatedDate = DateTime.UtcNow, Id = Guid.NewGuid(), RepliedOnCommentContent = model.RepliedOnCommentContent,
+                RepliedOnCommentCreatedBy = model.RepliedOnCommentCreatedBy, RepliedOnCommentId = model.RepliedOnCommentId
             });
 
             return Ok(suggestedComment);
@@ -66,7 +67,10 @@ namespace CommentMicroservice.Api.Controllers
                 CreatedBy = suggestedComment.CreatedBy,
                 Id = suggestedComment.Id,
                 CreatedDate = suggestedComment.CreatedDate,
-                DiscussionId = suggestedComment.DiscussionId
+                DiscussionId = suggestedComment.DiscussionId,
+                RepliedOnCommentContent = suggestedComment.RepliedOnCommentContent,
+                RepliedOnCommentCreatedBy = suggestedComment.RepliedOnCommentCreatedBy,
+                RepliedOnCommentId = suggestedComment.RepliedOnCommentId
             });
 
             await publishEndpoint.Publish<ISuggestedCommentAccepted>(new { AcceptedCommentId = suggestedComment.Id, suggestedComment.CreatedBy});
