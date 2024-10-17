@@ -1,5 +1,6 @@
 using BookmarkMicroservice.Api.Database;
 using BookmarkMicroservice.Api.Services;
+using BookmarkMicroservice.Api.Services.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IBookmarkService, BookmarkService>();
+builder.Services.AddTransient<IPaginationService, PaginationService>();
 
 var app = builder.Build();
 
