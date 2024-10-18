@@ -45,7 +45,8 @@ namespace BookmarkMicroservice.Api.Controllers
 
         [Route("DoesNextFindBookmarksPageExist/{userId}")]
         [HttpGet]
-        public async Task<IActionResult> DoesNextFindBookmarksPageExistAsync(Guid userId, [FromQuery] BookmarkParameters bookmarkParameters, string searchingQuery)
+        public async Task<IActionResult> DoesNextFindBookmarksPageExistAsync(Guid userId, [FromQuery] BookmarkParameters bookmarkParameters,
+            string searchingQuery)
         {
             bool doesExist = await paginationService.DoesNextFindBookmarksPageExist(userId, searchingQuery, bookmarkParameters);
             return Ok(doesExist);
