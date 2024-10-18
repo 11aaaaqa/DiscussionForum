@@ -1,6 +1,7 @@
 using BookmarkMicroservice.Api.Database;
 using BookmarkMicroservice.Api.Services;
 using BookmarkMicroservice.Api.Services.Pagination;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(x =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddMassTransit(x =>
+{
+    x.SetKebabCaseEndpointNameFormatter();
+    x.UsingRabbitMq((context, config) =>
+    {
+        config.Host(
+            $"amqp://{builder.Configuration["RabbitMQ:User"]}:{builder.Configuration["RabbitMQ:Password"]}@{builder.Configuration["RabbitMQ:HostName"]}");
+        config.ConfigureEndpoints(context);
+    });
+});
 
 builder.Services.AddTransient<IBookmarkService, BookmarkService>();
 builder.Services.AddTransient<IPaginationService, PaginationService>();
