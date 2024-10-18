@@ -64,7 +64,7 @@ namespace BookmarkMicroservice.Api.Controllers
 
         [Route("DeleteBookmark/{bookmarkId}")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteBookmark(Guid bookmarkId)
+        public async Task<IActionResult> DeleteBookmarkAsync(Guid bookmarkId)
         {
             await bookmarkService.DeleteBookmark(bookmarkId);
             return Ok();
