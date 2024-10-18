@@ -19,35 +19,35 @@ namespace BookmarkMicroservice.Api.Controllers
             this.bookmarkService = bookmarkService;
         }
 
-        [Route("GetAllBookmarks")]
+        [Route("GetBookmarksByUserId/{userId}")]
         [HttpGet]
-        public async Task<IActionResult> GetAllBookmarksAsync([FromQuery] BookmarkParameters bookmarkParameters)
+        public async Task<IActionResult> GetBookmarksByUserIdAsync(Guid userId, [FromQuery] BookmarkParameters bookmarkParameters)
         {
-            var bookmarks = await bookmarkService.GetAllBookmarks(bookmarkParameters);
+            var bookmarks = await bookmarkService.GetBookmarksByUserId(userId, bookmarkParameters);
             return Ok(bookmarks);
         }
 
-        [Route("DoesNextAllBookmarksPageExist")]
+        [Route("DoesNextAllBookmarksPageExist/{userId}")]
         [HttpGet]
-        public async Task<IActionResult> DoesNextAllBookmarksPageExistAsync([FromQuery] BookmarkParameters bookmarkParameters)
+        public async Task<IActionResult> DoesNextBookmarksByIdPageExistAsync(Guid userId, [FromQuery] BookmarkParameters bookmarkParameters)
         {
-            bool doesExist = await paginationService.DoesNextAllBookmarksPageExist(bookmarkParameters);
+            bool doesExist = await paginationService.DoesNextBookmarksByUserIdPageExist(userId, bookmarkParameters);
             return Ok(doesExist);
         }
 
-        [Route("FindBookmarks")]
+        [Route("FindBookmarks/{userId}")]
         [HttpGet]
-        public async Task<IActionResult> FindBookmarksAsync(string searchingQuery, [FromQuery] BookmarkParameters bookmarkParameters)
+        public async Task<IActionResult> FindBookmarksAsync(Guid userId, string searchingQuery, [FromQuery] BookmarkParameters bookmarkParameters)
         {
-            var bookmarks = await bookmarkService.FindBookmarks(searchingQuery, bookmarkParameters);
+            var bookmarks = await bookmarkService.FindBookmarks(userId, searchingQuery, bookmarkParameters);
             return Ok(bookmarks);
         }
 
-        [Route("DoesNextFindBookmarksPageExist")]
+        [Route("DoesNextFindBookmarksPageExist/{userId}")]
         [HttpGet]
-        public async Task<IActionResult> DoesNextFindBookmarksPageExistAsync([FromQuery] BookmarkParameters bookmarkParameters, string searchingQuery)
+        public async Task<IActionResult> DoesNextFindBookmarksPageExistAsync(Guid userId, [FromQuery] BookmarkParameters bookmarkParameters, string searchingQuery)
         {
-            bool doesExist = await paginationService.DoesNextFindBookmarksPageExist(searchingQuery, bookmarkParameters);
+            bool doesExist = await paginationService.DoesNextFindBookmarksPageExist(userId, searchingQuery, bookmarkParameters);
             return Ok(doesExist);
         }
 
