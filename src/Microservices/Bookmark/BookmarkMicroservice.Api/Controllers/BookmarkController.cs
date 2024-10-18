@@ -27,7 +27,7 @@ namespace BookmarkMicroservice.Api.Controllers
             return Ok(bookmarks);
         }
 
-        [Route("DoesNextAllBookmarksPageExist/{userId}")]
+        [Route("DoesNextBookmarksByIdPageExist/{userId}")]
         [HttpGet]
         public async Task<IActionResult> DoesNextBookmarksByIdPageExistAsync(Guid userId, [FromQuery] BookmarkParameters bookmarkParameters)
         {
