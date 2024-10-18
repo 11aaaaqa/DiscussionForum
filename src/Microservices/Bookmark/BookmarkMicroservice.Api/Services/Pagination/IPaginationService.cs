@@ -4,7 +4,7 @@ namespace BookmarkMicroservice.Api.Services.Pagination
 {
     public interface IPaginationService
     {
-        Task<bool> DoesNextBookmarksByUserIdPageExist(Guid userId, BookmarkParameters  bookmarkParameters);
-        Task<bool> DoesNextFindBookmarksPageExist(Guid userId, string searchingString, BookmarkParameters bookmarkParameters);
+        Task<bool> DoesNextBookmarksByUserNamePageExist(string userName, BookmarkParameters  bookmarkParameters);
+        Task<bool> DoesNextFindBookmarksPageExist(string userName, string searchingString, BookmarkParameters bookmarkParameters);
     }
 }

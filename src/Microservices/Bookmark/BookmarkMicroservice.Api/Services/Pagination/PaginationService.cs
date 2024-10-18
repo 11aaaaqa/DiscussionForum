@@ -12,18 +12,18 @@ namespace BookmarkMicroservice.Api.Services.Pagination
         {
             this.context = context;
         }
-        public async Task<bool> DoesNextBookmarksByUserIdPageExist(Guid userId, BookmarkParameters bookmarkParameters)
+        public async Task<bool> DoesNextBookmarksByUserNamePageExist(string userName, BookmarkParameters bookmarkParameters)
         {
-            int totalBookmarksCount = await context.Bookmarks.Where(x => x.UserId == userId).CountAsync();
+            int totalBookmarksCount = await context.Bookmarks.Where(x => x.UserName == userName).CountAsync();
             int totalRequestedBookmarksCount = bookmarkParameters.PageSize * bookmarkParameters.PageNumber;
             int startedRequestedBookmarksCount = totalRequestedBookmarksCount - bookmarkParameters.PageSize;
             bool doesExist = (totalBookmarksCount > startedRequestedBookmarksCount);
             return doesExist;
         }
 
-        public async Task<bool> DoesNextFindBookmarksPageExist(Guid userId, string searchingString, BookmarkParameters bookmarkParameters)
+        public async Task<bool> DoesNextFindBookmarksPageExist(string userName, string searchingString, BookmarkParameters bookmarkParameters)
         {
-            int totalBookmarksCount = await context.Bookmarks.Where(x => x.UserId == userId)
+            int totalBookmarksCount = await context.Bookmarks.Where(x => x.UserName == userName)
                 .Where(x => x.DiscussionTitle.ToLower().Contains(searchingString.ToLower())).CountAsync();
             int totalRequestedBookmarksCount = bookmarkParameters.PageSize * bookmarkParameters.PageNumber;
             int startedRequestedBookmarksCount = totalRequestedBookmarksCount - bookmarkParameters.PageSize;

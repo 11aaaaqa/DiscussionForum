@@ -11,19 +11,19 @@ namespace BookmarkMicroservice.UnitTests
     public class BookmarkControllerTests
     {
         [Fact]
-        public async Task GetBookmarksByUserIdAsync_ReturnsOkWithListOfBookmarks()
+        public async Task GetBookmarksByUserNameAsync_ReturnsOkWithListOfBookmarks()
         {
-            var userId = Guid.NewGuid();
+            var userName = "test";
             var bookmarkParameters = new BookmarkParameters { PageSize = 3, PageNumber = 3 };
             var mock = new Mock<IBookmarkService>();
-            mock.Setup(x => x.GetBookmarksByUserId(userId, bookmarkParameters)).ReturnsAsync(new List<Bookmark>
+            mock.Setup(x => x.GetBookmarksByUserName(userName, bookmarkParameters)).ReturnsAsync(new List<Bookmark>
             {
-                new Bookmark{Id = Guid.NewGuid(), UserId = userId}, new Bookmark{Id = Guid.NewGuid(), UserId = userId}, 
-                new Bookmark{Id = Guid.NewGuid(), UserId = userId}
+                new Bookmark{Id = Guid.NewGuid(), UserName = userName}, new Bookmark{Id = Guid.NewGuid(), UserName = userName}, 
+                new Bookmark{Id = Guid.NewGuid(), UserName = userName}
             });
             var controller = new BookmarkController(mock.Object, new Mock<IPaginationService>().Object);
 
-            var result = await controller.GetBookmarksByUserIdAsync(userId, bookmarkParameters);
+            var result = await controller.GetBookmarksByUserNameAsync(userName, bookmarkParameters);
 
             var methodResult = Assert.IsType<OkObjectResult>(result);
             Assert.NotNull(methodResult.Value);
@@ -33,15 +33,15 @@ namespace BookmarkMicroservice.UnitTests
         }
 
         [Fact]
-        public async Task DoesNextBookmarksByIdPageExistAsync_ReturnsOkWithTrue()
+        public async Task DoesNextBookmarksByUserNamePageExistAsync_ReturnsOkWithTrue()
         {
-            var userId = Guid.NewGuid();
+            var userName = "test";
             var bookmarkParameters = new BookmarkParameters { PageSize = 3, PageNumber = 3 };
             var mock = new Mock<IPaginationService>();
-            mock.Setup(x => x.DoesNextBookmarksByUserIdPageExist(userId, bookmarkParameters)).ReturnsAsync(true);
+            mock.Setup(x => x.DoesNextBookmarksByUserNamePageExist(userName, bookmarkParameters)).ReturnsAsync(true);
             var controller = new BookmarkController(new Mock<IBookmarkService>().Object, mock.Object);
 
-            var result = await controller.DoesNextBookmarksByIdPageExistAsync(userId, bookmarkParameters);
+            var result = await controller.DoesNextBookmarksByUserNamePageExistAsync(userName, bookmarkParameters);
 
             var methodResult = Assert.IsType<OkObjectResult>(result);
             bool doesExist = Assert.IsType<bool>(methodResult.Value);
@@ -52,13 +52,13 @@ namespace BookmarkMicroservice.UnitTests
         [Fact]
         public async Task DoesNextAllBookmarksPageExistAsync_ReturnsOkWithFalse()
         {
-            var userId = Guid.NewGuid();
+            var userName = "test";
             var bookmarkParameters = new BookmarkParameters { PageSize = 3, PageNumber = 3 };
             var mock = new Mock<IPaginationService>();
-            mock.Setup(x => x.DoesNextBookmarksByUserIdPageExist(userId, bookmarkParameters)).ReturnsAsync(false);
+            mock.Setup(x => x.DoesNextBookmarksByUserNamePageExist(userName, bookmarkParameters)).ReturnsAsync(false);
             var controller = new BookmarkController(new Mock<IBookmarkService>().Object, mock.Object);
 
-            var result = await controller.DoesNextBookmarksByIdPageExistAsync(userId, bookmarkParameters);
+            var result = await controller.DoesNextBookmarksByUserNamePageExistAsync(userName, bookmarkParameters);
 
             var methodResult = Assert.IsType<OkObjectResult>(result);
             bool doesExist = Assert.IsType<bool>(methodResult.Value);
@@ -69,19 +69,19 @@ namespace BookmarkMicroservice.UnitTests
         [Fact]
         public async Task FindBookmarksAsync_ReturnsOkWithListOfBookmarks()
         {
-            var userId = Guid.NewGuid();
+            var userName = "testUSerNAme";
             string searchingString = "test";
             var bookmarkParameters = new BookmarkParameters { PageSize = 3, PageNumber = 3 };
             var mock = new Mock<IBookmarkService>();
-            mock.Setup(x => x.FindBookmarks(userId, searchingString, bookmarkParameters)).ReturnsAsync(new List<Bookmark>
+            mock.Setup(x => x.FindBookmarks(userName, searchingString, bookmarkParameters)).ReturnsAsync(new List<Bookmark>
             {
-                new Bookmark{DiscussionTitle = "test123", UserId = userId},
-                new Bookmark{DiscussionTitle = "test", UserId = userId},
-                new Bookmark{DiscussionTitle = "test5", UserId = userId}
+                new Bookmark{DiscussionTitle = "test123", UserName = userName},
+                new Bookmark{DiscussionTitle = "test", UserName = userName},
+                new Bookmark{DiscussionTitle = "test5", UserName = userName}
             });
             var controller = new BookmarkController(mock.Object, new Mock<IPaginationService>().Object);
 
-            var result = await controller.FindBookmarksAsync(userId, searchingString, bookmarkParameters);
+            var result = await controller.FindBookmarksAsync(userName, searchingString, bookmarkParameters);
 
             var methodResult = Assert.IsType<OkObjectResult>(result);
             var bookmarks = Assert.IsType<List<Bookmark>>(methodResult.Value);
@@ -92,14 +92,14 @@ namespace BookmarkMicroservice.UnitTests
         [Fact]
         public async Task DoesNextFindBookmarksPageExistAsync_ReturnsOkWithFalse()
         {
-            var userId = Guid.NewGuid();
+            var userName = "testUSerNAme";
             string searchingString = "test";
             var parameters = new BookmarkParameters { PageNumber = 2, PageSize = 3};
             var mock = new Mock<IPaginationService>();
-            mock.Setup(x => x.DoesNextFindBookmarksPageExist(userId, searchingString, parameters)).ReturnsAsync(false);
+            mock.Setup(x => x.DoesNextFindBookmarksPageExist(userName, searchingString, parameters)).ReturnsAsync(false);
             var controller = new BookmarkController(new Mock<IBookmarkService>().Object, mock.Object);
 
-            var result = await controller.DoesNextFindBookmarksPageExistAsync(userId, parameters, searchingString);
+            var result = await controller.DoesNextFindBookmarksPageExistAsync(userName, parameters, searchingString);
 
             var methodResult = Assert.IsType<OkObjectResult>(result);
             bool doesExist = Assert.IsType<bool>(methodResult.Value);
@@ -110,14 +110,14 @@ namespace BookmarkMicroservice.UnitTests
         [Fact]
         public async Task DoesNextFindBookmarksPageExistAsync_ReturnsOkWithTrue()
         {
-            var userId = Guid.NewGuid();
+            var userName = "testUSerNAme";
             string searchingString = "test";
             var parameters = new BookmarkParameters { PageNumber = 2, PageSize = 3 };
             var mock = new Mock<IPaginationService>();
-            mock.Setup(x => x.DoesNextFindBookmarksPageExist(userId, searchingString, parameters)).ReturnsAsync(true);
+            mock.Setup(x => x.DoesNextFindBookmarksPageExist(userName, searchingString, parameters)).ReturnsAsync(true);
             var controller = new BookmarkController(new Mock<IBookmarkService>().Object, mock.Object);
 
-            var result = await controller.DoesNextFindBookmarksPageExistAsync(userId, parameters, searchingString);
+            var result = await controller.DoesNextFindBookmarksPageExistAsync(userName, parameters, searchingString);
 
             var methodResult = Assert.IsType<OkObjectResult>(result);
             bool doesExist = Assert.IsType<bool>(methodResult.Value);
@@ -128,7 +128,7 @@ namespace BookmarkMicroservice.UnitTests
         [Fact]
         public async Task AddBookmarkAsync_ReturnsOkWithCreatedBookmark()
         {
-            var bookmarkModel = new BookmarkDto {DiscussionId = Guid.NewGuid(), DiscussionTitle = "tests", UserId = Guid.NewGuid()};
+            var bookmarkModel = new BookmarkDto {DiscussionId = Guid.NewGuid(), DiscussionTitle = "tests", UserName = "testUsername"};
             var mock = new Mock<IBookmarkService>();
             var controller = new BookmarkController(mock.Object, new Mock<IPaginationService>().Object);
 

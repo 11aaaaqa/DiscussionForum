@@ -12,17 +12,17 @@ namespace BookmarkMicroservice.Api.Services
         {
             this.context = context;
         }
-        public async Task<List<Bookmark>> GetBookmarksByUserId(Guid userId, BookmarkParameters bookmarkParameters)
+        public async Task<List<Bookmark>> GetBookmarksByUserName(string userName, BookmarkParameters bookmarkParameters)
         {
-            var bookmarks = await context.Bookmarks.Where(x => x.UserId == userId)
+            var bookmarks = await context.Bookmarks.Where(x => x.UserName == userName)
                 .Skip(bookmarkParameters.PageSize * (bookmarkParameters.PageNumber - 1))
                 .Take(bookmarkParameters.PageSize).ToListAsync();
             return bookmarks;
         }
 
-        public async Task<List<Bookmark>> FindBookmarks(Guid userId, string searchingString, BookmarkParameters bookmarkParameters)
+        public async Task<List<Bookmark>> FindBookmarks(string userName, string searchingString, BookmarkParameters bookmarkParameters)
         {
-            var bookmarks = await context.Bookmarks.Where(x => x.UserId == userId)
+            var bookmarks = await context.Bookmarks.Where(x => x.UserName == userName)
                 .Where(x => x.DiscussionTitle.ToLower().Contains(searchingString.ToLower()))
                 .Skip(bookmarkParameters.PageSize * (bookmarkParameters.PageNumber - 1))
                 .Take(bookmarkParameters.PageSize).ToListAsync();
