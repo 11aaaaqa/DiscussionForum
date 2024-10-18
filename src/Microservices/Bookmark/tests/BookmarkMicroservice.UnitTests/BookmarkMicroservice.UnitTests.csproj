@@ -23,4 +23,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\BookmarkMicroservice.Api\BookmarkMicroservice.Api.csproj" />
+  </ItemGroup>
+
 </Project>
