@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text;
+using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Web.MVC.Models.ApiResponses.Bookmark;
 using Web.MVC.Models.ViewModels.Bookmark;
 
@@ -56,6 +59,26 @@ namespace Web.MVC.Controllers
                 PageSize = pageSize, CurrentPageNumber = pageNumber, DoesNextPageExist = doesNextFindPageExist, NextPageNumber = pageNumber + 1,
                 PreviousPageNumber = pageNumber - 1, UserName = userName, Bookmarks = foundBookmarks, SearchingQuery = searchingQuery
             });
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> AddBookmark(Guid discussionId, string discussionTitle, string returnUrl)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            using StringContent jsonContent = new(JsonSerializer.Serialize(new
+            {
+                UserName = User.Identity.Name, DiscussionId = discussionId, DiscussionTitle = discussionTitle
+            }), Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PostAsync(
+                $"http://bookmark-microservice-api:8080/api/Bookmark/AddBookmark", jsonContent);
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            if (!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
