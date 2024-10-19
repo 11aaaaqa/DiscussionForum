@@ -128,6 +128,7 @@ services:
          - ASPNETCORE_ENVIRONMENT=Development
          - ASPNETCORE_URLS=http://+:8080
       depends_on:
+         - rabbitmq
          - postgres-bookmark-microservice
 
     postgres-bookmark-microservice:
