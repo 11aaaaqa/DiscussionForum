@@ -16,10 +16,13 @@ namespace Web.MVC.Controllers
             this.httpClientFactory = httpClientFactory;
         }
 
+        [Authorize]
         [Route("users/{userName}/bookmarks")]
         [HttpGet]
         public async Task<IActionResult> GetBookmarks(string userName, int pageSize, int pageNumber, string? searchingQuery)
         {
+            if (User.Identity.Name != userName) return View("ActionError");
+
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
             if (searchingQuery is null)
