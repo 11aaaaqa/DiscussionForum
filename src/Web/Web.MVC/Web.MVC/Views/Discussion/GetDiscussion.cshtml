@@ -30,8 +30,21 @@
     <p class="break-line">@ViewBag.Content</p>
     @if (User.Identity.Name != ViewBag.CreatedBy)
     {
+        string returnUrl;
+        if (Context.Request.QueryString.HasValue)
+        {
+            returnUrl = Context.Request.Path + Context.Request.QueryString;
+        }
+        else
+        {
+            returnUrl = Context.Request.Path;
+        }
         <a asp-action="AddReport" asp-controller="Report" asp-route-reportedUserName="@ViewBag.CreatedBy" asp-route-reportedDiscussionTitle="@ViewBag.Title"
-            asp-route-reportedDiscussionContent="@ViewBag.Content" asp-route-reportedDiscussionId="@ViewBag.DiscussionId">пожаловаться</a>
+           asp-route-reportedDiscussionContent="@ViewBag.Content" asp-route-reportedDiscussionId="@ViewBag.DiscussionId">пожаловаться</a>
+        <form method="post" asp-controller="Bookmark" asp-action="AddBookmark" asp-route-returnUrl="@returnUrl" asp-route-discussionId="@ViewBag.DiscussionId"
+              asp-route-discussionTitle="@ViewBag.Title">
+            <input type="submit" value="добавить в закладки"/>
+        </form>
     }
 </div>
 <div>
