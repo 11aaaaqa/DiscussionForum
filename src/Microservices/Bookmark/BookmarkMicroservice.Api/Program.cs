@@ -1,4 +1,5 @@
 using BookmarkMicroservice.Api.Database;
+using BookmarkMicroservice.Api.MessageBus.Consumers;
 using BookmarkMicroservice.Api.Services;
 using BookmarkMicroservice.Api.Services.Pagination;
 using MassTransit;
@@ -14,6 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
+    x.AddConsumer<UserNameChangedBookmarkConsumer>();
     x.UsingRabbitMq((context, config) =>
     {
         config.Host(

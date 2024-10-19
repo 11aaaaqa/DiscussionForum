@@ -31,8 +31,4 @@
     <ProjectReference Include="..\..\..\Building-blocks\MessageBus\MessageBus.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="MessageBus\Consumers\" />
-  </ItemGroup>
-
 </Project>
