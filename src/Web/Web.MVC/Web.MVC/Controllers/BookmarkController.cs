@@ -80,5 +80,21 @@ namespace Web.MVC.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> DeleteBookmark(Guid bookmarkId, string returnUrl)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+
+            var response = await httpClient.DeleteAsync(
+                $"http://bookmark-microservice-api:8080/api/Bookmark/DeleteBookmark/{bookmarkId}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            if (!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
