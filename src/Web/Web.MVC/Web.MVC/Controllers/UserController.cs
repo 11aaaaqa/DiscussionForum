@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using GeneralClassesLib.ApiResponses;
@@ -212,12 +213,13 @@ namespace Web.MVC.Controllers
                     $"http://user-microservice-api:8080/api/profile/User/ChangeUserName", jsonContent);
                 if (!response.IsSuccessStatusCode) return View("ActionError");
 
+                Response.Cookies.Delete("accessToken");
+
                 var authResponse = await httpClient.GetAsync(
                     $"http://register-microservice-api:8080/api/User/AuthUserByUserName?userName={model.NewUserName}");
                 if (!authResponse.IsSuccessStatusCode) return View("ActionError");
 
                 var authenticated = await authResponse.Content.ReadFromJsonAsync<AuthenticatedResponse>();
-                Response.Cookies.Delete("accessToken");
                 Response.Cookies.Append("accessToken", authenticated.Token, new CookieOptions
                 {
                     Expires = DateTimeOffset.UtcNow.AddMonths(2),
