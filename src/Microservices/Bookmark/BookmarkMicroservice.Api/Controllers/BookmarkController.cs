@@ -56,10 +56,19 @@ namespace BookmarkMicroservice.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBookmarkAsync([FromBody] BookmarkDto model)
         {
-            var createdBookmark = await bookmarkService.AddBookmark(new Bookmark
+            Bookmark createdBookmark;
+            try
             {
-                DiscussionId = model.DiscussionId, DiscussionTitle = model.DiscussionTitle, Id = Guid.NewGuid(), UserName = model.UserName
-            });
+                createdBookmark = await bookmarkService.AddBookmark(new Bookmark
+                {
+                    DiscussionId = model.DiscussionId, DiscussionTitle = model.DiscussionTitle, Id = Guid.NewGuid(), UserName = model.UserName
+                });
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+            
             return Ok(createdBookmark);
         }
 

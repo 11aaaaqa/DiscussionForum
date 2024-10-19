@@ -31,6 +31,9 @@ namespace BookmarkMicroservice.Api.Services
 
         public async Task<Bookmark> AddBookmark(Bookmark bookmark)
         {
+            var alreadyAddedBookmark = await context.Bookmarks.Where(x => x.UserName == bookmark.UserName)
+                .Where(x => x.DiscussionId == bookmark.DiscussionId).ToListAsync();
+            if (alreadyAddedBookmark.Count > 0) throw new Exception("Bookmark already added");
             await context.Bookmarks.AddAsync(bookmark);
             await context.SaveChangesAsync();
             return bookmark;
