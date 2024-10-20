@@ -39,10 +39,23 @@
             { 
                 <br/><br/> <a asp-controller="Moderator" asp-action="BanUser" asp-route-userName="@Model.UserName" asp-route-returnUrl="@returnUrl"
                            >отстранить пользователя</a><br/>
-                <a asp-controller="Moderator" asp-action="ChangeUserRoles" asp-route-returnUrl="@returnUrl" asp-route-aspNetUserId="@Model.AspNetUserId">назначить роль</a>
             }
-
         }
+        @if (User.IsInRole(UserRoleConstants.AdminRole))
+        {
+            string returnUrl;
+            if (Context.Request.QueryString.HasValue)
+            {
+                returnUrl = Context.Request.Path + Context.Request.QueryString;
+            }
+            else
+            {
+                returnUrl = Context.Request.Path;
+            }
+            <a asp-controller="Moderator" asp-action="ChangeUserRoles" asp-route-returnUrl="@returnUrl"
+               asp-route-aspNetUserId="@Model.AspNetUserId">назначить роль</a>
+        }
+        
     </div>
     <div class="text-center">
         <br /><br /><a asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-userName="@Model.UserName" asp-route-pageNumber="1"
