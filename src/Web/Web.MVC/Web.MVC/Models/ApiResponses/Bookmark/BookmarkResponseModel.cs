@@ -6,5 +6,6 @@
         public string UserName { get; set; }
         public Guid DiscussionId { get; set; }
         public string DiscussionTitle { get; set; }
+        public DateTime AddedAt { get; set; }
     }
 }
