@@ -19,11 +19,19 @@ namespace BookmarkMicroservice.Api.Controllers
             this.bookmarkService = bookmarkService;
         }
 
-        [Route("GetBookmarksByUserName/{userName}")]
+        [Route("GetBookmarksByUserNameByNovelty/{userName}")]
         [HttpGet]
-        public async Task<IActionResult> GetBookmarksByUserNameAsync(string userName, [FromQuery] BookmarkParameters bookmarkParameters)
+        public async Task<IActionResult> GetBookmarksByUserNameByNoveltyAsync(string userName, [FromQuery] BookmarkParameters bookmarkParameters)
         {
-            var bookmarks = await bookmarkService.GetBookmarksByUserName(userName, bookmarkParameters);
+            var bookmarks = await bookmarkService.GetBookmarksByUserNameByNovelty(userName, bookmarkParameters);
+            return Ok(bookmarks);
+        }
+
+        [Route("GetBookmarksByUserNameByAntiquity/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> GetBookmarksByUserNameByAntiquityAsync(string userName, [FromQuery] BookmarkParameters bookmarkParameters)
+        {
+            var bookmarks = await bookmarkService.GetBookmarksByUserNameByAntiquity(userName, bookmarkParameters);
             return Ok(bookmarks);
         }
 
@@ -35,11 +43,21 @@ namespace BookmarkMicroservice.Api.Controllers
             return Ok(doesExist);
         }
 
-        [Route("FindBookmarks/{userName}")]
+        [Route("FindBookmarksByNovelty/{userName}")]
         [HttpGet]
-        public async Task<IActionResult> FindBookmarksAsync(string userName, string searchingQuery, [FromQuery] BookmarkParameters bookmarkParameters)
+        public async Task<IActionResult> FindBookmarksByNoveltyAsync(string userName, string searchingQuery,
+            [FromQuery] BookmarkParameters bookmarkParameters)
         {
-            var bookmarks = await bookmarkService.FindBookmarks(userName, searchingQuery, bookmarkParameters);
+            var bookmarks = await bookmarkService.FindBookmarksByNovelty(userName, searchingQuery, bookmarkParameters);
+            return Ok(bookmarks);
+        }
+
+        [Route("FindBookmarksByAntiquity/{userName}")]
+        [HttpGet]
+        public async Task<IActionResult> FindBookmarksByAntiquityAsync(string userName, string searchingQuery,
+            [FromQuery] BookmarkParameters bookmarkParameters)
+        {
+            var bookmarks = await bookmarkService.FindBookmarksByAntiquity(userName, searchingQuery, bookmarkParameters);
             return Ok(bookmarks);
         }
 
@@ -61,7 +79,8 @@ namespace BookmarkMicroservice.Api.Controllers
             {
                 createdBookmark = await bookmarkService.AddBookmark(new Bookmark
                 {
-                    DiscussionId = model.DiscussionId, DiscussionTitle = model.DiscussionTitle, Id = Guid.NewGuid(), UserName = model.UserName
+                    DiscussionId = model.DiscussionId, DiscussionTitle = model.DiscussionTitle, Id = Guid.NewGuid(), UserName = model.UserName,
+                    AddedAt = DateTime.UtcNow
                 });
             }
             catch (Exception e)

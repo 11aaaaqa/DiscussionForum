@@ -12,17 +12,35 @@ namespace BookmarkMicroservice.Api.Services
         {
             this.context = context;
         }
-        public async Task<List<Bookmark>> GetBookmarksByUserName(string userName, BookmarkParameters bookmarkParameters)
+
+        public async Task<List<Bookmark>> GetBookmarksByUserNameByNovelty(string userName, BookmarkParameters bookmarkParameters)
         {
-            var bookmarks = await context.Bookmarks.Where(x => x.UserName == userName)
+            var bookmarks = await context.Bookmarks.Where(x => x.UserName == userName).OrderByDescending(x => x.AddedAt)
                 .Skip(bookmarkParameters.PageSize * (bookmarkParameters.PageNumber - 1))
                 .Take(bookmarkParameters.PageSize).ToListAsync();
             return bookmarks;
         }
 
-        public async Task<List<Bookmark>> FindBookmarks(string userName, string searchingString, BookmarkParameters bookmarkParameters)
+        public async Task<List<Bookmark>> GetBookmarksByUserNameByAntiquity(string userName, BookmarkParameters bookmarkParameters)
         {
-            var bookmarks = await context.Bookmarks.Where(x => x.UserName == userName)
+            var bookmarks = await context.Bookmarks.Where(x => x.UserName == userName).OrderBy(x => x.AddedAt)
+                .Skip(bookmarkParameters.PageSize * (bookmarkParameters.PageNumber - 1))
+                .Take(bookmarkParameters.PageSize).ToListAsync();
+            return bookmarks;
+        }
+
+        public async Task<List<Bookmark>> FindBookmarksByNovelty(string userName, string searchingString, BookmarkParameters bookmarkParameters)
+        {
+            var bookmarks = await context.Bookmarks.Where(x => x.UserName == userName).OrderByDescending(x => x.AddedAt)
+                .Where(x => x.DiscussionTitle.ToLower().Contains(searchingString.ToLower()))
+                .Skip(bookmarkParameters.PageSize * (bookmarkParameters.PageNumber - 1))
+                .Take(bookmarkParameters.PageSize).ToListAsync();
+            return bookmarks;
+        }
+
+        public async Task<List<Bookmark>> FindBookmarksByAntiquity(string userName, string searchingString, BookmarkParameters bookmarkParameters)
+        {
+            var bookmarks = await context.Bookmarks.Where(x => x.UserName == userName).OrderBy(x => x.AddedAt)
                 .Where(x => x.DiscussionTitle.ToLower().Contains(searchingString.ToLower()))
                 .Skip(bookmarkParameters.PageSize * (bookmarkParameters.PageNumber - 1))
                 .Take(bookmarkParameters.PageSize).ToListAsync();
