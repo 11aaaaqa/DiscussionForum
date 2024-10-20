@@ -10,7 +10,8 @@
         <p>Ответов: @Model.Answers</p>
         @if (User.Identity.Name == Model.UserName || User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
         {
-            <a asp-controller="Bookmark" asp-action="GetBookmarks" asp-route-pageNumber="1" asp-route-pageSize="20" asp-route-userName="@Model.UserName">
+            <a asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="1" asp-route-pageSize="20"
+               asp-route-userName="@Model.UserName">
                 закладки
             </a><br/>
             if (Model.IsBanned)

@@ -1,0 +1,50 @@
+﻿@model Web.MVC.Models.ViewModels.Bookmark.BookmarkViewModel
+
+<h3>Закладки</h3>
+<div>
+    @if (true)
+    {
+        <form method="get">
+            <input name="searchingQuery" placeholder="Поиск" />
+            <input type="hidden" name="pageSize" value="@Model.PageSize" />
+            <input type="hidden" name="pageNumber" value="1" />
+            <input type="hidden" name="userName" value="@Model.UserName" />
+            <input type="submit" value="найти" />
+        </form>
+        <a asp-controller="Bookmark" asp-action="GetBookmarksByAntiquity" asp-route-pageNumber="1" asp-route-pageSize="@Model.PageSize"
+           asp-route-userName="@Model.UserName">старые</a><br/>
+        string returnUrl;
+        if (Context.Request.QueryString.HasValue)
+        {
+            returnUrl = Context.Request.Path + Context.Request.QueryString;
+        }
+        else
+        {
+            returnUrl = Context.Request.Path;
+        }
+        @foreach (var bookmark in Model.Bookmarks)
+        {
+            <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@bookmark.DiscussionId" asp-route-pageNumber="1" asp-route-pageSize="20">
+                @bookmark.DiscussionTitle
+            </a>
+
+            <form method="post" asp-action="DeleteBookmark" asp-controller="Bookmark" asp-route-bookmarkId="@bookmark.Id" asp-route-returnUrl="@returnUrl">
+                <input type="submit" value="удалить закладку" />
+            </form>
+        }
+    }
+</div>
+
+@if (Model.PreviousPageNumber > 0)
+{
+    <a asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize"
+       asp-route-userName="@Model.UserName" asp-route-searchingQuery="@Model.SearchingQuery">Назад</a>
+}
+@if (Model.DoesNextPageExist && Model.Bookmarks.Count != 0)
+{
+
+    <a asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize"
+       asp-route-searchingQuery="@Model.SearchingQuery">
+        Вперед
+    </a>
+}
