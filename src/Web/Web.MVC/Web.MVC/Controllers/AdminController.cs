@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using System.Text;
+using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using Web.MVC.DTOs.Admin;
 using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ViewModels.AdminViewModels;
 
@@ -56,6 +60,43 @@ namespace Web.MVC.Controllers
                 CurrentPageNumber = pageNumber, DoesNextPageExist = doesExist, NextPageNumber = pageNumber + 1, PreviousPageNumber = pageNumber - 1,
                 Bans = foundBans, PageSize = pageSize, SearchingQuery = searchingQuery
             });
+        }
+
+        [Route("admin/create-bot")]
+        [HttpGet]
+        public IActionResult CreateBotAccount()
+        {
+            return View();
+        }
+
+        [Route("admin/create-bot")]
+        [HttpPost]
+        public async Task<IActionResult> CreateBotAccount(CreateBotDto model, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                using HttpClient httpClient = httpClientFactory.CreateClient();
+                using StringContent jsonContent = new(JsonSerializer.Serialize(new
+                {
+                    model.UserName, model.Email, model.Password
+                }), Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PostAsync(
+                 $"http://register-microservice-api:8080/api/User/CreateBotAccount", jsonContent);
+                if (response.StatusCode == HttpStatusCode.Conflict)
+                {
+                    ModelState.AddModelError(string.Empty, "Такой пользователь уже существует");
+                    return View(model);
+                }
+
+                if (!response.IsSuccessStatusCode) return View("ActionError");
+
+                if (!string.IsNullOrEmpty(returnUrl))
+                    return LocalRedirect(returnUrl);
+
+                return RedirectToAction("Index", "Home");
+            }
+            return View(model);
         }
     }
 }

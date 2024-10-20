@@ -6,10 +6,13 @@ using RegisterMicroservice.Api.DTOs.Auth;
 using RegisterMicroservice.Api.Models.UserModels;
 using RegisterMicroservice.Api.Services;
 using System.Security.Claims;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using RegisterMicroservice.Api.Constants;
 using RegisterMicroservice.Api.DTOs;
 using RegisterMicroservice.Api.DTOs.User;
+using MassTransit.Transports;
+using MessageBus.Messages;
 
 namespace RegisterMicroservice.Api.Controllers
 {
@@ -21,14 +24,16 @@ namespace RegisterMicroservice.Api.Controllers
         private readonly IEmailSender emailSender;
         private readonly ITokenService tokenService;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly IPublishEndpoint publishEndpoint;
 
         public UserController(UserManager<User> userManager, IEmailSender emailSender, ITokenService tokenService,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager, IPublishEndpoint publishEndpoint)
         {
             this.userManager = userManager;
             this.emailSender = emailSender;
             this.tokenService = tokenService;
             this.roleManager = roleManager;
+            this.publishEndpoint = publishEndpoint;
         }
 
         [HttpGet("GetById")]
@@ -266,6 +271,34 @@ namespace RegisterMicroservice.Api.Controllers
             int pageStartCount = totalGettingUsersCount - userParameters.PageSize;
             bool doesExist = (totalUsersCount > pageStartCount);
             return Ok(doesExist);
+        }
+
+        [Route("CreateBotAccount")]
+        [HttpPost]
+        public async Task<IActionResult> CreateBotAccountAsync([FromBody] CreateBotAccountDto model)
+        {
+            var user = new User
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserName = model.UserName,
+                Email = model.Email,
+                EmailConfirmed = true
+            };
+
+            var result = await userManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+                return Conflict(result.Errors);
+
+            await userManager.AddToRoleAsync(user, UserRoleConstants.UserRole);
+
+            await publishEndpoint.Publish<IUserRegistered>(new
+            {
+                UserId = user.Id,
+                UserName = user.UserName
+            });
+
+            return Ok();
         }
     }
 }
