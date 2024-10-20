@@ -1,0 +1,28 @@
+﻿@model Web.MVC.DTOs.Admin.CreateBotDto
+
+<h3>Создать бота</h3>
+
+<form method="post">
+    <div asp-validation-summary="All"></div>
+    <div>
+        <label asp-for="Email"></label><br/>
+        <input asp-for="Email"/>
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="UserName"></label><br />
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div>
+        <label asp-for="Password"></label><br />
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <label asp-for="PasswordConfirm"></label><br />
+        <input asp-for="PasswordConfirm" />
+        <span asp-validation-for="PasswordConfirm"></span>
+    </div>
+    <input type="submit" value="создать"/>
+</form>

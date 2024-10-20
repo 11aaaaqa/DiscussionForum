@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Admin\CreateBotAccount.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Discussion\GetDiscussionsSortedByPopularityForToday.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Discussion\GetDiscussionsSortedByPopularityForWeek.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\BanUserAndDeleteSuggestion.cshtml" />
@@ -137,6 +138,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\User\GetUsersSuggestedTopics.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Admin\CreateBotAccount.cshtml" />
   </ItemGroup>
 
 </Project>
