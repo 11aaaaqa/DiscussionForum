@@ -81,7 +81,7 @@ namespace Web.MVC.Controllers
             return View(model);
         }
 
-        [Authorize]
+        [Authorize(Roles = UserRoleConstants.AdminRole + ", " + UserRoleConstants.ModeratorRole)]
         [HttpGet]
         public async Task<IActionResult> Reports(string reportType, int pageNumber, int pageSize)
         {
@@ -106,7 +106,7 @@ namespace Web.MVC.Controllers
         }
 
         [Route("reports/{reportId}")]
-        [Authorize]
+        [Authorize(Roles = UserRoleConstants.AdminRole + ", " + UserRoleConstants.ModeratorRole)]
         [HttpGet]
         public async Task<IActionResult> GetReport(Guid reportId, string returnUrl)
         {
@@ -119,6 +119,7 @@ namespace Web.MVC.Controllers
             return View(report);
         }
 
+        [Authorize(Roles = UserRoleConstants.AdminRole + ", " + UserRoleConstants.ModeratorRole)]
         [HttpPost]
         public async Task<IActionResult> DeleteReport(Guid reportId, string returnUrl)
         {

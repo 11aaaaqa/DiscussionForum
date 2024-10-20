@@ -1,13 +1,16 @@
 ﻿using System.Net;
 using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.MVC.Constants;
 using Web.MVC.DTOs.Admin;
 using Web.MVC.Models.ApiResponses;
 using Web.MVC.Models.ViewModels.AdminViewModels;
 
 namespace Web.MVC.Controllers
 {
+    [Authorize(Roles = UserRoleConstants.AdminRole)]
     public class AdminController : Controller
     {
         private readonly IHttpClientFactory httpClientFactory;

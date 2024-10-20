@@ -100,6 +100,7 @@ namespace Web.MVC.Controllers
             });
         }
 
+        [Authorize]
         [Route("users/{userName}/suggested/discussions")]
         [HttpGet]
         public async Task<IActionResult> GetUsersSuggestedDiscussions(string userName, int pageSize, int pageNumber)
@@ -125,6 +126,7 @@ namespace Web.MVC.Controllers
             });
         }
 
+        [Authorize]
         [Route("users/{userName}/suggested/comments")]
         [HttpGet]
         public async Task<IActionResult> GetUsersSuggestedComments(string userName, int pageSize, int pageNumber)
@@ -151,6 +153,7 @@ namespace Web.MVC.Controllers
             });
         }
 
+        [Authorize]
         [Route("users/{userName}/suggested/topics")]
         [HttpGet]
         public async Task<IActionResult> GetUsersSuggestedTopics(string userName, int pageSize, int pageNumber)

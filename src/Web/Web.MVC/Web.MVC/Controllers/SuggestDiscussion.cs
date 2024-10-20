@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Web.MVC.Constants;
 using Web.MVC.Models.ApiResponses.Discussion;
 
 namespace Web.MVC.Controllers
@@ -12,6 +14,7 @@ namespace Web.MVC.Controllers
             this.httpClientFactory = httpClientFactory;
         }
 
+        [Authorize(Roles = UserRoleConstants.AdminRole + ", " + UserRoleConstants.ModeratorRole)]
         [HttpPost]
         public async Task<IActionResult> DeleteSuggestedDiscussion(Guid suggestedDiscussionId, string returnUrl)
         {
@@ -26,6 +29,7 @@ namespace Web.MVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize(Roles = UserRoleConstants.AdminRole + ", " + UserRoleConstants.ModeratorRole)]
         [Route("MySuggestions/{suggestedDiscussionId}")]
         [HttpGet]
         public async Task<IActionResult> GetSuggestedDiscussionById(Guid suggestedDiscussionId)

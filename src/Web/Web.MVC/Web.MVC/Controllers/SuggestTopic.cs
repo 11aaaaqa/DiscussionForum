@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Web.MVC.Constants;
 
 namespace Web.MVC.Controllers
 {
@@ -11,6 +13,7 @@ namespace Web.MVC.Controllers
             this.httpClientFactory = httpClientFactory;
         }
 
+        [Authorize(Roles = UserRoleConstants.AdminRole + ", " + UserRoleConstants.ModeratorRole)]
         [HttpPost]
         public async Task<IActionResult> DeleteSuggestedTopicById(Guid id, string returnUrl)
         {

@@ -173,6 +173,7 @@ namespace Web.MVC.Controllers
             return View("SomethingWentWrong", id);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> DeleteDiscussion(Guid discussionId, string? returnUrl, string? reportType)
         {

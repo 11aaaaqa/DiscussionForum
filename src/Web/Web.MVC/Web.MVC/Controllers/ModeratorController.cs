@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.MVC.Constants;
 using Web.MVC.DTOs.Moderator;
@@ -17,6 +18,7 @@ using Web.MVC.Services;
 
 namespace Web.MVC.Controllers
 {
+    [Authorize(Roles = UserRoleConstants.AdminRole + ", " + UserRoleConstants.ModeratorRole)]
     public class ModeratorController : Controller
     {
         private readonly IHttpClientFactory httpClientFactory;
