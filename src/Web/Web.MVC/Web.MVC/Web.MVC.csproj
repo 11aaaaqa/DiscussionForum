@@ -144,4 +144,8 @@
     <UpToDateCheckInput Remove="Views\Admin\CreateBotAccount.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Information\" />
+  </ItemGroup>
+
 </Project>
