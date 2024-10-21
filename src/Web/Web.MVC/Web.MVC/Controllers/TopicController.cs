@@ -155,7 +155,7 @@ namespace Web.MVC.Controllers
             return View(model);
         }
 
-        [Route("topics/new-topics")]
+        [Route("topics/new")]
         [HttpGet]
         public async Task<IActionResult> GetAllTopicsSortedByNovelty(int pageNumber, int pageSize)
         {
@@ -180,7 +180,7 @@ namespace Web.MVC.Controllers
             return View(topics);
         }
 
-        [Route("topics/popular-topics")]
+        [Route("topics/popular")]
         [HttpGet]
         public async Task<IActionResult> GetAllTopicsSortedByPopularity(int pageNumber, int pageSize)
         {

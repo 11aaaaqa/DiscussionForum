@@ -24,6 +24,7 @@ namespace Web.MVC.Controllers
             this.checkUserService = checkUserService;
         }
 
+        [Route("discussions/suggest")]
         [Authorize]
         [HttpGet]
         public IActionResult SuggestDiscussion(string topicName)
@@ -31,6 +32,7 @@ namespace Web.MVC.Controllers
             return View(new DiscussionDto{TopicName = topicName});
         }
 
+        [Route("discussions/suggest")]
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> SuggestDiscussion(DiscussionDto model)

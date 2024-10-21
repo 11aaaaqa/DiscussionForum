@@ -23,12 +23,14 @@ namespace Web.MVC.Controllers
             this.configuration = configuration;
         }
 
+        [Route("auth/register")]
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
+        [Route("auth/register")]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterDto model)
         {

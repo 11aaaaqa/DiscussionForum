@@ -20,6 +20,7 @@ namespace Web.MVC.Controllers
             this.httpClientFactory = httpClientFactory;
         }
 
+        [Route("reports/add")]
         [Authorize]
         [HttpGet]
         public IActionResult AddReport(string reportedUserName, string? reportedCommentContent,
@@ -37,6 +38,7 @@ namespace Web.MVC.Controllers
             return View(model);
         }
 
+        [Route("reports/add")]
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddReport(CreateReportDto model)
@@ -81,6 +83,7 @@ namespace Web.MVC.Controllers
             return View(model);
         }
 
+        [Route("reports")]
         [Authorize(Roles = UserRoleConstants.AdminRole + ", " + UserRoleConstants.ModeratorRole)]
         [HttpGet]
         public async Task<IActionResult> Reports(string reportType, int pageNumber, int pageSize)

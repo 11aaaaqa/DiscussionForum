@@ -32,6 +32,7 @@ namespace Web.MVC.Controllers
             this.suggestionService = suggestionService;
         }
 
+        [Route("moderator/suggested/topics")]
         [HttpGet]
         public async Task<IActionResult> SuggestedTopics(int pageSize, int pageNumber)
         {
@@ -83,6 +84,7 @@ namespace Web.MVC.Controllers
             return RedirectToAction("SuggestedTopics");
         }
 
+        [Route("moderator/suggested/discussions")]
         [HttpGet]
         public async Task<IActionResult> SuggestedDiscussions(int pageSize, int pageNumber)
         {
@@ -153,6 +155,7 @@ namespace Web.MVC.Controllers
             return View("ActionError");
         }
 
+        [Route("moderator/suggested/comments")]
         [HttpGet]
         public async Task<IActionResult> SuggestedComments(int pageSize, int pageNumber)
         {
@@ -202,6 +205,7 @@ namespace Web.MVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Route("moderator/ban-user")]
         [HttpGet]
         public async Task<IActionResult> BanUser(string? userName, Guid? userId)
         {
@@ -240,6 +244,7 @@ namespace Web.MVC.Controllers
             return View();
         }
 
+        [Route("moderator/ban-user")]
         [HttpPost]
         public async Task<IActionResult> BanUser(string? userName, Guid? userId, BanUserDto model, string returnUrl, string? banType)
         {
@@ -283,6 +288,7 @@ namespace Web.MVC.Controllers
             return View(model);
         }
 
+        [Route("moderator/ban-user-and-delete-suggestion")]
         [HttpGet]
         public async Task<IActionResult> BanUserAndDeleteSuggestion(string? userName, Guid? userId)
         {
@@ -321,6 +327,7 @@ namespace Web.MVC.Controllers
             return View();
         }
 
+        [Route("moderator/ban-user-and-delete-suggestion")]
         [HttpPost]
         public async Task<IActionResult> BanUserAndDeleteSuggestion(string? userName, Guid? userId, BanUserDto model, string returnUrl, string? banType,
             Guid suggestionDeleteId, string suggestionDeleteType)
@@ -516,6 +523,7 @@ namespace Web.MVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Route("moderator/change-user-roles")]
         [HttpGet]
         public async Task<IActionResult> ChangeUserRoles(string aspNetUserId)
         {
@@ -544,6 +552,7 @@ namespace Web.MVC.Controllers
             return View(model);
         }
 
+        [Route("moderator/change-user-roles")]
         [HttpPost]
         public async Task<IActionResult> ChangeUserRoles(string aspNetUserId, string returnUrl, List<CheckBoxUserRoleDto> userRoles)
         {
@@ -566,6 +575,7 @@ namespace Web.MVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Route("moderator/users")]
         [HttpGet]
         public async Task<IActionResult> Users(int pageNumber, int pageSize, string? searchingQuery, string searchingType)
         {
