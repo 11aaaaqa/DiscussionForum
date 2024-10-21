@@ -126,5 +126,15 @@ namespace CommentMicroservice.Api.Controllers
                 await paginationService.DoesNextCommentsByUserNamePageExistAsync(userName, commentParameters);
             return Ok(doesExist);
         }
+
+        [Route("GetCommentById/{commentId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetCommentByIdAsync(Guid commentId)
+        {
+            var comment = await repository.GetByIdAsync(commentId);
+            if (comment == null) return BadRequest();
+
+            return Ok(comment);
+        }
     }
 }
