@@ -21,7 +21,7 @@ namespace Web.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBookmarksByAntiquity(string userName, int pageSize, int pageNumber, string? searchingQuery)
         {
-            if (User.Identity.Name != userName) return View("ActionError");
+            if (User.Identity.Name != userName) return RedirectToAction("AccessIsForbidden", "Information");
 
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
@@ -69,7 +69,7 @@ namespace Web.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBookmarksByNovelty(string userName, int pageSize, int pageNumber, string? searchingQuery)
         {
-            if (User.Identity.Name != userName) return View("ActionError");
+            if (User.Identity.Name != userName) return RedirectToAction("AccessIsForbidden", "Information");
 
             using HttpClient httpClient = httpClientFactory.CreateClient();
 

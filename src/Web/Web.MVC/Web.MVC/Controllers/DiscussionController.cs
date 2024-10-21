@@ -178,6 +178,15 @@ namespace Web.MVC.Controllers
         public async Task<IActionResult> DeleteDiscussion(Guid discussionId, string? returnUrl, string? reportType)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
+            var discussionResponse = await httpClient.GetAsync(
+                $"http://discussion-microservice-api:8080/api/Discussion/GetDiscussionById?id={discussionId}");
+            if (!discussionResponse.IsSuccessStatusCode) return View("ActionError");
+
+            var discussion = await discussionResponse.Content.ReadFromJsonAsync<DiscussionResponse>();
+
+            if (discussion.CreatedBy != User.Identity.Name)
+                return RedirectToAction("AccessIsForbidden", "Information");
+
             var response = await httpClient.DeleteAsync(
                 $"http://discussion-microservice-api:8080/api/Discussion/DeleteDiscussionById/{discussionId}");
             if (!response.IsSuccessStatusCode) return View("ActionError");

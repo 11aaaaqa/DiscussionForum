@@ -105,6 +105,8 @@ namespace Web.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsersSuggestedDiscussions(string userName, int pageSize, int pageNumber)
         {
+            if (userName != User.Identity.Name) return RedirectToAction("AccessIsForbidden","Information");
+
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
                 $"http://discussion-microservice-api:8080/api/SuggestDiscussion/GetSuggestedDiscussionsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
@@ -131,6 +133,8 @@ namespace Web.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsersSuggestedComments(string userName, int pageSize, int pageNumber)
         {
+            if (userName != User.Identity.Name) return RedirectToAction("AccessIsForbidden", "Information");
+
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
                 $"http://comment-microservice-api:8080/api/SuggestComment/GetSuggestedCommentsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
@@ -158,6 +162,8 @@ namespace Web.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsersSuggestedTopics(string userName, int pageSize, int pageNumber)
         {
+            if (userName != User.Identity.Name) return RedirectToAction("AccessIsForbidden", "Information");
+
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
                 $"http://topic-microservice-api:8080/api/SuggestTopic/GetSuggestedTopicsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
@@ -196,6 +202,11 @@ namespace Web.MVC.Controllers
             if (ModelState.IsValid)
             {
                 using HttpClient httpClient = httpClientFactory.CreateClient();
+                var userResponse = await httpClient.GetAsync($"http://user-microservice-api:8080/api/profile/User/GetUserById/{model.UserId}");
+                if (!userResponse.IsSuccessStatusCode) return View("ActionError");
+
+                var user = await userResponse.Content.ReadFromJsonAsync<UserResponse>();
+                if (user.UserName != User.Identity.Name) return RedirectToAction("AccessIsForbidden", "Information");
 
                 var existsResponse = await httpClient.GetAsync(
                     $"http://user-microservice-api:8080/api/profile/User/IsNormalizedUserNameAlreadyExists/{model.NewUserName}");
