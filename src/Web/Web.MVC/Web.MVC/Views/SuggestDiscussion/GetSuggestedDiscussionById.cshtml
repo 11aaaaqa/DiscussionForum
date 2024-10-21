@@ -1,4 +1,7 @@
-﻿@model Web.MVC.Models.ApiResponses.Discussion.SuggestedDiscussionResponse
+﻿@{
+    ViewData["Title"] = $"Предложенное пользователем {Model.CreatedBy} обсуждение";
+}
+@model Web.MVC.Models.ApiResponses.Discussion.SuggestedDiscussionResponse
 
 <h3>@Model.Title</h3>
 <p>@Model.Content</p>

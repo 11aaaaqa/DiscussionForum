@@ -1,4 +1,7 @@
-﻿@model GetDiscussionsViewModel
+﻿@{
+    ViewData["Title"] = "Предложенные обсуждения";
+}
+@model GetDiscussionsViewModel
 
 <div>
     @if (Model.Discussions is null || Model.Discussions.Count == 0)

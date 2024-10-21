@@ -1,4 +1,7 @@
-﻿@model Web.MVC.Models.ViewModels.UserViewModels.GetCommentsViewModel
+﻿@{
+    ViewData["Title"] = "Предложенные комментарии";
+}
+@model Web.MVC.Models.ViewModels.UserViewModels.GetCommentsViewModel
 
 <div>
     @if (Model.Comments is null || Model.Comments.Count == 0)

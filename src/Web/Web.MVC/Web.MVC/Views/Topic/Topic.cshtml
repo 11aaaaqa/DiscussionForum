@@ -1,4 +1,7 @@
-﻿@model DiscussionViewModel
+﻿@{
+    ViewData["Title"] = $"{Model.TopicName}";
+}
+@model DiscussionViewModel
 
 <h3>Обсуждения</h3>
 <a asp-controller="Discussion" asp-action="SuggestDiscussion" asp-route-topicName="@Model.TopicName">создать обсуждение</a>

@@ -1,4 +1,7 @@
-﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@{
+    ViewData["Title"] = $"Жалоба от {Model.UserNameReportedBy}";
+}
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Web.MVC.Constants
 @model Web.MVC.Models.ApiResponses.ReportResponses.ReportApiResponse
 
