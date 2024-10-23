@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text;
 using System.Text.Json;
+using DNTCaptcha.Core;
 using GeneralClassesLib.ApiResponses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,7 @@ namespace Web.MVC.Controllers
             return View();
         }
 
+        [ValidateDNTCaptcha(ErrorMessage = "Пожалуйста, пройдите капчу")]
         [Route("auth/register")]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterDto model)
