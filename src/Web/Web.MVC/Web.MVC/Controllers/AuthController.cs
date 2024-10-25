@@ -214,6 +214,7 @@ namespace Web.MVC.Controllers
             return View();
         }
 
+        [ValidateDNTCaptcha(ErrorMessage = "Ошибка в капче")]
         [HttpPost]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordDto model)
         {
