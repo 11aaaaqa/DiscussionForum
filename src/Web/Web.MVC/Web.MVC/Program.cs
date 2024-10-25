@@ -33,7 +33,7 @@ builder.Services.AddDNTCaptcha(options =>
 {
     options.UseCookieStorageProvider()
         .UseCustomFont(Path.Combine(builder.Environment.WebRootPath, "fonts", "ARIAL.TTF"))
-        .WithEncryptionKey("d8a122a8-f84c-49bf-be94-fa97c4e79a8f");
+        .WithEncryptionKey(builder.Configuration["Captcha:EncryptionKey"]);
 });
 
 builder.Services.AddTransient<IReportService, SuggestionsService>();
