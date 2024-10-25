@@ -138,7 +138,7 @@ namespace Web.MVC.Controllers
                 {
                     var user = await userResponse.Content.ReadFromJsonAsync<GetUserResponse>();
                     if (user.EmailConfirmed == false)
-                        return View("EmailIsNotConfirmed", user.Id);
+                        return RedirectToAction("ConfirmEmailPrepare", routeValues: new { UserId = user.Id });
                 }
                 else
                 {
@@ -280,29 +280,40 @@ namespace Web.MVC.Controllers
             return View(model);
         }
 
+        [Route("auth/email-is-not-confirmed")]
         [HttpGet]
+        public IActionResult ConfirmEmailPrepare(ConfirmEmailPrepareDto model)
+        {
+            return View(model);
+        }
+
+        [Route("auth/email-is-not-confirmed")]
+        [ValidateDNTCaptcha(ErrorMessage = "Ошибка в капче")]
+        [HttpPost]
         public async Task<IActionResult> ConfirmEmailPrepare(string userId)
         {
-            using var httpClient = httpClientFactory.CreateClient();
-            var uri = new ConfirmEmailMethodUri
+            if (ModelState.IsValid)
             {
-                Protocol = configuration["Uri:Protocol"],
-                DomainName = configuration["Uri:DomainName"],
-                Controller = "Auth",
-                Action = "ConfirmEmail"
-            };
+                using var httpClient = httpClientFactory.CreateClient();
+                var uri = new ConfirmEmailMethodUri
+                {
+                    Protocol = configuration["Uri:Protocol"],
+                    DomainName = configuration["Uri:DomainName"],
+                    Controller = "Auth",
+                    Action = "ConfirmEmail"
+                };
 
-            using StringContent jsonContent = new(JsonSerializer.Serialize(uri), Encoding.UTF8, "application/json");
+                using StringContent jsonContent = new(JsonSerializer.Serialize(uri), Encoding.UTF8, "application/json");
 
-            var response = await httpClient.PostAsync(
-                $"http://register-microservice-api:8080/api/User/SendEmailConfirmationLink?userId={userId}",
-                jsonContent);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                return View("Confirmation");
+                var response = await httpClient.PostAsync(
+                    $"http://register-microservice-api:8080/api/User/SendEmailConfirmationLink?userId={userId}",
+                    jsonContent);
+                if (response.IsSuccessStatusCode)
+                    return View("Confirmation");
+
+                return View("ActionError");
             }
-
-            return View("ActionError");
+            return View(new ConfirmEmailPrepareDto{UserId = userId});
         }
 
         private void AuthenticateUser(string jwtToken)
