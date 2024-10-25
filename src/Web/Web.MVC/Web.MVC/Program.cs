@@ -32,7 +32,7 @@ builder.Services.AddAuthentication(x =>
 builder.Services.AddDNTCaptcha(options =>
 {
     options.UseCookieStorageProvider()
-        .UseCustomFont(Path.Combine(builder.Environment.WebRootPath, "fonts", "chilispepper.ttf"))
+        .UseCustomFont(Path.Combine(builder.Environment.WebRootPath, "fonts", "movistar.ttf"))
         .WithEncryptionKey(builder.Configuration["Captcha:EncryptionKey"]);
 });
 
