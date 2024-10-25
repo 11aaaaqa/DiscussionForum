@@ -31,7 +31,7 @@ namespace Web.MVC.Controllers
             return View();
         }
 
-        [ValidateDNTCaptcha(ErrorMessage = "Пожалуйста, пройдите капчу")]
+        [ValidateDNTCaptcha(ErrorMessage = "Ошибка в капче")]
         [Route("auth/register")]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterDto model)
