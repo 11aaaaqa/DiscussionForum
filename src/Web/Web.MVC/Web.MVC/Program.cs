@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Web;
+using DNTCaptcha.Core;
 using Web.MVC.Middlewares;
 using Web.MVC.Services;
 
@@ -28,6 +29,12 @@ builder.Services.AddAuthentication(x =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]))
     };
 });
+builder.Services.AddDNTCaptcha(options =>
+{
+    options.UseCookieStorageProvider()
+        .UseCustomFont(Path.Combine(builder.Environment.WebRootPath, "fonts", "ARIAL.TTF"))
+        .WithEncryptionKey("d8a122a8-f84c-49bf-be94-fa97c4e79a8f");
+});
 
 builder.Services.AddTransient<IReportService, SuggestionsService>();
 builder.Services.AddTransient<ISuggestionService, SuggestionsService>();
@@ -47,6 +54,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseRateLimiter();
 
 app.UseMiddleware<JwtTokenMiddleware>();
 
