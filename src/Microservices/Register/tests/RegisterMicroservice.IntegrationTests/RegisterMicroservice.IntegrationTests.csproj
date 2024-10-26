@@ -24,4 +24,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\RegisterMicroservice.Api\RegisterMicroservice.Api.csproj" />
+  </ItemGroup>
+
 </Project>
