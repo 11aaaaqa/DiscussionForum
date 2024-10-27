@@ -15,9 +15,21 @@ services:
         - ASPNETCORE_HTTPS_PORT=1213
        depends_on:
          - register-microservice-api
+         - gateway-api
        volumes:
          - ${APPDATA}/Microsoft/UserSecrets/:/root/.microsoft/usersecrets
          - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https/
+    
+    gateway-api:
+      image: ${DOCKER_REGISTRY-}gateway-api
+      build:
+        context: .
+        dockerfile: src/Gateway/Gateway.Api/Dockerfile
+      ports:
+        - "7422:8080"
+      environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - ASPNETCORE_URLS=http://+:8080
 
     register-microservice-api:
       image: ${DOCKER_REGISTRY-}register-microservice-api
@@ -32,6 +44,7 @@ services:
       depends_on:
         - postgres-register-microservice
         - rabbitmq
+        - gateway-api
 
     user-microservice-api:
       image: ${DOCKER_REGISTRY-}user-microservice-api
@@ -46,6 +59,7 @@ services:
       depends_on:
         - postgres-user-microservice
         - rabbitmq
+        - gateway-api
 
     topic-microservice-api:
       image: ${DOCKER_REGISTRY-}topic-microservice-api
@@ -60,6 +74,7 @@ services:
       depends_on:
         - postgres-topic-microservice
         - rabbitmq
+        - gateway-api
 
     discussion-microservice-api:
       image: ${DOCKER_REGISTRY-}discussion-microservice-api
@@ -74,6 +89,7 @@ services:
       depends_on:
         - postgres-discussion-microservice
         - rabbitmq
+        - gateway-api
 
     comment-microservice-api:
       image: ${DOCKER_REGISTRY-}comment-microservice-api
@@ -88,6 +104,7 @@ services:
       depends_on:
         - rabbitmq
         - postgres-comment-microservice
+        - gateway-api
 
     report-microservice-api:
       image: ${DOCKER_REGISTRY-}report-microservice-api
@@ -102,6 +119,7 @@ services:
       depends_on:
         - rabbitmq
         - postgres-report-microservice
+        - gateway-api
 
     banhistory-microservice-api:
       image: ${DOCKER_REGISTRY-}banhistory-microservice-api
@@ -116,6 +134,7 @@ services:
       depends_on:
         - rabbitmq
         - postgres-banhistory-microservice
+        - gateway-api
 
     bookmark-microservice-api:
       image: ${DOCKER_REGISTRY-}bookmark-microservice-api
@@ -130,6 +149,7 @@ services:
       depends_on:
          - rabbitmq
          - postgres-bookmark-microservice
+         - gateway-api
 
     postgres-bookmark-microservice:
       container_name: postgres-bookmark-microservice
@@ -264,3 +284,4 @@ services:
 
 volumes:
   postgres-data:    
+
