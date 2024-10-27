@@ -89,6 +89,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9C18E806
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookmarkMicroservice.UnitTests", "src\Microservices\Bookmark\tests\BookmarkMicroservice.UnitTests\BookmarkMicroservice.UnitTests.csproj", "{2AA16C8C-D47A-437A-BABD-02EFEC3828E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gateway.Api", "src\Gateway\Gateway.Api\Gateway.Api.csproj", "{9186B56E-F991-4AB2-A0EC-227ED61ABEA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -183,6 +185,10 @@ Global
 		{2AA16C8C-D47A-437A-BABD-02EFEC3828E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AA16C8C-D47A-437A-BABD-02EFEC3828E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AA16C8C-D47A-437A-BABD-02EFEC3828E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9186B56E-F991-4AB2-A0EC-227ED61ABEA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9186B56E-F991-4AB2-A0EC-227ED61ABEA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9186B56E-F991-4AB2-A0EC-227ED61ABEA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9186B56E-F991-4AB2-A0EC-227ED61ABEA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -229,6 +235,7 @@ Global
 		{A70D8551-229E-4CBE-BA39-8D6E15363D85} = {C960EE4E-201A-45B2-B3C0-4169B7D996FD}
 		{9C18E806-89D6-4BE9-B7A1-C392324BE5CB} = {C960EE4E-201A-45B2-B3C0-4169B7D996FD}
 		{2AA16C8C-D47A-437A-BABD-02EFEC3828E2} = {9C18E806-89D6-4BE9-B7A1-C392324BE5CB}
+		{9186B56E-F991-4AB2-A0EC-227ED61ABEA6} = {EB127177-4FBB-47AD-A78C-9961C6CCE463}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9F5758DC-BF57-41BA-9D49-8FD04B6D71B4}
