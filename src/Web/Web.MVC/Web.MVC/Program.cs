@@ -10,6 +10,10 @@ using Web.MVC.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddAntiforgery(x =>
+{
+    x.Cookie.Name = "afrgry";
+});
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
