@@ -14,10 +14,13 @@ namespace Web.MVC.Controllers
     public class ReportController : Controller
     {
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly string url;
 
-        public ReportController(IHttpClientFactory httpClientFactory)
+        public ReportController(IHttpClientFactory httpClientFactory, IConfiguration config)
         {
             this.httpClientFactory = httpClientFactory;
+            url = (string.IsNullOrEmpty(config["Url:Port"]))
+                ? $"{config["Url:Protocol"]}://{config["Url:HostName"]}" : $"{config["Url:Protocol"]}://{config["Url:HostName"]}:{config["Url:Port"]}";
         }
 
         [Route("reports/add")]
@@ -48,7 +51,7 @@ namespace Web.MVC.Controllers
                 using HttpClient httpClient = httpClientFactory.CreateClient();
 
                 var getLink =
-                    $"http://user-microservice-api:8080/api/profile/User/IsUserBannedByUserName/{User.Identity.Name}?banTypes[]={BanTypeConstants.GeneralBanType}&banTypes[]={BanTypeConstants.ReportBanType}";
+                    $"{url}/api/profile/User/IsUserBannedByUserName/{User.Identity.Name}?banTypes[]={BanTypeConstants.GeneralBanType}&banTypes[]={BanTypeConstants.ReportBanType}";
                 var isUserBannedResponse = await httpClient.GetAsync(getLink);
                 if (!isUserBannedResponse.IsSuccessStatusCode) return View("ActionError");
 
@@ -56,7 +59,7 @@ namespace Web.MVC.Controllers
                 if (isUserBanned) return View("ReportBanned");
 
                 var userResponse = await httpClient.GetAsync(
-                    $"http://user-microservice-api:8080/api/profile/User/GetUserByUserName/{model.ReportedUserName}");
+                    $"{url}/api/profile/User/GetUserByUserName/{model.ReportedUserName}");
                 if (!userResponse.IsSuccessStatusCode) return View("ActionError");
                 var user = await userResponse.Content.ReadFromJsonAsync<CustUserResponse>();
 
@@ -71,7 +74,7 @@ namespace Web.MVC.Controllers
                 using StringContent jsonContent = new(JsonSerializer.Serialize(requestModel), Encoding.UTF8, "application/json");
 
                 var response = await httpClient.PostAsync(
-                    $"http://report-microservice-api:8080/api/Report/CreateReport", jsonContent);
+                    $"{url}/api/Report/CreateReport", jsonContent);
                 if (response.IsSuccessStatusCode)
                 {
                     return View("Thanks");
@@ -90,13 +93,13 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://report-microservice-api:8080/api/Report/GetReportsByReportType/{reportType}?pageNumber={pageNumber}&pageSize={pageSize}");
+                $"{url}/api/Report/GetReportsByReportType/{reportType}?pageNumber={pageNumber}&pageSize={pageSize}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var reports = await response.Content.ReadFromJsonAsync<List<ReportApiResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://report-microservice-api:8080/api/Report/DoesNextPageByReportTypeExist?reportType={reportType}&pageSize={pageSize}&pageNumber={pageNumber + 1}");
+                $"{url}/api/Report/DoesNextPageByReportTypeExist?reportType={reportType}&pageSize={pageSize}&pageNumber={pageNumber + 1}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             var doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -114,7 +117,7 @@ namespace Web.MVC.Controllers
         public async Task<IActionResult> GetReport(Guid reportId, string returnUrl)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
-            var response = await httpClient.GetAsync($"http://report-microservice-api:8080/api/Report/GetReportById/{reportId}");
+            var response = await httpClient.GetAsync($"{url}/api/Report/GetReportById/{reportId}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             ViewBag.ReturnUrl = returnUrl;
@@ -129,7 +132,7 @@ namespace Web.MVC.Controllers
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response =
                 await httpClient.DeleteAsync(
-                    $"http://report-microservice-api:8080/api/Report/DeleteReportById/{reportId}");
+                    $"{url}/api/Report/DeleteReportById/{reportId}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))

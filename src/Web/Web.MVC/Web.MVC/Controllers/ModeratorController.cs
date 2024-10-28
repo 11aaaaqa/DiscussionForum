@@ -24,12 +24,16 @@ namespace Web.MVC.Controllers
         private readonly IHttpClientFactory httpClientFactory;
         private readonly IReportService reportService;
         private readonly ISuggestionService suggestionService;
+        private readonly string url;
 
-        public ModeratorController(IHttpClientFactory httpClientFactory, IReportService reportService, ISuggestionService suggestionService)
+        public ModeratorController(IHttpClientFactory httpClientFactory, IReportService reportService, ISuggestionService suggestionService,
+            IConfiguration config)
         {
             this.httpClientFactory = httpClientFactory;
             this.reportService = reportService;
             this.suggestionService = suggestionService;
+            url = (string.IsNullOrEmpty(config["Url:Port"]))
+                ? $"{config["Url:Protocol"]}://{config["Url:HostName"]}" : $"{config["Url:Protocol"]}://{config["Url:HostName"]}:{config["Url:Port"]}";
         }
 
         [Route("moderator/suggested/topics")]
@@ -39,12 +43,12 @@ namespace Web.MVC.Controllers
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
             var response = await httpClient.GetAsync(
-                $"http://topic-microservice-api:8080/api/SuggestTopic/GetAllSuggestedTopics?pageSize={pageSize}&pageNumber={pageNumber}");
+                $"{url}/api/SuggestTopic/GetAllSuggestedTopics?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
             var suggestedTopics = await response.Content.ReadFromJsonAsync<List<TopicResponse>>();
 
             var doesNextSuggestedTopicsPageExist = await httpClient.GetAsync(
-                $"http://topic-microservice-api:8080/api/SuggestTopic/DoesNextSuggestedTopicsPageExist?pageNumber={pageNumber + 1}&pageSize={pageSize}");
+                $"{url}/api/SuggestTopic/DoesNextSuggestedTopicsPageExist?pageNumber={pageNumber + 1}&pageSize={pageSize}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             bool doesExist = await doesNextSuggestedTopicsPageExist.Content.ReadFromJsonAsync<bool>();
@@ -61,7 +65,7 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
-            var response = await httpClient.DeleteAsync($"http://topic-microservice-api:8080/api/SuggestTopic/AcceptSuggestedTopic/{id}");
+            var response = await httpClient.DeleteAsync($"{url}/api/SuggestTopic/AcceptSuggestedTopic/{id}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))
@@ -75,7 +79,7 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             
-            var response = await httpClient.DeleteAsync($"http://topic-microservice-api:8080/api/SuggestTopic/RejectSuggestedTopic/{id}");
+            var response = await httpClient.DeleteAsync($"{url}/api/SuggestTopic/RejectSuggestedTopic/{id}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))
@@ -91,13 +95,13 @@ namespace Web.MVC.Controllers
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
             var response = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/GetAllSuggestedDiscussions?pageSize={pageSize}&pageNumber={pageNumber}");
+                $"{url}/api/SuggestDiscussion/GetAllSuggestedDiscussions?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/DoesNextAllSuggestedDiscussionsPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+                $"{url}/api/SuggestDiscussion/DoesNextAllSuggestedDiscussionsPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -114,7 +118,7 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
-            var response = await httpClient.DeleteAsync($"http://discussion-microservice-api:8080/api/SuggestDiscussion/AcceptSuggestedDiscussion/{id}");
+            var response = await httpClient.DeleteAsync($"{url}/api/SuggestDiscussion/AcceptSuggestedDiscussion/{id}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))
@@ -128,7 +132,7 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
-            var response = await httpClient.DeleteAsync($"http://discussion-microservice-api:8080/api/SuggestDiscussion/RejectSuggestedDiscussion/{id}");
+            var response = await httpClient.DeleteAsync($"{url}/api/SuggestDiscussion/RejectSuggestedDiscussion/{id}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if(!string.IsNullOrEmpty(returnUrl))
@@ -144,7 +148,7 @@ namespace Web.MVC.Controllers
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
             var response = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/GetSuggestedDiscussionById?id={id}");
+                $"{url}/api/SuggestDiscussion/GetSuggestedDiscussionById?id={id}");
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 ViewBag.ReturnUrl = returnUrl;
@@ -161,13 +165,13 @@ namespace Web.MVC.Controllers
         {
             using var httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://comment-microservice-api:8080/api/SuggestComment/GetAllSuggestedComments?pageSize={pageSize}&pageNumber={pageNumber}");
+                $"{url}/api/SuggestComment/GetAllSuggestedComments?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
             
             var suggestedComments = await response.Content.ReadFromJsonAsync<List<SuggestedCommentResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://comment-microservice-api:8080/api/SuggestComment/DoesNextSuggestedCommentsPageExist?pageNumber={pageNumber + 1}&pageSize={pageSize}");
+                $"{url}/api/SuggestComment/DoesNextSuggestedCommentsPageExist?pageNumber={pageNumber + 1}&pageSize={pageSize}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -183,7 +187,7 @@ namespace Web.MVC.Controllers
         public async Task<IActionResult> AcceptSuggestedComment(Guid id, string returnUrl)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
-            var response = await httpClient.DeleteAsync($"http://comment-microservice-api:8080/api/SuggestComment/AcceptSuggestedComment/{id}");
+            var response = await httpClient.DeleteAsync($"{url}/api/SuggestComment/AcceptSuggestedComment/{id}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))
@@ -196,7 +200,7 @@ namespace Web.MVC.Controllers
         public async Task<IActionResult> RejectSuggestedComment(Guid id, string returnUrl)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
-            var response = await httpClient.DeleteAsync($"http://comment-microservice-api:8080/api/SuggestComment/RejectSuggestedComment/{id}");
+            var response = await httpClient.DeleteAsync($"{url}/api/SuggestComment/RejectSuggestedComment/{id}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))
@@ -214,7 +218,7 @@ namespace Web.MVC.Controllers
             using HttpClient httpClient = httpClientFactory.CreateClient();
             if (userName is null)
             {
-                var response = await httpClient.GetAsync($"http://user-microservice-api:8080/api/profile/User/UserBanInfoByUserId/{userId}");
+                var response = await httpClient.GetAsync($"{url}/api/profile/User/UserBanInfoByUserId/{userId}");
                 if (!response.IsSuccessStatusCode) return View("ActionError");
 
                 var banInfo = await response.Content.ReadFromJsonAsync<UserBanInfoResponse>();
@@ -228,7 +232,7 @@ namespace Web.MVC.Controllers
             }
             else
             {
-                var response = await httpClient.GetAsync($"http://user-microservice-api:8080/api/profile/User/UserBanInfoByUserName/{userName}");
+                var response = await httpClient.GetAsync($"{url}/api/profile/User/UserBanInfoByUserName/{userName}");
                 if (!response.IsSuccessStatusCode) return View("ActionError");
 
                 var banInfo = await response.Content.ReadFromJsonAsync<UserBanInfoResponse>();
@@ -268,14 +272,14 @@ namespace Web.MVC.Controllers
                     using StringContent jsonContent =
                         new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
                     var response = await httpClient.PatchAsync(
-                        $"http://user-microservice-api:8080/api/profile/User/BanUserByUserName/{userName}", jsonContent);
+                        $"{url}/api/profile/User/BanUserByUserName/{userName}", jsonContent);
                     if (!response.IsSuccessStatusCode) return View("ActionError");
                 }
                 else
                 {
                     using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
                     var response = await httpClient.PatchAsync(
-                        $"http://user-microservice-api:8080/api/profile/User/BanUserByUserId/{userId}", jsonContent);
+                        $"{url}/api/profile/User/BanUserByUserId/{userId}", jsonContent);
                     if (!response.IsSuccessStatusCode) return View("ActionError");
                 }
 
@@ -297,7 +301,7 @@ namespace Web.MVC.Controllers
             using HttpClient httpClient = httpClientFactory.CreateClient();
             if (userName is null)
             {
-                var response = await httpClient.GetAsync($"http://user-microservice-api:8080/api/profile/User/UserBanInfoByUserId/{userId}");
+                var response = await httpClient.GetAsync($"{url}/api/profile/User/UserBanInfoByUserId/{userId}");
                 if (!response.IsSuccessStatusCode) return View("ActionError");
 
                 var banInfo = await response.Content.ReadFromJsonAsync<UserBanInfoResponse>();
@@ -311,7 +315,7 @@ namespace Web.MVC.Controllers
             }
             else
             {
-                var response = await httpClient.GetAsync($"http://user-microservice-api:8080/api/profile/User/UserBanInfoByUserName/{userName}");
+                var response = await httpClient.GetAsync($"{url}/api/profile/User/UserBanInfoByUserName/{userName}");
                 if (!response.IsSuccessStatusCode) return View("ActionError");
 
                 var banInfo = await response.Content.ReadFromJsonAsync<UserBanInfoResponse>();
@@ -352,14 +356,14 @@ namespace Web.MVC.Controllers
                     using StringContent jsonContent =
                         new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
                     var response = await httpClient.PatchAsync(
-                        $"http://user-microservice-api:8080/api/profile/User/BanUserByUserName/{userName}", jsonContent);
+                        $"{url}/api/profile/User/BanUserByUserName/{userName}", jsonContent);
                     if (!response.IsSuccessStatusCode) return View("ActionError");
                 }
                 else
                 {
                     using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
                     var response = await httpClient.PatchAsync(
-                        $"http://user-microservice-api:8080/api/profile/User/BanUserByUserId/{userId}", jsonContent);
+                        $"{url}/api/profile/User/BanUserByUserId/{userId}", jsonContent);
                     if (!response.IsSuccessStatusCode) return View("ActionError");
                 }
 
@@ -406,7 +410,7 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://topic-microservice-api:8080/api/SuggestTopic/GetSuggestedTopicsByUserName/{userName}");
+                $"{url}/api/SuggestTopic/GetSuggestedTopicsByUserName/{userName}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             ViewBag.SuggestedByUserName = userName;
@@ -419,7 +423,7 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.DeleteAsync(
-                $"http://topic-microservice-api:8080/api/SuggestTopic/DeleteAllSuggestedTopicsByUserName/{userName}");
+                $"{url}/api/SuggestTopic/DeleteAllSuggestedTopicsByUserName/{userName}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))
@@ -434,7 +438,7 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/GetSuggestedDiscussionsByUserName/{userName}");
+                $"{url}/api/SuggestDiscussion/GetSuggestedDiscussionsByUserName/{userName}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             ViewBag.SuggestedByUserName = userName;
@@ -447,7 +451,7 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.DeleteAsync(
-                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/DeleteAllSuggestedDiscussionsByUserName/{userName}");
+                $"{url}/api/SuggestDiscussion/DeleteAllSuggestedDiscussionsByUserName/{userName}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))
@@ -462,7 +466,7 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://comment-microservice-api:8080/api/SuggestComment/GetSuggestedCommentsByUserName/{userName}");
+                $"{url}/api/SuggestComment/GetSuggestedCommentsByUserName/{userName}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             ViewBag.SuggestedByUserName = userName;
@@ -475,7 +479,7 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.DeleteAsync(
-                $"http://comment-microservice-api:8080/api/SuggestComment/DeleteAllSuggestedCommentsByUserName/{userName}");
+                $"{url}/api/SuggestComment/DeleteAllSuggestedCommentsByUserName/{userName}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))
@@ -490,14 +494,14 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://report-microservice-api:8080/api/Report/GetReportsByUserName/{userName}?pageNumber={pageNumber}&pageSize={pageSize}");
+                $"{url}/api/Report/GetReportsByUserName/{userName}?pageNumber={pageNumber}&pageSize={pageSize}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             ViewBag.ReportedByUserName = userName;
             var reports = await response.Content.ReadFromJsonAsync<List<ReportApiResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://report-microservice-api:8080/api/Report/DoesNextPageByUserNameExist?userName={userName}&pageNumber={pageNumber + 1}&pageSize={pageSize}");
+                $"{url}/api/Report/DoesNextPageByUserNameExist?userName={userName}&pageNumber={pageNumber + 1}&pageSize={pageSize}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -514,7 +518,7 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.DeleteAsync(
-                $"http://report-microservice-api:8080/api/Report/DeleteReportsByUserName/{userName}");
+                $"{url}/api/Report/DeleteReportsByUserName/{userName}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))
@@ -528,7 +532,7 @@ namespace Web.MVC.Controllers
         public async Task<IActionResult> ChangeUserRoles(string aspNetUserId)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
-            var response = await httpClient.GetAsync($"http://register-microservice-api:8080/api/User/GetUserRolesByUserId/{aspNetUserId}");
+            var response = await httpClient.GetAsync($"{url}/api/User/GetUserRolesByUserId/{aspNetUserId}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
             var roles = await response.Content.ReadFromJsonAsync<List<string>>();
 
@@ -566,7 +570,7 @@ namespace Web.MVC.Controllers
             using StringContent jsonContent = new(JsonSerializer.Serialize(new { RoleNames = selectedUserRoles, UserId = aspNetUserId}),
                 Encoding.UTF8, "application/json");
             using HttpClient httpClient = httpClientFactory.CreateClient();
-            var response = await httpClient.PostAsync("http://register-microservice-api:8080/api/User/AddUserToRoles", jsonContent);
+            var response = await httpClient.PostAsync($"{url}/api/User/AddUserToRoles", jsonContent);
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))
@@ -585,26 +589,26 @@ namespace Web.MVC.Controllers
             if (searchingQuery is null)
             {
                 var response = await httpClient.GetAsync(
-                $"http://register-microservice-api:8080/api/User/GetAllUsers?pageNumber={pageNumber}&pageSize={pageSize}");
+                $"{url}/api/User/GetAllUsers?pageNumber={pageNumber}&pageSize={pageSize}");
                 if (!response.IsSuccessStatusCode) return View("ActionError");
 
                 users = await response.Content.ReadFromJsonAsync<List<AspNetUserResponse>>();
 
                 var doesNextPageExistResponse = await httpClient.GetAsync(
-                    $"http://register-microservice-api:8080/api/User/DoesNextUsersPageExist?pageNumber={pageNumber + 1}&pageSize={pageSize}");
+                    $"{url}/api/User/DoesNextUsersPageExist?pageNumber={pageNumber + 1}&pageSize={pageSize}");
                 if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
                 doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
             }
             else
             {
                 var response = await httpClient.GetAsync(
-                    $"http://register-microservice-api:8080/api/User/GetAllUsersSearching?pageNumber={pageNumber}&pageSize={pageSize}&searchingString={searchingQuery}&searchingType={searchingType}");
+                    $"{url}/api/User/GetAllUsersSearching?pageNumber={pageNumber}&pageSize={pageSize}&searchingString={searchingQuery}&searchingType={searchingType}");
                 if (!response.IsSuccessStatusCode) return View("ActionError");
 
                 users = await response.Content.ReadFromJsonAsync<List<AspNetUserResponse>>();
 
                 var doesNextPageExistResponse = await httpClient.GetAsync(
-                    $"http://register-microservice-api:8080/api/User/DoesNextUsersPageSearchingExist?pageNumber={pageNumber + 1}&pageSize={pageSize}&searchingString={searchingQuery}&searchingType={searchingType}");
+                    $"{url}/api/User/DoesNextUsersPageSearchingExist?pageNumber={pageNumber + 1}&pageSize={pageSize}&searchingString={searchingQuery}&searchingType={searchingType}");
                 if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
                 doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();

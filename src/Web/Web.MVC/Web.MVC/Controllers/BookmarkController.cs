@@ -10,10 +10,13 @@ namespace Web.MVC.Controllers
     public class BookmarkController : Controller
     {
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly string url;
 
-        public BookmarkController(IHttpClientFactory httpClientFactory)
+        public BookmarkController(IHttpClientFactory httpClientFactory, IConfiguration config)
         {
             this.httpClientFactory = httpClientFactory;
+            url = (string.IsNullOrEmpty(config["Url:Port"]))
+                ? $"{config["Url:Protocol"]}://{config["Url:HostName"]}" : $"{config["Url:Protocol"]}://{config["Url:HostName"]}:{config["Url:Port"]}";
         }
 
         [Authorize]
@@ -28,13 +31,13 @@ namespace Web.MVC.Controllers
             if (searchingQuery is null)
             {
                 var response = await httpClient.GetAsync(
-                    $"http://bookmark-microservice-api:8080/api/Bookmark/GetBookmarksByUserNameByAntiquity/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
+                    $"{url}/api/Bookmark/GetBookmarksByUserNameByAntiquity/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
                 if (!response.IsSuccessStatusCode) return View("ActionError");
 
                 var bookmarks = await response.Content.ReadFromJsonAsync<List<BookmarkResponseModel>>();
 
                 var doesNextPageExistResponse = await httpClient.GetAsync(
-                    $"http://bookmark-microservice-api:8080/api/Bookmark/DoesNextBookmarksByUserNamePageExist/{userName}?pageSize={pageSize}&pageNumber={pageNumber  + 1}");
+                    $"{url}/api/Bookmark/DoesNextBookmarksByUserNamePageExist/{userName}?pageSize={pageSize}&pageNumber={pageNumber  + 1}");
                 if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
                 bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -46,13 +49,13 @@ namespace Web.MVC.Controllers
             }
 
             var findBookmarksResponse = await httpClient.GetAsync(
-                $"http://bookmark-microservice-api:8080/api/Bookmark/FindBookmarksByAntiquity/{userName}?pageSize={pageSize}&pageNumber={pageNumber}&searchingQuery={searchingQuery}");
+                $"{url}/api/Bookmark/FindBookmarksByAntiquity/{userName}?pageSize={pageSize}&pageNumber={pageNumber}&searchingQuery={searchingQuery}");
             if (!findBookmarksResponse.IsSuccessStatusCode) return View("ActionError");
 
             var foundBookmarks = await findBookmarksResponse.Content.ReadFromJsonAsync<List<BookmarkResponseModel>>();
 
             var doesNextFindPageExistResponse = await httpClient.GetAsync(
-                $"http://bookmark-microservice-api:8080/api/Bookmark/DoesNextFindBookmarksPageExist/{userName}?pageSize={pageSize}&pageNumber={pageNumber + 1}&searchingQuery={searchingQuery}");
+                $"{url}/api/Bookmark/DoesNextFindBookmarksPageExist/{userName}?pageSize={pageSize}&pageNumber={pageNumber + 1}&searchingQuery={searchingQuery}");
             if (!doesNextFindPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesNextFindPageExist = await doesNextFindPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -76,13 +79,13 @@ namespace Web.MVC.Controllers
             if (searchingQuery is null)
             {
                 var response = await httpClient.GetAsync(
-                    $"http://bookmark-microservice-api:8080/api/Bookmark/GetBookmarksByUserNameByNovelty/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
+                    $"{url}/api/Bookmark/GetBookmarksByUserNameByNovelty/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
                 if (!response.IsSuccessStatusCode) return View("ActionError");
 
                 var bookmarks = await response.Content.ReadFromJsonAsync<List<BookmarkResponseModel>>();
 
                 var doesNextPageExistResponse = await httpClient.GetAsync(
-                    $"http://bookmark-microservice-api:8080/api/Bookmark/DoesNextBookmarksByUserNamePageExist/{userName}?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+                    $"{url}/api/Bookmark/DoesNextBookmarksByUserNamePageExist/{userName}?pageSize={pageSize}&pageNumber={pageNumber + 1}");
                 if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
                 bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -100,13 +103,13 @@ namespace Web.MVC.Controllers
             }
 
             var findBookmarksResponse = await httpClient.GetAsync(
-                $"http://bookmark-microservice-api:8080/api/Bookmark/FindBookmarksByNovelty/{userName}?pageSize={pageSize}&pageNumber={pageNumber}&searchingQuery={searchingQuery}");
+                $"{url}/api/Bookmark/FindBookmarksByNovelty/{userName}?pageSize={pageSize}&pageNumber={pageNumber}&searchingQuery={searchingQuery}");
             if (!findBookmarksResponse.IsSuccessStatusCode) return View("ActionError");
 
             var foundBookmarks = await findBookmarksResponse.Content.ReadFromJsonAsync<List<BookmarkResponseModel>>();
 
             var doesNextFindPageExistResponse = await httpClient.GetAsync(
-                $"http://bookmark-microservice-api:8080/api/Bookmark/DoesNextFindBookmarksPageExist/{userName}?pageSize={pageSize}&pageNumber={pageNumber + 1}&searchingQuery={searchingQuery}");
+                $"{url}/api/Bookmark/DoesNextFindBookmarksPageExist/{userName}?pageSize={pageSize}&pageNumber={pageNumber + 1}&searchingQuery={searchingQuery}");
             if (!doesNextFindPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesNextFindPageExist = await doesNextFindPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -135,7 +138,7 @@ namespace Web.MVC.Controllers
             }), Encoding.UTF8, "application/json");
 
             var response = await httpClient.PostAsync(
-                $"http://bookmark-microservice-api:8080/api/Bookmark/AddBookmark", jsonContent);
+                $"{url}/api/Bookmark/AddBookmark", jsonContent);
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))
@@ -151,7 +154,7 @@ namespace Web.MVC.Controllers
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
             var response = await httpClient.DeleteAsync(
-                $"http://bookmark-microservice-api:8080/api/Bookmark/DeleteBookmark/{bookmarkId}");
+                $"{url}/api/Bookmark/DeleteBookmark/{bookmarkId}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))

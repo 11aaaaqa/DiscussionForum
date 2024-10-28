@@ -17,11 +17,14 @@ namespace Web.MVC.Controllers
     {
         private readonly ICheckUserService checkUserService;
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly string url;
 
-        public DiscussionController(IHttpClientFactory httpClientFactory, ICheckUserService checkUserService)
+        public DiscussionController(IHttpClientFactory httpClientFactory, ICheckUserService checkUserService, IConfiguration config)
         {
             this.httpClientFactory = httpClientFactory;
             this.checkUserService = checkUserService;
+            url = (string.IsNullOrEmpty(config["Url:Port"]))
+                ? $"{config["Url:Protocol"]}://{config["Url:HostName"]}" : $"{config["Url:Protocol"]}://{config["Url:HostName"]}:{config["Url:Port"]}";
         }
 
         [Route("discussions/suggest")]
@@ -42,7 +45,7 @@ namespace Web.MVC.Controllers
                 using var httpClient = httpClientFactory.CreateClient();
 
                 var getLink =
-                    $"http://user-microservice-api:8080/api/profile/User/IsUserBannedByUserName/{User.Identity.Name}?banTypes[]={BanTypeConstants.GeneralBanType}&banTypes[]={BanTypeConstants.DiscussionBanType}";
+                    $"{url}/api/profile/User/IsUserBannedByUserName/{User.Identity.Name}?banTypes[]={BanTypeConstants.GeneralBanType}&banTypes[]={BanTypeConstants.DiscussionBanType}";
                 var isUserBannedResponse = await httpClient.GetAsync(getLink);
                 if (!isUserBannedResponse.IsSuccessStatusCode) return View("ActionError");
 
@@ -57,7 +60,7 @@ namespace Web.MVC.Controllers
                         (JsonSerializer.Serialize(new { model.Title, model.Content, CreatedBy = User.Identity.Name }), Encoding.UTF8, "application/json");
 
                     var response = await httpClient.PostAsync(
-                        $"http://discussion-microservice-api:8080/api/SuggestDiscussion/SuggestToCreate?topicName={model.TopicName}",
+                        $"{url}/api/SuggestDiscussion/SuggestToCreate?topicName={model.TopicName}",
                         jsonContent);
                     if (response.StatusCode == HttpStatusCode.OK)
                         return View("Thanks");
@@ -67,7 +70,7 @@ namespace Web.MVC.Controllers
                     using StringContent jsonContent = new(JsonSerializer.Serialize(new { model.Title, model.TopicName, model.Content,
                             CreatedBy = User.Identity.Name }), Encoding.UTF8, "application/json");
                     var response = await httpClient.PostAsync(
-                        "http://discussion-microservice-api:8080/api/Discussion/CreateDiscussion",
+                        $"{url}/api/Discussion/CreateDiscussion",
                         jsonContent);
                     if (!response.IsSuccessStatusCode) return View("ActionError");
 
@@ -89,7 +92,7 @@ namespace Web.MVC.Controllers
 
             var response =
                 await httpClient.GetAsync(
-                    $"http://discussion-microservice-api:8080/api/Discussion/GetDiscussionById?id={id}");
+                    $"{url}/api/Discussion/GetDiscussionById?id={id}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var discussion = await response.Content.ReadFromJsonAsync<DiscussionResponse>();
@@ -97,14 +100,14 @@ namespace Web.MVC.Controllers
             ViewBag.Rating = discussion.Rating; ViewBag.Title = discussion.Title; ViewBag.DiscussionId = id;
 
             var getCommentsResponse = await httpClient.GetAsync(
-                $"http://comment-microservice-api:8080/api/Comment/GetCommentsByDiscussionId/{id}?pageNumber={pageNumber}&pageSize={pageSize}");
+                $"{url}/api/Comment/GetCommentsByDiscussionId/{id}?pageNumber={pageNumber}&pageSize={pageSize}");
             if (!getCommentsResponse.IsSuccessStatusCode) return View("ActionError");
 
             var comments = await getCommentsResponse.Content.ReadFromJsonAsync<List<CommentResponse>>();
             ViewBag.Comments = comments;
 
             var doesNextCommentsPageExistResponse = await httpClient.GetAsync(
-                $"http://comment-microservice-api:8080/api/Comment/DoesNextCommentsByDiscussionIdPageExist/{id}?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+                $"{url}/api/Comment/DoesNextCommentsByDiscussionIdPageExist/{id}?pageSize={pageSize}&pageNumber={pageNumber + 1}");
             if (!doesNextCommentsPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesNextCommentsPageExist = await doesNextCommentsPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -128,7 +131,7 @@ namespace Web.MVC.Controllers
                 using var httpClient = httpClientFactory.CreateClient();
 
                 var getLink =
-                    $"http://user-microservice-api:8080/api/profile/User/IsUserBannedByUserName/{User.Identity.Name}?banTypes[]={BanTypeConstants.GeneralBanType}&banTypes[]={BanTypeConstants.CommentBanType}";
+                    $"{url}/api/profile/User/IsUserBannedByUserName/{User.Identity.Name}?banTypes[]={BanTypeConstants.GeneralBanType}&banTypes[]={BanTypeConstants.CommentBanType}";
                 var isUserBannedResponse = await httpClient.GetAsync(getLink);
                 if (!isUserBannedResponse.IsSuccessStatusCode) return View("ActionError");
                 
@@ -151,7 +154,7 @@ namespace Web.MVC.Controllers
                         DiscussionId = discussionId
                     }), Encoding.UTF8, "application/json");
 
-                    var response = await httpClient.PostAsync("http://comment-microservice-api:8080/api/SuggestComment/Suggest", jsonContent);
+                    var response = await httpClient.PostAsync($"{url}/api/SuggestComment/Suggest", jsonContent);
                     if (response.IsSuccessStatusCode)
                         return View("ThanksForComment", discussionId);
                     
@@ -166,7 +169,7 @@ namespace Web.MVC.Controllers
                         RepliedOnCommentContent = repliedOnCommentContent,
                         discussionId, model.CreatedBy, model.Content }), Encoding.UTF8, "application/json");
                     var response = await httpClient.PostAsync(
-                        "http://comment-microservice-api:8080/api/Comment/CreateComment", jsonContent);
+                        $"{url}/api/Comment/CreateComment", jsonContent);
                     if (!response.IsSuccessStatusCode)
                         return View("SomethingWentWrong", discussionId);
                     return LocalRedirect($"/discussions/{id}?pageSize=20&pageNumber=1");
@@ -181,7 +184,7 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.DeleteAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/DeleteDiscussionById/{discussionId}");
+                $"{url}/api/Discussion/DeleteDiscussionById/{discussionId}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))
@@ -202,7 +205,7 @@ namespace Web.MVC.Controllers
                 JsonSerializer.Serialize(new { discussionId, userNameIncreasedBy = User.Identity.Name }),
                 Encoding.UTF8, "application/json");
             var response = await httpClient.PatchAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/IncreaseDiscussionRatingByOne", jsonContent);
+                $"{url}/api/Discussion/IncreaseDiscussionRatingByOne", jsonContent);
             if (!response.IsSuccessStatusCode) return View("RatingIsAlreadyIncreased", model: returnUrl);
 
             if(!string.IsNullOrEmpty(returnUrl)) 
@@ -220,7 +223,7 @@ namespace Web.MVC.Controllers
                 JsonSerializer.Serialize(new { discussionId, userNameDecreasedBy = User.Identity.Name }),
                 Encoding.UTF8, "application/json");
             var response = await httpClient.PatchAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/DecreaseDiscussionRatingByOne", jsonContent);
+                $"{url}/api/Discussion/DecreaseDiscussionRatingByOne", jsonContent);
             if (!response.IsSuccessStatusCode) return View("RatingIsAlreadyDecreased", model: returnUrl);
 
             if (!string.IsNullOrEmpty(returnUrl))
@@ -235,13 +238,13 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/GetAllDiscussionsSortedByNovelty?pageSize={pageSize}&pageNumber={pageNumber}");
+                $"{url}/api/Discussion/GetAllDiscussionsSortedByNovelty?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/DoesNextAllDiscussionsPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+                $"{url}/api/Discussion/DoesNextAllDiscussionsPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -259,13 +262,13 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/GetAllDiscussionsSortedByPopularityForToday?pageSize={pageSize}&pageNumber={pageNumber}");
+                $"{url}/api/Discussion/GetAllDiscussionsSortedByPopularityForToday?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/DoesNextDiscussionsForTodayPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+                $"{url}/api/Discussion/DoesNextDiscussionsForTodayPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -287,13 +290,13 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/GetAllDiscussionsSortedByPopularityForWeek?pageSize={pageSize}&pageNumber={pageNumber}");
+                $"{url}/api/Discussion/GetAllDiscussionsSortedByPopularityForWeek?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/DoesNextDiscussionsForWeekPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+                $"{url}/api/Discussion/DoesNextDiscussionsForWeekPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -315,13 +318,13 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/GetAllDiscussionsSortedByPopularityForMonth?pageSize={pageSize}&pageNumber={pageNumber}");
+                $"{url}/api/Discussion/GetAllDiscussionsSortedByPopularityForMonth?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/DoesNextDiscussionsForMonthPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+                $"{url}/api/Discussion/DoesNextDiscussionsForMonthPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -343,13 +346,13 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/GetAllDiscussionsSortedByPopularityForAllTime?pageSize={pageSize}&pageNumber={pageNumber}");
+                $"{url}/api/Discussion/GetAllDiscussionsSortedByPopularityForAllTime?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/DoesNextAllDiscussionsPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+                $"{url}/api/Discussion/DoesNextAllDiscussionsPageExist?pageSize={pageSize}&pageNumber={pageNumber + 1}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();

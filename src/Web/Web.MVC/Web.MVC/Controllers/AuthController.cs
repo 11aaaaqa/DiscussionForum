@@ -16,12 +16,16 @@ namespace Web.MVC.Controllers
         private readonly IHttpClientFactory httpClientFactory;
         private readonly ILogger<AuthController> logger;
         private readonly IConfiguration configuration;
+        private readonly string url;
 
         public AuthController(IHttpClientFactory httpClientFactory, ILogger<AuthController> logger, IConfiguration configuration)
         {
             this.httpClientFactory = httpClientFactory;
             this.logger = logger;
             this.configuration = configuration;
+            url = (string.IsNullOrEmpty(configuration["Url:Port"]))
+                ? $"{configuration["Url:Protocol"]}://{configuration["Url:HostName"]}"
+                : $"{configuration["Url:Protocol"]}://{configuration["Url:HostName"]}:{configuration["Url:Port"]}";
         }
 
         [Route("auth/register")]
@@ -55,7 +59,7 @@ namespace Web.MVC.Controllers
                 logger.LogInformation("Http client was created and model was serialized");
                 
                 var response = await client.PostAsync(
-                    "http://register-microservice-api:8080/api/Auth/register",
+                    $"{url}/api/Auth/register",
                     jsonContent);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -88,10 +92,10 @@ namespace Web.MVC.Controllers
 
             logger.LogInformation("Http client was created");
 
-            var response = await client.GetAsync($"http://register-microservice-api:8080/api/Auth/confirmEmail?token={token}&userId={userId}");
+            var response = await client.GetAsync($"{url}/api/Auth/confirmEmail?token={token}&userId={userId}");
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var userResponse = await client.GetAsync($"http://register-microservice-api:8080/api/User/GetById?uid={userId}");
+                var userResponse = await client.GetAsync($"{url}/api/User/GetById?uid={userId}");
                 if (userResponse.StatusCode != HttpStatusCode.OK)
                 {
                     return View("ActionError");
@@ -100,7 +104,7 @@ namespace Web.MVC.Controllers
                 var user = await userResponse.Content.ReadFromJsonAsync<UserResponse>();
                 
                 var authResponse = await client.GetAsync(
-                    $"http://register-microservice-api:8080/api/User/AuthUserByUserName?userName={user.UserName}");
+                    $"{url}/api/User/AuthUserByUserName?userName={user.UserName}");
                 if (authResponse.StatusCode != HttpStatusCode.OK)
                 {
                     return View("ActionError");
@@ -133,7 +137,7 @@ namespace Web.MVC.Controllers
                 using HttpClient httpClient = httpClientFactory.CreateClient();
 
                 var userResponse = await httpClient.GetAsync(
-                    $"http://register-microservice-api:8080/api/User/GetByUserNameOrEmail?userNameOrEmail={model.UserNameOrEmail}");
+                    $"{url}/api/User/GetByUserNameOrEmail?userNameOrEmail={model.UserNameOrEmail}");
                 if (userResponse.StatusCode == HttpStatusCode.OK)
                 {
                     var user = await userResponse.Content.ReadFromJsonAsync<GetUserResponse>();
@@ -148,7 +152,7 @@ namespace Web.MVC.Controllers
                 
                 using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
 
-                var response = await httpClient.PostAsync("http://register-microservice-api:8080/api/Auth/login", jsonContent);
+                var response = await httpClient.PostAsync($"{url}/api/Auth/login", jsonContent);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -189,7 +193,7 @@ namespace Web.MVC.Controllers
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
             var response = await httpClient.GetAsync(
-                $"http://register-microservice-api:8080/api/Token/revoke?userName={HttpContext.User.Identity.Name}");
+                $"{url}/api/Token/revoke?userName={HttpContext.User.Identity.Name}");
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -233,7 +237,7 @@ namespace Web.MVC.Controllers
                 using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
 
                 var response = await httpClient.PostAsync(
-                    "http://register-microservice-api:8080/api/Auth/ForgotPassword",
+                    $"{url}/api/Auth/ForgotPassword",
                     jsonContent);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -265,7 +269,7 @@ namespace Web.MVC.Controllers
                 using StringContent jsonContent = new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
 
                 var response = await httpClient.PostAsync(
-                    "http://register-microservice-api:8080/api/Auth/ResetPassword",
+                    $"{url}/api/Auth/ResetPassword",
                     jsonContent);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -306,7 +310,7 @@ namespace Web.MVC.Controllers
                 using StringContent jsonContent = new(JsonSerializer.Serialize(uri), Encoding.UTF8, "application/json");
 
                 var response = await httpClient.PostAsync(
-                    $"http://register-microservice-api:8080/api/User/SendEmailConfirmationLink?userId={userId}",
+                    $"{url}/api/User/SendEmailConfirmationLink?userId={userId}",
                     jsonContent);
                 if (response.IsSuccessStatusCode)
                     return View("Confirmation");

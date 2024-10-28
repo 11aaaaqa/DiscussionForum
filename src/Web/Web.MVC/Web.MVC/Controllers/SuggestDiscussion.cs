@@ -8,10 +8,13 @@ namespace Web.MVC.Controllers
     public class SuggestDiscussion : Controller
     {
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly string url;
 
-        public SuggestDiscussion(IHttpClientFactory httpClientFactory)
+        public SuggestDiscussion(IHttpClientFactory httpClientFactory, IConfiguration config)
         {
             this.httpClientFactory = httpClientFactory;
+            url = (string.IsNullOrEmpty(config["Url:Port"]))
+                ? $"{config["Url:Protocol"]}://{config["Url:HostName"]}" : $"{config["Url:Protocol"]}://{config["Url:HostName"]}:{config["Url:Port"]}";
         }
 
         [Authorize(Roles = UserRoleConstants.AdminRole + ", " + UserRoleConstants.ModeratorRole)]
@@ -20,7 +23,7 @@ namespace Web.MVC.Controllers
         {
             using var httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.DeleteAsync(
-                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/RejectSuggestedDiscussion/{suggestedDiscussionId}");
+                $"{url}/api/SuggestDiscussion/RejectSuggestedDiscussion/{suggestedDiscussionId}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))
@@ -36,7 +39,7 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/GetSuggestedDiscussionById?id={suggestedDiscussionId}");
+                $"{url}/api/SuggestDiscussion/GetSuggestedDiscussionById?id={suggestedDiscussionId}");
 
             if (!response.IsSuccessStatusCode) return View("ActionError");
 

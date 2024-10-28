@@ -19,10 +19,13 @@ namespace Web.MVC.Controllers
     public class UserController : Controller
     {
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly string url;
 
-        public UserController(IHttpClientFactory httpClientFactory)
+        public UserController(IHttpClientFactory httpClientFactory, IConfiguration config)
         {
             this.httpClientFactory = httpClientFactory;
+            url = (string.IsNullOrEmpty(config["Url:Port"]))
+                ? $"{config["Url:Protocol"]}://{config["Url:HostName"]}" : $"{config["Url:Protocol"]}://{config["Url:HostName"]}:{config["Url:Port"]}";
         }
 
         [Route("users/{userName}")]
@@ -30,12 +33,12 @@ namespace Web.MVC.Controllers
         public async Task<IActionResult> GetUser(string userName)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
-            var response = await httpClient.GetAsync($"http://user-microservice-api:8080/api/profile/User/GetUserByUserName/{userName}");
+            var response = await httpClient.GetAsync($"{url}/api/profile/User/GetUserByUserName/{userName}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var user = await response.Content.ReadFromJsonAsync<UserResponse>();
 
-            var userRolesResponse = await httpClient.GetAsync($"http://register-microservice-api:8080/api/User/GetUserRolesByUserId/{user.AspNetUserId}");
+            var userRolesResponse = await httpClient.GetAsync($"{url}/api/User/GetUserRolesByUserId/{user.AspNetUserId}");
             if (!userRolesResponse.IsSuccessStatusCode) return View("ActionError");
             var userRoles = await userRolesResponse.Content.ReadFromJsonAsync<List<string>>();
             if (userRoles.Contains(UserRoleConstants.AdminRole))
@@ -56,13 +59,13 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/GetDiscussionsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
+                $"{url}/api/Discussion/GetDiscussionsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/Discussion/DoesNextDiscussionsByUserNamePageExist/{userName}?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+                $"{url}/api/Discussion/DoesNextDiscussionsByUserNamePageExist/{userName}?pageSize={pageSize}&pageNumber={pageNumber + 1}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -81,13 +84,13 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://comment-microservice-api:8080/api/Comment/GetCommentsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
+                $"{url}/api/Comment/GetCommentsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var comments = await response.Content.ReadFromJsonAsync<List<CommentResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://comment-microservice-api:8080/api/Comment/DoesNextCommentsByUserNamePageExist/{userName}?pageSize={pageSize}&pageNumber={pageNumber + 1}");
+                $"{url}/api/Comment/DoesNextCommentsByUserNamePageExist/{userName}?pageSize={pageSize}&pageNumber={pageNumber + 1}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -109,13 +112,13 @@ namespace Web.MVC.Controllers
 
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/GetSuggestedDiscussionsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
+                $"{url}/api/SuggestDiscussion/GetSuggestedDiscussionsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var suggestedDiscussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/DoesNextSuggestedDiscussionsByUserNamePageExist/{userName}?pageNumber={pageNumber + 1}&pageSize={pageSize}");
+                $"{url}/api/SuggestDiscussion/DoesNextSuggestedDiscussionsByUserNamePageExist/{userName}?pageNumber={pageNumber + 1}&pageSize={pageSize}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -137,13 +140,13 @@ namespace Web.MVC.Controllers
 
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://comment-microservice-api:8080/api/SuggestComment/GetSuggestedCommentsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
+                $"{url}/api/SuggestComment/GetSuggestedCommentsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var suggestedComments = await response.Content.ReadFromJsonAsync<List<SuggestedCommentResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://comment-microservice-api:8080/api/SuggestComment/DoesNextSuggestedCommentsByUserNamePageExist/{userName}?pageNumber={pageNumber + 1}&pageSize={pageSize}");
+                $"{url}/api/SuggestComment/DoesNextSuggestedCommentsByUserNamePageExist/{userName}?pageNumber={pageNumber + 1}&pageSize={pageSize}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -166,13 +169,13 @@ namespace Web.MVC.Controllers
 
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://topic-microservice-api:8080/api/SuggestTopic/GetSuggestedTopicsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
+                $"{url}/api/SuggestTopic/GetSuggestedTopicsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var suggestedTopics = await response.Content.ReadFromJsonAsync<List<TopicResponse>>();
 
             var doesNextPageExistResponse = await httpClient.GetAsync(
-                $"http://topic-microservice-api:8080/api/SuggestTopic/DoesNextSuggestedTopicsByUserNamePageExist/{userName}?pageNumber={pageNumber + 1}&pageSize={pageSize}");
+                $"{url}/api/SuggestTopic/DoesNextSuggestedTopicsByUserNamePageExist/{userName}?pageNumber={pageNumber + 1}&pageSize={pageSize}");
             if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
             bool doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
@@ -202,14 +205,14 @@ namespace Web.MVC.Controllers
             if (ModelState.IsValid)
             {
                 using HttpClient httpClient = httpClientFactory.CreateClient();
-                var userResponse = await httpClient.GetAsync($"http://user-microservice-api:8080/api/profile/User/GetUserById/{model.UserId}");
+                var userResponse = await httpClient.GetAsync($"{url}/api/profile/User/GetUserById/{model.UserId}");
                 if (!userResponse.IsSuccessStatusCode) return View("ActionError");
 
                 var user = await userResponse.Content.ReadFromJsonAsync<UserResponse>();
                 if (user.UserName != User.Identity.Name) return RedirectToAction("AccessIsForbidden", "Information");
 
                 var existsResponse = await httpClient.GetAsync(
-                    $"http://user-microservice-api:8080/api/profile/User/IsNormalizedUserNameAlreadyExists/{model.NewUserName}");
+                    $"{url}/api/profile/User/IsNormalizedUserNameAlreadyExists/{model.NewUserName}");
                 if (!existsResponse.IsSuccessStatusCode) return View("ActionError");
                 bool exists = await existsResponse.Content.ReadFromJsonAsync<bool>();
                 if (exists)
@@ -222,13 +225,13 @@ namespace Web.MVC.Controllers
                     new(JsonSerializer.Serialize(new { model.NewUserName, model.UserId }), Encoding.UTF8, "application/json");
 
                 var response = await httpClient.PatchAsync(
-                    $"http://user-microservice-api:8080/api/profile/User/ChangeUserName", jsonContent);
+                    $"{url}/api/profile/User/ChangeUserName", jsonContent);
                 if (!response.IsSuccessStatusCode) return View("ActionError");
 
                 Response.Cookies.Delete("accessToken");
 
                 var authResponse = await httpClient.GetAsync(
-                    $"http://register-microservice-api:8080/api/User/AuthUserByUserName?userName={model.NewUserName}");
+                    $"{url}/api/User/AuthUserByUserName?userName={model.NewUserName}");
                 if (!authResponse.IsSuccessStatusCode) return View("ActionError");
 
                 var authenticated = await authResponse.Content.ReadFromJsonAsync<AuthenticatedResponse>();
@@ -268,7 +271,7 @@ namespace Web.MVC.Controllers
                 using StringContent jsonContent =
                     new(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
                 var response = await httpClient.PatchAsync(
-                    "http://register-microservice-api:8080/api/User/ChangePassword", jsonContent);
+                    $"{url}/api/User/ChangePassword", jsonContent);
                 if (response.StatusCode == HttpStatusCode.NotFound) return View("ActionError");
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {

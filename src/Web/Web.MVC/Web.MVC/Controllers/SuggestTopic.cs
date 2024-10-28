@@ -7,10 +7,13 @@ namespace Web.MVC.Controllers
     public class SuggestTopic : Controller
     {
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly string url;
 
-        public SuggestTopic(IHttpClientFactory httpClientFactory)
+        public SuggestTopic(IHttpClientFactory httpClientFactory, IConfiguration config)
         {
             this.httpClientFactory = httpClientFactory;
+            url = (string.IsNullOrEmpty(config["Url:Port"]))
+                ? $"{config["Url:Protocol"]}://{config["Url:HostName"]}" : $"{config["Url:Protocol"]}://{config["Url:HostName"]}:{config["Url:Port"]}";
         }
 
         [Authorize(Roles = UserRoleConstants.AdminRole + ", " + UserRoleConstants.ModeratorRole)]
@@ -19,7 +22,7 @@ namespace Web.MVC.Controllers
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.DeleteAsync(
-                $"http://topic-microservice-api:8080/api/SuggestTopic/RejectSuggestedTopic/{id}");
+                $"{url}/api/SuggestTopic/RejectSuggestedTopic/{id}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl)) 
