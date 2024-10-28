@@ -5,16 +5,19 @@ namespace Web.MVC.Services
     public class CheckUserService : ICheckUserService
     {
         private readonly IHttpClientFactory httpClientFactory;
-
-        public CheckUserService(IHttpClientFactory httpClientFactory)
+        private readonly string url;
+        
+        public CheckUserService(IHttpClientFactory httpClientFactory, IConfiguration config)
         {
             this.httpClientFactory = httpClientFactory;
+            url = (string.IsNullOrEmpty(config["Url:Port"]))
+                ? $"{config["Url:Protocol"]}://{config["Url:HostName"]}" : $"{config["Url:Protocol"]}://{config["Url:HostName"]}:{config["Url:Port"]}";
         }
         public async Task<bool> HasUserCreatedSpecifiedDiscussionsCount(string userName, uint discussionsCount)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://user-microservice-api:8080/api/profile/User/GetUserByUserName/{userName}");
+                $"{url}/api/profile/User/GetUserByUserName/{userName}");
             if (!response.IsSuccessStatusCode) return false;
 
             var user = await response.Content.ReadFromJsonAsync<UserResponse>();
@@ -26,7 +29,7 @@ namespace Web.MVC.Services
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"http://user-microservice-api:8080/api/profile/User/GetUserByUserName/{userName}");
+                $"{url}/api/profile/User/GetUserByUserName/{userName}");
             if (!response.IsSuccessStatusCode) return false;
 
             var user = await response.Content.ReadFromJsonAsync<UserResponse>();

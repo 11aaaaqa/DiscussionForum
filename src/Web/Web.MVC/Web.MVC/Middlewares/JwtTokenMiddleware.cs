@@ -13,11 +13,14 @@ namespace Web.MVC.Middlewares
     {
         private readonly RequestDelegate next;
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly string url;
 
-        public JwtTokenMiddleware(RequestDelegate next, IHttpClientFactory httpClientFactory)
+        public JwtTokenMiddleware(RequestDelegate next, IHttpClientFactory httpClientFactory, IConfiguration config)
         {
             this.next = next;
             this.httpClientFactory = httpClientFactory;
+            url = (string.IsNullOrEmpty(config["Url:Port"]))
+                ? $"{config["Url:Protocol"]}://{config["Url:HostName"]}" : $"{config["Url:Protocol"]}://{config["Url:HostName"]}:{config["Url:Port"]}";
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -34,7 +37,7 @@ namespace Web.MVC.Middlewares
 
                     using var httpClient = httpClientFactory.CreateClient();
                     var response = await httpClient.GetAsync(
-                        $"http://register-microservice-api:8080/api/User/GetByUserName?userName={currentUserName}");
+                        $"{url}/api/User/GetByUserName?userName={currentUserName}");
                     if (response.StatusCode == HttpStatusCode.BadRequest)
                         await next(context);
                     
@@ -49,7 +52,7 @@ namespace Web.MVC.Middlewares
                         { AccessToken = accessToken, RefreshToken = currentUser.RefreshToken };
                     using StringContent jsonContent = new(JsonSerializer.Serialize(tokenApiModel), Encoding.UTF8, "application/json");
                     var refreshResponse = await httpClient.PostAsync(
-                        "http://register-microservice-api:8080/api/Token/refresh", jsonContent);
+                        $"{url}/api/Token/refresh", jsonContent);
                     var refreshContent = await refreshResponse.Content.ReadFromJsonAsync<AuthenticatedResponse>();
 
                     context.Response.Cookies.Append("accessToken", refreshContent.Token, new CookieOptions

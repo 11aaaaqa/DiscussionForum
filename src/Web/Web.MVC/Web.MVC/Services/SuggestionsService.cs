@@ -3,16 +3,19 @@
     public class SuggestionsService : IReportService, ISuggestionService
     {
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly string url;
 
-        public SuggestionsService(IHttpClientFactory httpClientFactory)
+        public SuggestionsService(IHttpClientFactory httpClientFactory, IConfiguration config)
         {
             this.httpClientFactory = httpClientFactory;
+            url = (string.IsNullOrEmpty(config["Url:Port"]))
+                ? $"{config["Url:Protocol"]}://{config["Url:HostName"]}" : $"{config["Url:Protocol"]}://{config["Url:HostName"]}:{config["Url:Port"]}";
         }
         public async Task<bool> DeleteReport(Guid reportId)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response =
-                await httpClient.DeleteAsync($"http://report-microservice-api:8080/api/Report/DeleteReportById/{reportId}");
+                await httpClient.DeleteAsync($"{url}/api/Report/DeleteReportById/{reportId}");
             if (response.IsSuccessStatusCode)
                 return true;
 
@@ -23,7 +26,7 @@
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.DeleteAsync(
-                $"http://topic-microservice-api:8080/api/SuggestTopic/RejectSuggestedTopic/{suggestedTopicId}");
+                $"{url}/api/SuggestTopic/RejectSuggestedTopic/{suggestedTopicId}");
             if(response.IsSuccessStatusCode) return true;
             return false;
         }
@@ -32,7 +35,7 @@
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.DeleteAsync(
-                $"http://discussion-microservice-api:8080/api/SuggestDiscussion/RejectSuggestedDiscussion/{suggestedDiscussionId}");
+                $"{url}/api/SuggestDiscussion/RejectSuggestedDiscussion/{suggestedDiscussionId}");
             if (response.IsSuccessStatusCode) return true;
             return false;
         }
@@ -41,7 +44,7 @@
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.DeleteAsync(
-                $"http://comment-microservice-api:8080/api/SuggestComment/RejectSuggestedComment/{suggestedCommentId}");
+                $"{url}/api/SuggestComment/RejectSuggestedComment/{suggestedCommentId}");
             if (response.IsSuccessStatusCode) return true;
             return false;
         }
