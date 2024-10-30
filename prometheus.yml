@@ -19,14 +19,9 @@ rule_files:
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
 scrape_configs:
-  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-  - job_name: "prometheus"
 
-    # metrics_path defaults to '/metrics'
-    # scheme defaults to 'http'.
-
+  - job_name: "microservices"
     static_configs:
-      - targets: ["host.docker.internal:9090"]
       - targets: ["host.docker.internal:2211"]
       - targets: ["host.docker.internal:1122"]
       - targets: ["host.docker.internal:5365"]
@@ -35,3 +30,26 @@ scrape_configs:
       - targets: ["host.docker.internal:1218"]
       - targets: ["host.docker.internal:2058"]
       - targets: ["host.docker.internal:5592"]
+  
+
+  - job_name: "gateway"
+    static_configs:
+      - targets: ["host.docker.internal:7422"]
+  
+
+  - job_name: "mvc"
+    static_configs:
+      - targets: ["host.docker.internal:1212"]
+  
+
+  - job_name: 'mvcHttps'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true   
+    static_configs:
+      - targets: ["host.docker.internal:1213"]
+  
+
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["host.docker.internal:9090"]
