@@ -6,6 +6,7 @@ using System.Web;
 using DNTCaptcha.Core;
 using Web.MVC.Middlewares;
 using Web.MVC.Services;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +54,9 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+
+app.UseMetricServer();
+app.UseHttpMetrics();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
