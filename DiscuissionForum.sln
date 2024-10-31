@@ -92,9 +92,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gateway.Api", "src\Gateway\Gateway.Api\Gateway.Api.csproj", "{9186B56E-F991-4AB2-A0EC-227ED61ABEA6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "additional files", "additional files", "{150F1818-9DB0-48A4-A194-D50EA5459259}"
-	ProjectSection(SolutionItems) = preProject
-		prometheus.yml = prometheus.yml
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
