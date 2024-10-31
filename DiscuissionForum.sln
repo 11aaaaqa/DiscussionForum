@@ -91,6 +91,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookmarkMicroservice.UnitTe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gateway.Api", "src\Gateway\Gateway.Api\Gateway.Api.csproj", "{9186B56E-F991-4AB2-A0EC-227ED61ABEA6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "additional files", "additional files", "{D15B9524-F600-4D40-B528-EF0307342B48}"
+	ProjectSection(SolutionItems) = preProject
+		prometheus.yml = prometheus.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
