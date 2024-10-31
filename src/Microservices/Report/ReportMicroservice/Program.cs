@@ -1,5 +1,6 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Prometheus;
 using ReportMicroservice.Api.Database;
 using ReportMicroservice.Api.MessageBus.Consumers;
 using ReportMicroservice.Api.Models;
@@ -38,6 +39,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMetricServer();
+app.UseHttpMetrics();
 
 app.UseAuthorization();
 

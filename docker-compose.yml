@@ -162,7 +162,7 @@ services:
         POSTGRES_DB: BookmarkMicroservice
         POSTGRES_HOST: postgres-bookmark-microservice
       volumes: 
-        - postgres-data:/var/lib/postgresql/data
+        - postgres-bookmark-data:/var/lib/postgresql/data
 
     postgres-banhistory-microservice:
       container_name: postgres-banhistory-microservice
@@ -175,7 +175,7 @@ services:
         POSTGRES_DB: BanHistoryMicroservice
         POSTGRES_HOST: postgres-banhistory-microservice
       volumes: 
-        - postgres-data:/var/lib/postgresql/data
+        - postgres-banhistory-data:/var/lib/postgresql/data
 
     postgres-report-microservice:
       container_name: postgres-report-microservice
@@ -188,7 +188,7 @@ services:
         POSTGRES_DB: ReportMicroservice
         POSTGRES_HOST: postgres-report-microservice
       volumes: 
-        - postgres-data:/var/lib/postgresql/data
+        - postgres-report-data:/var/lib/postgresql/data
 
     postgres-comment-microservice:
       container_name: postgres-comment-microservice
@@ -201,7 +201,7 @@ services:
         POSTGRES_DB: CommentMicroservice
         POSTGRES_HOST: postgres-comment-microservice
       volumes: 
-        - postgres-data:/var/lib/postgresql/data
+        - postgres-comment-data:/var/lib/postgresql/data
 
     postgres-discussion-microservice:
       container_name: postgres-discussion-microservice
@@ -214,7 +214,7 @@ services:
         POSTGRES_DB: DiscussionMicroservice
         POSTGRES_HOST: postgres-discussion-microservice
       volumes: 
-        - postgres-data:/var/lib/postgresql/data
+        - postgres-discussion-data:/var/lib/postgresql/data
 
     postgres-topic-microservice:
       container_name: postgres-topic-microservice
@@ -227,7 +227,7 @@ services:
         POSTGRES_DB: TopicMicroservice
         POSTGRES_HOST: postgres-topic-microservice
       volumes: 
-        - postgres-data:/var/lib/postgresql/data
+        - postgres-topic-data:/var/lib/postgresql/data
 
     postgres-register-microservice:
        container_name: postgres-register-microservice
@@ -240,7 +240,7 @@ services:
          POSTGRES_DB: RegisterMicroservice
          POSTGRES_HOST: postgres-register-microservice
        volumes: 
-         - postgres-data:/var/lib/postgresql/data
+         - postgres-register-data:/var/lib/postgresql/data
 
     postgres-user-microservice:
        container_name: postgres-user-microservice
@@ -253,7 +253,7 @@ services:
          POSTGRES_DB: UserMicroservice
          POSTGRES_HOST: postgres-user-microservice
        volumes: 
-         - postgres-data:/var/lib/postgresql/data
+         - postgres-user-data:/var/lib/postgresql/data
 
     postgres-hangfire:
       container_name: postgres-hangfire
@@ -266,7 +266,7 @@ services:
         POSTGRES_DB: Hangfire
         POSTGRES_HOST: postgres-hangfire
       volumes: 
-        - postgres-data:/var/lib/postgresql/data
+        - postgres-hangfire-data:/var/lib/postgresql/data
 
     rabbitmq:
         image: rabbitmq:3-management
@@ -282,6 +282,54 @@ services:
             - 15672:15672
             - 5672:5672
 
+    prometheus:
+      image: prom/prometheus:latest
+      container_name: prometheus
+      ports:
+        - 9090:9090
+      command:
+        - --config.file=/etc/prometheus/prometheus.yml
+      volumes:
+        - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+        - prometheus-data:/prometheus
+
+    grafana:
+      image: grafana/grafana-enterprise
+      container_name: grafana
+      restart: unless-stopped
+      ports:
+        - '3000:3000'
+      environment:
+        - GF_DATABASE_TYPE=postgres
+        - GF_DATABASE_HOST=postgres-grafana:5432
+        - GF_DATABASE_NAME=DicussionForumGrafana
+        - GF_DATABASE_USER=postgres
+        - GF_DATABASE_PASSWORD=postgres
+      volumes:
+        - grafana-data:/var/lib/grafana
+
+    postgres-grafana:
+      image: postgres:latest
+      container_name: postgres-grafana
+      environment:
+        - POSTGRES_DB=DicussionForumGrafana
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+      volumes:
+        - postgres-grafana-data:/var/lib/postgresql/data
+
 volumes:
-  postgres-data:    
+  postgres-bookmark-data: {}
+  postgres-banhistory-data: {}
+  postgres-report-data: {}
+  postgres-comment-data: {}
+  postgres-discussion-data: {}
+  postgres-topic-data: {}
+  postgres-register-data: {}
+  postgres-user-data: {}
+  postgres-hangfire-data: {}
+  postgres-grafana-data: {}
+  prometheus-data: {}
+  grafana-data: {}
+
 

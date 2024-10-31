@@ -5,6 +5,7 @@ using CommentMicroservice.Api.Services;
 using CommentMicroservice.Api.Services.Repository;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMetricServer();
+app.UseHttpMetrics();
 
 app.UseAuthorization();
 

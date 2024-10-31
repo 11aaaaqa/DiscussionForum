@@ -3,6 +3,7 @@ using Hangfire.PostgreSql;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Prometheus;
 using RegisterMicroservice.Api.Database;
 using RegisterMicroservice.Api.MessageBus.Consumers;
 using RegisterMicroservice.Api.Models.UserModels;
@@ -59,9 +60,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMetricServer();
+app.UseHttpMetrics();
+
 app.UseHangfireDashboard();
 app.MapControllers();
 
 app.Run();
-
-public partial class Program{}
