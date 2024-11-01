@@ -5,6 +5,7 @@ using DNTCaptcha.Core;
 using GeneralClassesLib.ApiResponses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Prometheus;
 using Web.MVC.DTOs.Auth;
 using Web.MVC.DTOs.ResetPassword;
 using Web.MVC.Models.ApiResponses;
@@ -17,6 +18,8 @@ namespace Web.MVC.Controllers
         private readonly ILogger<AuthController> logger;
         private readonly IConfiguration configuration;
         private readonly string url;
+        private static readonly Counter UsersConfirmedEmailCounter = Metrics.CreateCounter
+            ("users_confirmed_email", "Number of users confirmed their email.");
 
         public AuthController(IHttpClientFactory httpClientFactory, ILogger<AuthController> logger, IConfiguration configuration)
         {
@@ -95,6 +98,8 @@ namespace Web.MVC.Controllers
             var response = await client.GetAsync($"{url}/api/Auth/confirmEmail?token={token}&userId={userId}");
             if (response.StatusCode == HttpStatusCode.OK)
             {
+                UsersConfirmedEmailCounter.Inc();
+
                 var userResponse = await client.GetAsync($"{url}/api/User/GetById?uid={userId}");
                 if (userResponse.StatusCode != HttpStatusCode.OK)
                 {

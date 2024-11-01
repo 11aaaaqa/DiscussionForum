@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Prometheus;
 using Web.MVC.Constants;
 using Web.MVC.DTOs.Moderator;
 using Web.MVC.Models;
@@ -25,6 +26,14 @@ namespace Web.MVC.Controllers
         private readonly IReportService reportService;
         private readonly ISuggestionService suggestionService;
         private readonly string url;
+        private static readonly Counter AcceptedDiscussionsCounter = Metrics.CreateCounter(
+            "accepted_discussions", "Number of accepted discussions.");
+        private static readonly Counter RejectedDiscussionsCounter = Metrics.CreateCounter(
+            "rejected_discussions", "Number of rejected discussions.");
+        private static readonly Counter AcceptedCommentsCounter = Metrics.CreateCounter(
+            "accepted_comments", "Number of accepted comments.");
+        private static readonly Counter RejectedCommentsCounter = Metrics.CreateCounter(
+            "rejected_comments", "Number of rejected comments.");
 
         public ModeratorController(IHttpClientFactory httpClientFactory, IReportService reportService, ISuggestionService suggestionService,
             IConfiguration config)
@@ -121,6 +130,8 @@ namespace Web.MVC.Controllers
             var response = await httpClient.DeleteAsync($"{url}/api/SuggestDiscussion/AcceptSuggestedDiscussion/{id}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
+            AcceptedDiscussionsCounter.Inc();
+
             if (!string.IsNullOrEmpty(returnUrl))
                 return LocalRedirect(returnUrl);
 
@@ -134,6 +145,8 @@ namespace Web.MVC.Controllers
 
             var response = await httpClient.DeleteAsync($"{url}/api/SuggestDiscussion/RejectSuggestedDiscussion/{id}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            RejectedDiscussionsCounter.Inc();
 
             if(!string.IsNullOrEmpty(returnUrl))
                 return LocalRedirect(returnUrl);
@@ -190,6 +203,8 @@ namespace Web.MVC.Controllers
             var response = await httpClient.DeleteAsync($"{url}/api/SuggestComment/AcceptSuggestedComment/{id}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
+            AcceptedCommentsCounter.Inc();
+
             if (!string.IsNullOrEmpty(returnUrl))
                 return LocalRedirect(returnUrl);
 
@@ -202,6 +217,8 @@ namespace Web.MVC.Controllers
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.DeleteAsync($"{url}/api/SuggestComment/RejectSuggestedComment/{id}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            RejectedCommentsCounter.Inc();
 
             if (!string.IsNullOrEmpty(returnUrl))
                 return LocalRedirect(returnUrl);

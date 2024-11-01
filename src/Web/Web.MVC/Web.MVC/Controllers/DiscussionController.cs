@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Prometheus;
 using Web.MVC.Constants;
 using Web.MVC.DTOs.Comment;
 using Web.MVC.DTOs.Discussion;
@@ -18,6 +19,14 @@ namespace Web.MVC.Controllers
         private readonly ICheckUserService checkUserService;
         private readonly IHttpClientFactory httpClientFactory;
         private readonly string url;
+        private static readonly Counter SuggestedDiscussionsCounter = Metrics.CreateCounter
+            ("suggested_discussions", "Number of suggested discussions.");
+        private static readonly Counter SuggestedCommentsCounter = Metrics.CreateCounter
+            ("suggested_comments", "Number of suggested comments.");
+        private static readonly Counter CreatedDiscussionsCounter = Metrics.CreateCounter
+            ("created_discussions", "Number of directly created discussions without checking by a moderator.");
+        private static readonly Counter CreatedCommentsCounter = Metrics.CreateCounter
+            ("created_comments", "Number of directly created comments without checking by a moderator.");
 
         public DiscussionController(IHttpClientFactory httpClientFactory, ICheckUserService checkUserService, IConfiguration config)
         {
@@ -63,7 +72,11 @@ namespace Web.MVC.Controllers
                         $"{url}/api/SuggestDiscussion/SuggestToCreate?topicName={model.TopicName}",
                         jsonContent);
                     if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        SuggestedDiscussionsCounter.Inc();
                         return View("Thanks");
+                    }
+                       
                 }
                 else
                 {
@@ -74,6 +87,7 @@ namespace Web.MVC.Controllers
                         jsonContent);
                     if (!response.IsSuccessStatusCode) return View("ActionError");
 
+                    CreatedDiscussionsCounter.Inc();
                     var discussionId = await response.Content.ReadFromJsonAsync<Guid>();
                     return LocalRedirect($"/discussions/{discussionId}");
                 }
@@ -156,7 +170,10 @@ namespace Web.MVC.Controllers
 
                     var response = await httpClient.PostAsync($"{url}/api/SuggestComment/Suggest", jsonContent);
                     if (response.IsSuccessStatusCode)
+                    {
+                        SuggestedCommentsCounter.Inc();
                         return View("ThanksForComment", discussionId);
+                    }
                     
                     return View("SomethingWentWrong", discussionId);
                 }
@@ -172,6 +189,9 @@ namespace Web.MVC.Controllers
                         $"{url}/api/Comment/CreateComment", jsonContent);
                     if (!response.IsSuccessStatusCode)
                         return View("SomethingWentWrong", discussionId);
+
+                    CreatedCommentsCounter.Inc();
+
                     return LocalRedirect($"/discussions/{id}?pageSize=20&pageNumber=1");
                 }
             }
