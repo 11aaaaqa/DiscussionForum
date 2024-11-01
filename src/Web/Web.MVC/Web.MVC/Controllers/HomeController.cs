@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Prometheus;
-using System.Net.Http;
-using System.Security.Policy;
 using Web.MVC.Models.ApiResponses.Discussion;
 using Web.MVC.Models;
-using System;
 
 namespace Web.MVC.Controllers
 {
