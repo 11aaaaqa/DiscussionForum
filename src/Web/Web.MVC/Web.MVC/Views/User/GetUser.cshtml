@@ -34,12 +34,12 @@
             {
                 returnUrl = Context.Request.Path;
             }
-            <a href="~/SuggestedTopics/@Model.UserName">предложенные темы</a><br/>
-            <a href="~/Suggestions/Discussions/@Model.UserName">предложенные обсуждения</a><br/>
-            <a href="~/Suggestions/Comments/@Model.UserName">предложенные комментарии</a><br/>
-            <a href="~/ReportsByUser/@Model.UserName?pageNumber=1&pageSize=20">жалобы</a>
             if (User.Identity.Name != Model.UserName)
             { 
+                <a href="~/SuggestedTopics/@Model.UserName">предложенные темы</a><br/>
+                <a href="~/Suggestions/Discussions/@Model.UserName">предложенные обсуждения</a><br/>
+                <a href="~/Suggestions/Comments/@Model.UserName">предложенные комментарии</a><br/>
+                <a href="~/ReportsByUser/@Model.UserName?pageNumber=1&pageSize=20">жалобы</a>
                 <br/><br/> <a asp-controller="Moderator" asp-action="BanUser" asp-route-userName="@Model.UserName" asp-route-returnUrl="@returnUrl"
                            >отстранить пользователя</a><br/>
             }
