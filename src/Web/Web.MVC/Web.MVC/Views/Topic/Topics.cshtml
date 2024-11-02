@@ -1,53 +1,71 @@
 ﻿@{
-    ViewData["Title"] = "Форум";
+    ViewData["Title"] = "Темы";
 }
 @model List<Web.MVC.Models.ApiResponses.TopicResponse>
+<link rel="stylesheet" href="~/css/topic/topicCategory.css"/>
 
-<div class="text-center">
-    <h3>Темы</h3>
-    <a asp-action="SuggestTopic" asp-controller="Topic">Предложить тему</a><br/>
-    <form method="get">
-        <input name="searchingQuery" placeholder="Поиск" />
-        <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
-        <input type="hidden" name="pageNumber" value="1"/>
-        <input type="submit" value="найти"/>
-    </form>
-    @foreach (var topic in Model)
-    {
-        <a asp-controller="Topic" asp-action="Topic" asp-route-topicName="@topic.Name" asp-route-pageNumber="1" asp-route-pageSize="20">@topic.Name</a>
-        <p>Постов: @topic.PostsCount</p>
-    }
-    @if (ViewBag.PreviousPageNumber != 0 && Model.Count != 0)
-    {
-        @if (ViewBag.SearchingQuery is null)
-        {
-            <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize">
-                Назад
+<nav>
+    <ul>
+        <li class="li-category">
+            <a class="category active-category" asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="1" asp-route-pageSize="15">
+                Темы
             </a>
-        }
-        else
-        {
-            <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize"
-               asp-route-searchingQuery="@ViewBag.SearchingQuery">
-                Назад
+        </li>
+        <li class="li-category">
+            <a class="category" asp-controller="Topic" asp-action="GetAllTopicsSortedByNovelty" asp-route-pageNumber="1" asp-route-pageSize="15">
+                Новые темы
             </a>
-        }
-    }
-    @if (ViewBag.DoesNextPageExist && Model.Count != 0)
-    {
-        @if (ViewBag.SearchingQuery is null)
-        {
-            <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize">
-                Вперед
+        </li>
+        <li class="li-category">
+            <a class="category" asp-controller="Topic" asp-action="GetAllTopicsSortedByPopularity" asp-route-pageNumber="1" asp-route-pageSize="15">
+                Популярные темы
             </a>
-        }
-        else
-        {
-            <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize"
-               asp-route-searchingQuery="@ViewBag.SearchingQuery">
-                Вперед
-            </a>
-        }
-    }
-</div>
+        </li>
+    </ul>
+</nav>
 
+<a asp-action="SuggestTopic" asp-controller="Topic">Предложить тему</a><br/>
+
+<form method="get">
+    <input name="searchingQuery" placeholder="Поиск" />
+    <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
+    <input type="hidden" name="pageNumber" value="1" />
+    <input type="submit" value="найти" />
+</form>
+@foreach (var topic in Model)
+{
+    <a asp-controller="Topic" asp-action="Topic" asp-route-topicName="@topic.Name" asp-route-pageNumber="1" asp-route-pageSize="20">@topic.Name</a>
+    <p>Постов: @topic.PostsCount</p>
+}
+@if (ViewBag.PreviousPageNumber != 0 && Model.Count != 0)
+{
+    @if (ViewBag.SearchingQuery is null)
+    {
+        <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize">
+            Назад
+        </a>
+    }
+    else
+    {
+        <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize"
+           asp-route-searchingQuery="@ViewBag.SearchingQuery">
+            Назад
+        </a>
+    }
+}
+@if (ViewBag.DoesNextPageExist && Model.Count != 0)
+{
+    @if (ViewBag.SearchingQuery is null)
+    {
+        <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize">
+            Вперед
+        </a>
+    }
+    else
+    {
+        <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize"
+           asp-route-searchingQuery="@ViewBag.SearchingQuery">
+            Вперед
+        </a>
+    }
+}

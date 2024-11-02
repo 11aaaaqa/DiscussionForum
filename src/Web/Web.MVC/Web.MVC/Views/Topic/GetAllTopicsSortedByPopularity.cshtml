@@ -2,25 +2,47 @@
     ViewData["Title"] = "Популярные темы";
 }
 @model List<Web.MVC.Models.ApiResponses.TopicModel>
+<link rel="stylesheet" href="~/css/topic/topicCategory.css" />
 
-<div class="text-center">
-    <h3>Популярные темы</h3>
-    <a asp-action="SuggestTopic" asp-controller="Topic">Предложить тему</a><br />
-    @foreach (var topic in Model)
-    {
-        <a asp-controller="Topic" asp-action="Topic" asp-route-topicName="@topic.Name" asp-route-pageNumber="1" asp-route-pageSize="20">@topic.Name</a>
-        <p>Постов: @topic.PostsCount</p>
-    }
-    @if (ViewBag.PreviousPageNumber != 0 && Model.Count != 0)
-    {
-        <a asp-controller="Topic" asp-action="GetAllTopicsSortedByPopularity" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize">
-            Назад
-        </a>
-    }
-    @if (ViewBag.DoesNextPageExist && Model.Count != 0)
-    {
-        <a asp-controller="Topic" asp-action="GetAllTopicsSortedByPopularity" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize">
-            Вперед
-        </a>
-    }
-</div>
+<nav>
+    <ul>
+        <li class="li-category">
+            <a class="category" asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="1" asp-route-pageSize="15">
+                Темы
+            </a>
+        </li>
+        <li class="li-category">
+            <a class="category" asp-controller="Topic" asp-action="GetAllTopicsSortedByNovelty" asp-route-pageNumber="1" asp-route-pageSize="15">
+                Новые темы
+            </a>
+        </li>
+        <li class="li-category">
+            <a class="category active-category" asp-controller="Topic" asp-action="GetAllTopicsSortedByPopularity"
+               asp-route-pageNumber="1" asp-route-pageSize="15">
+                Популярные темы
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<a asp-action="SuggestTopic" asp-controller="Topic">Предложить тему</a><br/>
+
+@foreach (var topic in Model)
+{
+    <a asp-controller="Topic" asp-action="Topic" asp-route-topicName="@topic.Name" asp-route-pageNumber="1" asp-route-pageSize="20">@topic.Name</a>
+    <p>Постов: @topic.PostsCount</p>
+}
+
+
+@if (ViewBag.PreviousPageNumber != 0 && Model.Count != 0)
+{
+    <a asp-controller="Topic" asp-action="GetAllTopicsSortedByPopularity" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize">
+        Назад
+    </a>
+}
+@if (ViewBag.DoesNextPageExist && Model.Count != 0)
+{
+    <a asp-controller="Topic" asp-action="GetAllTopicsSortedByPopularity" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize">
+        Вперед
+    </a>
+}

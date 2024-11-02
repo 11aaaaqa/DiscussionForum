@@ -2,9 +2,28 @@
     ViewData["Title"] = "Лучшие обсуждения";
 }
 @model GetDiscussionsViewModel
+<link rel="stylesheet" href="~/css/discussion/discussionCategory.css"/>
 
-<h3>Лучшее за сегодня</h3>
-
+<nav>
+    <ul>
+        <li class="li-category">
+            <a class="category active-category" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForToday"
+               asp-route-pageNumber="1" asp-route-pageSize="20">За сегодня</a>
+        </li>
+        <li class="li-category">
+            <a class="category" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForWeek"
+               asp-route-pageNumber="1" asp-route-pageSize="20">За неделю</a>
+        </li>
+        <li class="li-category">
+            <a class="category" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForMonth"
+               asp-route-pageNumber="1" asp-route-pageSize="20">За месяц</a>
+        </li>
+        <li class="li-category">
+            <a class="category" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForAllTime"
+               asp-route-pageNumber="1" asp-route-pageSize="20">За все время</a>
+        </li>
+    </ul>
+</nav>
 @foreach (var discussion in Model.Discussions)
 {
     <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@discussion.Id" asp-route-pageNumber="1" asp-route-pageSize="20">
