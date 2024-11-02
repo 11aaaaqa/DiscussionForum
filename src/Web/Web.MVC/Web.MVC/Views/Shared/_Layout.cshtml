@@ -28,31 +28,26 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Report" asp-action="Reports" asp-route-reportType="@ReportTypeConstants.CommentType" asp-route-pageNumber="1" asp-route-pageSize="20">CommentsReports</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Topic" asp-action="GetAllTopicsSortedByNovelty" asp-route-pageNumber="1" asp-route-pageSize="15">Новые темы</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Topic" asp-action="GetAllTopicsSortedByPopularity" asp-route-pageNumber="1" asp-route-pageSize="15">Популярные темы</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Discussion" asp-action="GetDiscussionsSortedByNovelty" asp-route-pageNumber="1" asp-route-pageSize="20">Новые обсуждения</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForToday" asp-route-pageNumber="1" asp-route-pageSize="20">Лучшее за сегодня</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForWeek" asp-route-pageNumber="1" asp-route-pageSize="20">Лучшее за неделю</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForMonth" asp-route-pageNumber="1" asp-route-pageSize="20">Лучшее за месяц</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForAllTime" asp-route-pageNumber="1" asp-route-pageSize="20">Лучшее за все время</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Moderator" asp-action="Users" asp-route-pageNumber="1" asp-route-pageSize="30">Все пользователи</a>
                         </li>
                     </ul>
                 </div> *@
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="1"
+                               asp-route-pageSize="15">Темы</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForToday"
+                               asp-route-pageNumber="1" asp-route-pageSize="20">Лучшее</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Discussion" asp-action="GetDiscussionsSortedByNovelty"
+                               asp-route-pageNumber="1" asp-route-pageSize="20">Новые</a>
+                        </li>
+                    </ul>
+                </div>
                 <div class="profile-btns">
                     @if (User.Identity.IsAuthenticated)
                     {
