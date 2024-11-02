@@ -45,6 +45,13 @@ namespace Web.MVC.Controllers
                 ? $"{config["Url:Protocol"]}://{config["Url:HostName"]}" : $"{config["Url:Protocol"]}://{config["Url:HostName"]}:{config["Url:Port"]}";
         }
 
+        [Route("admin-panel")]
+        [HttpGet]
+        public IActionResult GetAdminPanel()
+        {
+            return View();
+        }
+
         [Route("moderator/suggested/topics")]
         [HttpGet]
         public async Task<IActionResult> SuggestedTopics(int pageSize, int pageNumber)
