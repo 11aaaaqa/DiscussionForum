@@ -16,12 +16,23 @@ li.profile-btns {
 }
 a.profile-btns {
     color: black;
-    padding: 10px 15px;
+    padding: .5rem 1rem;
     text-decoration: none;
     display: inline-block;
 }
 a.profile-btns:hover {
-    background-color: orange;
+    background-color: #f1f1f1;
+    color: orange;
+}
+.dropdown-refs {
+    color: black;
+    padding: .5rem 1rem;
+    text-decoration: none;
+    display: inline-block;
+    background-color: white;
+}
+.dropdown-refs:hover {
+    background-color: #f1f1f1;
 }
 input.logout {
     background-color: transparent;
@@ -31,7 +42,7 @@ input.logout {
     cursor: pointer;
 }
 input.logout:hover {
-    background-color: orange;
+    background-color: #f1f1f1;
 }
 .dropdown-profile {
     position: relative;
@@ -75,5 +86,17 @@ input.logout:hover {
     cursor: pointer;
 }
 .open-profile-dropdown-btn:hover {
-    background-color: orange;
+    background-color: #f1f1f1;
+    color: orange;
+}
+a.header-items {
+    display:block;
+    padding:.5rem 1rem;
+    color: black;
+    padding: 10px 15px;
+    text-decoration: none;
+}
+a.header-items:hover {
+    color: orange;
+    background-color: #f1f1f1;
 }

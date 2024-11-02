@@ -35,15 +35,15 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="1"
+                            <a class="header-items" asp-area="" asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="1"
                                asp-route-pageSize="15">Темы</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForToday"
-                               asp-route-pageNumber="1" asp-route-pageSize="20">Лучшее</a>
+                            <a class="header-items" asp-area="" asp-controller="Discussion"
+                               asp-action="GetDiscussionsSortedByPopularityForToday" asp-route-pageNumber="1" asp-route-pageSize="20">Лучшее</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Discussion" asp-action="GetDiscussionsSortedByNovelty"
+                            <a class="header-items" asp-area="" asp-controller="Discussion" asp-action="GetDiscussionsSortedByNovelty"
                                asp-route-pageNumber="1" asp-route-pageSize="20">Новые</a>
                         </li>
                     </ul>
@@ -65,7 +65,7 @@
                                 <div class="dropdown-profile">
                                     <button id="dropdownProfileButton" class="open-profile-dropdown-btn">@User.Identity.Name &#x25BC;</button>
                                     <div id="dropdownProfileList" class="dropdown-profile-list">
-                                        <a class="profile-btns" asp-controller="User" asp-action="GetUser" asp-route-userName="@User.Identity.Name">мой профиль</a>
+                                        <a class="dropdown-refs" asp-controller="User" asp-action="GetUser" asp-route-userName="@User.Identity.Name">мой профиль</a>
                                         <form method="post" asp-controller="Auth" asp-action="Logout" asp-route-returnUrl="@returnUrl">
                                             <input class="logout" type="submit" value="выйти"/>
                                         </form>
