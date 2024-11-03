@@ -5,9 +5,9 @@
 @model Web.MVC.Models.ViewModels.ModeratorViewModels.SuggestedTopicsByUserNameViewModel
 
 <div class="text-center">
-    <h3>Предложенные темы</h3>
     @if (Model.SuggestedTopics.Count != 0)
     {
+        <h3>Предложенные темы</h3>
         string returnUrl;
         if (Context.Request.QueryString.HasValue)
         {
@@ -23,32 +23,28 @@
         </form>
         <a asp-controller="Moderator" asp-action="BanUser" asp-route-userName="@Model.SuggestedByUserName"
            asp-route-returnUrl="@returnUrl">забанить пользователя</a>
-    }
-    
-    <table>
-        <tr><th>Название</th><th>Принять</th><th>Отклонить</th><th>Отстранить предлагающего</th></tr>
-        @if (true)
-        {
-            string returnUrl;
-            if (Context.Request.QueryString.HasValue)
-            {
-                returnUrl = Context.Request.Path + Context.Request.QueryString;
-            }
-            else
-            {
-                returnUrl = Context.Request.Path;
-            }
+
+        <table>
+            <tr><th>Название</th><th>Принять</th><th>Отклонить</th><th>Отстранить предлагающего</th></tr>
             @foreach (var suggestedTopic in Model.SuggestedTopics)
             {
                 <tr>
                     <td>@suggestedTopic.Name</td>
-                    <td><form method="post" asp-action="AcceptSuggestedTopic" asp-controller="Moderator" asp-route-id=@suggestedTopic.Id asp-route-returnUrl="@returnUrl"><input type="submit" value="принять" /></form></td>
-                    <td><form method="post" asp-controller="Moderator" asp-action="RejectSuggestedTopic" asp-route-id=@suggestedTopic.Id asp-route-returnUrl="@returnUrl"><input type="submit" value="отклонить" /></form></td>
+                    <td>
+                        <form method="post" asp-action="AcceptSuggestedTopic" asp-controller="Moderator" asp-route-id=@suggestedTopic.Id asp-route-returnUrl="@returnUrl"><input type="submit" value="принять" /></form>
+                    </td>
+                    <td>
+                        <form method="post" asp-controller="Moderator" asp-action="RejectSuggestedTopic" asp-route-id=@suggestedTopic.Id asp-route-returnUrl="@returnUrl"><input type="submit" value="отклонить" /></form>
+                    </td>
                     <td><a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion" asp-route-returnUrl="@returnUrl" asp-route-userName="@suggestedTopic.SuggestedBy" asp-route-suggestionDeleteId="@suggestedTopic.Id" asp-route-suggestionDeleteType="@BanTypeConstants.TopicBanType">остранить и отклонить предложение</a></td>
                 </tr>
             }
-        }
-    </table>
+        </table>
+    }
+    else
+    {
+        <h3>Предложенных тем нет</h3>
+    }
 </div>
 
 @if (Model.PreviousPageNumber != 0)
