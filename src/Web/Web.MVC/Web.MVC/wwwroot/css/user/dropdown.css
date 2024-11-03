@@ -3,8 +3,9 @@
     display: inline-block;
 }
 .open-dropdown-btn {
-    padding: 7px;
-    border: none;
+    padding: 10px 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
     background-color: white;
     color: black;
     cursor: pointer;

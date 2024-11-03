@@ -21,3 +21,8 @@
     color: white;
     border: 1px solid orange;
 }
+.profile-navbar button.active {
+    background-color: orange;
+    color: white;
+    border: 1px solid orange;
+}
