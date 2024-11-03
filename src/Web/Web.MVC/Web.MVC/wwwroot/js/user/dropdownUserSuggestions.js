@@ -13,12 +13,8 @@
 }
 
 setupDropdown('dropdownSuggestionsButton', 'dropdownSuggestionsList');
-setupDropdown('dropdownAdminButton', 'dropdownAdminList');
 
 window.addEventListener('click', function () {
     const dropdownSuggestionsList = document.getElementById('dropdownSuggestionsList');
-    const dropdownAdminList = document.getElementById('dropdownAdminList');
-
-    dropdownAdminList.style.display = 'none';
     dropdownSuggestionsList.style.display = 'none';
 });
