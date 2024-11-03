@@ -430,16 +430,25 @@ namespace Web.MVC.Controllers
 
         [Route("SuggestedTopics/{userName}")]
         [HttpGet]
-        public async Task<IActionResult> GetSuggestedTopicsByUserName(string userName)
+        public async Task<IActionResult> GetSuggestedTopicsByUserName(string userName, int pageSize, int pageNumber)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"{url}/api/SuggestTopic/GetSuggestedTopicsByUserName/{userName}");
+                $"{url}/api/SuggestTopic/GetSuggestedTopicsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
-            ViewBag.SuggestedByUserName = userName;
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"{url}/api/SuggestTopic/DoesNextSuggestedTopicsByUserNamePageExist/{userName}?pageNumber={pageNumber + 1}&pageSize={pageSize}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesNextPageExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+
             var suggestedTopics = await response.Content.ReadFromJsonAsync<List<TopicResponse>>();
-            return View(suggestedTopics);
+            return View(new SuggestedTopicsByUserNameViewModel
+            {
+                PageSize = pageSize,DoesNextPageExist = doesNextPageExist, CurrentPageNumber = pageNumber,NextPageNumber = pageNumber + 1,
+                PreviousPageNumber = pageNumber - 1, SuggestedTopics = suggestedTopics, SuggestedByUserName = userName
+            });
         }
 
         [HttpPost]
@@ -458,16 +467,25 @@ namespace Web.MVC.Controllers
 
         [Route("Suggestions/Discussions/{userName}")]
         [HttpGet]
-        public async Task<IActionResult> GetSuggestedDiscussionsByUserName(string userName)
+        public async Task<IActionResult> GetSuggestedDiscussionsByUserName(string userName, int pageSize, int pageNumber)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"{url}/api/SuggestDiscussion/GetSuggestedDiscussionsByUserName/{userName}");
+                $"{url}/api/SuggestDiscussion/GetSuggestedDiscussionsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
-            ViewBag.SuggestedByUserName = userName;
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"{url}/api/SuggestDiscussion/DoesNextSuggestedDiscussionsByUserNamePageExist/{userName}?pageNumber={pageNumber + 1}&pageSize={pageSize}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesNextPageExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+
             var suggestedDiscussions = await response.Content.ReadFromJsonAsync<List<SuggestedDiscussionResponse>>();
-            return View(suggestedDiscussions);
+            return View(new GetSuggestedDiscussionsByUserNameViewModel
+            {
+                PageSize = pageSize, CurrentPageNumber = pageNumber, DoesNextPageExist = doesNextPageExist, NextPageNumber = pageNumber + 1,
+                PreviousPageNumber = pageNumber - 1, SuggestedByUserName = userName, SuggestedDiscussions = suggestedDiscussions
+            });
         }
 
         [HttpPost]
@@ -486,16 +504,25 @@ namespace Web.MVC.Controllers
 
         [Route("Suggestions/Comments/{userName}")]
         [HttpGet]
-        public async Task<IActionResult> GetSuggestedCommentsByUserName(string userName)
+        public async Task<IActionResult> GetSuggestedCommentsByUserName(string userName, int pageNumber, int pageSize)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"{url}/api/SuggestComment/GetSuggestedCommentsByUserName/{userName}");
+                $"{url}/api/SuggestComment/GetSuggestedCommentsByUserName/{userName}?pageSize={pageSize}&pageNumber={pageNumber}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
-            ViewBag.SuggestedByUserName = userName;
+            var doesNextPageExistResponse = await httpClient.GetAsync(
+                $"{url}/api/SuggestComment/DoesNextSuggestedCommentsByUserNamePageExist/{userName}?pageNumber={pageNumber + 1}&pageSize={pageSize}");
+            if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
+
+            bool doesNextPageExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
+
             var suggestedComments = await response.Content.ReadFromJsonAsync<List<SuggestedCommentResponse>>();
-            return View(suggestedComments);
+            return View(new GetSuggestedCommentsByUserNameViewModel
+            {
+                PageSize = pageSize, DoesNextPageExist = doesNextPageExist, CurrentPageNumber = pageNumber, NextPageNumber = pageNumber + 1,
+                PreviousPageNumber = pageNumber - 1, SuggestedByUserName = userName, SuggestedComments = suggestedComments
+            });
         }
 
         [HttpPost]
