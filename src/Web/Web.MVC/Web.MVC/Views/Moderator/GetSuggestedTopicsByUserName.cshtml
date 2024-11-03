@@ -3,6 +3,57 @@
 }
 @using Web.MVC.Constants
 @model Web.MVC.Models.ViewModels.ModeratorViewModels.SuggestedTopicsByUserNameViewModel
+<link rel="stylesheet" href="~/css/user/dropdown.css" />
+<link rel="stylesheet" href="~/css/user/navbar.css" />
+
+<div class="profile-navbar">
+    <a asp-controller="User" asp-action="GetUser" asp-route-userName="@Model.SuggestedByUserName">профиль</a>
+    <a asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-userName="@Model.SuggestedByUserName"
+       asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
+    <a asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
+       asp-route-userName="@Model.SuggestedByUserName">комментарии</a>
+    @if (User.Identity.Name == Model.SuggestedByUserName || User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
+    {
+        <a asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="1" asp-route-pageSize="20"
+           asp-route-userName="@Model.SuggestedByUserName">
+            закладки
+        </a>
+    }
+    <div class="dropdown">
+        @if (User.Identity.Name == Model.SuggestedByUserName)
+        {
+            <div>
+                <button id="dropdownSuggestionsButton" class="open-dropdown-btn">предложения &#x25BC;</button>
+                <div id="dropdownSuggestionsList" class="dropdown-list">
+                    <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1"
+                       asp-route-pageSize="20" asp-route-userName="@Model.SuggestedByUserName">комментарии</a>
+                    <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@Model.SuggestedByUserName"
+                       asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
+                    <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="1"
+                       asp-route-pageSize="20" asp-route-userName="@Model.SuggestedByUserName">темы</a>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="dropdown">
+        @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
+        {
+            <div>
+                <button id="dropdownAdminButton" class="open-dropdown-btn active">админ &#x25BC;</button>
+                <div id="dropdownAdminList" class="dropdown-list">
+                    <a class="dropdown-content active" asp-controller="Moderator" asp-action="GetSuggestedTopicsByUserName" asp-route-pageNumber="1"
+                       asp-route-pageSize="20" asp-route-userName="@Model.SuggestedByUserName">предложенные темы</a>
+                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedDiscussionsByUserName"
+                       asp-route-userName="@Model.SuggestedByUserName" asp-route-pageNumber="1" asp-route-pageSize="20">предложенные обсуждения</a>
+                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedCommentsByUserName" asp-route-pageNumber="1"
+                       asp-route-pageSize="20" asp-route-userName="@Model.SuggestedByUserName">предложенные комментарии</a>
+                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetReportsByUserName" asp-route-pageNumber="1"
+                       asp-route-pageSize="20" asp-route-userName="@Model.SuggestedByUserName">жалобы</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
 
 <div class="text-center">
     @if (Model.SuggestedTopics.Count != 0)
@@ -61,3 +112,5 @@
         Вперед
     </a>
 }
+<script src="~/js/user/dropdownUserAdmin.js"></script>
+<script src="~/js/user/dropdownUserSuggestions.js"></script>
