@@ -2,11 +2,11 @@
     ViewData["Title"] = "Предложенные обсуждения";
 }
 @using System.Web
-@model System.Collections.Generic.List<Web.MVC.Models.ApiResponses.Discussion.SuggestedDiscussionResponse>
+@model Web.MVC.Models.ViewModels.ModeratorViewModels.GetSuggestedDiscussionsByUserNameViewModel
 
 <div class="text-center">
     <h3>Предложенные обсуждения</h3>
-    @if (Model.Count != 0)
+    @if (Model.SuggestedDiscussions.Count != 0)
     {
         string returnUrl;
         if (Context.Request.QueryString.HasValue)
@@ -17,18 +17,32 @@
         {
             returnUrl = Context.Request.Path;
         }
-        <form method="post" asp-controller="Moderator" asp-action="DeleteAllSuggestedDiscussionsByUserName" asp-route-userName="@ViewBag.SuggestedByUserName"
+        <form method="post" asp-controller="Moderator" asp-action="DeleteAllSuggestedDiscussionsByUserName" asp-route-userName="@Model.SuggestedByUserName"
               asp-route-returnUrl="@returnUrl">
             <input type="submit" value="удалить все предложенные обсуждения"/>
         </form>
-        <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@returnUrl" asp-route-userName="@ViewBag.SuggestedByUserName">
+        <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@returnUrl" asp-route-userName="@Model.SuggestedByUserName">
             отстранить пользователя
         </a><br/>
     }
-    @foreach (var suggestedDiscussion in Model)
+    @foreach (var suggestedDiscussion in Model.SuggestedDiscussions)
     {
         <a href="~/SuggestedDiscussions/@suggestedDiscussion.Id?returnUrl=@HttpUtility.UrlEncode(Context.Request.Path + Context.Request.QueryString)">@suggestedDiscussion.Title</a>
         <br/>
     }
 </div>
 
+@if (Model.PreviousPageNumber != 0)
+{
+    <a asp-controller="Moderator" asp-action="GetSuggestedDiscussionsByUserName" asp-route-pageNumber="@Model.PreviousPageNumber"
+       asp-route-pageSize="@Model.PageSize" asp-route-userName="@Model.SuggestedByUserName">
+        Назад
+    </a>
+}
+@if (Model.DoesNextPageExist && Model.SuggestedDiscussions.Count != 0)
+{
+    <a asp-controller="Moderator" asp-action="GetSuggestedDiscussionsByUserName" asp-route-pageNumber="@Model.NextPageNumber"
+       asp-route-pageSize="@Model.PageSize" asp-route-userName="@Model.SuggestedByUserName">
+        Вперед
+    </a>
+}

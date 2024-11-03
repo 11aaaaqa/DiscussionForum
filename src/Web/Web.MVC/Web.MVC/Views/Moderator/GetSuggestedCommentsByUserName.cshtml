@@ -3,7 +3,7 @@
 }
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Web.MVC.Constants
-@model System.Collections.Generic.List<Web.MVC.Models.ApiResponses.CommentsResponses.SuggestedCommentResponse>
+@model Web.MVC.Models.ViewModels.ModeratorViewModels.GetSuggestedCommentsByUserNameViewModel
 
 <div class="text-center">
     <h3>Предложенные комментарии</h3>
@@ -18,33 +18,48 @@
         {
             returnUrl = Context.Request.Path;
         }
-        @if (Model.Count != 0)
+        @if (Model.SuggestedComments.Count != 0)
         {
             <form method="post" asp-controller="Moderator" asp-action="DeleteAllSuggestedCommentsByUserName" asp-route-returnUrl="@returnUrl"
-                  asp-route-userName="@ViewBag.SuggestedByUserName">
-             <input type="submit" value="удалить все предложения"/>
+                  asp-route-userName="@Model.SuggestedByUserName">
+                <input type="submit" value="удалить все предложения"/>
             </form>
-            <a asp-controller="Moderator" asp-action="BanUser" asp-route-userName="@ViewBag.SuggestedByUserName" asp-route-returnUrl="@returnUrl">
+            <a asp-controller="Moderator" asp-action="BanUser" asp-route-userName="@Model.SuggestedByUserName" asp-route-returnUrl="@returnUrl">
                 отстранить пользователя
             </a>
         }
-        @foreach (var suggestedComment in Model)
+        @foreach (var suggestedComment in Model.SuggestedComments)
         {
             <p>@suggestedComment.Content</p>
             <form method="post" asp-controller="Moderator" asp-action="AcceptSuggestedComment" asp-route-id="@suggestedComment.Id"
-                asp-route-returnUrl="@returnUrl">
+                  asp-route-returnUrl="@returnUrl">
                 <input type="submit" value="принять" />
             </form>
             <form method="post" asp-controller="Moderator" asp-action="RejectSuggestedComment" asp-route-id="@suggestedComment.Id" 
-                asp-route-returnUrl="@returnUrl">
+                  asp-route-returnUrl="@returnUrl">
                 <input type="submit" value="отклонить" />
             </form>
             <a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion"
-                asp-route-returnUrl="@returnUrl" asp-route-userName="@suggestedComment.CreatedBy"
-                asp-route-suggestionDeleteId="@suggestedComment.Id" asp-route-suggestionDeleteType="@BanTypeConstants.CommentBanType">
-                    остранить и отклонить предложение
+               asp-route-returnUrl="@returnUrl" asp-route-userName="@suggestedComment.CreatedBy"
+               asp-route-suggestionDeleteId="@suggestedComment.Id" asp-route-suggestionDeleteType="@BanTypeConstants.CommentBanType">
+                остранить и отклонить предложение
             </a>
         }
     }
     
 </div>
+
+@if (Model.PreviousPageNumber != 0)
+{
+    <a asp-controller="Moderator" asp-action="GetSuggestedCommentsByUserName" asp-route-pageNumber="@Model.PreviousPageNumber"
+       asp-route-pageSize="@Model.PageSize" asp-route-userName="@Model.SuggestedByUserName">
+        Назад
+    </a>
+}
+@if (Model.DoesNextPageExist && Model.SuggestedComments.Count != 0)
+{
+    <a asp-controller="Moderator" asp-action="GetSuggestedCommentsByUserName" asp-route-pageNumber="@Model.NextPageNumber"
+       asp-route-pageSize="@Model.PageSize" asp-route-userName="@Model.SuggestedByUserName">
+        Вперед
+    </a>
+}
