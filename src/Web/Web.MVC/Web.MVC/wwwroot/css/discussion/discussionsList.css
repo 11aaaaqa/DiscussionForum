@@ -1,0 +1,21 @@
+﻿.border-div {
+    border: 1.5px solid #a9a9a9;
+    padding: 10px 20px 5px;
+    margin: 5px 20%;
+    width: 60%;
+    border-radius: 7px;
+}
+
+@media (max-width: 800px) {
+    .border-div {
+        margin: 10px 10%;
+        width: 80%;
+    }
+}
+
+@media (max-width: 500px) {
+    .border-div {
+        margin: 10px 5%;
+        width: 90%;
+    }
+}
