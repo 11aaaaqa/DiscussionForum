@@ -2,6 +2,7 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.MVC.Constants;
 using Web.MVC.Models.ApiResponses.Bookmark;
 using Web.MVC.Models.ViewModels.Bookmark;
 
@@ -24,7 +25,8 @@ namespace Web.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBookmarksByAntiquity(string userName, int pageSize, int pageNumber, string? searchingQuery)
         {
-            if (User.Identity.Name != userName) return RedirectToAction("AccessIsForbidden", "Information");
+            if (User.Identity.Name != userName && !User.IsInRole(UserRoleConstants.AdminRole) && !User.IsInRole(UserRoleConstants.ModeratorRole))
+                return RedirectToAction("AccessIsForbidden", "Information");
 
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
@@ -72,7 +74,8 @@ namespace Web.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBookmarksByNovelty(string userName, int pageSize, int pageNumber, string? searchingQuery)
         {
-            if (User.Identity.Name != userName) return RedirectToAction("AccessIsForbidden", "Information");
+            if (User.Identity.Name != userName && !User.IsInRole(UserRoleConstants.AdminRole) && !User.IsInRole(UserRoleConstants.ModeratorRole))
+                return RedirectToAction("AccessIsForbidden", "Information");
 
             using HttpClient httpClient = httpClientFactory.CreateClient();
 
