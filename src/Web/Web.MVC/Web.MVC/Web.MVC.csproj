@@ -36,6 +36,7 @@
     <_ContentIncludedByDefault Remove="Views\Discussion\GetDiscussionsSortedByPopularityForWeek.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\BanUserAndDeleteSuggestion.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\ChangeUserRoles.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Moderator\GetAdminPanel.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\GetReportsByUserName.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\GetSuggestedCommentsByUserName.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedComments.cshtml" />
@@ -152,6 +153,10 @@
   <ItemGroup>
     <Folder Include="Views\Information\" />
     <Folder Include="wwwroot\fonts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Moderator\GetAdminPanel.cshtml" />
   </ItemGroup>
 
 </Project>

@@ -1,45 +1,20 @@
 ﻿@{
     ViewData["Title"] = "Arkeia";
 }
+@model GetDiscussionsViewModel
 
-<div class="text-center">
-
-<a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="1" asp-route-pageSize="20">Форум</a>    
-
-@if (User.Identity.IsAuthenticated)
+@foreach (var discussion in Model.Discussions)
 {
-    string returnUrl;
-    if (Context.Request.QueryString.HasValue)
-    {
-        returnUrl = Context.Request.Path + Context.Request.QueryString;
-    }
-    else
-    {
-        returnUrl = Context.Request.Path;
-    }
-    <a asp-controller="User" asp-action="GetUser" asp-route-userName="@User.Identity.Name">мой профиль</a>
-    <form method="post" asp-controller="Auth" asp-action="Logout" asp-route-returnUrl="@returnUrl">
-        <input type="submit" value="выйти"/>
-    </form>
-    <br/><a asp-controller="Moderator" asp-action="SuggestedTopics" asp-route-pageNumber="1" asp-route-pageSize="20">предложенные темы</a><br/>
-    <a asp-controller="Moderator" asp-action="SuggestedDiscussions" asp-route-pageNumber="1" asp-route-pageSize="20">предложенные обсуждения</a><br/>
-    <a asp-controller="Moderator" asp-action="SuggestedComments" asp-route-pageNumber="1" asp-route-pageSize="20">предложенные комментарии</a><br/>
-    <a asp-controller="Admin" asp-action="GetBansHistory" asp-route-pageNumber="1" asp-route-pageSize="20">история банов</a><br/><br/>
-    <a asp-controller="Admin" asp-action="CreateBotAccount" asp-route-returnUrl="@returnUrl">создать бота</a><br/>
+    <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@discussion.Id" asp-route-pageNumber="1" asp-route-pageSize="20">
+        @discussion.Title
+    </a>
+    <h6>Создано: @discussion.CreatedBy</h6>
+    <h6>Рейтинг: @discussion.Rating</h6>
+    <h6>Дата создания: @discussion.CreatedAt</h6>
 }
-else
-{
-    string returnUrl;
-    if (Context.Request.QueryString.HasValue)
-    {
-        returnUrl = Context.Request.Path + Context.Request.QueryString;
-    }
-    else
-    {
-        returnUrl = Context.Request.Path;
-    }
-    <a asp-controller="Auth" asp-action="Login" asp-route-returnUrl="@returnUrl">Войти</a>
-    <a asp-controller="Auth" asp-action="Register">зарегистрироваться</a>
-} 
 
-</div>
+@if (Model.DoesNextPageExist && Model.Discussions.Count != 0)
+{
+    <a asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForToday" asp-route-pageNumber="@Model.NextPageNumber"
+       asp-route-pageSize="@Model.PageSize">Вперед</a>
+}

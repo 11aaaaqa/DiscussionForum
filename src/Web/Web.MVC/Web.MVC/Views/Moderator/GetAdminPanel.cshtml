@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Web.MVC.Constants
+@{
+    ViewData["Title"] = "Панель администратора";
+}
+
+<div>
+    <h4>Предлжения</h4>
+    <a asp-controller="Moderator" asp-action="SuggestedTopics" asp-route-pageNumber="1" asp-route-pageSize="20">предложенные темы</a>
+    <a asp-controller="Moderator" asp-action="SuggestedDiscussions" asp-route-pageNumber="1" asp-route-pageSize="20">предложенные обсуждения</a>
+    <a asp-controller="Moderator" asp-action="SuggestedComments" asp-route-pageNumber="1" asp-route-pageSize="20">предложенные комментарии</a>
+</div>
+<div>
+    <h4>Жалобы</h4>
+    <a asp-controller="Report" asp-action="Reports" asp-route-reportType="@ReportTypeConstants.DiscussionType"
+       asp-route-pageNumber="1" asp-route-pageSize="20">Жалобы на обсуждения</a>
+    <a asp-controller="Report" asp-action="Reports" asp-route-reportType="@ReportTypeConstants.CommentType" asp-route-pageNumber="1"
+       asp-route-pageSize="20">Жалобы на комментарии</a>
+</div>
+<div>
+    <h4>Пользователи</h4>
+    <a asp-controller="Moderator" asp-action="Users" asp-route-pageNumber="1" asp-route-pageSize="30">Все пользователи</a>
+</div>
+@if (User.IsInRole(UserRoleConstants.AdminRole))
+{
+    string returnUrl;
+    if (Context.Request.QueryString.HasValue)
+    {
+        returnUrl = Context.Request.Path + Context.Request.QueryString;
+    }
+    else
+    {
+        returnUrl = Context.Request.Path;
+    }
+    <div>
+        <h4>Админ</h4>
+        <a asp-controller="Admin" asp-action="GetBansHistory" asp-route-pageNumber="1" asp-route-pageSize="20">история банов</a>
+        <a asp-controller="Admin" asp-action="CreateBotAccount" asp-route-returnUrl="@returnUrl">создать бота</a>
+    </div>
+}

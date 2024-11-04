@@ -1,7 +1,60 @@
 ﻿@{
-    ViewData["Title"] = "Предложенные комментарии";
+    ViewData["Title"] = "Созданные комментарии";
 }
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Web.MVC.Constants
 @model Web.MVC.Models.ViewModels.UserViewModels.GetCommentsViewModel
+<link rel="stylesheet" href="~/css/user/dropdown.css" />
+<link rel="stylesheet" href="~/css/user/navbar.css" />
+
+<div class="profile-navbar">
+    <a asp-controller="User" asp-action="GetUser" asp-route-userName="@ViewBag.UserName">профиль</a>
+    <a asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-userName="@ViewBag.UserName"
+       asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
+    <a class="active" asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
+       asp-route-userName="@ViewBag.UserName">комментарии</a>
+    @if (User.Identity.Name == ViewBag.UserName || User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
+    {
+        <a asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="1" asp-route-pageSize="20"
+           asp-route-userName="@ViewBag.UserName">
+            закладки
+        </a>
+    }
+    <div class="dropdown">
+        @if (User.Identity.Name == ViewBag.UserName)
+        {
+            <div>
+                <button id="dropdownSuggestionsButton" class="open-dropdown-btn">предложения &#x25BC;</button>
+                <div id="dropdownSuggestionsList" class="dropdown-list">
+                    <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1"
+                       asp-route-pageSize="20" asp-route-userName="@ViewBag.UserName">комментарии</a>
+                    <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@ViewBag.UserName"
+                       asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
+                    <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="1"
+                       asp-route-pageSize="20" asp-route-userName="@ViewBag.UserName">темы</a>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="dropdown">
+        @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole) && User.Identity.Name != ViewBag.UserName)
+        {
+            <div>
+                <button id="dropdownAdminButton" class="open-dropdown-btn">админ &#x25BC;</button>
+                <div id="dropdownAdminList" class="dropdown-list">
+                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedTopicsByUserName" asp-route-pageNumber="1"
+                       asp-route-pageSize="20" asp-route-userName="@ViewBag.UserName">предложенные темы</a>
+                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedDiscussionsByUserName"
+                       asp-route-userName="@ViewBag.UserName" asp-route-pageNumber="1" asp-route-pageSize="20">предложенные обсуждения</a>
+                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedCommentsByUserName" asp-route-pageNumber="1"
+                       asp-route-pageSize="20" asp-route-userName="@ViewBag.UserName">предложенные комментарии</a>
+                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetReportsByUserName" asp-route-pageNumber="1"
+                       asp-route-pageSize="20" asp-route-userName="@ViewBag.UserName">жалобы</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
 
 <div>
     @if (Model.Comments is null || Model.Comments.Count == 0)
@@ -35,3 +88,5 @@
         Вперед
     </a>
 }
+<script src="~/js/user/dropdownUserAdmin.js"></script>
+<script src="~/js/user/dropdownUserSuggestions.js"></script>

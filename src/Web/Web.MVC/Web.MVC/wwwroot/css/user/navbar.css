@@ -1,0 +1,28 @@
+﻿.profile-navbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-navbar a {
+    padding: 10px 15px; 
+    text-decoration: none;
+    color: black;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.profile-navbar a:hover {
+    background-color: #f1f1f1;
+    color: orange;
+}
+
+.profile-navbar a.active {
+    background-color: orange;
+    color: white;
+    border: 1px solid orange;
+}
+.profile-navbar button.active {
+    background-color: orange;
+    color: white;
+    border: 1px solid orange;
+}

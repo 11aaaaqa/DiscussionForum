@@ -3,70 +3,72 @@
 }
 @using Web.MVC.Constants
 @model Web.MVC.Models.ApiResponses.CustUserResponses.UserResponse
-
-<div class="text-center">
-    <div>
-        <p>Имя пользователя: @Model.UserName</p>
-        <p>Роль: @ViewBag.UserRole</p>
-        <p>Зарегистрирован: @Model.RegisteredAt</p>
-        <p>Создано обсуждений: @Model.Posts</p>
-        <p>Ответов: @Model.Answers</p>
+<link rel="stylesheet" href="~/css/user/dropdown.css"/>
+<link rel="stylesheet" href="~/css/user/navbar.css"/>
+<div>
+    <div class="profile-navbar">
+        <a class="active" asp-controller="User" asp-action="GetUser" asp-route-userName="@Model.UserName">профиль</a>
+        <a asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-userName="@Model.UserName"
+           asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
+        <a asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
+           asp-route-userName="@Model.UserName">комментарии</a>
         @if (User.Identity.Name == Model.UserName || User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
         {
             <a asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="1" asp-route-pageSize="20"
                asp-route-userName="@Model.UserName">
                 закладки
-            </a><br/>
-            if (Model.IsBanned)
-            {
-                <p>Забанен по причине "@Model.BannedFor" до @Model.BannedUntil</p>
-                <p>Тип бана: @Model.BanType</p>
-            }
+            </a>
         }
-        @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
-        {
-            string returnUrl;
-            if (Context.Request.QueryString.HasValue)
+        <div class="dropdown">
+            @if (User.Identity.Name == Model.UserName)
             {
-                returnUrl = Context.Request.Path + Context.Request.QueryString;
+                <div>
+                    <button id="dropdownSuggestionsButton" class="open-dropdown-btn">предложения &#x25BC;</button>
+                    <div id="dropdownSuggestionsList" class="dropdown-list">
+                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@Model.UserName">комментарии</a>
+                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@Model.UserName"
+                           asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
+                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@Model.UserName">темы</a>
+                    </div>
+                </div>
             }
-            else
+        </div>
+        <div class="dropdown">
+            @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
             {
-                returnUrl = Context.Request.Path;
+                <div>
+                    <button id="dropdownAdminButton" class="open-dropdown-btn">админ &#x25BC;</button>
+                    <div id="dropdownAdminList" class="dropdown-list">
+                        <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedTopicsByUserName" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@Model.UserName">предложенные темы</a>
+                        <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedDiscussionsByUserName"
+                           asp-route-userName="@Model.UserName" asp-route-pageNumber="1" asp-route-pageSize="20">предложенные обсуждения</a>
+                        <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedCommentsByUserName" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@Model.UserName">предложенные комментарии</a>
+                        <a class="dropdown-content" asp-controller="Moderator" asp-action="GetReportsByUserName" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@Model.UserName">жалобы</a>
+                    </div>
+                </div>
             }
-            <a href="~/SuggestedTopics/@Model.UserName">предложенные темы</a><br/>
-            <a href="~/Suggestions/Discussions/@Model.UserName">предложенные обсуждения</a><br/>
-            <a href="~/Suggestions/Comments/@Model.UserName">предложенные комментарии</a><br/>
-            <a href="~/ReportsByUser/@Model.UserName?pageNumber=1&pageSize=20">жалобы</a>
-            if (User.Identity.Name != Model.UserName)
-            { 
-                <br/><br/> <a asp-controller="Moderator" asp-action="BanUser" asp-route-userName="@Model.UserName" asp-route-returnUrl="@returnUrl"
-                           >отстранить пользователя</a><br/>
-            }
-        }
-        @if (User.IsInRole(UserRoleConstants.AdminRole))
-        {
-            string returnUrl;
-            if (Context.Request.QueryString.HasValue)
-            {
-                returnUrl = Context.Request.Path + Context.Request.QueryString;
-            }
-            else
-            {
-                returnUrl = Context.Request.Path;
-            }
-            <br/><br/><a asp-controller="Moderator" asp-action="ChangeUserRoles" asp-route-returnUrl="@returnUrl"
-               asp-route-aspNetUserId="@Model.AspNetUserId">назначить роль</a>
-        }
-        
+        </div>
     </div>
-    <div class="text-center">
-        <br /><br /><a asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-userName="@Model.UserName" asp-route-pageNumber="1"
-                       asp-route-pageSize="20">созданные обсуждения</a><br/>
-        <a asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="1" asp-route-pageSize="20" asp-route-userName="@Model.UserName"
-           >созданные комментарии</a>
-    </div>
-    @if (User.Identity.Name == @Model.UserName)
+
+    <p>@Model.UserName</p>
+    <p>@ViewBag.UserRole</p>
+    <p>Зарегистрирован: @Model.RegisteredAt</p>
+    <p>Создано обсуждений: @Model.Posts</p>
+    <p>Ответов: @Model.Answers</p>
+    @if (User.Identity.Name == Model.UserName || User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
+    {
+        if (Model.IsBanned)
+        {
+            <p>Забанен по причине "@Model.BannedFor" до @Model.BannedUntil</p>
+            <p>Тип бана: @Model.BanType</p>
+        }
+    }
+    @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole) && User.Identity.Name != Model.UserName)
     {
         string returnUrl;
         if (Context.Request.QueryString.HasValue)
@@ -77,18 +79,32 @@
         {
             returnUrl = Context.Request.Path;
         }
-        <br/><br/> <a asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
-                      asp-route-userName="@Model.UserName">предложенные комментарии</a>
-        <br/> <a asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@Model.UserName" asp-route-pageNumber="1"
-                 asp-route-pageSize="20">предложенные обсуждения</a>
-        <br/> <a asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="1" asp-route-pageSize="20"
-                 asp-route-userName="@Model.UserName">предложенные темы</a>
-        <div>
-            <h3>Настройки пользователя</h3>
-            <a asp-action="ChangeUserName" asp-controller="User" asp-route-returnUrl="@string.Empty" asp-route-userId="@Model.Id">изменить имя</a><br/>
-            <a asp-controller="User" asp-action="ChangePassword" asp-route-returnUrl="@returnUrl" asp-route-userId="@Model.AspNetUserId">
-                изменить пароль
-            </a>
-        </div>
+        <a asp-controller="Moderator" asp-action="BanUser" asp-route-userName="@Model.UserName" asp-route-returnUrl="@returnUrl">отстранить пользователя</a>
+        @if (User.IsInRole(UserRoleConstants.AdminRole))
+        {
+            <a asp-controller="Moderator" asp-action="ChangeUserRoles" asp-route-returnUrl="@returnUrl"
+               asp-route-aspNetUserId="@Model.AspNetUserId">назначить роль</a>
+        }
     }
 </div>
+@if (User.Identity.Name == Model.UserName)
+{
+    string returnUrl;
+    if (Context.Request.QueryString.HasValue)
+    {
+        returnUrl = Context.Request.Path + Context.Request.QueryString;
+    }
+    else
+    {
+        returnUrl = Context.Request.Path;
+    }
+    <div>
+        <h3>Настройки пользователя</h3>
+        <a asp-action="ChangeUserName" asp-controller="User" asp-route-returnUrl="@string.Empty" asp-route-userId="@Model.Id">изменить имя</a><br />
+        <a asp-controller="User" asp-action="ChangePassword" asp-route-returnUrl="@returnUrl" asp-route-userId="@Model.AspNetUserId">
+            изменить пароль
+        </a>
+    </div>
+}
+<script src="~/js/user/dropdownUserAdmin.js"></script>
+<script src="~/js/user/dropdownUserSuggestions.js"></script>
