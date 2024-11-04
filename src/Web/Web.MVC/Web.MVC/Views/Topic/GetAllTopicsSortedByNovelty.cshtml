@@ -2,28 +2,13 @@
     ViewData["Title"] = "Новые темы";
 }
 @model List<Web.MVC.Models.ApiResponses.TopicModel>
-<link rel="stylesheet" href="~/css/topic/topicCategory.css" />
+<link rel="stylesheet" href="~/css/forumNavbar.css" />
 
-<nav>
-    <ul>
-        <li class="li-category">
-            <a class="category" asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="1" asp-route-pageSize="15">
-                Темы
-            </a>
-        </li>
-        <li class="li-category">
-            <a class="category active-category" asp-controller="Topic" asp-action="GetAllTopicsSortedByNovelty" asp-route-pageNumber="1"
-               asp-route-pageSize="15">
-                Новые темы
-            </a>
-        </li>
-        <li class="li-category">
-            <a class="category" asp-controller="Topic" asp-action="GetAllTopicsSortedByPopularity" asp-route-pageNumber="1" asp-route-pageSize="15">
-                Популярные темы
-            </a>
-        </li>
-    </ul>
-</nav>
+<div class="forum-navbar">
+    <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="1" asp-route-pageSize="15">Темы</a>
+    <a class="active-forum-navbar" asp-controller="Topic" asp-action="GetAllTopicsSortedByNovelty" asp-route-pageNumber="1" asp-route-pageSize="15">Новые темы</a>
+    <a asp-controller="Topic" asp-action="GetAllTopicsSortedByPopularity" asp-route-pageNumber="1" asp-route-pageSize="15">Популярные темы</a>
+</div>
 
 <a asp-action="SuggestTopic" asp-controller="Topic">Предложить тему</a><br/>
 
