@@ -6,16 +6,37 @@
     border-radius: 7px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1200px) {
     .border-div {
-        margin: 10px 10%;
+        margin: 5px 15%;
+        width: 70%;
+    }
+}
+
+@media (max-width: 992px) {
+    .border-div {
+        margin: 5px 12%;
+        width: 76%;
+    }
+}
+
+@media (max-width: 768px) {
+    .border-div {
+        margin: 5px 10%;
         width: 80%;
     }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
     .border-div {
-        margin: 10px 5%;
+        margin: 5px 7%;
+        width: 86%;
+    }
+}
+
+@media (max-width: 520px) {
+    .border-div {
+        margin: 5px 5%;
         width: 90%;
     }
 }
