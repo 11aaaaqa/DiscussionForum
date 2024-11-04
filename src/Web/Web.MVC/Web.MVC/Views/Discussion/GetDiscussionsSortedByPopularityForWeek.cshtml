@@ -2,28 +2,14 @@
     ViewData["Title"] = "Лучшие обсуждения";
 }
 @model GetDiscussionsViewModel
-<link rel="stylesheet" href="~/css/topic/topicCategory.css"/>
+<link rel="stylesheet" href="~/css/forumNavbar.css" />
 
-<nav>
-    <ul>
-        <li class="li-category">
-            <a class="category" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForToday"
-               asp-route-pageNumber="1" asp-route-pageSize="20">За сегодня</a>
-        </li>
-        <li class="li-category">
-            <a class="category active-category" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForWeek"
-               asp-route-pageNumber="1" asp-route-pageSize="20">За неделю</a>
-        </li>
-        <li class="li-category">
-            <a class="category" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForMonth"
-               asp-route-pageNumber="1" asp-route-pageSize="20">За месяц</a>
-        </li>
-        <li class="li-category">
-            <a class="category" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForAllTime"
-               asp-route-pageNumber="1" asp-route-pageSize="20">За все время</a>
-        </li>
-    </ul>
-</nav>
+<div class="forum-navbar">
+    <a asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForToday" asp-route-pageNumber="1" asp-route-pageSize="20">За сегодня</a>
+    <a class="active-forum-navbar" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForWeek" asp-route-pageNumber="1" asp-route-pageSize="20">За неделю</a>
+    <a asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForMonth" asp-route-pageNumber="1" asp-route-pageSize="20">За месяц</a>
+    <a asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForAllTime" asp-route-pageNumber="1" asp-route-pageSize="20">За все время</a>
+</div>
 
 @foreach (var discussion in Model.Discussions)
 {
