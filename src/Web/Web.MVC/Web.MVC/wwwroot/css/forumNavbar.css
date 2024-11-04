@@ -5,7 +5,7 @@
     padding: 10px 15px;
 }
 .forum-navbar a:hover {
-    background-color: #f1f1f1;
+    color: orange;
 }
 .forum-navbar a.active-forum-navbar {
     background-color: white;
