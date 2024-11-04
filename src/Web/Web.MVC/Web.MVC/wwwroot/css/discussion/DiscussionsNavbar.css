@@ -1,0 +1,48 @@
+﻿.discussions-navbar {
+    margin: 0 20%;
+    margin-bottom: 15px;
+}
+.discussions-navbar a {
+    text-decoration: none;
+    background-color: white;
+    color: black;
+    padding: 10px 15px;
+}
+.discussions-navbar a:hover {
+    color: orange;
+}
+.discussions-navbar a.active-discussions-navbar {
+    background-color: white;
+    color: orange;
+    font-weight: bolder;
+}
+
+@media (max-width: 1200px) {
+    .discussions-navbar {
+        margin: 10px 15%;
+    }
+}
+
+@media (max-width: 992px) {
+    .discussions-navbar {
+        margin: 10px 12%;
+    }
+}
+
+@media (max-width: 768px) {
+    .discussions-navbar {
+        margin: 10px 10%;
+    }
+}
+
+@media (max-width: 600px) {
+    .discussions-navbar {
+        margin: 10px 7%;
+    }
+}
+
+@media (max-width: 520px) {
+    .discussions-navbar {
+        margin: 10px 5%;
+    }
+}
