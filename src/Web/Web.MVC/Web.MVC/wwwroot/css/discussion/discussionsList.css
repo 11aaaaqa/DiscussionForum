@@ -5,6 +5,17 @@
     width: 60%;
     border-radius: 7px;
 }
+.default {
+    color: black;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: #32cd32;
+}
 
 @media (max-width: 1200px) {
     .border-div {
