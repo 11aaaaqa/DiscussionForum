@@ -1,0 +1,14 @@
+﻿.discussion-title {
+    display: block;
+    text-decoration: none;
+    background-color: white;
+    color: #0d0d0d;
+    font-weight: 600;
+    word-wrap: break-word;
+    margin-bottom: 10px; 
+}
+.discussion-title:hover {
+    color: #0d0d0d;
+    font-weight: 600;
+    background-color: white;
+}
