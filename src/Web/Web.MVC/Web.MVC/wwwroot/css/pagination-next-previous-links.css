@@ -39,10 +39,10 @@
     width: 120px;
 }
 
-.pagination-link-previous-doesnt-exist:hover {
-    cursor: not-allowed;
-    color: white;
-}
+    .pagination-link-previous-doesnt-exist:hover {
+        cursor: not-allowed;
+        color: white;
+    }
 
 .pagination-link-next:hover {
     background-color: #f1f1f1;
@@ -62,11 +62,11 @@
     width: 120px;
 }
 
-.pagination-link-previous:hover {
-    background-color: #f1f1f1;
-    border: 1px solid #d2691e;
-    color: black;
-}
+    .pagination-link-previous:hover {
+        background-color: #f1f1f1;
+        border: 1px solid #d2691e;
+        color: black;
+    }
 
 .pagination-link-container {
     display: flex;
