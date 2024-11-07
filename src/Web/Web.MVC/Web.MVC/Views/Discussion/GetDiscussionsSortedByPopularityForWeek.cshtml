@@ -2,32 +2,49 @@
     ViewData["Title"] = "Лучшие обсуждения";
 }
 @model GetDiscussionsViewModel
-<link rel="stylesheet" href="~/css/forumNavbar.css" />
+<link rel="stylesheet" href="~/css/discussion/DiscussionsNavbar.css" />
+<link rel="stylesheet" href="~/css/pagination-next-previous-links.css" />
+<link rel="stylesheet" href="~/css/discussion/discussionsList.css" />
+<link rel="stylesheet" href="~/css/discussion/DiscussionsPreview.css" />
 
-<div class="forum-navbar">
+<div class="discussions-navbar">
     <a asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForToday" asp-route-pageNumber="1" asp-route-pageSize="20">За сегодня</a>
-    <a class="active-forum-navbar" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForWeek" asp-route-pageNumber="1" asp-route-pageSize="20">За неделю</a>
+    <a class="active-discussions-navbar" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForWeek" asp-route-pageNumber="1" asp-route-pageSize="20">За неделю</a>
     <a asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForMonth" asp-route-pageNumber="1" asp-route-pageSize="20">За месяц</a>
     <a asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForAllTime" asp-route-pageNumber="1" asp-route-pageSize="20">За все время</a>
 </div>
 
 @foreach (var discussion in Model.Discussions)
 {
-    <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@discussion.Id" asp-route-pageNumber="1" asp-route-pageSize="20">
-        @discussion.Title
-    </a>
-    <h6>Создано: @discussion.CreatedBy</h6>
-    <h6>Рейтинг: @discussion.Rating</h6>
-    <h6>Дата создания: @discussion.CreatedAt</h6>
+    <div class="border-div">
+        <a class="discussion-title" asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@discussion.Id" asp-route-pageNumber="1"
+           asp-route-pageSize="20">
+            @discussion.Title
+        </a>
+        <p class="rating-value" data-value="@discussion.Rating">Рейтинг: @discussion.Rating</p>
+        <p>Создано: @discussion.CreatedBy</p>
+        <p>Дата создания: @discussion.CreatedAt</p>
+    </div>
 }
 
-@if (Model.PreviousPageNumber != 0 && Model.Discussions.Count != 0)
-{
-    <a asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForWeek" asp-route-pageNumber="@Model.PreviousPageNumber"
-       asp-route-pageSize="@Model.PageSize">Назад</a>
-}
-@if (Model.DoesNextPageExist && Model.Discussions.Count != 0)
-{
-    <a asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForWeek" asp-route-pageNumber="@Model.NextPageNumber"
-       asp-route-pageSize="@Model.PageSize">Вперед</a>
-}
+<div class="pagination-link-container">
+    @if (Model.PreviousPageNumber != 0 && Model.Discussions.Count != 0)
+    {
+        <a class="pagination-link-previous" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForWeek"
+           asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize">Назад</a>
+    }
+    else
+    {
+        <a class="pagination-link-previous-doesnt-exist">Назад</a>
+    }
+    @if (Model.DoesNextPageExist && Model.Discussions.Count != 0)
+    {
+        <a class="pagination-link-next" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForWeek"
+           asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize">Вперед</a>
+    }
+    else
+    {
+        <a class="pagination-link-next-doesnt-exist">Вперед</a>
+    }
+</div>
+<script src="~/js/discussion/RatingColorChanging.js"></script>
