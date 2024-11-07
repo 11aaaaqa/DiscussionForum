@@ -1,0 +1,164 @@
+﻿.topic-preview {
+    border: 1.5px solid #a9a9a9;
+    padding: 10px 20px 5px;
+    border-radius: 7px;
+    margin: 5px 25%;
+    width: 50%;
+}
+
+.topic-preview a {
+    text-decoration: none;
+    color: #0d0d0d;
+    font-weight: 600;
+}
+
+.topic-preview a:hover {
+    color: #0d0d0d;
+    font-weight: 600;
+}
+
+.pagination-link-next {
+    text-decoration: none;
+    border: 1px solid #333;
+    color: black;
+    background-color: white;
+    text-align: center;
+    padding: 6px 20px;
+    border-radius: 7px;
+    display: block;
+    width: 120px;
+    margin: 0 6px;
+}
+
+.pagination-link-next-doesnt-exist {
+    text-decoration: none;
+    color: white;
+    background-color: #ccc;
+    text-align: center;
+    opacity: 0.6;
+    padding: 6px 20px;
+    border-radius: 7px;
+    display: block;
+    width: 120px;
+    margin: 0 6px;
+}
+
+.pagination-link-next-doesnt-exist:hover {
+    cursor: not-allowed;
+    color: white;
+}
+
+.pagination-link-previous-doesnt-exist {
+    text-decoration: none;
+    color: white;
+    background-color: #ccc;
+    text-align: center;
+    opacity: 0.6;
+    padding: 6px 20px;
+    border-radius: 7px;
+    display: block;
+    width: 120px;
+}
+
+.pagination-link-previous-doesnt-exist:hover {
+    cursor: not-allowed;
+    color: white;
+}
+
+.pagination-link-next:hover {
+    background-color: #f1f1f1;
+    border: 1px solid #d2691e;
+    color: black;
+}
+
+.pagination-link-previous {
+    text-decoration: none;
+    border: 1px solid #333;
+    color: black;
+    background-color: white;
+    text-align: center;
+    padding: 6px 20px;
+    border-radius: 7px;
+    display: block;
+    width: 120px;
+}
+
+.pagination-link-previous:hover {
+    background-color: #f1f1f1;
+    border: 1px solid #d2691e;
+    color: black;
+}
+
+.pagination-link-container {
+    display: flex;
+    margin: 0 25%;
+}
+
+@media (max-width: 1200px) {
+    .pagination-link-container {
+        margin: 0 20%;
+    }
+}
+
+@media (max-width: 992px) {
+    .pagination-link-container {
+        margin: 0 15%;
+    }
+}
+
+@media (max-width: 768px) {
+    .pagination-link-container {
+        margin: 0 12%;
+    }
+}
+
+@media (max-width: 600px) {
+    .pagination-link-container {
+        margin: 0 9%;
+    }
+}
+
+@media (max-width: 520px) {
+    .pagination-link-container {
+        margin: 0 7%;
+    }
+}
+
+
+
+
+
+@media (max-width: 1200px) {
+    .topic-preview {
+        margin: 5px 20%;
+        width: 60%;
+    }
+}
+
+@media (max-width: 992px) {
+    .topic-preview {
+        margin: 5px 15%;
+        width: 70%;
+    }
+}
+
+@media (max-width: 768px) {
+    .topic-preview {
+        margin: 5px 12%;
+        width: 76%;
+    }
+}
+
+@media (max-width: 600px) {
+    .topic-preview {
+        margin: 5px 9%;
+        width: 82%;
+    }
+}
+
+@media (max-width: 520px) {
+    .topic-preview {
+        margin: 5px 7%;
+        width: 86%;
+    }
+}
