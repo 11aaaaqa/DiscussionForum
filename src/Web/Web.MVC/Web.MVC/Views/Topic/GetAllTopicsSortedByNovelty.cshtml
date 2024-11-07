@@ -3,6 +3,8 @@
 }
 @model List<Web.MVC.Models.ApiResponses.TopicModel>
 <link rel="stylesheet" href="~/css/forumNavbar.css" />
+<link rel="stylesheet" href="~/css/topic/SortedTopicPreview.css"/>
+<link rel="stylesheet" href="~/css/NextPreviousPaginationBtns.css" />
 
 <div class="forum-navbar">
     <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="1" asp-route-pageSize="15">Темы</a>
@@ -10,24 +12,39 @@
     <a asp-controller="Topic" asp-action="GetAllTopicsSortedByPopularity" asp-route-pageNumber="1" asp-route-pageSize="15">Популярные темы</a>
 </div>
 
-<a asp-action="SuggestTopic" asp-controller="Topic">Предложить тему</a><br/>
+<div class="suggest">
+    <a class="add-topic-link" asp-action="SuggestTopic" asp-controller="Topic">+ Добавить тему</a>
+</div>
 
 @foreach (var topic in Model)
 {
-    <a asp-controller="Topic" asp-action="Topic" asp-route-topicName="@topic.Name" asp-route-pageNumber="1" asp-route-pageSize="20">@topic.Name</a>
-    <p>Постов: @topic.PostsCount</p>
+    <div class="topic-preview">
+        <a asp-controller="Topic" asp-action="Topic" asp-route-topicName="@topic.Name" asp-route-pageNumber="1" asp-route-pageSize="20">@topic.Name</a>
+        <p>Постов: @topic.PostsCount</p>
+    </div>
 }
 
-
-@if (ViewBag.PreviousPageNumber != 0 && Model.Count != 0)
-{
-    <a asp-controller="Topic" asp-action="GetAllTopicsSortedByNovelty" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize">
-        Назад
-    </a>
-}
-@if (ViewBag.DoesNextPageExist && Model.Count != 0)
-{
-    <a asp-controller="Topic" asp-action="GetAllTopicsSortedByNovelty" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize">
-        Вперед
-    </a>
-}
+<div class="pagination-link-container">
+    @if (ViewBag.PreviousPageNumber != 0 && Model.Count != 0)
+    {
+        <a class="pagination-link-previous" asp-controller="Topic" asp-action="GetAllTopicsSortedByNovelty" asp-route-pageNumber="@ViewBag.PreviousPageNumber"
+           asp-route-pageSize="@ViewBag.PageSize">
+            Назад
+        </a>
+    }
+    else
+    {
+        <a class="pagination-link-previous-doesnt-exist">Назад</a>
+    }
+    @if (ViewBag.DoesNextPageExist && Model.Count != 0)
+    {
+        <a class="pagination-link-next" asp-controller="Topic" asp-action="GetAllTopicsSortedByNovelty" asp-route-pageNumber="@ViewBag.NextPageNumber"
+           asp-route-pageSize="@ViewBag.PageSize">
+            Вперед
+        </a>
+    }
+    else
+    {
+        <a class="pagination-link-next-doesnt-exist">Вперед</a>
+    }
+</div>
