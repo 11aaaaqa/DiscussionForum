@@ -4,6 +4,8 @@
 @model List<Web.MVC.Models.ApiResponses.TopicResponse>
 <link rel="stylesheet" href="~/css/forumNavbar.css"/>
 <link rel="stylesheet" href="~/css/topic/TopicPreview.css"/>
+<link rel="stylesheet" href="~/css/SearchForm.css"/>
+<link rel="stylesheet" href="~/css/NextPreviousPaginationBtns.css"/>
 
 <div class="forum-navbar">
     <a class="active-forum-navbar" asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="1" asp-route-pageSize="15">Темы</a>
@@ -11,21 +13,22 @@
     <a asp-controller="Topic" asp-action="GetAllTopicsSortedByPopularity" asp-route-pageNumber="1" asp-route-pageSize="15">Популярные темы</a>
 </div>
 
-<a asp-action="SuggestTopic" asp-controller="Topic">Предложить тему</a><br/>
-
-<form method="get">
-    <input name="searchingQuery" placeholder="Поиск" />
-    <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
-    <input type="hidden" name="pageNumber" value="1" />
-    <input type="submit" value="найти" />
-</form>
-    @foreach (var topic in Model)
-    {
-        <div class="topic-preview">
-            <a asp-controller="Topic" asp-action="Topic" asp-route-topicName="@topic.Name" asp-route-pageNumber="1" asp-route-pageSize="20">@topic.Name</a>
-            <p>Постов: @topic.PostsCount</p>
-        </div>
-    }
+<div class="search-suggest">
+    <form method="get" class="search-form">
+        <input class="search-input" name="searchingQuery" placeholder="Поиск..." />
+        <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
+        <input type="hidden" name="pageNumber" value="1" />
+        <input type="submit" value="Найти" class="search-submit" />
+    </form>
+    <a asp-action="SuggestTopic" asp-controller="Topic">Предложить тему</a>
+</div>
+@foreach (var topic in Model)
+{
+    <div class="topic-preview">
+        <a asp-controller="Topic" asp-action="Topic" asp-route-topicName="@topic.Name" asp-route-pageNumber="1" asp-route-pageSize="20">@topic.Name</a>
+        <p>Постов: @topic.PostsCount</p>
+    </div>
+}
 <div class="pagination-link-container">
     @if (ViewBag.PreviousPageNumber != 0 && Model.Count != 0)
     {
@@ -67,6 +70,6 @@
     }
     else
     {
-        <a class="pagination-link-next-doesnt-exist">Назад</a>
+        <a class="pagination-link-next-doesnt-exist">Вперед</a>
     }
 </div>
