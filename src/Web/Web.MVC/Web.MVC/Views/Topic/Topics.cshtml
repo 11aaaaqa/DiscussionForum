@@ -3,6 +3,7 @@
 }
 @model List<Web.MVC.Models.ApiResponses.TopicResponse>
 <link rel="stylesheet" href="~/css/forumNavbar.css"/>
+<link rel="stylesheet" href="~/css/topic/TopicPreview.css"/>
 
 <div class="forum-navbar">
     <a class="active-forum-navbar" asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="1" asp-route-pageSize="15">Темы</a>
@@ -18,40 +19,54 @@
     <input type="hidden" name="pageNumber" value="1" />
     <input type="submit" value="найти" />
 </form>
-@foreach (var topic in Model)
-{
-    <a asp-controller="Topic" asp-action="Topic" asp-route-topicName="@topic.Name" asp-route-pageNumber="1" asp-route-pageSize="20">@topic.Name</a>
-    <p>Постов: @topic.PostsCount</p>
-}
-@if (ViewBag.PreviousPageNumber != 0 && Model.Count != 0)
-{
-    @if (ViewBag.SearchingQuery is null)
+    @foreach (var topic in Model)
     {
-        <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize">
-            Назад
-        </a>
+        <div class="topic-preview">
+            <a asp-controller="Topic" asp-action="Topic" asp-route-topicName="@topic.Name" asp-route-pageNumber="1" asp-route-pageSize="20">@topic.Name</a>
+            <p>Постов: @topic.PostsCount</p>
+        </div>
+    }
+<div class="pagination-link-container">
+    @if (ViewBag.PreviousPageNumber != 0 && Model.Count != 0)
+    {
+        @if (ViewBag.SearchingQuery is null)
+        {
+            <a class="pagination-link-previous" asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.PreviousPageNumber"
+               asp-route-pageSize="@ViewBag.PageSize">
+                Назад
+            </a>
+        }
+        else
+        {
+            <a class="pagination-link-previous" asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.PreviousPageNumber"
+               asp-route-pageSize="@ViewBag.PageSize" asp-route-searchingQuery="@ViewBag.SearchingQuery">
+                Назад
+            </a>
+        }
     }
     else
     {
-        <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize"
-           asp-route-searchingQuery="@ViewBag.SearchingQuery">
-            Назад
-        </a>
+        <a class="pagination-link-previous-doesnt-exist">Назад</a>
     }
-}
-@if (ViewBag.DoesNextPageExist && Model.Count != 0)
-{
-    @if (ViewBag.SearchingQuery is null)
+    @if (ViewBag.DoesNextPageExist && Model.Count != 0)
     {
-        <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize">
-            Вперед
-        </a>
+        @if (ViewBag.SearchingQuery is null)
+        {
+            <a class="pagination-link-next-doesnt-exist" asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber"
+               asp-route-pageSize="@ViewBag.PageSize">
+                Вперед
+            </a>
+        }
+        else
+        {
+            <a class="pagination-link-next-doesnt-exist" asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber"
+               asp-route-pageSize="@ViewBag.PageSize"asp-route-searchingQuery="@ViewBag.SearchingQuery">
+                Вперед
+            </a>
+        }
     }
     else
     {
-        <a asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize"
-           asp-route-searchingQuery="@ViewBag.SearchingQuery">
-            Вперед
-        </a>
+        <a class="pagination-link-next-doesnt-exist">Назад</a>
     }
-}
+</div>
