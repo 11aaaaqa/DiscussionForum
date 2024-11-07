@@ -17,113 +17,106 @@
     font-weight: 600;
 }
 
+.add-topic-link {
+    margin-left: 40%;
+    text-decoration: none;
+    background-color: #333;
+    color: white;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 5px 10px 5px;
+}
+.add-topic-link:hover {
+    background-color: #555;
+    color: white;
+}
+
+.search-suggest {
+    margin: 0 25%;
+    display: flex;
+    align-items: center;
+}
+
 .pagination-link-container {
     margin: 0 25%;
 }
 
-.search-form {
-    margin: 0 25%;
-}
-
 @media (max-width: 1200px) {
     .pagination-link-container {
         margin: 0 20%;
     }
-}
-
-@media (max-width: 992px) {
-    .pagination-link-container {
-        margin: 0 15%;
-    }
-}
-
-@media (max-width: 768px) {
-    .pagination-link-container {
-        margin: 0 12%;
-    }
-}
-
-@media (max-width: 600px) {
-    .pagination-link-container {
-        margin: 0 9%;
-    }
-}
-
-@media (max-width: 520px) {
-    .pagination-link-container {
-        margin: 0 7%;
-    }
-}
-
-
-
-
-
-@media (max-width: 1200px) {
-    .search-form {
+    .search-suggest {
         margin: 0 20%;
     }
-}
-
-@media (max-width: 992px) {
-    .search-form {
-        margin: 0 15%;
-    }
-}
-
-@media (max-width: 768px) {
-    .search-form {
-        margin: 0 12%;
-    }
-}
-
-@media (max-width: 600px) {
-    .search-form {
-        margin: 0 9%;
-    }
-}
-
-@media (max-width: 520px) {
-    .search-form {
-        margin: 0 7%;
-    }
-}
-
-
-
-
-
-@media (max-width: 1200px) {
     .topic-preview {
         margin: 5px 20%;
         width: 60%;
     }
+    .add-topic-link {
+        margin-left: 31%;
+    }
 }
 
 @media (max-width: 992px) {
+    .pagination-link-container {
+        margin: 0 15%;
+    }
+    .search-suggest {
+        margin: 0 15%;
+    }
     .topic-preview {
         margin: 5px 15%;
         width: 70%;
     }
+    .add-topic-link {
+        margin-left: 20%; 
+    }
 }
 
 @media (max-width: 768px) {
+    .pagination-link-container {
+        margin: 0 12%;
+    }
+    .search-suggest {
+        margin: 0 12%;
+    }
     .topic-preview {
         margin: 5px 12%;
         width: 76%;
     }
+    .add-topic-link {
+        margin-left: 5%;
+    }
 }
 
 @media (max-width: 600px) {
+    .pagination-link-container {
+        margin: 0 9%;
+    }
+    .search-suggest {
+        margin: 0 9%;
+    }
     .topic-preview {
         margin: 5px 9%;
         width: 82%;
     }
+    .add-topic-link {
+        margin-left: 7%;
+    }
 }
 
 @media (max-width: 520px) {
+    .pagination-link-container {
+        margin: 0 7%;
+    }
+    .search-suggest {
+        margin: 0 7%;
+    }
     .topic-preview {
         margin: 5px 7%;
         width: 86%;
+    }
+    .add-topic-link {
+        margin-left: 6%;
     }
 }
