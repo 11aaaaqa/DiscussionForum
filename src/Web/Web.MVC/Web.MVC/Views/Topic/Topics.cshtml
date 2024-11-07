@@ -20,7 +20,7 @@
         <input type="hidden" name="pageNumber" value="1" />
         <input type="submit" value="Найти" class="search-submit" />
     </form>
-    <a asp-action="SuggestTopic" asp-controller="Topic">Предложить тему</a>
+    <a class="add-topic-link" asp-action="SuggestTopic" asp-controller="Topic">+ Добавить тему</a>
 </div>
 @foreach (var topic in Model)
 {
@@ -55,14 +55,14 @@
     {
         @if (ViewBag.SearchingQuery is null)
         {
-            <a class="pagination-link-next-doesnt-exist" asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber"
+            <a class="pagination-link-next" asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber"
                asp-route-pageSize="@ViewBag.PageSize">
                 Вперед
             </a>
         }
         else
         {
-            <a class="pagination-link-next-doesnt-exist" asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber"
+            <a class="pagination-link-next" asp-controller="Topic" asp-action="Topics" asp-route-pageNumber="@ViewBag.NextPageNumber"
                asp-route-pageSize="@ViewBag.PageSize"asp-route-searchingQuery="@ViewBag.SearchingQuery">
                 Вперед
             </a>
