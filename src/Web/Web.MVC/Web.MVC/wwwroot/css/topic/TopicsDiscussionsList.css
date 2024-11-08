@@ -1,0 +1,104 @@
+﻿.create-discussion-link {
+    margin-left: 44.5%;
+    text-decoration: none;
+    background-color: #333;
+    color: white;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 5px 10px 5px;
+}
+
+.create-discussion-link:hover {
+    background-color: #555;
+    color: white;
+}
+
+.pagination-link-container {
+    margin: 0 20%;
+}
+
+.search-create {
+    display: flex;
+    margin: 0 20%;
+    align-items: center;
+}
+
+@media (max-width: 1200px) {
+    .border-div {
+        margin: 5px 15%;
+        width: 70%;
+    }
+    .pagination-link-container {
+        margin: 0 15%;
+    }
+    .search-create {
+        margin: 0 15%;
+    }
+    .create-discussion-link {
+        margin-left: 34%;
+    }
+}
+
+@media (max-width: 992px) {
+    .border-div {
+        margin: 5px 12%;
+        width: 76%;
+    }
+    .pagination-link-container {
+        margin: 0 12%;
+    }
+    .search-create {
+        margin: 0 12%;
+    }
+    .create-discussion-link {
+        margin-left: 18.5%;
+    }
+}
+
+@media (max-width: 768px) {
+    .border-div {
+        margin: 5px 10%;
+        width: 80%;
+    }
+    .pagination-link-container {
+        margin: 0 10%;
+    }
+    .search-create {
+        margin: 0 10%;
+    }
+    .create-discussion-link {
+        margin-left: 1.5%;
+    }
+}
+
+@media (max-width: 600px) {
+    .border-div {
+        margin: 5px 7%;
+        width: 86%;
+    }
+    .pagination-link-container {
+        margin: 0 7%;
+    }
+    .search-create {
+        margin: 0 7%;
+    }
+    .create-discussion-link {
+        margin-left: 1.5%;
+    }
+}
+
+@media (max-width: 520px) {
+    .border-div {
+        margin: 5px 5%;
+        width: 90%;
+    }
+    .pagination-link-container {
+        margin: 0 5%;
+    }
+    .search-create {
+        margin: 0 5%;
+    }
+    .create-discussion-link {
+        margin-left: 1.5%;
+    }
+}
