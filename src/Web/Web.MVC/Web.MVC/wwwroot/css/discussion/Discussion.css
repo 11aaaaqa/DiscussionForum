@@ -1,0 +1,96 @@
+﻿.title {
+    margin-bottom: 20px;
+}
+
+.discussion-additional-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+}
+
+.rating p {
+    margin: 0;
+}
+
+.discussion-rating {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.other-additional {
+    display: flex;
+    align-items: center;
+}
+
+.other-additional a {
+    padding-right: 5px;
+    text-decoration: none;
+    color: black;
+}
+
+.other-additional a:hover {
+    color: orange;
+}
+
+.add-bookmark {
+    border: none;
+    text-decoration: none;
+    background-color: white;
+    color: black;
+}
+
+.add-bookmark:hover {
+    background-color: white;
+    color: orange;
+}
+
+.discussion-created-by {
+    text-decoration: none;
+    color: black;
+}
+
+.discussion-created-by:hover {
+    text-decoration: none;
+    color: black;
+}
+
+.increase-rating-form {
+    padding-left: 5px;
+}
+
+.decrease-rating-input {
+    color: black;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    background-color: red;
+    text-align: center;
+}
+
+.decrease-rating-input:hover {
+    transform: scale(1.1);
+}
+
+.decrease-rating-input:active {
+    transform: scale(0.95);
+}
+
+.increase-rating-input {
+    color: black;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    background-color: lawngreen;
+    text-align: center;
+}
+
+.increase-rating-input:hover {
+    transform: scale(1.1);
+}
+
+.increase-rating-input:active {
+    transform: scale(0.95);
+}
