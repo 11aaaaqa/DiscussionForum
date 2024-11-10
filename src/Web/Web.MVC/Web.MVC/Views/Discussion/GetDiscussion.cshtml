@@ -64,12 +64,12 @@
     </div>
 </div>
 
-<div>
+<div class="search-div">
     <form method="post" asp-controller="Discussion" asp-action="SuggestComment" asp-route-id="@ViewBag.DiscussionId">
         <div asp-validation-summary="ModelOnly"></div>
         <div>
             <label asp-for="Content"></label><br/>
-            <input asp-for="Content"/>
+            <input asp-for="Content" />
             <span asp-validation-for="Content"></span>
         </div>
         <input type="submit" value="отправить"/>
