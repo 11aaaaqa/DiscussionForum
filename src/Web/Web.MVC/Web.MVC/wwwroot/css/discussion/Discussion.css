@@ -249,6 +249,10 @@
     cursor: pointer;
 }
 
+.discussion-page-container {
+    margin: 0 15%;
+}
+
 @media (max-width: 1200px) {
     .comment-div {
         margin-top: 4%;
@@ -258,6 +262,9 @@
     }
     .reply-to-comment-textarea {
         width: 400px;
+    }
+    .discussion-page-container {
+        margin: 0 13%;
     }
 }
 
@@ -271,6 +278,9 @@
     .reply-to-comment-textarea {
         width: 350px;
     }
+    .discussion-page-container {
+        margin: 0 10%;
+    }
 }
 
 @media (max-width: 768px) {
@@ -282,6 +292,9 @@
     }
     .reply-to-comment-textarea {
         width: 300px;
+    }
+    .discussion-page-container {
+        margin: 0 8%;
     }
 }
 
@@ -295,6 +308,9 @@
     .reply-to-comment-textarea {
         width: 300px;
     }
+    .discussion-page-container {
+        margin: 0 6%;
+    }
 }
 
 @media (max-width: 520px) {
@@ -306,5 +322,8 @@
     }
     .reply-to-comment-textarea {
         width: 300px;
+    }
+    .discussion-page-container {
+        margin: 0 3%;
     }
 }

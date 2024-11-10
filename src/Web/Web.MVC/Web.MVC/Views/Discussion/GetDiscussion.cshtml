@@ -2,162 +2,182 @@
     ViewData["Title"] = @ViewBag.Title;
 }
 <link rel="stylesheet" href="~/css/discussion/Discussion.css"/>
+<link rel="stylesheet" href="~/css/NextPreviousPaginationBtns.css"/>
 @model Web.MVC.DTOs.Comment.SuggestCommentDto
 
-<h4 class="title">@ViewBag.Title</h4>
-<p>@ViewBag.Content</p>
+<div class="discussion-page-container">
+    <h4 class="title">@ViewBag.Title</h4>
+    <p>@ViewBag.Content</p>
 
-<p>Создано: <a class="discussion-created-by" asp-controller="User" asp-action="GetUser" asp-route-userName="@ViewBag.CreatedBy">@ViewBag.CreatedBy</a></p>
-<p>Дата создания: @ViewBag.CreatedAt</p>
+    <p>Создано: <a class="discussion-created-by" asp-controller="User" asp-action="GetUser" asp-route-userName="@ViewBag.CreatedBy">@ViewBag.CreatedBy</a></p>
+    <p>Дата создания: @ViewBag.CreatedAt</p>
 
-<div class="discussion-additional-content">
-    <div class="rating">
-        @if (User.Identity.Name != ViewBag.CreatedBy)
-        {
-            string returnUrl;
-            if (Context.Request.QueryString.HasValue)
+    <div class="discussion-additional-content">
+        <div class="rating">
+            @if (User.Identity.Name != ViewBag.CreatedBy)
             {
-                returnUrl = Context.Request.Path + Context.Request.QueryString;
-            }
-            else
-            {
-                returnUrl = Context.Request.Path;
-            }
-
-            <p>Рейтинг:
-                <form class="increase-rating-form" method="post" asp-action="IncreaseDiscussionRatingByOne" asp-controller="Discussion"
-                      asp-route-returnUrl="@returnUrl"asp-route-discussionId="@ViewBag.DiscussionId">
-                    <input class="increase-rating-input" type="submit" value="↑" />
-                </form>
-                <p class="discussion-rating">@ViewBag.Rating</p>
-                <form method="post" asp-action="DecreaseDiscussionRatingByOne" asp-controller="Discussion" asp-route-returnUrl="@returnUrl"
-                      asp-route-discussionId="@ViewBag.DiscussionId">
-                <input class="decrease-rating-input" type="submit" value="↓" />
-                </form>
-            </p>
-        }
-        else
-        {
-            <p>Рейтинг: @ViewBag.Rating</p>
-        }
-    </div>
-    <div class="other-additional">
-        @if (User.Identity.Name != ViewBag.CreatedBy)
-        {
-            string returnUrl;
-            if (Context.Request.QueryString.HasValue)
-            {
-                returnUrl = Context.Request.Path + Context.Request.QueryString;
-            }
-            else
-            {
-                returnUrl = Context.Request.Path;
-            }
-
-            <a asp-action="AddReport" asp-controller="Report" asp-route-reportedUserName="@ViewBag.CreatedBy" asp-route-reportedDiscussionTitle="@ViewBag.Title"
-               asp-route-reportedDiscussionContent="@ViewBag.Content" asp-route-reportedDiscussionId="@ViewBag.DiscussionId">Пожаловаться</a>
-            <form method="post" asp-controller="Bookmark" asp-action="AddBookmark" asp-route-returnUrl="@returnUrl" asp-route-discussionId="@ViewBag.DiscussionId"
-                  asp-route-discussionTitle="@ViewBag.Title">
-                <input class="add-bookmark" type="submit" value="Добавить в закладки" />
-            </form>
-        }
-    </div>
-</div>
-
-<div class="comment-div">
-    <form method="post" asp-controller="Discussion" asp-action="SuggestComment" asp-route-id="@ViewBag.DiscussionId">
-        <div asp-validation-summary="ModelOnly"></div>
-        <div>
-            <textarea class="leave-a-comment-textarea" asp-for="Content" placeholder="Оставить комментарий"></textarea>
-            <span asp-validation-for="Content"></span>
-        </div>
-        <input class="send-a-comment" type="submit" value="Отправить"/>
-    </form>
-</div>
-
-<div class="comments-list-main-div">
-    @if (ViewBag.Comments is null || ViewBag.Comments.Count == 0)
-    {
-        <p>Ещё никто не оставил комментарий под этим обсуждением :(</p>
-    }
-    else
-    {
-        @foreach (var comment in ViewBag.Comments)
-        {
-            string returnUrl;
-            if (Context.Request.QueryString.HasValue)
-            {
-                returnUrl = Context.Request.Path + Context.Request.QueryString;
-            }
-            else
-            {
-                returnUrl = Context.Request.Path;
-            }
-            <div class="comment">
-                <p>@comment.CreatedBy в @comment.CreatedDate</p>
-                @if (comment.RepliedOnCommentId is not null)
+                string returnUrl;
+                if (Context.Request.QueryString.HasValue)
                 {
-                    <div class="comment-replying-content">
-                        <p class="mb-2"><strong>@comment.RepliedOnCommentCreatedBy:</strong></p>
-                        <p class="mb-2">"@comment.RepliedOnCommentContent"</p>
-                    </div>
-                }
-                @if (comment.RepliedOnCommentId is null && comment.RepliedOnCommentCreatedBy is not null)
-                {
-                    <div class="comment-replying-content">
-                        <p class="mb-2"><strong>@comment.RepliedOnCommentCreatedBy:</strong></p>
-                        <p class="mb-2">Комменарий был удален</p>
-                    </div>
-                }
-                <p class="m-0">@comment.Content</p>
-                @if (User.Identity.Name == comment.CreatedBy)
-                {
-                    <form method="post" asp-controller="Comment" asp-action="DeleteComment" asp-route-returnUrl="@returnUrl" asp-route-id="@comment.Id">
-                        <input class="comment-delete" type="submit" value="Удалить" />
-                    </form>
+                    returnUrl = Context.Request.Path + Context.Request.QueryString;
                 }
                 else
                 {
-                    <div class="comment-additional-container">
-                        <div>
-                            <button id="open-reply-to-comment" class="open-reply-to-comment">Ответить</button>
-                            <div id="reply-to-comment-form" class="reply-to-comment-form">
-                                <form method="post" asp-controller="Discussion" asp-action="SuggestComment" asp-route-id="@ViewBag.DiscussionId"
-                                      asp-route-repliedOnCommentContent="@comment.Content" asp-route-repliedOnCommentId="@comment.Id"
-                                      asp-route-repliedOnCommentCreatedBy="@comment.CreatedBy">
-                                    <div asp-validation-summary="ModelOnly"></div>
-                                    <div>
-                                        <textarea class="reply-to-comment-textarea" rows="1" asp-for="Content" placeholder="Ответить"></textarea>
-                                        <span asp-validation-for="Content"></span>
-                                    </div>
-                                    <input class="reply-to-comment-submit" type="submit" value="Отправить" />
-                                </form>
+                    returnUrl = Context.Request.Path;
+                }
+
+                <p>
+                    Рейтинг:
+                    <form class="increase-rating-form" method="post" asp-action="IncreaseDiscussionRatingByOne" asp-controller="Discussion"
+                          asp-route-returnUrl="@returnUrl" asp-route-discussionId="@ViewBag.DiscussionId">
+                        <input class="increase-rating-input" type="submit" value="↑" />
+                    </form>
+                <p class="discussion-rating">@ViewBag.Rating</p>
+                <form method="post" asp-action="DecreaseDiscussionRatingByOne" asp-controller="Discussion" asp-route-returnUrl="@returnUrl"
+                      asp-route-discussionId="@ViewBag.DiscussionId">
+                    <input class="decrease-rating-input" type="submit" value="↓" />
+                </form>
+                </p>
+            }
+            else
+            {
+                <p>Рейтинг: @ViewBag.Rating</p>
+            }
+        </div>
+        <div class="other-additional">
+            @if (User.Identity.Name != ViewBag.CreatedBy)
+            {
+                string returnUrl;
+                if (Context.Request.QueryString.HasValue)
+                {
+                    returnUrl = Context.Request.Path + Context.Request.QueryString;
+                }
+                else
+                {
+                    returnUrl = Context.Request.Path;
+                }
+
+                <a asp-action="AddReport" asp-controller="Report" asp-route-reportedUserName="@ViewBag.CreatedBy" asp-route-reportedDiscussionTitle="@ViewBag.Title"
+                   asp-route-reportedDiscussionContent="@ViewBag.Content" asp-route-reportedDiscussionId="@ViewBag.DiscussionId">Пожаловаться</a>
+                <form method="post" asp-controller="Bookmark" asp-action="AddBookmark" asp-route-returnUrl="@returnUrl" asp-route-discussionId="@ViewBag.DiscussionId"
+                      asp-route-discussionTitle="@ViewBag.Title">
+                    <input class="add-bookmark" type="submit" value="Добавить в закладки" />
+                </form>
+            }
+        </div>
+    </div>
+
+    <div class="comment-div">
+        <form method="post" asp-controller="Discussion" asp-action="SuggestComment" asp-route-id="@ViewBag.DiscussionId">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div>
+                <textarea class="leave-a-comment-textarea" asp-for="Content" placeholder="Оставить комментарий"></textarea>
+                <span asp-validation-for="Content"></span>
+            </div>
+            <input class="send-a-comment" type="submit" value="Отправить" />
+        </form>
+    </div>
+
+    <div class="comments-list-main-div">
+        @if (ViewBag.Comments is null || ViewBag.Comments.Count == 0)
+        {
+            <p>Ещё никто не оставил комментарий под этим обсуждением :(</p>
+        }
+        else
+        {
+            @foreach (var comment in ViewBag.Comments)
+            {
+                string returnUrl;
+                if (Context.Request.QueryString.HasValue)
+                {
+                    returnUrl = Context.Request.Path + Context.Request.QueryString;
+                }
+                else
+                {
+                    returnUrl = Context.Request.Path;
+                }
+                <div class="comment">
+                    <p>@comment.CreatedBy в @comment.CreatedDate</p>
+                    @if (comment.RepliedOnCommentId is not null)
+                    {
+                        <div class="comment-replying-content">
+                            <p class="mb-2"><strong>@comment.RepliedOnCommentCreatedBy:</strong></p>
+                            <p class="mb-2">"@comment.RepliedOnCommentContent"</p>
+                        </div>
+                    }
+                    @if (comment.RepliedOnCommentId is null && comment.RepliedOnCommentCreatedBy is not null)
+                    {
+                        <div class="comment-replying-content">
+                            <p class="mb-2"><strong>@comment.RepliedOnCommentCreatedBy:</strong></p>
+                            <p class="mb-2">Комменарий был удален</p>
+                        </div>
+                    }
+                    <p class="m-0">@comment.Content</p>
+                    @if (User.Identity.Name == comment.CreatedBy)
+                    {
+                        <form method="post" asp-controller="Comment" asp-action="DeleteComment" asp-route-returnUrl="@returnUrl" asp-route-id="@comment.Id">
+                            <input class="comment-delete" type="submit" value="Удалить" />
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="comment-additional-container">
+                            <div>
+                                <button id="open-reply-to-comment" class="open-reply-to-comment">Ответить</button>
+                                <div id="reply-to-comment-form" class="reply-to-comment-form">
+                                    <form method="post" asp-controller="Discussion" asp-action="SuggestComment" asp-route-id="@ViewBag.DiscussionId"
+                                          asp-route-repliedOnCommentContent="@comment.Content" asp-route-repliedOnCommentId="@comment.Id"
+                                          asp-route-repliedOnCommentCreatedBy="@comment.CreatedBy">
+                                        <div asp-validation-summary="ModelOnly"></div>
+                                        <div>
+                                            <textarea class="reply-to-comment-textarea" rows="1" asp-for="Content" placeholder="Ответить"></textarea>
+                                            <span asp-validation-for="Content"></span>
+                                        </div>
+                                        <input class="reply-to-comment-submit" type="submit" value="Отправить" />
+                                    </form>
+                                </div>
+                            </div>
+                            <div>
+                                <a class="report-link" asp-action="AddReport" asp-controller="Report" asp-route-reportedUserName="@comment.CreatedBy"
+                                   asp-route-reportedCommentContent="@comment.Content" asp-route-reportedCommentId="@comment.Id">Пожаловаться</a>
                             </div>
                         </div>
-                        <div>
-                            <a class="report-link" asp-action="AddReport" asp-controller="Report" asp-route-reportedUserName="@comment.CreatedBy"
-                               asp-route-reportedCommentContent="@comment.Content" asp-route-reportedCommentId="@comment.Id">Пожаловаться</a>
-                        </div>
-                    </div>
-                }
-            </div>
+                    }
+                </div>
+            }
         }
-    }
-</div>
+    </div>
 
-@if (ViewBag.PreviousPageNumber != 0 && ViewBag.Comments.Count != 0)
-{
-    <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-pageNumber="@ViewBag.PreviousPageNumber" asp-route-pageSize="@ViewBag.PageSize"
-       asp-route-id="@ViewBag.DiscussionId">
-        Назад
-    </a>
-}
-@if (ViewBag.DoesNextCommentsPageExist && ViewBag.Comments.Count != 0)
-{
-    <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-pageNumber="@ViewBag.NextPageNumber" asp-route-pageSize="@ViewBag.PageSize"
-       asp-route-id="@ViewBag.DiscussionId">
-        Вперед
-    </a>
-}
+    <div class="pagination-link-container">
+        @if (ViewBag.Comments.Count != 0)
+        {
+            if (ViewBag.PreviousPageNumber != 0)
+            {
+                <a class="pagination-link-previous" asp-controller="Discussion" asp-action="GetDiscussion" asp-route-pageNumber="@ViewBag.PreviousPageNumber"
+                   asp-route-pageSize="@ViewBag.PageSize" asp-route-id="@ViewBag.DiscussionId">
+                    Назад
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-previous-doesnt-exist">Назад</a>
+            }
+        }
+        @if (ViewBag.Comments.Count != 0)
+        {
+            if (ViewBag.DoesNextCommentsPageExist)
+            {
+                <a class="pagination-link-next" asp-controller="Discussion" asp-action="GetDiscussion" asp-route-pageNumber="@ViewBag.NextPageNumber"
+                   asp-route-pageSize="@ViewBag.PageSize" asp-route-id="@ViewBag.DiscussionId">
+                    Вперед
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-next-doesnt-exist">Вперед</a>
+            }
+        }
+    </div>
+</div>
 <script src="~/js/discussion/ResizeCommentTextArea.js"></script>
 <script src="~/js/discussion/ReplyToComment.js"></script>
