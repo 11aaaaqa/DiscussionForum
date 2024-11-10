@@ -2,10 +2,26 @@
     margin-bottom: 20px;
 }
 
+.search-div {
+    margin-top: 3%;
+}
+
 .discussion-additional-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.discussion-additional-content::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 1px;
+    background-color: black;
 }
 
 .rating {
@@ -93,4 +109,35 @@
 
 .increase-rating-input:active {
     transform: scale(0.95);
+}
+
+
+@media (max-width: 1200px) {
+    .search-div {
+        margin-top: 4%;
+    }
+}
+
+@media (max-width: 992px) {
+    .search-div {
+        margin-top: 5%;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-div {
+        margin-top: 6%;
+    }
+}
+
+@media (max-width: 600px) {
+    .search-div {
+        margin-top: 7%;
+    }
+}
+
+@media (max-width: 520px) {
+    .search-div {
+        margin-top: 7%;
+    }
 }
