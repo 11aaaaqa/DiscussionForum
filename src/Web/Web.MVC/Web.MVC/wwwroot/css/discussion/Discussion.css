@@ -7,7 +7,7 @@
 }
 
 .leave-a-comment-textarea {
-    width: 30%;
+    width: 35%;
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 10px;
@@ -213,12 +213,51 @@
     color: black;
 }
 
+.reply-to-comment-textarea {
+    width: 450px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 15px;
+    resize: none;
+    overflow: hidden;
+    transition: border-color 0.3s;
+}
+
+.reply-to-comment-textarea:focus {
+    border-color: orange;
+    outline: none;
+}
+
+.reply-to-comment-textarea:hover {
+    cursor: text;
+}
+
+.reply-to-comment-submit {
+    border: none;
+    border-radius: 4px;
+    background-color: orange;
+    color: white;
+    padding: 8px 12px;
+    font-size: 15px;
+    margin-top: 3px;
+}
+
+.reply-to-comment-submit:hover {
+    background-color: darkorange;
+    color: white;
+    cursor: pointer;
+}
+
 @media (max-width: 1200px) {
     .comment-div {
         margin-top: 4%;
     }
     .leave-a-comment-textarea {
         width: 40%;
+    }
+    .reply-to-comment-textarea {
+        width: 400px;
     }
 }
 
@@ -229,6 +268,9 @@
     .leave-a-comment-textarea {
         width: 45%;
     }
+    .reply-to-comment-textarea {
+        width: 350px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -237,6 +279,9 @@
     }
     .leave-a-comment-textarea {
         width: 50%;
+    }
+    .reply-to-comment-textarea {
+        width: 300px;
     }
 }
 
@@ -247,6 +292,9 @@
     .leave-a-comment-textarea {
         width: 55%;
     }
+    .reply-to-comment-textarea {
+        width: 300px;
+    }
 }
 
 @media (max-width: 520px) {
@@ -255,5 +303,8 @@
     }
     .leave-a-comment-textarea {
         width: 60%;
+    }
+    .reply-to-comment-textarea {
+        width: 300px;
     }
 }

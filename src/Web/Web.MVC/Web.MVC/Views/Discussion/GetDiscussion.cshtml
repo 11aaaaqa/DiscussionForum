@@ -127,7 +127,6 @@
                                       asp-route-repliedOnCommentCreatedBy="@comment.CreatedBy">
                                     <div asp-validation-summary="ModelOnly"></div>
                                     <div>
-                                        @* <input asp-for="Content" placeholder="Ответить"> *@
                                         <textarea class="reply-to-comment-textarea" rows="1" asp-for="Content" placeholder="Ответить"></textarea>
                                         <span asp-validation-for="Content"></span>
                                     </div>
