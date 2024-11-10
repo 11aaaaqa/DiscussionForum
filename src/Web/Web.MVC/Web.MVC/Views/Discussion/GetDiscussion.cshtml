@@ -64,15 +64,14 @@
     </div>
 </div>
 
-<div class="search-div">
+<div class="comment-div">
     <form method="post" asp-controller="Discussion" asp-action="SuggestComment" asp-route-id="@ViewBag.DiscussionId">
         <div asp-validation-summary="ModelOnly"></div>
         <div>
-            <label asp-for="Content"></label><br/>
-            <input asp-for="Content" />
+            <textarea class="leave-a-comment-textarea" asp-for="Content" placeholder="Оставить комментарий"></textarea>
             <span asp-validation-for="Content"></span>
         </div>
-        <input type="submit" value="отправить"/>
+        <input class="send-a-comment" type="submit" value="Отправить"/>
     </form>
 </div>
 <div>
@@ -145,3 +144,4 @@
         Вперед
     </a>
 }
+<script src="~/js/discussion/ResizeCommentTextArea.js"></script>
