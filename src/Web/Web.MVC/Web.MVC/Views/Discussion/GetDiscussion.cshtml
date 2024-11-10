@@ -113,23 +113,33 @@
                 @if (User.Identity.Name == comment.CreatedBy)
                 {
                     <form method="post" asp-controller="Comment" asp-action="DeleteComment" asp-route-returnUrl="@returnUrl" asp-route-id="@comment.Id">
-                        <input type="submit" value="удалить" />
+                        <input class="comment-delete" type="submit" value="Удалить" />
                     </form>
                 }
                 else
                 {
-                    <form method="post" asp-controller="Discussion" asp-action="SuggestComment" asp-route-id="@ViewBag.DiscussionId"
-                      asp-route-repliedOnCommentContent="@comment.Content" asp-route-repliedOnCommentId="@comment.Id"
-                      asp-route-repliedOnCommentCreatedBy="@comment.CreatedBy">
-                        <div asp-validation-summary="ModelOnly"></div>
+                    <div class="comment-additional-container">
                         <div>
-                            <input asp-for="Content" placeholder="Ответить">
-                            <span asp-validation-for="Content"></span>
+                            <button id="open-reply-to-comment" class="open-reply-to-comment">Ответить</button>
+                            <div id="reply-to-comment-form" class="reply-to-comment-form">
+                                <form method="post" asp-controller="Discussion" asp-action="SuggestComment" asp-route-id="@ViewBag.DiscussionId"
+                                      asp-route-repliedOnCommentContent="@comment.Content" asp-route-repliedOnCommentId="@comment.Id"
+                                      asp-route-repliedOnCommentCreatedBy="@comment.CreatedBy">
+                                    <div asp-validation-summary="ModelOnly"></div>
+                                    <div>
+                                        @* <input asp-for="Content" placeholder="Ответить"> *@
+                                        <textarea class="reply-to-comment-textarea" rows="1" asp-for="Content" placeholder="Ответить"></textarea>
+                                        <span asp-validation-for="Content"></span>
+                                    </div>
+                                    <input class="reply-to-comment-submit" type="submit" value="Отправить" />
+                                </form>
+                            </div>
                         </div>
-                        <input type="submit" value="отправить" />
-                    </form>
-                    <a asp-action="AddReport" asp-controller="Report" asp-route-reportedUserName="@comment.CreatedBy"
-                       asp-route-reportedCommentContent="@comment.Content" asp-route-reportedCommentId="@comment.Id">пожаловаться</a>
+                        <div>
+                            <a class="report-link" asp-action="AddReport" asp-controller="Report" asp-route-reportedUserName="@comment.CreatedBy"
+                               asp-route-reportedCommentContent="@comment.Content" asp-route-reportedCommentId="@comment.Id">Пожаловаться</a>
+                        </div>
+                    </div>
                 }
             </div>
         }
@@ -151,3 +161,4 @@
     </a>
 }
 <script src="~/js/discussion/ResizeCommentTextArea.js"></script>
+<script src="~/js/discussion/ReplyToComment.js"></script>
