@@ -2,21 +2,21 @@
     ViewData["Title"] = "Вход";
 }
 @model Web.MVC.DTOs.Auth.LoginDto
+<link rel="stylesheet" href="~/css/auth/Login.css"/>
 
-<h4>Войти в аккаунт</h4>
-
-<form method="post">
-    <div asp-validation-summary="ModelOnly"></div>
-    <div>
-        <label asp-for="UserNameOrEmail"></label><br/>
-        <input asp-for="UserNameOrEmail"/>
-        <span asp-validation-for="UserNameOrEmail"></span>
-    </div>
-    <div>
-        <label asp-for="Password"></label><br/>
-        <input asp-for="Password"/>
-        <span asp-validation-for="Password"></span>
-    </div>
-    <a asp-controller="Auth" asp-action="ForgotPassword">Забыли пароль?</a><br/>
-    <input type="submit" value="войти"/>
-</form>
+<div class="login-form-container">
+    <h2>Вход в аккаунт</h2>
+    <form method="post">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div>
+            <input class="login-input" asp-for="UserNameOrEmail" placeholder="Имя пользователя или адрес эл. почты"/>
+            <span asp-validation-for="UserNameOrEmail"></span>
+        </div>
+        <div>
+            <input class="login-input mt-2" asp-for="Password" placeholder="Пароль"/>
+            <span asp-validation-for="Password"></span>
+        </div>
+        <a class="mb-2" asp-controller="Auth" asp-action="ForgotPassword">Забыли пароль?</a><br/>
+        <input class="login-submit" type="submit" value="Войти"/>
+    </form>
+</div>
