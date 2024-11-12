@@ -13,8 +13,8 @@ h2 {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     padding: 40px;
     text-align: center;
-    margin: 30%;
-    margin-top: 15%;
+    margin: 0 30%;
+    margin-top: 10%;
 }
 
 .register-input {
@@ -70,35 +70,35 @@ h2 {
 
 @media (max-width: 1200px) {
     .register-page-container {
-        margin: 25%;
-        margin-top: 13%;
+        margin: 0 25%;
+        margin-top: 9%;
     }
 }
 
 @media (max-width: 992px) {
     .register-page-container {
-        margin: 15%;
-        margin-top: 11%;
+        margin: 0 15%;
+        margin-top: 8%;
     }
 }
 
 @media (max-width: 768px) {
     .register-page-container {
-        margin: 8%;
-        margin-top: 9%;
+        margin: 0 8%;
+        margin-top: 7%;
     }
 }
 
 @media (max-width: 600px) {
     .register-page-container {
-        margin: 5%;
-        margin-top: 7%;
+        margin: 0 5%;
+        margin-top: 6%;
     }
 }
 
 @media (max-width: 520px) {
     .register-page-container {
-        margin: 3%;
+        margin: 0 3%;
         margin-top: 5%;
     }
 }
