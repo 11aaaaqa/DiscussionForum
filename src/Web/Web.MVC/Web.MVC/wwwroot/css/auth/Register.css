@@ -68,6 +68,11 @@ h2 {
     margin-left: 5%;
 }
 
+.validation-summary {
+    text-align: left;
+    margin-left: 5%;
+}
+
 @media (max-width: 1200px) {
     .register-page-container {
         margin: 0 25%;

@@ -7,7 +7,7 @@
 <div class="register-page-container">
     <h2>Зарегистрироваться</h2>
     <form method="post" asp-action="Register" asp-controller="Auth">
-        <div asp-validation-summary="ModelOnly"></div>
+        <div class="validation-summary" asp-validation-summary="ModelOnly"></div>
         <span class="validation-message" asp-validation-for="Email"></span>
         <span class="validation-message" asp-validation-for="UserName"></span>
         <span class="validation-message" asp-validation-for="Password"></span>
@@ -41,7 +41,7 @@
                          asp-text-box-template="<div>{0}</div>"
                          asp-validation-message-class="text-danger"
                          asp-refresh-button-class="glyphicon glyphicon-refresh btn-sm"
-                         asp-show-refresh-button="true"/>
+                         asp-show-refresh-button="false"/>
         </div>
         <input class="register-submit" type="submit" value="Зарегистрироваться" />
     </form>
