@@ -1,13 +1,17 @@
-﻿const replyToCommentBtn = document.getElementById('open-reply-to-comment');
-const replyToCommentForm = document.getElementById('reply-to-comment-form');
-const replyToCommentInput = document.querySelector('.reply-to-comment-textarea');
+﻿const replyToCommentBtns = document.querySelectorAll('.open-reply-to-comment');
+const replyToCommentForms = document.querySelectorAll('.reply-to-comment-form');
+const replyToCommentInputs = document.querySelectorAll('.reply-to-comment-textarea');
 
-replyToCommentBtn.addEventListener('click', function() {
-    replyToCommentBtn.style.display = 'none';
-    replyToCommentForm.style.display = 'flex';
+replyToCommentBtns.forEach((replyToCommentBtn, index) => {
+    replyToCommentBtn.addEventListener('click', function () {
+        replyToCommentBtn.style.display = 'none';
+        replyToCommentForms[index].style.display = 'flex';
+    });
 });
 
-replyToCommentInput.addEventListener('input', function () {
-    this.style.height = 'auto';
-    this.style.height = this.scrollHeight + 'px';
+replyToCommentInputs.forEach(replyToCommentInput => {
+    replyToCommentInput.addEventListener('input', function () {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+    });
 });

@@ -123,8 +123,8 @@
                     {
                         <div class="comment-additional-container">
                             <div>
-                                <button id="open-reply-to-comment" class="open-reply-to-comment">Ответить</button>
-                                <div id="reply-to-comment-form" class="reply-to-comment-form">
+                                <button class="open-reply-to-comment">Ответить</button>
+                                <div class="reply-to-comment-form">
                                     <form method="post" asp-controller="Discussion" asp-action="SuggestComment" asp-route-id="@ViewBag.DiscussionId"
                                           asp-route-repliedOnCommentContent="@comment.Content" asp-route-repliedOnCommentId="@comment.Id"
                                           asp-route-repliedOnCommentCreatedBy="@comment.CreatedBy">
