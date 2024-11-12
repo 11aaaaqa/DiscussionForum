@@ -1,0 +1,104 @@
+﻿body {
+    background-color: #f0f0f0;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.register-page-container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    text-align: center;
+    margin: 30%;
+    margin-top: 15%;
+}
+
+.register-input {
+    width: 90%;
+    padding: 12px 15px;
+    border: 2px solid black;
+    border-radius: 8px;
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    margin-bottom: 5px;
+    transition: border-color 0.4s, box-shadow 0.4s;
+}
+
+.register-input:focus {
+    border-color: orange;
+    box-shadow: 0 0 9px rgba(0, 0, 0, 0.5);
+    outline: none;
+}
+
+.register-submit {
+    border: none;
+    border-radius: 8px;
+    color: white;
+    background-color: orange;
+    padding: 12px;
+    font-size: 16px;
+    width: 90%;
+    transition: background-color 0.3s;
+}
+
+.register-submit:hover {
+    background-color: darkorange;
+    border: none;
+    color: white;
+}
+
+.register-captcha {
+    display: flex;
+    width: 90%;
+    text-align: left;
+    margin-left: 5%;
+}
+
+.validation-message {
+    color: red;
+    font-size: 15px;
+    margin-bottom: 10px;
+    display: block;
+    text-align: left;
+    margin-left: 5%;
+}
+
+@media (max-width: 1200px) {
+    .register-page-container {
+        margin: 25%;
+        margin-top: 13%;
+    }
+}
+
+@media (max-width: 992px) {
+    .register-page-container {
+        margin: 15%;
+        margin-top: 11%;
+    }
+}
+
+@media (max-width: 768px) {
+    .register-page-container {
+        margin: 8%;
+        margin-top: 9%;
+    }
+}
+
+@media (max-width: 600px) {
+    .register-page-container {
+        margin: 5%;
+        margin-top: 7%;
+    }
+}
+
+@media (max-width: 520px) {
+    .register-page-container {
+        margin: 3%;
+        margin-top: 5%;
+    }
+}
