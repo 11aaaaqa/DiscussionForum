@@ -2,15 +2,26 @@
     ViewData["Title"] = "Предложить тему";
 }
 @model Web.MVC.DTOs.Topic.TopicDto
+<link rel="stylesheet" href="~/css/topic/SuggestTopic.css"/>
 
-<h3>Предложить тему</h3>
+<div class="suggest-topic-page-container">
+    <h3>Предложить тему</h3>
 
-<form method="post">
-    <div asp-validation-summary="All"></div>
-    <div>
-        <label asp-for="Name"></label><br/>
-        <input asp-for="Name"/>
-        <span asp-validation-for="Name"></span>
-    </div>
-    <input type="submit" value="предложить"/>
-</form>
+    <form method="post">
+        <div asp-validation-summary="ModelOnly"></div>
+        <span class="validation-message" asp-validation-for="Name"></span>
+        <div>
+            <textarea class="suggest-topic-textarea" asp-for="Name" placeholder="Название" rows="2"></textarea>
+        </div>
+        <input class="suggest-topic-submit" type="submit" value="Предложить"/>
+    </form>
+</div>
+
+<script>
+    const commentInput = document.querySelector('.suggest-topic-textarea');
+
+    commentInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+    });
+</script>

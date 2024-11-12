@@ -1,0 +1,95 @@
+﻿.validation-message {
+    color: red;
+    font-size: 15px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.suggest-topic-textarea {
+    width: 50%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 15px;
+    resize: none;
+    overflow: hidden;
+    transition: border-color 0.3s;
+}
+
+.suggest-topic-textarea:focus {
+    border-color: orange;
+    outline: none;
+}
+
+.suggest-topic-textarea:hover {
+    cursor: text;
+}
+
+.suggest-topic-submit {
+    border: none;
+    border-radius: 4px;
+    background-color: orange;
+    color: white;
+    padding: 8px 12px;
+    font-size: 15px;
+    margin-top: 5px;
+}
+
+.suggest-topic-submit:hover {
+    background-color: darkorange;
+    color: white;
+    cursor: pointer;
+}
+
+.suggest-topic-page-container {
+    margin: 0 20%;
+}
+
+@media (max-width: 1200px) {
+    .suggest-topic-page-container {
+        margin: 0 18%;
+    }
+    .suggest-topic-textarea {
+        width: 55%;
+    }
+}
+
+@media (max-width: 992px) {
+    .suggest-topic-page-container {
+        margin: 0 15%;
+    }
+
+    .suggest-topic-textarea {
+        width: 61%;
+    }
+}
+
+@media (max-width: 768px) {
+    .suggest-topic-page-container {
+        margin: 0 12%;
+    }
+
+    .suggest-topic-textarea {
+        width: 66%;
+    }
+}
+
+@media (max-width: 600px) {
+    .suggest-topic-page-container {
+        margin: 0 8%;
+    }
+
+    .suggest-topic-textarea {
+        width: 73%;
+    }
+}
+
+@media (max-width: 520px) {
+    .suggest-topic-page-container {
+        margin: 0 5%;
+    }
+
+    .suggest-topic-textarea {
+        width: 80%;
+    }
+}
