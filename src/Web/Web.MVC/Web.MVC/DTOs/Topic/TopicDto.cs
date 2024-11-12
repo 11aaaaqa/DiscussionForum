@@ -4,7 +4,7 @@ namespace Web.MVC.DTOs.Topic
 {
     public class TopicDto
     {
-        [Required]
+        [Required(ErrorMessage = "Поле \"Название\" обязательно")]
         [StringLength(40, ErrorMessage = "Максимальная длина названия - 40 символов")]
         [Display(Name = "Название")]
         public string Name { get; set; }
