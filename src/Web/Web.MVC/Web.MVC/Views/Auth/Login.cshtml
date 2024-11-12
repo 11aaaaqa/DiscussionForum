@@ -7,14 +7,14 @@
 <div class="login-form-container">
     <h2>Вход в аккаунт</h2>
     <form method="post">
-        <div asp-validation-summary="ModelOnly"></div>
+        <div class="validation-summary" asp-validation-summary="ModelOnly"></div>
+        <span class="validation-message" asp-validation-for="UserNameOrEmail"></span>
+        <span class="validation-message" asp-validation-for="Password"></span>
         <div>
             <input class="login-input" asp-for="UserNameOrEmail" placeholder="Имя пользователя или адрес эл. почты"/>
-            <span asp-validation-for="UserNameOrEmail"></span>
         </div>
         <div>
             <input class="login-input mt-2" asp-for="Password" placeholder="Пароль"/>
-            <span asp-validation-for="Password"></span>
         </div>
         <a class="mb-2" asp-controller="Auth" asp-action="ForgotPassword">Забыли пароль?</a><br/>
         <input class="login-submit" type="submit" value="Войти"/>
