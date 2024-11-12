@@ -2,20 +2,31 @@
     ViewData["Title"] = "Предложить обсуждение";
 }
 @model Web.MVC.DTOs.Discussion.DiscussionDto
+<link rel="stylesheet" href="~/css/discussion/SuggestDiscussion.css"/>
 
-<h3>Предложить обсуждение</h3>
+<div class="suggest-discussion-page-container">
+    <h3 class="mb-3">Предложить обсуждение</h3>
 
-<form method="post">
-    <div asp-validation-summary="ModelOnly"></div>
-    <div>
-        <label asp-for="Title"></label><br/>
-        <input asp-for="Title"/>
-        <span asp-validation-for="Title"></span>
-    </div>
-    <div>
-        <label asp-for="Content"></label><br />
-        <input asp-for="Content" />
-        <span asp-validation-for="Content"></span>
-    </div>
-    <input type="submit" value="предложить"/>
-</form>
+    <form method="post">
+        <div asp-validation-summary="ModelOnly"></div>
+        <span class="validation-message" asp-validation-for="Title"></span>
+        <span class="validation-message" asp-validation-for="Content"></span>
+        <div>
+            <textarea class="suggest-discussion-textarea" rows="1" asp-for="Title" placeholder="Заголовок"></textarea>
+        </div>
+        <div>
+            <textarea class="suggest-discussion-textarea" rows="2" asp-for="Content" placeholder="Обсуждение"></textarea>
+        </div>
+        <input class="suggest-discussion-submit" type="submit" value="предложить"/>
+    </form>
+</div>
+<script>
+    const commentInputs = document.querySelectorAll('.suggest-discussion-textarea');
+
+    commentInputs.forEach(commentInput => {
+        commentInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+    });
+</script>
