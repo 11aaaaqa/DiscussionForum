@@ -11,7 +11,7 @@ namespace Web.MVC.DTOs.Report
         public Guid? ReportedCommentId { get; set; }
         public Guid? ReportedDiscussionId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Поле \"Причина\" обязательно")]
         [StringLength(50, ErrorMessage = "Максимальная длина причины - 50 символов")]
         [Display(Name="Причина")]
         public string Reason { get; set; }
