@@ -57,8 +57,7 @@
                     returnUrl = Context.Request.Path;
                 }
 
-                <a asp-action="AddReport" asp-controller="Report" asp-route-reportedUserName="@ViewBag.CreatedBy" asp-route-reportedDiscussionTitle="@ViewBag.Title"
-                   asp-route-reportedDiscussionContent="@ViewBag.Content" asp-route-reportedDiscussionId="@ViewBag.DiscussionId">Пожаловаться</a>
+                <a asp-action="AddReport" asp-controller="Report" asp-route-reportedUserName="@ViewBag.CreatedBy" asp-route-reportedDiscussionId="@ViewBag.DiscussionId">Пожаловаться</a>
                 <form method="post" asp-controller="Bookmark" asp-action="AddBookmark" asp-route-returnUrl="@returnUrl" asp-route-discussionId="@ViewBag.DiscussionId"
                       asp-route-discussionTitle="@ViewBag.Title">
                     <input class="add-bookmark" type="submit" value="Добавить в закладки" />
@@ -138,8 +137,7 @@
                                 </div>
                             </div>
                             <div>
-                                <a class="report-link" asp-action="AddReport" asp-controller="Report" asp-route-reportedUserName="@comment.CreatedBy"
-                                   asp-route-reportedCommentContent="@comment.Content" asp-route-reportedCommentId="@comment.Id">Пожаловаться</a>
+                                <a class="report-link" asp-action="AddReport" asp-controller="Report" asp-route-reportedUserName="@comment.CreatedBy" asp-route-reportedCommentId="@comment.Id">Пожаловаться</a>
                             </div>
                         </div>
                     }
