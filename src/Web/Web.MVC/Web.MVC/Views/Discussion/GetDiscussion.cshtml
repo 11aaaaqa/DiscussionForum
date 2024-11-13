@@ -96,7 +96,7 @@
                     returnUrl = Context.Request.Path;
                 }
                 <div class="comment">
-                    <p>@comment.CreatedBy в @comment.CreatedDate</p>
+                    <p><a class="created-by-comment" asp-controller="User" asp-action="GetUser" asp-route-userName="@comment.CreatedBy">@comment.CreatedBy</a> в @comment.CreatedDate</p>
                     @if (comment.RepliedOnCommentId is not null)
                     {
                         <div class="comment-replying-content">

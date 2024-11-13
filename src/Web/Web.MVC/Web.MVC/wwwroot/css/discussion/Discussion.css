@@ -6,6 +6,16 @@
     margin-top: 3%;
 }
 
+.created-by-comment {
+    text-decoration: none;
+    color: black;
+    background-color: white;
+}
+
+.created-by-comment:hover {
+    color: black;
+}
+
 .leave-a-comment-textarea {
     width: 35%;
     border: 1px solid #ddd;
