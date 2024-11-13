@@ -85,7 +85,7 @@ namespace BookmarkMicroservice.Api.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest();
+                return Conflict();
             }
             
             return Ok(createdBookmark);

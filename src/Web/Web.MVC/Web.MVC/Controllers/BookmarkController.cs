@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -142,7 +143,12 @@ namespace Web.MVC.Controllers
 
             var response = await httpClient.PostAsync(
                 $"{url}/api/Bookmark/AddBookmark", jsonContent);
-            if (!response.IsSuccessStatusCode) return View("ActionError");
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.Conflict)
+                    return View("BookmarkIsAlreadyAdded");
+                return View("ActionError");
+            }
 
             if (!string.IsNullOrEmpty(returnUrl))
                 return LocalRedirect(returnUrl);
