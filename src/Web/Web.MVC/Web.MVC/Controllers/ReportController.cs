@@ -6,7 +6,9 @@ using Web.MVC.Constants;
 using Web.MVC.DTOs.Report;
 using Web.MVC.Models;
 using Web.MVC.Models.ApiRequests;
+using Web.MVC.Models.ApiResponses.CommentsResponses;
 using Web.MVC.Models.ApiResponses.CustUserResponses;
+using Web.MVC.Models.ApiResponses.Discussion;
 using Web.MVC.Models.ApiResponses.ReportResponses;
 
 namespace Web.MVC.Controllers
@@ -26,18 +28,45 @@ namespace Web.MVC.Controllers
         [Route("reports/add")]
         [Authorize]
         [HttpGet]
-        public IActionResult AddReport(string reportedUserName, string? reportedCommentContent,
-            string? reportedDiscussionTitle, string? reportedDiscussionContent, Guid? reportedDiscussionId, Guid reportedCommentId)
+        public async Task<IActionResult> AddReport(string reportedUserName, Guid? reportedDiscussionId, Guid? reportedCommentId)
         {
-            var model = new CreateReportDto
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            CreateReportDto model;
+
+            if (reportedDiscussionId is null)
             {
-                ReportedDiscussionId = reportedDiscussionId,
-                ReportedCommentId = reportedCommentId,
-                ReportedUserName = reportedUserName,
-                ReportedCommentContent = reportedCommentContent,
-                ReportedDiscussionContent = reportedDiscussionContent,
-                ReportedDiscussionTitle = reportedDiscussionTitle
-            };
+                if (reportedCommentId is null) return View("ActionError");
+                var response = await httpClient.GetAsync($"{url}/api/Comment/GetCommentById/{reportedCommentId}");
+                if (!response.IsSuccessStatusCode) return View("ActionError");
+
+                var comment = await response.Content.ReadFromJsonAsync<CommentResponse>();
+
+                model = new CreateReportDto
+                {
+                    ReportedDiscussionId = reportedDiscussionId,
+                    ReportedCommentId = reportedCommentId,
+                    ReportedUserName = reportedUserName,
+                    ReportedCommentContent = comment.Content,
+                    ReportedDiscussionContent = null,
+                    ReportedDiscussionTitle = null
+                };
+            }
+            else
+            {
+                var response = await httpClient.GetAsync($"{url}/api/Discussion/GetDiscussionById?id={reportedDiscussionId}");
+                if (!response.IsSuccessStatusCode) return View("ActionError");
+
+                var discussion = await response.Content.ReadFromJsonAsync<DiscussionResponse>();
+                model = new CreateReportDto
+                {
+                    ReportedDiscussionId = reportedDiscussionId,
+                    ReportedCommentId = reportedCommentId,
+                    ReportedUserName = reportedUserName,
+                    ReportedCommentContent = null,
+                    ReportedDiscussionContent = discussion.Content,
+                    ReportedDiscussionTitle = discussion.Title
+                };
+            }
             return View(model);
         }
 
