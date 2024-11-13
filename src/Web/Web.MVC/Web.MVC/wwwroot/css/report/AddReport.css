@@ -1,0 +1,93 @@
+﻿.add-report-page-container {
+    margin: 0 15%;
+}
+
+.add-report-page-container p {
+    margin: 0;
+    width: 100%;
+}
+
+.add-report-textarea {
+    width: 40%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 15px;
+    resize: none;
+    overflow: hidden;
+    transition: border-color 0.3s;
+}
+
+.add-report-textarea:focus {
+    border-color: orange;
+    outline: none;
+}
+
+.add-report-textarea:hover {
+    cursor: text;
+}
+
+.add-report-submit {
+    border: none;
+    border-radius: 4px;
+    background-color: orange;
+    color: white;
+    padding: 8px 12px;
+    font-size: 15px;
+}
+
+.add-report-submit:hover {
+    background-color: darkorange;
+    color: white;
+    cursor: pointer;
+}
+
+@media (max-width: 1200px) {
+    .add-report-page-container {
+        margin: 0 15%;
+    }
+    .add-report-textarea {
+        width: 40%;
+    }
+}
+
+@media (max-width: 992px) {
+    .add-report-page-container {
+        margin: 0 13%;
+    }
+
+    .add-report-textarea {
+        width: 45%;
+    }
+}
+
+@media (max-width: 768px) {
+    .add-report-page-container {
+        margin: 0 10%;
+    }
+
+    .add-report-textarea {
+        width: 50%;
+    }
+}
+
+@media (max-width: 600px) {
+    .add-report-page-container {
+        margin: 0 8%;
+    }
+
+    .add-report-textarea {
+        width: 55%;
+    }
+}
+
+@media (max-width: 520px) {
+
+    .add-report-page-container {
+        margin: 0 5%;
+    }
+
+    .add-report-textarea {
+        width: 60%;
+    }
+}
