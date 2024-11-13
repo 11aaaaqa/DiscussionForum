@@ -2,25 +2,36 @@
     ViewData["Title"] = "Пожаловаться";
 }
 @model Web.MVC.DTOs.Report.CreateReportDto
+<link rel="stylesheet" href="~/css/report/AddReport.css"/>
+<link rel="stylesheet" href="~/css/ErrorMessageSpanValidation.css"/>
 
-@if (Model.ReportedCommentContent is null)
-{
-    <h3>Сообщить о нарушении от пользователя @@@Model.ReportedUserName</h3>
-    <h4>Заголовок: @Model.ReportedDiscussionTitle</h4>
-    <p>Обсуждение: @Model.ReportedDiscussionContent</p>
-}
-else
-{
-    <h3>Сообщить о нарушении от пользователя @@@Model.ReportedUserName</h3>
-    <p>Комментарий: @Model.ReportedCommentContent</p>
-}
+<div class="add-report-page-container">
+    @if (Model.ReportedCommentContent is null)
+    {
+        <p class="mb-4"><strong>Сообщить о нарушении от пользователя @@@Model.ReportedUserName</strong></p>
+        <p class="mb-2"><strong>Заголовок: </strong>@Model.ReportedDiscussionTitle</p>
+        <p class="mb-3"><strong>Обсуждение: </strong>@Model.ReportedDiscussionContent</p>
+    }
+    else
+    {
+        <p class="mb-4"><strong>Сообщить о нарушении от пользователя @@@Model.ReportedUserName</strong></p>
+        <p class="mb-3"><strong>Комментарий: </strong>@Model.ReportedCommentContent</p>
+    }
 
-<form method="post">
-    <div asp-validation-summary="ModelOnly"></div>
-    <div>
-        <label asp-for="Reason"></label><br/>
-        <input asp-for="Reason"/>
-        <span asp-validation-for="Reason"></span>
-    </div>
-    <input type="submit" value="отправить"/>
-</form>
+    <form method="post">
+        <div asp-validation-summary="ModelOnly"></div>
+        <span class="validation-message" asp-validation-for="Reason"></span>
+        <div>
+            <textarea class="add-report-textarea" asp-for="Reason" placeholder="Причина" rows="1"></textarea>
+        </div>
+        <input class="add-report-submit" type="submit" value="Отправить"/>
+    </form>
+</div>
+<script>
+    const reportInput = document.querySelector('.add-report-textarea');
+
+    reportInput.addEventListener('input', function () {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+    });
+</script>
