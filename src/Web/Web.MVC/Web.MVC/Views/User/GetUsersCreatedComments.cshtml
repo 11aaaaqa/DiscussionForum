@@ -23,21 +23,24 @@
     <div class="dropdown">
         @if (User.Identity.Name == ViewBag.UserName)
         {
-            <div>
-                <button id="dropdownSuggestionsButton" class="open-dropdown-btn">предложения &#x25BC;</button>
-                <div id="dropdownSuggestionsList" class="dropdown-list">
-                    <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1"
-                       asp-route-pageSize="20" asp-route-userName="@ViewBag.UserName">комментарии</a>
-                    <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@ViewBag.UserName"
-                       asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
-                    <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="1"
-                       asp-route-pageSize="20" asp-route-userName="@ViewBag.UserName">темы</a>
+            @if (!User.IsInRole(UserRoleConstants.AdminRole) && !User.IsInRole(UserRoleConstants.ModeratorRole))
+            {
+                <div>
+                    <button id="dropdownSuggestionsButton" class="open-dropdown-btn">предложения &#x25BC;</button>
+                    <div id="dropdownSuggestionsList" class="dropdown-list">
+                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@ViewBag.UserName">комментарии</a>
+                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@ViewBag.UserName"
+                           asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
+                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@ViewBag.UserName">темы</a>
+                    </div>
                 </div>
-            </div>
+            }
         }
     </div>
     <div class="dropdown">
-        @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole) && User.Identity.Name != ViewBag.UserName)
+        @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
         {
             <div>
                 <button id="dropdownAdminButton" class="open-dropdown-btn">админ &#x25BC;</button>

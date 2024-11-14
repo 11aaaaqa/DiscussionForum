@@ -23,17 +23,20 @@
     <div class="dropdown">
         @if (User.Identity.Name == Model.UserName)
         {
-            <div>
-                <button id="dropdownSuggestionsButton" class="open-dropdown-btn">предложения &#x25BC;</button>
-                <div id="dropdownSuggestionsList" class="dropdown-list">
-                    <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1"
-                       asp-route-pageSize="20" asp-route-userName="@Model.UserName">комментарии</a>
-                    <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@Model.UserName"
-                       asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
-                    <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="1"
-                       asp-route-pageSize="20" asp-route-userName="@Model.UserName">темы</a>
+            @if (!User.IsInRole(UserRoleConstants.AdminRole) && !User.IsInRole(UserRoleConstants.ModeratorRole))
+            {
+                <div>
+                    <button id="dropdownSuggestionsButton" class="open-dropdown-btn">предложения &#x25BC;</button>
+                    <div id="dropdownSuggestionsList" class="dropdown-list">
+                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@Model.UserName">комментарии</a>
+                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@Model.UserName"
+                           asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
+                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@Model.UserName">темы</a>
+                    </div>
                 </div>
-            </div>
+            }
         }
     </div>
     <div class="dropdown">
