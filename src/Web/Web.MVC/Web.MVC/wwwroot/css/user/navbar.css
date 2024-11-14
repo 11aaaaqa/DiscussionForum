@@ -1,28 +1,30 @@
 ﻿.profile-navbar {
     display: flex;
     align-items: center;
-    gap: 10px;
 }
 
-.profile-navbar a {
-    padding: 10px 15px; 
+.profile-navbar-link {
+    padding: 10px 10px; 
     text-decoration: none;
     color: black;
     border: 1px solid transparent;
     border-radius: 4px;
 }
-.profile-navbar a:hover {
-    background-color: #f1f1f1;
+.profile-navbar-link:hover {
+    background-color: white;
     color: orange;
 }
 
-.profile-navbar a.active {
-    background-color: orange;
-    color: white;
-    border: 1px solid orange;
+.active-navbar-link {
+    padding: 10px 10px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background-color: white;
+    color: orange;
+    font-weight: 600;
 }
-.profile-navbar button.active {
-    background-color: orange;
-    color: white;
-    border: 1px solid orange;
+
+.active-navbar-link:hover {
+    color: orange;
 }
