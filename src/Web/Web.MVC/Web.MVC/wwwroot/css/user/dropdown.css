@@ -31,3 +31,10 @@
     background-color: #f1f1f1;
     color: black;
 }
+.active-dropdown-content {
+    color: orange;
+    font-weight: 500;
+}
+.active-dropdown-content:hover {
+    color: orange;
+}
