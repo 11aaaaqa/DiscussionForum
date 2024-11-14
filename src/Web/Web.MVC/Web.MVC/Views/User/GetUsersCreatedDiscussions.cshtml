@@ -5,17 +5,22 @@
 @using Web.MVC.Constants
 <link rel="stylesheet" href="~/css/user/dropdown.css"/>
 <link rel="stylesheet" href="~/css/user/navbar.css"/>
+<link rel="stylesheet" href="~/css/discussion/discussionsList.css"/>
+<link rel="stylesheet" href="~/css/NextPreviousPaginationBtns.css" />
+<link rel="stylesheet" href="~/css/discussion/DiscussionsPreview.css" />
+<link rel="stylesheet" href="~/css/user/CreatedDiscussions.css"/>
+
 @model GetDiscussionsViewModel
 
 <div class="profile-navbar">
-    <a asp-controller="User" asp-action="GetUser" asp-route-userName="@ViewBag.UserName">профиль</a>
-    <a class="active" asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-userName="@ViewBag.UserName"
+    <a class="profile-navbar-link" asp-controller="User" asp-action="GetUser" asp-route-userName="@ViewBag.UserName">профиль</a>
+    <a class="active-navbar-link" asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-userName="@ViewBag.UserName"
        asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
-    <a asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
+    <a class="profile-navbar-link" asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
        asp-route-userName="@ViewBag.UserName">комментарии</a>
     @if (User.Identity.Name == ViewBag.UserName || User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
     {
-        <a asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="1" asp-route-pageSize="20"
+        <a class="profile-navbar-link" asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="1" asp-route-pageSize="20"
            asp-route-userName="@ViewBag.UserName">
             закладки
         </a>
@@ -57,7 +62,7 @@
 </div>
 
 <div>
-    @if (Model.Discussions is null || Model.Discussions.Count == 0)
+    @if (Model.Discussions.Count == 0)
     {
         <h3>Обсуждения ещё не созданы</h3>
     }
@@ -65,28 +70,48 @@
     {
         foreach (var discussion in Model.Discussions)
         {
-            <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@discussion.Id" asp-route-pageNumber="1" asp-route-pageSize="20">
-                @discussion.Title
-            </a>
-            <p>Создано: @discussion.CreatedAt</p>
-            <p>Рейтинг: @discussion.Rating</p>
+            <div class="border-div">
+                <a class="discussion-title" asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@discussion.Id" asp-route-pageNumber="1"
+                   asp-route-pageSize="20">@discussion.Title
+                </a>
+                <p class="rating-value" data-value="@discussion.Rating">Рейтинг: @discussion.Rating</p>
+                <p>Создано: @discussion.CreatedBy</p>
+                <p>Дата создания: @discussion.CreatedAt</p>
+            </div>
         }
     }
 </div>
 
-@if (Model.PreviousPageNumber != 0)
-{
-    <a asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize"
-       asp-route-userName="@ViewBag.UserName">
-        Назад
-    </a>
-}
-@if (Model.DoesNextPageExist && Model.Discussions.Count != 0)
-{
-    <a asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize"
-       asp-route-userName="@ViewBag.UserName">
-        Вперед
-    </a>
-}
+<div class="pagination-link-container">
+    @if (Model.Discussions.Count != 0)
+    {
+        if (Model.PreviousPageNumber != 0)
+        {
+            <a class="pagination-link-previous" asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-pageNumber="@Model.PreviousPageNumber"
+               asp-route-pageSize="@Model.PageSize"asp-route-userName="@ViewBag.UserName">
+                Назад
+            </a>
+        }
+        else
+        {
+            <a class="pagination-link-previous-doesnt-exist">Назад</a>
+        }
+    }
+    @if (Model.Discussions.Count != 0)
+    {
+        if (Model.DoesNextPageExist)
+        {
+            <a class="pagination-link-next" asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-pageNumber="@Model.NextPageNumber"
+               asp-route-pageSize="@Model.PageSize"asp-route-userName="@ViewBag.UserName">
+                Вперед
+            </a>
+        }
+        else
+        {
+            <a class="pagination-link-next-doesnt-exist">Вперед</a>
+        }
+    }
+</div>
 <script src="~/js/user/dropdownUserAdmin.js"></script>
 <script src="~/js/user/dropdownUserSuggestions.js"></script>
+<script src="~/js/discussion/RatingColorChanging.js"></script>
