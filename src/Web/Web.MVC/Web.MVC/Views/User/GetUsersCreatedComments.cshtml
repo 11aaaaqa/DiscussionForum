@@ -8,14 +8,14 @@
 <link rel="stylesheet" href="~/css/user/navbar.css" />
 
 <div class="profile-navbar">
-    <a asp-controller="User" asp-action="GetUser" asp-route-userName="@ViewBag.UserName">профиль</a>
-    <a asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-userName="@ViewBag.UserName"
+    <a class="profile-navbar-link" asp-controller="User" asp-action="GetUser" asp-route-userName="@ViewBag.UserName">профиль</a>
+    <a class="profile-navbar-link" asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-userName="@ViewBag.UserName"
        asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
-    <a class="active" asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
+    <a class="active-navbar-link" asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
        asp-route-userName="@ViewBag.UserName">комментарии</a>
     @if (User.Identity.Name == ViewBag.UserName || User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
     {
-        <a asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="1" asp-route-pageSize="20"
+        <a class="profile-navbar-link" asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="1" asp-route-pageSize="20"
            asp-route-userName="@ViewBag.UserName">
             закладки
         </a>
