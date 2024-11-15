@@ -1,0 +1,96 @@
+﻿.search-bookmarks-container {
+    width: 65%;
+}
+
+.bookmark-title {
+    display: block;
+    text-decoration: none;
+    background-color: white;
+    color: #0d0d0d;
+    font-weight: 600;
+    word-wrap: break-word;
+}
+
+.bookmark-title:hover {
+    color: #0d0d0d;
+    font-weight: 600;
+    background-color: white;
+}
+
+.bookmark-preview-border {
+    border: 1.5px solid #a9a9a9;
+    padding: 10px 20px 5px;
+    border-radius: 7px;
+    margin: 5px 0%;
+}
+
+.bookmark-preview-border p {
+    margin: 5px 0;
+}
+
+.delete-bookmark {
+    border: none;
+    border-radius: 7px;
+    background-color: orange;
+    color: white;
+    padding: 5px 8px;
+    margin-top: 5px;
+    font-size: 15px;
+}
+
+.delete-bookmark:hover {
+    background-color: darkorange;
+    color: white;
+}
+
+.bookmarks-sorting-switching-link {
+    border: none;
+    border-radius: 8px;
+    background-color: orange;
+    color: white;
+    padding: 8px 13px;
+    text-decoration: none;
+}
+
+.bookmarks-sorting-switching-link:hover {
+    background-color: darkorange;
+    color: white;
+}
+
+.bookmarks-sorting-switching-container {
+    margin: 10px 0;
+}
+
+.bookmarks-page-container {
+    margin: 0 20%;
+}
+
+@media (max-width: 1200px) {
+    .bookmarks-page-container {
+        margin: 0 15%;
+    }
+}
+
+@media (max-width: 992px) {
+    .bookmarks-page-container {
+        margin: 0 10%;
+    }
+}
+
+@media (max-width: 768px) {
+    .bookmarks-page-container {
+        margin: 0 7%;
+    }
+}
+
+@media (max-width: 600px) {
+    .bookmarks-page-container {
+        margin: 0 5%;
+    }
+}
+
+@media (max-width: 520px) {
+    .bookmarks-page-container {
+        margin: 0 2%;
+    }
+}
