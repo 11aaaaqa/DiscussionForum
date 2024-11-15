@@ -6,106 +6,135 @@
 @model Web.MVC.Models.ViewModels.Bookmark.BookmarkViewModel
 <link rel="stylesheet" href="~/css/user/dropdown.css" />
 <link rel="stylesheet" href="~/css/user/navbar.css" />
+<link rel="stylesheet" href="~/css/SearchForm.css"/>
+<link rel="stylesheet" href="~/css/discussion/DiscussionsPreview.css"/>
+<link rel="stylesheet" href="~/css/NextPreviousPaginationBtns.css"/>
+<link rel="stylesheet" href="~/css/bookmark/GetBookmarks.css"/>
 
-<div class="profile-navbar">
-    <a class="profile-navbar-link" asp-controller="User" asp-action="GetUser" asp-route-userName="@Model.UserName">профиль</a>
-    <a class="profile-navbar-link" asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-userName="@Model.UserName"
-       asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
-    <a class="profile-navbar-link" asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
-       asp-route-userName="@Model.UserName">комментарии</a>
-    @if (User.Identity.Name == Model.UserName || User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
-    {
-        <a class="active-navbar-link" asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="1" asp-route-pageSize="20"
-           asp-route-userName="@Model.UserName">
-            закладки
-        </a>
-    }
-    <div class="dropdown">
-        @if (User.Identity.Name == Model.UserName)
+<div class="bookmarks-page-container">
+    <div class="profile-navbar">
+        <a class="profile-navbar-link" asp-controller="User" asp-action="GetUser" asp-route-userName="@Model.UserName">профиль</a>
+        <a class="profile-navbar-link" asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-userName="@Model.UserName"
+           asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
+        <a class="profile-navbar-link" asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
+           asp-route-userName="@Model.UserName">комментарии</a>
+        @if (User.Identity.Name == Model.UserName || User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
         {
-            @if (!User.IsInRole(UserRoleConstants.AdminRole) && !User.IsInRole(UserRoleConstants.ModeratorRole))
+            <a class="active-navbar-link" asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="1" asp-route-pageSize="20"
+               asp-route-userName="@Model.UserName">
+                закладки
+            </a>
+        }
+        <div class="dropdown">
+            @if (User.Identity.Name == Model.UserName)
+            {
+                @if (!User.IsInRole(UserRoleConstants.AdminRole) && !User.IsInRole(UserRoleConstants.ModeratorRole))
+                {
+                    <div>
+                        <button id="dropdownSuggestionsButton" class="open-dropdown-btn">предложения &#x25BC;</button>
+                        <div id="dropdownSuggestionsList" class="dropdown-list">
+                            <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1"
+                               asp-route-pageSize="20" asp-route-userName="@Model.UserName">комментарии</a>
+                            <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@Model.UserName"
+                               asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
+                            <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="1"
+                               asp-route-pageSize="20" asp-route-userName="@Model.UserName">темы</a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="dropdown">
+            @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
             {
                 <div>
-                    <button id="dropdownSuggestionsButton" class="open-dropdown-btn">предложения &#x25BC;</button>
-                    <div id="dropdownSuggestionsList" class="dropdown-list">
-                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1"
-                           asp-route-pageSize="20" asp-route-userName="@Model.UserName">комментарии</a>
-                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@Model.UserName"
-                           asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
-                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="1"
-                           asp-route-pageSize="20" asp-route-userName="@Model.UserName">темы</a>
+                    <button id="dropdownAdminButton" class="open-dropdown-btn">админ &#x25BC;</button>
+                    <div id="dropdownAdminList" class="dropdown-list">
+                        <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedTopicsByUserName" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@Model.UserName">предложенные темы</a>
+                        <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedDiscussionsByUserName"
+                           asp-route-userName="@Model.UserName" asp-route-pageNumber="1" asp-route-pageSize="20">предложенные обсуждения</a>
+                        <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedCommentsByUserName" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@Model.UserName">предложенные комментарии</a>
+                        <a class="dropdown-content" asp-controller="Moderator" asp-action="GetReportsByUserName" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@Model.UserName">жалобы</a>
                     </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div>
+        @if (true)
+        {
+            <div class="search-bookmarks-container">
+                <form method="get" class="search-form">
+                    <input class="search-input" name="searchingQuery" placeholder="Поиск" />
+                    <input type="hidden" name="pageSize" value="@Model.PageSize" />
+                    <input type="hidden" name="pageNumber" value="1" />
+                    <input type="hidden" name="userName" value="@Model.UserName" />
+                    <input class="search-submit" type="submit" value="Найти" />
+                </form>
+            </div>
+            <div class="bookmarks-sorting-switching-container">
+                <a class="bookmarks-sorting-switching-link" asp-controller="Bookmark" asp-action="GetBookmarksByAntiquity" asp-route-pageNumber="1"
+                   asp-route-pageSize="@Model.PageSize" asp-route-userName="@Model.UserName">Старые</a><br />
+            </div>
+            string returnUrl;
+            if (Context.Request.QueryString.HasValue)
+            {
+                returnUrl = Context.Request.Path + Context.Request.QueryString;
+            }
+            else
+            {
+                returnUrl = Context.Request.Path;
+            }
+            @foreach (var bookmark in Model.Bookmarks)
+            {
+                <div class="bookmark-preview-border">
+                    <a class="bookmark-title" asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@bookmark.DiscussionId"
+                       asp-route-pageNumber="1" asp-route-pageSize="20">
+                        @bookmark.DiscussionTitle
+                    </a>
+
+                    <form method="post" asp-action="DeleteBookmark" asp-controller="Bookmark" asp-route-bookmarkId="@bookmark.Id" asp-route-returnUrl="@returnUrl">
+                        <input class="delete-bookmark" type="submit" value="Удалить" />
+                    </form>
                 </div>
             }
         }
     </div>
-    <div class="dropdown">
-        @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
+
+    <div class="pagination-link-container">
+        @if (Model.Bookmarks.Count != 0)
         {
-            <div>
-                <button id="dropdownAdminButton" class="open-dropdown-btn">админ &#x25BC;</button>
-                <div id="dropdownAdminList" class="dropdown-list">
-                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedTopicsByUserName" asp-route-pageNumber="1"
-                       asp-route-pageSize="20" asp-route-userName="@Model.UserName">предложенные темы</a>
-                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedDiscussionsByUserName"
-                       asp-route-userName="@Model.UserName" asp-route-pageNumber="1" asp-route-pageSize="20">предложенные обсуждения</a>
-                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedCommentsByUserName" asp-route-pageNumber="1"
-                       asp-route-pageSize="20" asp-route-userName="@Model.UserName">предложенные комментарии</a>
-                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetReportsByUserName" asp-route-pageNumber="1"
-                       asp-route-pageSize="20" asp-route-userName="@Model.UserName">жалобы</a>
-                </div>
-            </div>
+            if (Model.PreviousPageNumber != 0)
+            {
+                <a class="pagination-link-previous" asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="@Model.PreviousPageNumber"
+                   asp-route-pageSize="@Model.PageSize" asp-route-userName="@Model.UserName" asp-route-searchingQuery="@Model.SearchingQuery">
+                    Назад
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-previous-doesnt-exist">Назад</a>
+            }
+        }
+        @if (Model.Bookmarks.Count != 0)
+        {
+            if (Model.DoesNextPageExist)
+            {
+                <a class="pagination-link-next" asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="@Model.NextPageNumber"
+                   asp-route-pageSize="@Model.PageSize" asp-route-searchingQuery="@Model.SearchingQuery">
+                    Вперед
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-next-doesnt-exist">Вперед</a>
+            }
         }
     </div>
 </div>
-
-<h3>Закладки</h3>
-<div>
-    @if (true)
-    {
-        <form method="get">
-            <input name="searchingQuery" placeholder="Поиск" />
-            <input type="hidden" name="pageSize" value="@Model.PageSize" />
-            <input type="hidden" name="pageNumber" value="1" />
-            <input type="hidden" name="userName" value="@Model.UserName" />
-            <input type="submit" value="найти" />
-        </form>
-        <a asp-controller="Bookmark" asp-action="GetBookmarksByAntiquity" asp-route-pageNumber="1" asp-route-pageSize="@Model.PageSize"
-           asp-route-userName="@Model.UserName">старые</a><br/>
-        string returnUrl;
-        if (Context.Request.QueryString.HasValue)
-        {
-            returnUrl = Context.Request.Path + Context.Request.QueryString;
-        }
-        else
-        {
-            returnUrl = Context.Request.Path;
-        }
-        @foreach (var bookmark in Model.Bookmarks)
-        {
-            <a asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@bookmark.DiscussionId" asp-route-pageNumber="1" asp-route-pageSize="20">
-                @bookmark.DiscussionTitle
-            </a>
-
-            <form method="post" asp-action="DeleteBookmark" asp-controller="Bookmark" asp-route-bookmarkId="@bookmark.Id" asp-route-returnUrl="@returnUrl">
-                <input type="submit" value="удалить закладку" />
-            </form>
-        }
-    }
-</div>
-
-@if (Model.PreviousPageNumber > 0)
-{
-    <a asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize"
-       asp-route-userName="@Model.UserName" asp-route-searchingQuery="@Model.SearchingQuery">Назад</a>
-}
-@if (Model.DoesNextPageExist && Model.Bookmarks.Count != 0)
-{
-
-    <a asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize"
-       asp-route-searchingQuery="@Model.SearchingQuery">
-        Вперед
-    </a>
-}
 <script src="~/js/user/dropdownUserAdmin.js"></script>
 <script src="~/js/user/dropdownUserSuggestions.js"></script>
