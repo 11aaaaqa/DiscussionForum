@@ -152,7 +152,6 @@
 
   <ItemGroup>
     <Folder Include="Views\Information\" />
-    <Folder Include="wwwroot\css\mooderator\" />
     <Folder Include="wwwroot\fonts\" />
   </ItemGroup>
 
