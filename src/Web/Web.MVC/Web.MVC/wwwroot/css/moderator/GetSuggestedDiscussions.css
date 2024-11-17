@@ -69,7 +69,7 @@
 }
 
 @media (max-width: 520px) {
-    suggested-discussions-page-container {
-        margin: 0;
+    .suggested-discussions-page-container {
+        margin: 0 3%;
     }
 }

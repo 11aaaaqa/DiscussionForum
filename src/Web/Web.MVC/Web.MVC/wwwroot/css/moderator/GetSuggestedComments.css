@@ -94,7 +94,7 @@
 }
 
 @media (max-width: 520px) {
-    suggested-comments-page-container {
-        margin: 0;
+    .suggested-comments-page-container {
+        margin: 0 3%;
     }
 }

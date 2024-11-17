@@ -94,7 +94,7 @@
 }
 
 @media (max-width: 520px) {
-    suggested-topics-page-container {
-        margin: 0;
+    .suggested-topics-page-container {
+        margin: 0 3%;
     }
 }
