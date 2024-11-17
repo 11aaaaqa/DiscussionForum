@@ -23,9 +23,7 @@
 
 .suggestion-container p {
     margin: 5px 0;
-    word-break: break-all;
     word-wrap: break-word;
-    overflow-wrap: break-word;
 }
 
 .highlited-topic-name {
