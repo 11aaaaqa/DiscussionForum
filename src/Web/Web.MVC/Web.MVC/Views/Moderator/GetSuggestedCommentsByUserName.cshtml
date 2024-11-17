@@ -63,7 +63,7 @@
     </div>
 
     <div>
-        @if (true)
+        @if (Model.SuggestedComments.Count != 0)
         {
             string returnUrl;
             if (Context.Request.QueryString.HasValue)
@@ -74,13 +74,11 @@
             {
                 returnUrl = Context.Request.Path;
             }
-            @if (Model.SuggestedComments.Count != 0)
-            {
-                <form method="post" asp-controller="Moderator" asp-action="DeleteAllSuggestedCommentsByUserName" asp-route-returnUrl="@returnUrl"
-                      asp-route-userName="@Model.SuggestedByUserName">
-                    <input class="delete-all-suggested-comments-input" type="submit" value="Удалить все предложенные комментарии" onclick="if (confirm('Вы действительно хотите удалить ВСЕ предложенные пользователем комментарии?')){return true;}else{event.stopPropagation(); event.preventDefault();};" />
-                </form>
-            }
+            <form method="post" asp-controller="Moderator" asp-action="DeleteAllSuggestedCommentsByUserName" asp-route-returnUrl="@returnUrl"
+                  asp-route-userName="@Model.SuggestedByUserName">
+                <input class="delete-all-suggested-comments-input" type="submit" value="Удалить все предложенные комментарии" onclick="if (confirm('Вы действительно хотите удалить ВСЕ предложенные пользователем комментарии?')){return true;}else{event.stopPropagation(); event.preventDefault();};" />
+            </form>
+            
             @foreach (var suggestedComment in Model.SuggestedComments)
             {
                 <div class="suggestion-container">
@@ -103,7 +101,6 @@
                 </div>
             }
         }
-
     </div>
 
     <div class="pagination-link-container">

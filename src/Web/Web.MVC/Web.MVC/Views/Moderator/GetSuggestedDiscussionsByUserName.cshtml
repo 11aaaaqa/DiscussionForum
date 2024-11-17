@@ -78,14 +78,15 @@
                   asp-route-returnUrl="@returnUrl">
                 <input class="delete-all-suggested-discussions-input" type="submit" value="Удалить все предложенные обсуждения" onclick="if (confirm('Вы действительно хотите удалить ВСЕ предложенные пользователем обсуждения?')){return true;}else{event.stopPropagation(); event.preventDefault();};" />
             </form>
-        }
-        @foreach (var suggestedDiscussion in Model.SuggestedDiscussions)
-        {
-            <div class="suggestion-container">
-                <p class="highlited-discussion-name">
-                    <a href="~/SuggestedDiscussions/@suggestedDiscussion.Id?returnUrl=@HttpUtility.UrlEncode(Context.Request.Path + Context.Request.QueryString)">@suggestedDiscussion.Title</a>
-                </p>
-            </div>
+
+            @foreach (var suggestedDiscussion in Model.SuggestedDiscussions)
+            {
+                <div class="suggestion-container">
+                    <p class="highlited-discussion-name">
+                        <a href="~/SuggestedDiscussions/@suggestedDiscussion.Id?returnUrl=@HttpUtility.UrlEncode(Context.Request.Path + Context.Request.QueryString)">@suggestedDiscussion.Title</a>
+                    </p>
+                </div>
+            }
         }
     </div>
 
