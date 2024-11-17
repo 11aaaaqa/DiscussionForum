@@ -1,0 +1,72 @@
+﻿.delete-all-reports-input {
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 13px;
+    margin-bottom: 2.5px;
+}
+
+.delete-all-reports-input:hover {
+    background-color: darkorange;
+    color: white;
+}
+
+.report-container {
+    border: 1.5px solid #a9a9a9;
+    padding: 10px 20px 5px;
+    margin: 5px 0;
+    width: 60%;
+    border-radius: 7px;
+    width: 100%;
+}
+
+.report-container p {
+    margin: 5px 0;
+    word-wrap: break-word;
+}
+
+.report-container a {
+    text-decoration: none;
+    background-color: white;
+    color: black;
+}
+
+.report-container a:hover {
+    background-color: white;
+    color: orange;
+}
+
+.reports-page-container {
+    margin: 0 20%;
+}
+
+@media (max-width: 1200px) {
+    .reports-page-container {
+        margin: 0 13%;
+    }
+}
+
+@media (max-width: 992px) {
+    .reports-page-container {
+        margin: 0 10%;
+    }
+}
+
+@media (max-width: 768px) {
+    .reports-page-container {
+        margin: 0 8%;
+    }
+}
+
+@media (max-width: 600px) {
+    .reports-page-container {
+        margin: 0 5%;
+    }
+}
+
+@media (max-width: 520px) {
+    .reports-page-container {
+        margin: 0 3%;
+    }
+}
