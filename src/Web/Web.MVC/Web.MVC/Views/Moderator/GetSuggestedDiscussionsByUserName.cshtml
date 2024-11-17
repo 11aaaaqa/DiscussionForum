@@ -6,6 +6,7 @@
 @model Web.MVC.Models.ViewModels.ModeratorViewModels.GetSuggestedDiscussionsByUserNameViewModel
 <link rel="stylesheet" href="~/css/user/dropdown.css" />
 <link rel="stylesheet" href="~/css/user/navbar.css" />
+<link rel="stylesheet" href="~/css/NextPreviousPaginationBtns.css"/>
 
 <div class="profile-navbar">
     <a class="profile-navbar-link" asp-controller="User" asp-action="GetUser" asp-route-userName="@Model.SuggestedByUserName">профиль</a>
@@ -87,19 +88,35 @@
     }
 </div>
 
-@if (Model.PreviousPageNumber != 0)
-{
-    <a asp-controller="Moderator" asp-action="GetSuggestedDiscussionsByUserName" asp-route-pageNumber="@Model.PreviousPageNumber"
-       asp-route-pageSize="@Model.PageSize" asp-route-userName="@Model.SuggestedByUserName">
-        Назад
-    </a>
-}
-@if (Model.DoesNextPageExist && Model.SuggestedDiscussions.Count != 0)
-{
-    <a asp-controller="Moderator" asp-action="GetSuggestedDiscussionsByUserName" asp-route-pageNumber="@Model.NextPageNumber"
-       asp-route-pageSize="@Model.PageSize" asp-route-userName="@Model.SuggestedByUserName">
-        Вперед
-    </a>
-}
+<div class="pagination-link-container">
+    @if (Model.SuggestedDiscussions.Count != 0)
+    {
+        @if (Model.PreviousPageNumber != 0)
+        {
+            <a class="pagination-link-previous" asp-controller="Moderator" asp-action="GetSuggestedDiscussionsByUserName"
+               asp-route-pageNumber="@Model.PreviousPageNumber"asp-route-pageSize="@Model.PageSize" asp-route-userName="@Model.SuggestedByUserName">
+                Назад
+            </a>
+        }
+        else
+        {
+            <a class="pagination-link-previous-doesnt-exist">Назад</a>
+        }
+    }
+    @if (Model.SuggestedDiscussions.Count != 0)
+    {
+        if (Model.DoesNextPageExist)
+        {
+            <a class="pagination-link-next" asp-controller="Moderator" asp-action="GetSuggestedDiscussionsByUserName"
+               asp-route-pageNumber="@Model.NextPageNumber"asp-route-pageSize="@Model.PageSize" asp-route-userName="@Model.SuggestedByUserName">
+                Вперед
+            </a>
+        }
+        else
+        {
+            <a class="pagination-link-next-doesnt-exist">Вперед</a>
+        }
+    }
+</div>
 <script src="~/js/user/dropdownUserAdmin.js"></script>
 <script src="~/js/user/dropdownUserSuggestions.js"></script>
