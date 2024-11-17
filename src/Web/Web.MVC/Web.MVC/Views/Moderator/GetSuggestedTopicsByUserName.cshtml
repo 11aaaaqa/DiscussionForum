@@ -5,115 +5,134 @@
 @model Web.MVC.Models.ViewModels.ModeratorViewModels.SuggestedTopicsByUserNameViewModel
 <link rel="stylesheet" href="~/css/user/dropdown.css" />
 <link rel="stylesheet" href="~/css/user/navbar.css" />
+<link rel="stylesheet" href="~/css/moderator/GetSuggestedTopics.css"/>
+<link rel="stylesheet" href="~/css/NextPreviousPaginationBtns.css"/>
 
-<div class="profile-navbar">
-    <a class="profile-navbar-link" asp-controller="User" asp-action="GetUser" asp-route-userName="@Model.SuggestedByUserName">профиль</a>
-    <a class="profile-navbar-link" asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-userName="@Model.SuggestedByUserName"
-       asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
-    <a class="profile-navbar-link" asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
-       asp-route-userName="@Model.SuggestedByUserName">комментарии</a>
-    @if (User.Identity.Name == Model.SuggestedByUserName || User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
-    {
-        <a class="profile-navbar-link" asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="1" asp-route-pageSize="20"
-           asp-route-userName="@Model.SuggestedByUserName">
-            закладки
-        </a>
-    }
-    <div class="dropdown">
-        @if (User.Identity.Name == Model.SuggestedByUserName)
+<div class="suggested-topics-page-container">
+    <div class="profile-navbar">
+        <a class="profile-navbar-link" asp-controller="User" asp-action="GetUser" asp-route-userName="@Model.SuggestedByUserName">профиль</a>
+        <a class="profile-navbar-link" asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-userName="@Model.SuggestedByUserName"
+           asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
+        <a class="profile-navbar-link" asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
+           asp-route-userName="@Model.SuggestedByUserName">комментарии</a>
+        @if (User.Identity.Name == Model.SuggestedByUserName || User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
         {
-            @if (!User.IsInRole(UserRoleConstants.AdminRole) && !User.IsInRole(UserRoleConstants.ModeratorRole))
+            <a class="profile-navbar-link" asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="1" asp-route-pageSize="20"
+               asp-route-userName="@Model.SuggestedByUserName">
+                закладки
+            </a>
+        }
+        <div class="dropdown">
+            @if (User.Identity.Name == Model.SuggestedByUserName)
+            {
+                @if (!User.IsInRole(UserRoleConstants.AdminRole) && !User.IsInRole(UserRoleConstants.ModeratorRole))
+                {
+                    <div>
+                        <button id="dropdownSuggestionsButton" class="open-dropdown-btn">предложения &#x25BC;</button>
+                        <div id="dropdownSuggestionsList" class="dropdown-list">
+                            <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1"
+                               asp-route-pageSize="20" asp-route-userName="@Model.SuggestedByUserName">комментарии</a>
+                            <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@Model.SuggestedByUserName"
+                               asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
+                            <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="1"
+                               asp-route-pageSize="20" asp-route-userName="@Model.SuggestedByUserName">темы</a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="dropdown">
+            @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
             {
                 <div>
-                    <button id="dropdownSuggestionsButton" class="open-dropdown-btn">предложения &#x25BC;</button>
-                    <div id="dropdownSuggestionsList" class="dropdown-list">
-                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1"
-                           asp-route-pageSize="20" asp-route-userName="@Model.SuggestedByUserName">комментарии</a>
-                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@Model.SuggestedByUserName"
-                           asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
-                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="1"
-                           asp-route-pageSize="20" asp-route-userName="@Model.SuggestedByUserName">темы</a>
+                    <button id="dropdownAdminButton" class="open-dropdown-btn active-navbar-link">админ &#x25BC;</button>
+                    <div id="dropdownAdminList" class="dropdown-list">
+                        <a class="dropdown-content active-dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedTopicsByUserName" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@Model.SuggestedByUserName">предложенные темы</a>
+                        <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedDiscussionsByUserName"
+                           asp-route-userName="@Model.SuggestedByUserName" asp-route-pageNumber="1" asp-route-pageSize="20">предложенные обсуждения</a>
+                        <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedCommentsByUserName" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@Model.SuggestedByUserName">предложенные комментарии</a>
+                        <a class="dropdown-content" asp-controller="Moderator" asp-action="GetReportsByUserName" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@Model.SuggestedByUserName">жалобы</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div>
+        @if (Model.SuggestedTopics.Count != 0)
+        {
+            string returnUrl;
+            if (Context.Request.QueryString.HasValue)
+            {
+                returnUrl = Context.Request.Path + Context.Request.QueryString;
+            }
+            else
+            {
+                returnUrl = Context.Request.Path;
+            }
+            <form method="post" asp-controller="Moderator" asp-action="DeleteSuggestedTopicsByUserName" asp-route-userName="@Model.SuggestedByUserName"
+                  asp-route-returnUrl="@returnUrl">
+                <input class="delete-all-suggested-topics-input" type="submit" value="Удалить все предложенные темы" onclick="if (confirm('Вы действительно хотите удалить ВСЕ предложенные пользователем темы?')){return true;}else{event.stopPropagation(); event.preventDefault();};" />
+            </form>
+            @foreach (var suggestedTopic in Model.SuggestedTopics)
+            {
+                <div class="suggestion-container">
+                    <p class="highlited-topic-name">@suggestedTopic.Name</p>
+                    <div class="suggestion-actions-container">
+                        <form method="post" asp-action="AcceptSuggestedTopic" asp-controller="Moderator" asp-route-id=@suggestedTopic.Id asp-route-returnUrl="@returnUrl">
+                            <input type="submit" value="Принять" />
+                        </form>
+
+                        <form method="post" asp-controller="Moderator" asp-action="RejectSuggestedTopic" asp-route-id=@suggestedTopic.Id asp-route-returnUrl="@returnUrl">
+                            <input type="submit" value="Отклонить" />
+                        </form>
+
+                        <a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion" asp-route-returnUrl="@returnUrl" asp-route-userName="@suggestedTopic.SuggestedBy" asp-route-suggestionDeleteId="@suggestedTopic.Id" asp-route-suggestionDeleteType="@BanTypeConstants.TopicBanType">
+                            Остранить и отклонить
+                        </a>
                     </div>
                 </div>
             }
         }
-    </div>
-    <div class="dropdown">
-        @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
-        {
-            <div>
-                <button id="dropdownAdminButton" class="open-dropdown-btn active-navbar-link">админ &#x25BC;</button>
-                <div id="dropdownAdminList" class="dropdown-list">
-                    <a class="dropdown-content active-dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedTopicsByUserName" asp-route-pageNumber="1"
-                       asp-route-pageSize="20" asp-route-userName="@Model.SuggestedByUserName">предложенные темы</a>
-                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedDiscussionsByUserName"
-                       asp-route-userName="@Model.SuggestedByUserName" asp-route-pageNumber="1" asp-route-pageSize="20">предложенные обсуждения</a>
-                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedCommentsByUserName" asp-route-pageNumber="1"
-                       asp-route-pageSize="20" asp-route-userName="@Model.SuggestedByUserName">предложенные комментарии</a>
-                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetReportsByUserName" asp-route-pageNumber="1"
-                       asp-route-pageSize="20" asp-route-userName="@Model.SuggestedByUserName">жалобы</a>
-                </div>
-            </div>
-        }
-    </div>
-</div>
-
-<div class="text-center">
-    @if (Model.SuggestedTopics.Count != 0)
-    {
-        <h3>Предложенные темы</h3>
-        string returnUrl;
-        if (Context.Request.QueryString.HasValue)
-        {
-            returnUrl = Context.Request.Path + Context.Request.QueryString;
-        }
         else
         {
-            returnUrl = Context.Request.Path;
+            <h3>Предложенных тем нет</h3>
         }
-        <form method="post" asp-controller="Moderator" asp-action="DeleteSuggestedTopicsByUserName" asp-route-userName="@Model.SuggestedByUserName"
-              asp-route-returnUrl="@returnUrl">
-            <input type="submit" value="удалить все предложенные темы" />
-        </form>
-        <a asp-controller="Moderator" asp-action="BanUser" asp-route-userName="@Model.SuggestedByUserName"
-           asp-route-returnUrl="@returnUrl">забанить пользователя</a>
+    </div>
 
-        <table>
-            <tr><th>Название</th><th>Принять</th><th>Отклонить</th><th>Отстранить предлагающего</th></tr>
-            @foreach (var suggestedTopic in Model.SuggestedTopics)
+    <div class="pagination-link-container">
+        @if (Model.SuggestedTopics.Count != 0)
+        {
+            @if (Model.PreviousPageNumber != 0)
             {
-                <tr>
-                    <td>@suggestedTopic.Name</td>
-                    <td>
-                        <form method="post" asp-action="AcceptSuggestedTopic" asp-controller="Moderator" asp-route-id=@suggestedTopic.Id asp-route-returnUrl="@returnUrl"><input type="submit" value="принять" /></form>
-                    </td>
-                    <td>
-                        <form method="post" asp-controller="Moderator" asp-action="RejectSuggestedTopic" asp-route-id=@suggestedTopic.Id asp-route-returnUrl="@returnUrl"><input type="submit" value="отклонить" /></form>
-                    </td>
-                    <td><a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion" asp-route-returnUrl="@returnUrl" asp-route-userName="@suggestedTopic.SuggestedBy" asp-route-suggestionDeleteId="@suggestedTopic.Id" asp-route-suggestionDeleteType="@BanTypeConstants.TopicBanType">остранить и отклонить предложение</a></td>
-                </tr>
+                <a class="pagination-link-previous" asp-controller="Moderator" asp-action="GetSuggestedTopicsByUserName"
+                   asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize" asp-route-userName="@Model.SuggestedByUserName">
+                    Назад
+                </a>
             }
-        </table>
-    }
-    else
-    {
-        <h3>Предложенных тем нет</h3>
-    }
+            else
+            {
+                <a class="pagination-link-previous-doesnt-exist">Назад</a>
+            }
+        }
+        @if (Model.SuggestedTopics.Count != 0)
+        {
+            if (Model.DoesNextPageExist)
+            {
+                <a class="pagination-link-next" asp-controller="Moderator" asp-action="GetSuggestedTopicsByUserName" asp-route-pageNumber="@Model.NextPageNumber"
+                   asp-route-pageSize="@Model.PageSize" asp-route-userName="@Model.SuggestedByUserName">
+                    Вперед
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-next-doesnt-exist">Вперед</a>
+            }
+        }
+    </div>
 </div>
-
-@if (Model.PreviousPageNumber != 0)
-{
-    <a asp-controller="Moderator" asp-action="GetSuggestedTopicsByUserName" asp-route-pageNumber="@Model.PreviousPageNumber"
-       asp-route-pageSize="@Model.PageSize" asp-route-userName="@Model.SuggestedByUserName">
-        Назад
-    </a>
-}
-@if (Model.DoesNextPageExist && Model.SuggestedTopics.Count != 0)
-{
-    <a asp-controller="Moderator" asp-action="GetSuggestedTopicsByUserName" asp-route-pageNumber="@Model.NextPageNumber"
-       asp-route-pageSize="@Model.PageSize" asp-route-userName="@Model.SuggestedByUserName">
-        Вперед
-    </a>
-}
 <script src="~/js/user/dropdownUserAdmin.js"></script>
 <script src="~/js/user/dropdownUserSuggestions.js"></script>
