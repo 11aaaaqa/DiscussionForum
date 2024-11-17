@@ -1,118 +1,137 @@
 ﻿@{
     ViewData["Title"] = "Жалобы";
 }
-@using System.Web
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Web.MVC.Constants
 @model GetReportsViewModel
 <link rel="stylesheet" href="~/css/user/dropdown.css" />
 <link rel="stylesheet" href="~/css/user/navbar.css" />
+<link rel="stylesheet" href="~/css/NextPreviousPaginationBtns.css"/>
+<link rel="stylesheet" href="~/css/moderator/GetReports.css"/>
 
-<div class="profile-navbar">
-    <a class="profile-navbar-link" asp-controller="User" asp-action="GetUser" asp-route-userName="@ViewBag.ReportedByUserName">профиль</a>
-    <a class="profile-navbar-link" asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-userName="@ViewBag.ReportedByUserName"
-       asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
-    <a class="profile-navbar-link" asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
-       asp-route-userName="@ViewBag.ReportedByUserName">комментарии</a>
-    @if (User.Identity.Name == ViewBag.ReportedByUserName || User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
-    {
-        <a class="profile-navbar-link" asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="1" asp-route-pageSize="20"
-           asp-route-userName="@ViewBag.ReportedByUserName">
-            закладки
-        </a>
-    }
-    <div class="dropdown">
-        @if (User.Identity.Name == ViewBag.ReportedByUserName)
+<div class="reports-page-container">
+    <div class="profile-navbar">
+        <a class="profile-navbar-link" asp-controller="User" asp-action="GetUser" asp-route-userName="@ViewBag.ReportedByUserName">профиль</a>
+        <a class="profile-navbar-link" asp-controller="User" asp-action="GetUsersCreatedDiscussions" asp-route-userName="@ViewBag.ReportedByUserName"
+           asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
+        <a class="profile-navbar-link" asp-controller="User" asp-action="GetUsersCreatedComments" asp-route-pageNumber="1" asp-route-pageSize="20"
+           asp-route-userName="@ViewBag.ReportedByUserName">комментарии</a>
+        @if (User.Identity.Name == ViewBag.ReportedByUserName || User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
         {
-            @if (!User.IsInRole(UserRoleConstants.AdminRole) && !User.IsInRole(UserRoleConstants.ModeratorRole))
+            <a class="profile-navbar-link" asp-controller="Bookmark" asp-action="GetBookmarksByNovelty" asp-route-pageNumber="1" asp-route-pageSize="20"
+               asp-route-userName="@ViewBag.ReportedByUserName">
+                закладки
+            </a>
+        }
+        <div class="dropdown">
+            @if (User.Identity.Name == ViewBag.ReportedByUserName)
+            {
+                @if (!User.IsInRole(UserRoleConstants.AdminRole) && !User.IsInRole(UserRoleConstants.ModeratorRole))
+                {
+                    <div>
+                        <button id="dropdownSuggestionsButton" class="open-dropdown-btn">предложения &#x25BC;</button>
+                        <div id="dropdownSuggestionsList" class="dropdown-list">
+                            <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1"
+                               asp-route-pageSize="20" asp-route-userName="@ViewBag.ReportedByUserName">комментарии</a>
+                            <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@ViewBag.ReportedByUserName"
+                               asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
+                            <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="1"
+                               asp-route-pageSize="20" asp-route-userName="@ViewBag.ReportedByUserName">темы</a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="dropdown">
+            @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
             {
                 <div>
-                    <button id="dropdownSuggestionsButton" class="open-dropdown-btn">предложения &#x25BC;</button>
-                    <div id="dropdownSuggestionsList" class="dropdown-list">
-                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedComments" asp-route-pageNumber="1"
-                           asp-route-pageSize="20" asp-route-userName="@ViewBag.ReportedByUserName">комментарии</a>
-                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedDiscussions" asp-route-userName="@ViewBag.ReportedByUserName"
-                           asp-route-pageNumber="1" asp-route-pageSize="20">обсуждения</a>
-                        <a class="dropdown-content" asp-controller="User" asp-action="GetUsersSuggestedTopics" asp-route-pageNumber="1"
-                           asp-route-pageSize="20" asp-route-userName="@ViewBag.ReportedByUserName">темы</a>
+                    <button id="dropdownAdminButton" class="open-dropdown-btn active-navbar-link">админ &#x25BC;</button>
+                    <div id="dropdownAdminList" class="dropdown-list">
+                        <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedTopicsByUserName" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@ViewBag.ReportedByUserName">предложенные темы</a>
+                        <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedDiscussionsByUserName"
+                           asp-route-userName="@ViewBag.ReportedByUserName" asp-route-pageNumber="1" asp-route-pageSize="20">предложенные обсуждения</a>
+                        <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedCommentsByUserName" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@ViewBag.ReportedByUserName">предложенные комментарии</a>
+                        <a class="dropdown-content active-dropdown-content" asp-controller="Moderator" asp-action="GetReportsByUserName" asp-route-pageNumber="1"
+                           asp-route-pageSize="20" asp-route-userName="@ViewBag.ReportedByUserName">жалобы</a>
                     </div>
                 </div>
             }
-        }
+        </div>
     </div>
-    <div class="dropdown">
-        @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
-        {
-            <div>
-                <button id="dropdownAdminButton" class="open-dropdown-btn active-navbar-link">админ &#x25BC;</button>
-                <div id="dropdownAdminList" class="dropdown-list">
-                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedTopicsByUserName" asp-route-pageNumber="1"
-                       asp-route-pageSize="20" asp-route-userName="@ViewBag.ReportedByUserName">предложенные темы</a>
-                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedDiscussionsByUserName"
-                       asp-route-userName="@ViewBag.ReportedByUserName" asp-route-pageNumber="1" asp-route-pageSize="20">предложенные обсуждения</a>
-                    <a class="dropdown-content" asp-controller="Moderator" asp-action="GetSuggestedCommentsByUserName" asp-route-pageNumber="1"
-                       asp-route-pageSize="20" asp-route-userName="@ViewBag.ReportedByUserName">предложенные комментарии</a>
-                    <a class="dropdown-content active-dropdown-content" asp-controller="Moderator" asp-action="GetReportsByUserName" asp-route-pageNumber="1"
-                       asp-route-pageSize="20" asp-route-userName="@ViewBag.ReportedByUserName">жалобы</a>
-                </div>
-            </div>
-        }
-    </div>
-</div>
 
-<div class="text-center">
-    <h3>Жалобы</h3>
-    @if (Model.Reports.Count == 0)
-    {
-        <h5>Жалоб нет</h5>
-    }
-    else
-    {
-        string returnUrl;
-        if (Context.Request.QueryString.HasValue)
+    <div>
+        @if (Model.Reports.Count != 0)
         {
-            returnUrl = Context.Request.Path + Context.Request.QueryString;
-        }
-        else
-        {
-            returnUrl = Context.Request.Path;
-        }
-        <form method="post" asp-controller="Moderator" asp-action="DeleteAllReportsByUserName" asp-route-returnUrl="@returnUrl"
-              asp-route-userName="@ViewBag.ReportedByUserName">
-            <input type="submit" value="удалить все жалобы"/>
-        </form>
-        <a asp-controller="Moderator" asp-action="BanUser" asp-route-returnUrl="@returnUrl" asp-route-userName="@ViewBag.ReportedByUserName"
-        >отстранить пользователя</a>
-        <table>
-            <tr><th>От пользователя</th><th>Причина</th><th>Тип</th></tr>
+            string returnUrl;
+            if (Context.Request.QueryString.HasValue)
+            {
+                returnUrl = Context.Request.Path + Context.Request.QueryString;
+            }
+            else
+            {
+                returnUrl = Context.Request.Path;
+            }
+            <form method="post" asp-controller="Moderator" asp-action="DeleteAllReportsByUserName" asp-route-returnUrl="@returnUrl"
+                  asp-route-userName="@ViewBag.ReportedByUserName">
+                <input class="delete-all-reports-input" type="submit" value="Удалить все жалобы" onclick="if (confirm('Вы действительно хотите удалить ВСЕ жалобы от пользователя?')){return true;}else{event.stopPropagation(); event.preventDefault();};" />
+            </form>
             @foreach (var report in Model.Reports)
             {
-                if (report.ReportedCommentContent is null)
-                {
-                    <tr><td>@report.UserNameReportedBy</td><td>@report.Reason</td><td><a href="~/reports/@report.Id?returnUrl=@HttpUtility.UrlEncode(Context.Request.Path + Context.Request.QueryString)">обсуждение</a></td></tr>
-                }
-                else
-                {
-                    <tr><td>@report.UserNameReportedBy</td><td>@report.Reason</td><td><a href="~/reports/@report.Id?returnUrl=@HttpUtility.UrlEncode(Context.Request.Path + Context.Request.QueryString)">комментарий</a></td></tr>
-                }
+                <div class="report-container">
+                    <p><strong>От пользователя: </strong><a asp-controller="User" asp-action="GetUser" asp-route-userName="@report.UserNameReportedBy">@report.UserNameReportedBy</a></p>
+                    <p><strong>Причина: </strong>@report.Reason</p>
+                    @if (report.ReportedCommentContent is null)
+                    {
+                        <p>
+                            <strong>Жалоба: </strong>
+                            <a asp-controller="Report" asp-action="GetReport" asp-route-returnUrl="@returnUrl" asp-route-reportId="@report.Id">обсуждение</a>
+                        </p>
+                    }
+                    else
+                    {
+                        <p>
+                            <strong>Жалоба: </strong>
+                            <a asp-controller="Report" asp-action="GetReport" asp-route-returnUrl="@returnUrl" asp-route-reportId="@report.Id">комментарий</a>
+                        </p>
+                    }
+                </div>
             }
-        </table>
-    }
-</div>
+        }
+    </div>
 
-@if (Model.PreviousPageNumber != 0 && Model.Reports.Count != 0)
-{
-    <a asp-controller="Moderator" asp-action="GetReportsByUserName" asp-route-userName="@ViewBag.ReportedByUserName"
-       asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize">
-        Назад
-    </a>
-}
-@if (Model.DoesNextPageExist && Model.Reports.Count != 0)
-{
-    <a asp-controller="Moderator" asp-action="GetReportsByUserName" asp-route-userName="@ViewBag.ReportedByUserName"
-       asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize">
-        Вперед
-    </a>
-}
+    <div class="pagination-link-container">
+        @if (Model.Reports.Count != 0)
+        {
+            if (Model.PreviousPageNumber != 0)
+            {
+                <a class="pagination-link-previous" asp-controller="Moderator" asp-action="GetReportsByUserName" asp-route-userName="@ViewBag.ReportedByUserName"
+                   asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize">
+                    Назад
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-previous-doesnt-exist">Назад</a>
+            }
+        }
+        @if (Model.Reports.Count != 0)
+        {
+            if (Model.DoesNextPageExist)
+            {
+                <a class="pagination-link-next" asp-controller="Moderator" asp-action="GetReportsByUserName" asp-route-userName="@ViewBag.ReportedByUserName"
+                   asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize">
+                    Вперед
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-next-doesnt-exist">Вперед</a>
+            }
+        }
+    </div>
+</div>
 <script src="~/js/user/dropdownUserAdmin.js"></script>
 <script src="~/js/user/dropdownUserSuggestions.js"></script>
