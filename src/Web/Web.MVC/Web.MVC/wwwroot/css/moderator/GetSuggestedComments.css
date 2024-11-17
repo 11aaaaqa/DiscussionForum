@@ -1,0 +1,100 @@
+﻿.delete-all-suggested-comments-input {
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 13px;
+    margin-bottom: 2.5px;
+}
+
+.delete-all-suggested-comments-input:hover {
+    background-color: darkorange;
+    color: white;
+}
+
+.suggestion-container {
+    border: 1.5px solid #a9a9a9;
+    padding: 10px 20px 5px;
+    margin: 5px 0;
+    width: 60%;
+    border-radius: 7px;
+    width: 100%;
+}
+
+.suggestion-container p {
+    margin: 5px 0;
+    word-wrap: break-word;
+}
+
+.highlited-comment-name {
+    font-weight: 500;
+}
+
+.suggestion-actions-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.suggestion-actions-container input[type="submit"] {
+    background-color: orange;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.suggestion-actions-container input[type="submit"]:hover {
+    background-color: darkorange;
+    color: white;
+}
+
+.suggestion-actions-container a {
+    text-decoration: none;
+    background-color: orange;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.suggestion-actions-container a:hover {
+    background-color: darkorange;
+    color: white;
+}
+
+.suggested-comments-page-container {
+    margin: 0 20%;
+}
+
+@media (max-width: 1200px) {
+    .suggested-comments-page-container {
+        margin: 0 13%;
+    }
+}
+
+@media (max-width: 992px) {
+    .suggested-comments-page-container {
+        margin: 0 10%;
+    }
+}
+
+@media (max-width: 768px) {
+    .suggested-comments-page-container {
+        margin: 0 8%;
+    }
+}
+
+@media (max-width: 600px) {
+    .suggested-comments-page-container {
+        margin: 0 5%;
+    }
+}
+
+@media (max-width: 520px) {
+    suggested-comments-page-container {
+        margin: 0;
+    }
+}
