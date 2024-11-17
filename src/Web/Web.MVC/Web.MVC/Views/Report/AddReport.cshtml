@@ -21,6 +21,13 @@
     <form method="post">
         <div asp-validation-summary="ModelOnly"></div>
         <span class="validation-message" asp-validation-for="Reason"></span>
+        
+        <input asp-for="ReportedCommentContent" type="hidden" value="@Model.ReportedCommentContent" />
+        <input asp-for="ReportedCommentId" type="hidden" value="@Model.ReportedCommentId" />
+        <input asp-for="ReportedDiscussionContent" type="hidden" value="@Model.ReportedDiscussionContent" />
+        <input asp-for="ReportedDiscussionId" type="hidden" value="@Model.ReportedDiscussionId" />
+        <input asp-for="ReportedDiscussionTitle" type="hidden" value="@Model.ReportedDiscussionTitle" />
+        <input asp-for="ReportedUserName" type="hidden" value="@Model.ReportedUserName" />
         <div>
             <textarea class="add-report-textarea" asp-for="Reason" placeholder="Причина" rows="1"></textarea>
         </div>
