@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.MVC.Constants;
+using Web.MVC.Models.ApiResponses.CommentsResponses;
 
 namespace Web.MVC.Controllers
 {
@@ -24,6 +25,28 @@ namespace Web.MVC.Controllers
             var response = await httpClient.DeleteAsync(
                 $"{url}/api/SuggestComment/RejectSuggestedComment/{suggestedCommentId}");
             if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            if (!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> DeleteMySuggestedComment(Guid suggestedCommentId, string returnUrl)
+        {
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync($"{url}/api/SuggestComment/GetSuggestedCommentsByIds?ids[]={suggestedCommentId}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var suggestedComments = await response.Content.ReadFromJsonAsync<List<SuggestedCommentResponse>>();
+            var suggestedComment = suggestedComments.First();
+            if (suggestedComment.CreatedBy != User.Identity.Name) return RedirectToAction("AccessIsForbidden","Information");
+
+            var deleteSuggestedCommentResponse = await httpClient.DeleteAsync(
+                $"{url}/api/SuggestComment/RejectSuggestedComment/{suggestedCommentId}");
+            if (!deleteSuggestedCommentResponse.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))
                 return LocalRedirect(returnUrl);
