@@ -1,0 +1,67 @@
+﻿.user-banned-info p{
+    margin: 0;
+    color: red;
+}
+
+.highlited-user-name {
+    font-weight: 500;
+}
+
+.increased-line {
+    font-size: 18px;
+}
+
+.two-links-user-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.two-links-user-container a{
+    text-decoration: none;
+    background-color: orange;
+    color: white;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 17px;
+}
+
+.two-links-user-container a:hover {
+    background-color: darkorange;
+    color: white;
+}
+
+.get-user-page-container {
+    margin: 0 20%;
+}
+
+@media (max-width: 1200px) {
+    .get-user-page-container {
+        margin: 0 13%;
+    }
+}
+
+@media (max-width: 992px) {
+    .get-user-page-container {
+        margin: 0 10%;
+    }
+}
+
+@media (max-width: 768px) {
+    .get-user-page-container {
+        margin: 0 8%;
+    }
+}
+
+@media (max-width: 600px) {
+    .get-user-page-container {
+        margin: 0 5%;
+    }
+}
+
+@media (max-width: 520px) {
+    .get-user-page-container {
+        margin: 0 3%;
+    }
+}
