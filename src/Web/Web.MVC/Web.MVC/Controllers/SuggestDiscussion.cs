@@ -46,5 +46,20 @@ namespace Web.MVC.Controllers
             var suggestedComments = await response.Content.ReadFromJsonAsync<SuggestedDiscussionResponse>();
             return View(suggestedComments);
         }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> DeleteMySuggestedDiscussion(Guid suggestedDiscussionId, string returnUrl)
+        {
+            using var httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.DeleteAsync(
+                $"{url}/api/SuggestDiscussion/RejectSuggestedDiscussion/{suggestedDiscussionId}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            if (!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
