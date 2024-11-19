@@ -77,7 +77,7 @@
             foreach (var suggestedComment in Model.SuggestedComments)
             {
                 <div class="suggestion-container">
-                    <p>
+                    <p class="highlited-comment-name">
                         <a class="suggestion-content-link" asp-controller="Discussion" asp-action="GetDiscussion" asp-route-id="@suggestedComment.DiscussionId"
                            asp-route-pageNumber="1" asp-route-pageSize="20">@suggestedComment.Content</a>
                     </p>
