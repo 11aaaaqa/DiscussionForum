@@ -8,8 +8,10 @@
 <div class="admin-panel-page-container">
     <div class="mb-4">
         <h3>Предложения</h3>
-        <a asp-controller="Moderator" asp-action="SuggestedTopics" asp-route-pageNumber="1" asp-route-pageSize="20">Предложенные темы</a>
-        <a class="mb-5" asp-controller="Moderator" asp-action="SuggestedDiscussions" asp-route-pageNumber="1" asp-route-pageSize="20">Предложенные обсуждения</a><br/>
+        <div class="mb-3">
+            <a asp-controller="Moderator" asp-action="SuggestedTopics" asp-route-pageNumber="1" asp-route-pageSize="20">Предложенные темы</a>
+            <a asp-controller="Moderator" asp-action="SuggestedDiscussions" asp-route-pageNumber="1" asp-route-pageSize="20">Предложенные обсуждения</a>
+        </div>
         <a asp-controller="Moderator" asp-action="SuggestedComments" asp-route-pageNumber="1" asp-route-pageSize="20">Предложенные комментарии</a>
     </div>
     <div class="mb-4">
