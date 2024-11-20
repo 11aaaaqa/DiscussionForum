@@ -1,12 +1,16 @@
 ﻿@{
     ViewData["Title"] = "Предложенные обсуждения";
 }
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Web.MVC.Models.ViewModels.UserViewModels.GetSuggestedDiscussionsViewModel
+<link rel="stylesheet" href="~/css/NextPreviousPaginationBtns.css" />
+<link rel="stylesheet" href="~/css/moderator/GetSuggestedDiscussions.css" />
 
-<div class="text-center">
-    <h3>Предложенные обсуждения</h3>
-    @foreach (var suggestedDiscussion in Model.SuggestedDiscussions)
+
+<div class="suggested-discussions-page-container">
+    @if (Model.SuggestedDiscussions.Count != 0)
     {
+        <h3>Предложенные обсуждения</h3>
         string returnUrl;
         if (Context.Request.QueryString.HasValue)
         {
@@ -16,21 +20,50 @@
         {
             returnUrl = Context.Request.Path;
         }
-        <a asp-controller="Moderator" asp-action="SuggestedDiscussion" asp-route-returnUrl="@returnUrl" asp-route-id="@suggestedDiscussion.Id">
-            @suggestedDiscussion.Title
-        </a><br/>
+        @foreach (var suggestedDiscussion in Model.SuggestedDiscussions)
+        {
+            <div class="suggestion-container">
+                <p class="highlited-discussion-name">
+                    <a asp-controller="Moderator" asp-action="SuggestedDiscussion" asp-route-returnUrl="@returnUrl" asp-route-id="@suggestedDiscussion.Id">
+                        @suggestedDiscussion.Title
+                    </a>
+                </p>
+            </div>
+        }
     }
-</div>
+    else
+    {
+        <h3>Предложенных обсуждений нет</h3>
+    }
 
-@if (Model.PreviousPageNumber != 0)
-{
-    <a asp-controller="Moderator" asp-action="SuggestedDiscussions" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize">
-        Назад
-    </a>
-}
-@if (Model.DoesNextPageExist && Model.SuggestedDiscussions.Count != 0)
-{
-    <a asp-controller="Moderator" asp-action="SuggestedDiscussions" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize">
-        Вперед
-    </a>
-}
+    <div class="pagination-link-container">
+        @if (Model.SuggestedDiscussions.Count != 0)
+        {
+            if (Model.PreviousPageNumber != 0)
+            {
+                <a class="pagination-link-previous" asp-controller="Moderator" asp-action="SuggestedDiscussions" asp-route-pageNumber="@Model.PreviousPageNumber"
+                   asp-route-pageSize="@Model.PageSize">
+                    Назад
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-previous-doesnt-exist">Назад</a>
+            }
+        }
+        @if (Model.SuggestedDiscussions.Count != 0)
+        {
+            if (Model.DoesNextPageExist)
+            {
+                <a class="pagination-link-next" asp-controller="Moderator" asp-action="SuggestedDiscussions" asp-route-pageNumber="@Model.NextPageNumber"
+                   asp-route-pageSize="@Model.PageSize">
+                    Вперед
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-next-doesnt-exist">Вперед</a>
+            }
+        }
+    </div>
+</div>

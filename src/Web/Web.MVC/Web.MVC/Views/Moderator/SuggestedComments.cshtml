@@ -4,11 +4,13 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Web.MVC.Constants
 @model Web.MVC.Models.ViewModels.ModeratorViewModels.SuggestedCommentsViewModel
+<link rel="stylesheet" href="~/css/NextPreviousPaginationBtns.css" />
+<link rel="stylesheet" href="~/css/moderator/GetSuggestedComments.css" />
 
-<div class="text-center">
-    <h3>Предложенные комментарии</h3>
-    @if (true)
+<div class="suggested-comments-page-container">
+    @if (Model.SuggestedComments.Count != 0)
     {
+        <h3>Предложенные комментарии</h3>
         string returnUrl;
         if (Context.Request.QueryString.HasValue)
         {
@@ -20,34 +22,59 @@
         }
         @foreach (var suggestedComment in Model.SuggestedComments)
         {
-            <p>@suggestedComment.Content</p>
-            <form method="post" asp-controller="Moderator" asp-action="AcceptSuggestedComment" asp-route-id="@suggestedComment.Id"
-                asp-route-returnUrl="@returnUrl">
-                <input type="submit" value="принять"/>
-            </form>
-            <form method="post" asp-controller="Moderator" asp-action="RejectSuggestedComment" asp-route-id="@suggestedComment.Id"
-                asp-route-returnUrl="@returnUrl">
-                <input type="submit" value="отклонить"/>
-            </form>
-            <a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion"
-             asp-route-returnUrl="@returnUrl" asp-route-userName="@suggestedComment.CreatedBy"
-             asp-route-suggestionDeleteId="@suggestedComment.Id" asp-route-suggestionDeleteType="@BanTypeConstants.CommentBanType">
-              остранить и отклонить предложение
-            </a>
+            <div class="suggestion-container">
+                <p class="highlited-comment-name">@suggestedComment.Content</p>
+                <div class="suggestion-actions-container">
+                    <form method="post" asp-controller="Moderator" asp-action="AcceptSuggestedComment" asp-route-id="@suggestedComment.Id"
+                          asp-route-returnUrl="@returnUrl">
+                        <input type="submit" value="Принять" />
+                    </form>
+                    <form method="post" asp-controller="Moderator" asp-action="RejectSuggestedComment" asp-route-id="@suggestedComment.Id"
+                          asp-route-returnUrl="@returnUrl">
+                        <input type="submit" value="Отклонить" />
+                    </form>
+                    <a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion"
+                       asp-route-returnUrl="@returnUrl" asp-route-userName="@suggestedComment.CreatedBy"
+                       asp-route-suggestionDeleteId="@suggestedComment.Id" asp-route-suggestionDeleteType="@BanTypeConstants.CommentBanType">
+                        Остранить и отклонить
+                    </a>
+                </div>
+            </div>
         }
     }
-    
-</div>
+    else
+    {
+        <h3>Предложенных комментариев нет</h3>
+    }
 
-@if (Model.PreviousPageNumber != 0)
-{
-    <a asp-controller="Moderator" asp-action="SuggestedComments" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize">
-        Назад
-    </a>
-}
-@if (Model.DoesNextPageExist && Model.SuggestedComments.Count != 0)
-{
-    <a asp-controller="Moderator" asp-action="SuggestedComments" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize">
-        Вперед
-    </a>
-}
+    <div class="pagination-link-container">
+        @if (Model.SuggestedComments.Count != 0)
+        {
+            if (Model.PreviousPageNumber != 0)
+            {
+                <a class="pagination-link-previous" asp-controller="Moderator" asp-action="SuggestedComments" asp-route-pageNumber="@Model.PreviousPageNumber"
+                   asp-route-pageSize="@Model.PageSize">
+                    Назад
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-previous-doesnt-exist">Назад</a>
+            }
+        }
+        @if (Model.SuggestedComments.Count != 0)
+        {
+            if (Model.DoesNextPageExist)
+            {
+                <a class="pagination-link-next" asp-controller="Moderator" asp-action="SuggestedComments" asp-route-pageNumber="@Model.NextPageNumber"
+                   asp-route-pageSize="@Model.PageSize">
+                    Вперед
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-next-doesnt-exist">Вперед</a>
+            }
+        }
+    </div>
+</div>

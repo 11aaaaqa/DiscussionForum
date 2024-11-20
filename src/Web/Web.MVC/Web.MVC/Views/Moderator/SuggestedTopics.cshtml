@@ -3,51 +3,75 @@
 }
 @using Web.MVC.Constants
 @model GetSuggestedTopicViewModel
+<link rel="stylesheet" href="~/css/moderator/GetSuggestedTopics.css" />
+<link rel="stylesheet" href="~/css/NextPreviousPaginationBtns.css" />
 
-<div class="text-center">
+<div class="suggested-topics-page-container">
     @if (Model.SuggestedTopics.Count != 0)
     {
         <h3>Предложенные темы</h3>
-        <table>
-            <tr><th>Название</th><th>Принять</th><th>Отклонить</th><th>Отстранить предлагающего</th></tr>
-            @foreach (var suggestedTopic in Model.SuggestedTopics)
-            {
-                string returnUrl;
-                if (Context.Request.QueryString.HasValue)
-                {
-                    returnUrl = Context.Request.Path + Context.Request.QueryString;
-                }
-                else
-                {
-                    returnUrl = Context.Request.Path;
-                }
+        string returnUrl;
+        if (Context.Request.QueryString.HasValue)
+        {
+            returnUrl = Context.Request.Path + Context.Request.QueryString;
+        }
+        else
+        {
+            returnUrl = Context.Request.Path;
+        }
+        @foreach (var suggestedTopic in Model.SuggestedTopics)
+        {
+            <div class="suggestion-container">
+                <p class="highlited-topic-name">@suggestedTopic.Name</p>
+                <div class="suggestion-actions-container">
+                    <form method="post" asp-action="AcceptSuggestedTopic" asp-controller="Moderator" asp-route-id=@suggestedTopic.Id asp-route-returnUrl="@returnUrl">
+                        <input type="submit" value="Принять" />
+                    </form>
 
-                <tr>
-                    <td>@suggestedTopic.Name</td>
-                    <td>
-                        <form method="post" asp-action="AcceptSuggestedTopic" asp-controller="Moderator" asp-route-id=@suggestedTopic.Id asp-route-returnUrl="@returnUrl"><input type="submit" value="принять"/></form></td>
-                    <td>
-                        <form method="post" asp-controller="Moderator" asp-action="RejectSuggestedTopic" asp-route-id=@suggestedTopic.Id asp-route-returnUrl="@returnUrl"><input type="submit" value="отклонить"/></form></td>
-                    <td><a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion" asp-route-returnUrl="@returnUrl" asp-route-userName="@suggestedTopic.SuggestedBy" asp-route-suggestionDeleteId="@suggestedTopic.Id" asp-route-suggestionDeleteType="@BanTypeConstants.TopicBanType">остранить и отклонить предложение</a></td>
-                </tr>
-            }
-        </table>
+                    <form method="post" asp-controller="Moderator" asp-action="RejectSuggestedTopic" asp-route-id=@suggestedTopic.Id asp-route-returnUrl="@returnUrl">
+                        <input type="submit" value="Отклонить" />
+                    </form>
+
+                    <a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion" asp-route-returnUrl="@returnUrl" asp-route-userName="@suggestedTopic.SuggestedBy" asp-route-suggestionDeleteId="@suggestedTopic.Id" asp-route-suggestionDeleteType="@BanTypeConstants.TopicBanType">
+                        Остранить и отклонить
+                    </a>
+                </div>
+            </div>
+        }
     }
     else
     {
         <h3>Предложенных тем нет</h3>
     }
-</div>
 
-@if (Model.PreviousPageNumber != 0)
-{
-    <a asp-controller="Moderator" asp-action="SuggestedTopics" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize">
-        Назад
-    </a>
-}
-@if (Model.DoesNextPageExist && Model.SuggestedTopics.Count != 0)
-{
-    <a asp-controller="Moderator" asp-action="SuggestedTopics" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize">
-        Вперед
-    </a>
-}
+    <div class="pagination-link-container">
+        @if (Model.SuggestedTopics.Count != 0)
+        {
+            @if (Model.PreviousPageNumber != 0)
+            {
+                <a class="pagination-link-previous" asp-controller="Moderator" asp-action="SuggestedTopics" asp-route-pageNumber="@Model.PreviousPageNumber"
+                   asp-route-pageSize="@Model.PageSize">
+                    Назад
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-previous-doesnt-exist">Назад</a>
+            }
+        }
+        @if (Model.SuggestedTopics.Count != 0)
+        {
+            if (Model.DoesNextPageExist)
+            {
+                <a class="pagination-link-next" asp-controller="Moderator" asp-action="SuggestedTopics" asp-route-pageNumber="@Model.NextPageNumber"
+                   asp-route-pageSize="@Model.PageSize">
+                    Вперед
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-next-doesnt-exist">Вперед</a>
+            }
+        }
+    </div>
+</div>
