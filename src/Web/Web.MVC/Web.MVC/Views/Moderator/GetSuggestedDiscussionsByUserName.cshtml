@@ -1,7 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Предложенные обсуждения";
 }
-@using System.Web
 @using Web.MVC.Constants
 @model Web.MVC.Models.ViewModels.ModeratorViewModels.GetSuggestedDiscussionsByUserNameViewModel
 <link rel="stylesheet" href="~/css/user/dropdown.css" />
@@ -83,7 +82,9 @@
             {
                 <div class="suggestion-container">
                     <p class="highlited-discussion-name">
-                        <a href="~/SuggestedDiscussions/@suggestedDiscussion.Id?returnUrl=@HttpUtility.UrlEncode(Context.Request.Path + Context.Request.QueryString)">@suggestedDiscussion.Title</a>
+                        <a asp-controller="Moderator" asp-action="SuggestedDiscussion" asp-route-returnUrl="@returnUrl" asp-route-id="@suggestedDiscussion.Id">
+                            @suggestedDiscussion.Title
+                        </a>
                     </p>
                 </div>
             }
