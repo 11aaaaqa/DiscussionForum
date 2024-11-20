@@ -1,0 +1,67 @@
+﻿.create-bot-container {
+    margin: 0 30%;
+}
+
+.create-bot-input-text {
+    width: 90%;
+    border: 2px solid black;
+    border-radius: 8px;
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    margin-bottom: 6px;
+    transition: border-color 0.4s, box-shadow 0.4s;
+    padding: 12px 15px;
+}
+
+.create-bot-input-text:focus {
+    outline: none;
+    border-color: orange;
+    box-shadow: 0 0 9px rgba(0, 0, 0, 0.5);
+}
+
+.create-bot-submit {
+    width: 90%;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    background-color: orange;
+    color: white;
+    transition: background-color 0.3s;
+    font-size: 16px;
+}
+
+.create-bot-submit:hover {
+    background-color: darkorange;
+    color: white;
+}
+
+@media (max-width: 1200px) {
+    .create-bot-container {
+        margin: 0 25%;
+    }
+}
+
+@media (max-width: 992px) {
+    .create-bot-container {
+        margin: 0 20%;
+    }
+}
+
+@media (max-width: 768px) {
+    .create-bot-container {
+        margin: 0 15%;
+    }
+}
+
+@media (max-width: 600px) {
+    .create-bot-container {
+        margin: 0 10%;
+    }
+}
+
+@media (max-width: 520px) {
+    .create-bot-container {
+        margin: 0 5%;
+    }
+}
