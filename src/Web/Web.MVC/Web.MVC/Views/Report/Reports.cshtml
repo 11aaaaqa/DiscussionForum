@@ -1,17 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Жалобы";
 }
-@using System.Web
 @model GetReportsViewModel
+<link rel="stylesheet" href="~/css/NextPreviousPaginationBtns.css" />
+<link rel="stylesheet" href="~/css/moderator/GetReports.css" />
 
-<div class="text-center">
-    <h3>Жалобы</h3>
-    @if (Model.Reports.Count == 0)
+<div class="reports-page-container">
+    @if (Model.Reports.Count != 0)
     {
-        <h5>Жалоб нет</h5>
-    }
-    else
-    {
+        <h3>Жалобы</h3>
         string returnUrl;
         if (Context.Request.QueryString.HasValue)
         {
@@ -21,34 +18,61 @@
         {
             returnUrl = Context.Request.Path;
         }
-        <table>
-            <tr><th>От пользователя</th><th>Причина</th><th>Тип</th></tr>
-            @foreach (var report in Model.Reports)
-            {
-                if (report.ReportedCommentContent is null)
+        @foreach (var report in Model.Reports)
+        {
+            <div class="report-container">
+                <p><strong>От пользователя: </strong><a asp-controller="User" asp-action="GetUser" asp-route-userName="@report.UserNameReportedBy">@report.UserNameReportedBy</a></p>
+                <p><strong>Причина: </strong>@report.Reason</p>
+                @if (report.ReportedCommentContent is null)
                 {
-                    <tr><td>@report.UserNameReportedBy</td><td>@report.Reason</td><td><a asp-controller="Report" asp-action="GetReport" asp-route-reportId="@report.Id" asp-route-returnUrl="@returnUrl">обсуждение</a></td></tr>
+                    <p>
+                        <strong>Жалоба: </strong>
+                        <a asp-controller="Report" asp-action="GetReport" asp-route-returnUrl="@returnUrl" asp-route-reportId="@report.Id">обсуждение</a>
+                    </p>
                 }
                 else
                 {
-                    <tr><td>@report.UserNameReportedBy</td><td>@report.Reason</td><td><a asp-controller="Report" asp-action="GetReport" asp-route-reportId="@report.Id" asp-route-returnUrl="@returnUrl">обсуждение</a></td></tr>
+                    <p>
+                        <strong>Жалоба: </strong>
+                        <a asp-controller="Report" asp-action="GetReport" asp-route-returnUrl="@returnUrl" asp-route-reportId="@report.Id">комментарий</a>
+                    </p>
                 }
-            }
-        </table>
+            </div>
+        }
     }
-</div>
+    else
+    {
+        <h3>Жалоб нет</h3>
+    }
 
-@if (Model.PreviousPageNumber != 0 && Model.Reports.Count != 0)
-{
-    <a asp-controller="Report" asp-action="Reports" asp-route-pageNumber="@Model.PreviousPageNumber" asp-route-pageSize="@Model.PageSize"
-       asp-route-reportType="@Model.ReportType">
-        Назад
-    </a>
-}
-@if (Model.DoesNextPageExist && Model.Reports.Count != 0)
-{
-    <a asp-controller="Report" asp-action="Reports" asp-route-pageNumber="@Model.NextPageNumber" asp-route-pageSize="@Model.PageSize"
-       asp-route-reportType="@Model.ReportType">
-        Вперед
-    </a>
-}
+    <div class="pagination-link-container">
+        @if (Model.Reports.Count != 0)
+        {
+            if (Model.PreviousPageNumber != 0)
+            {
+                <a class="pagination-link-previous" asp-controller="Report" asp-action="Reports" asp-route-pageNumber="@Model.PreviousPageNumber"
+                   asp-route-pageSize="@Model.PageSize" asp-route-reportType="@Model.ReportType">
+                    Назад
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-previous-doesnt-exist">Назад</a>
+            }
+        }
+        @if (Model.Reports.Count != 0)
+        {
+            if (Model.DoesNextPageExist)
+            {
+                <a class="pagination-link-next" asp-controller="Report" asp-action="Reports" asp-route-pageNumber="@Model.NextPageNumber"
+                   asp-route-pageSize="@Model.PageSize" asp-route-reportType="@Model.ReportType">
+                    Вперед
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-next-doesnt-exist">Вперед</a>
+            }
+        }
+    </div>
+</div>
