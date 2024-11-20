@@ -2,30 +2,29 @@
     ViewData["Title"] = "Создать бота";
 }
 @model Web.MVC.DTOs.Admin.CreateBotDto
+<link rel="stylesheet" href="~/css/ErrorMessageSpanValidation.css"/>
+<link rel="stylesheet" href="~/css/admin/CreateBotAccount.css"/>
 
-<h3>Создать бота</h3>
-
-<form method="post">
-    <div asp-validation-summary="ModelOnly"></div>
-    <div>
-        <label asp-for="Email"></label><br/>
-        <input asp-for="Email"/>
-        <span asp-validation-for="Email"></span>
-    </div>
-    <div>
-        <label asp-for="UserName"></label><br />
-        <input asp-for="UserName" />
-        <span asp-validation-for="UserName"></span>
-    </div>
-    <div>
-        <label asp-for="Password"></label><br />
-        <input asp-for="Password" />
-        <span asp-validation-for="Password"></span>
-    </div>
-    <div>
-        <label asp-for="PasswordConfirm"></label><br />
-        <input asp-for="PasswordConfirm" />
-        <span asp-validation-for="PasswordConfirm"></span>
-    </div>
-    <input type="submit" value="создать"/>
-</form>
+<div class="create-bot-container">
+    <h3 class="mb-3">Создать бота</h3>
+    <form method="post">
+        <div asp-validation-summary="ModelOnly"></div>
+        <span class="validation-message" asp-validation-for="Email"></span>
+        <span class="validation-message" asp-validation-for="UserName"></span>
+        <span class="validation-message" asp-validation-for="Password"></span>
+        <span class="validation-message" asp-validation-for="PasswordConfirm"></span>
+        <div>
+            <input class="create-bot-input-text" asp-for="Email" placeholder="Эл. почта" />
+        </div>
+        <div>
+            <input class="create-bot-input-text" asp-for="UserName" placeholder="Имя пользователя" />
+        </div>
+        <div>
+            <input class="create-bot-input-text" asp-for="Password" placeholder="Пароль" />
+        </div>
+        <div>
+            <input class="create-bot-input-text" asp-for="PasswordConfirm" placeholder="Подтвердите пароль" />
+        </div>
+        <input class="create-bot-submit" type="submit" value="Создать" />
+    </form>
+</div>
