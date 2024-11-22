@@ -2,14 +2,15 @@
     ViewData["Title"] = "Изменить имя пользователя";
 }
 @model Web.MVC.DTOs.User.ChangeUserNameDto
+<link rel="stylesheet" href="~/css/ErrorMessageSpanValidation.css"/>
+<link rel="stylesheet" href="~/css/user/ChangeUserName.css"/>
 
-<h3>Сменить имя</h3>
+<h3>Изменить имя</h3>
 <form method="post">
     <div asp-validation-summary="ModelOnly"></div>
+    <span class="validation-message" asp-validation-for="NewUserName"></span>
     <div>
-        <label asp-for="NewUserName"></label><br />
-        <input asp-for="NewUserName" />
-        <span asp-validation-for="NewUserName"></span>
+        <input class="change-username-input" asp-for="NewUserName" placeholder="Новое имя пользователя" />
     </div>
-    <input type="submit" value="изменить" />
+    <input class="change-username-submit" type="submit" value="Изменить" />
 </form>
