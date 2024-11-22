@@ -1,0 +1,87 @@
+﻿h3 {
+    margin-bottom: 20px;
+}
+
+.change-username-input {
+    width: 35%;
+    padding: 12px 15px;
+    border: 2px solid black;
+    border-radius: 8px;
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    margin-bottom: 5px;
+    transition: border-color 0.4s, box-shadow 0.4s;
+}
+
+.change-username-input:focus {
+    border-color: orange;
+    box-shadow: 0 0 9px rgba(0, 0, 0, 0.5);
+    outline: none;
+}
+
+.change-username-submit {
+    border: none;
+    border-radius: 8px;
+    color: white;
+    background-color: orange;
+    padding: 8px 12px;
+    font-size: 16px;
+    width: 10%;
+    transition: background-color 0.3s;
+}
+
+.change-username-submit:hover {
+    background-color: darkorange;
+    border: none;
+    color: white;
+}
+
+@media (max-width: 1200px) {
+    .change-username-input {
+        width: 38%;
+    }
+    .change-username-submit {
+        width: 12%;
+    }
+}
+
+@media (max-width: 992px) {
+    .change-username-input {
+        width: 41%;
+    }
+
+    .change-username-submit {
+        width: 14%;
+    }
+}
+
+@media (max-width: 768px) {
+    .change-username-input {
+        width: 48%;
+    }
+
+    .change-username-submit {
+        width: 18%;
+    }
+}
+
+@media (max-width: 600px) {
+    .change-username-input {
+        width: 50%;
+    }
+
+    .change-username-submit {
+        width: 20%;
+    }
+}
+
+@media (max-width: 520px) {
+    .change-username-input {
+        width: 55%;
+    }
+
+    .change-username-submit {
+        width: 23%;
+    }
+}
