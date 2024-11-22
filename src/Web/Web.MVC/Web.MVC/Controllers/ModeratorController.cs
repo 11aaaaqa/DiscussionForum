@@ -632,7 +632,7 @@ namespace Web.MVC.Controllers
 
         [Route("moderator/users")]
         [HttpGet]
-        public async Task<IActionResult> Users(int pageNumber, int pageSize, string? searchingQuery, string searchingType)
+        public async Task<IActionResult> Users(int pageNumber, int pageSize, string? searchingQuery)
         {
             using HttpClient httpClient = httpClientFactory.CreateClient();
             bool doesExist;
@@ -653,18 +653,17 @@ namespace Web.MVC.Controllers
             else
             {
                 var response = await httpClient.GetAsync(
-                    $"{url}/api/User/GetAllUsersSearching?pageNumber={pageNumber}&pageSize={pageSize}&searchingString={searchingQuery}&searchingType={searchingType}");
+                    $"{url}/api/User/GetAllUsersSearching?pageNumber={pageNumber}&pageSize={pageSize}&searchingString={searchingQuery}");
                 if (!response.IsSuccessStatusCode) return View("ActionError");
 
                 users = await response.Content.ReadFromJsonAsync<List<AspNetUserResponse>>();
 
                 var doesNextPageExistResponse = await httpClient.GetAsync(
-                    $"{url}/api/User/DoesNextUsersPageSearchingExist?pageNumber={pageNumber + 1}&pageSize={pageSize}&searchingString={searchingQuery}&searchingType={searchingType}");
+                    $"{url}/api/User/DoesNextUsersPageSearchingExist?pageNumber={pageNumber + 1}&pageSize={pageSize}&searchingString={searchingQuery}");
                 if (!doesNextPageExistResponse.IsSuccessStatusCode) return View("ActionError");
 
                 doesExist = await doesNextPageExistResponse.Content.ReadFromJsonAsync<bool>();
                 ViewBag.SearchingQuery = searchingQuery;
-                ViewBag.SearchingType = searchingType;
             }
 
             ViewBag.DoesNextPageExist = doesExist;
