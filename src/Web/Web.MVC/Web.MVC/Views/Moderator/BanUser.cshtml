@@ -3,12 +3,14 @@
 }
 @using Web.MVC.Constants
 @model Web.MVC.DTOs.Moderator.BanUserDto
+<link rel="stylesheet" href="~/css/ErrorMessageSpanValidation.css"/>
+<link rel="stylesheet" href="~/css/moderator/BanUser.css"/>
 
 <h3>Отстранить пользователя</h3>
 @if (ViewBag.IsUserBanned)
 {
-    <h5>Пользователь уже забанен до @ViewBag.BannedUntil по причине "@ViewBag.BanReason".</h5>
-    <h5>Тип бана: @ViewBag.BanType</h5>
+    <h5 class="user-is-already-banned-red mb-0">Пользователь уже забанен до @ViewBag.BannedUntil по причине "@ViewBag.BanReason"</h5>
+    <h5 class="user-is-already-banned-red mb-2">Тип бана: @ViewBag.BanType</h5>
 }
 else
 {
@@ -16,33 +18,32 @@ else
 }
 <form method="post">
     <div asp-validation-summary="ModelOnly"></div>
+    <span class="validation-message" asp-validation-for="Reason"></span>
+    <span class="validation-message" asp-validation-for="ForDays"></span>
     <div>
-        <label asp-for="Reason"></label><br />
-        <input asp-for="Reason" />
-        <span asp-validation-for="Reason"></span>
+        <input class="ban-user-input" asp-for="Reason" placeholder="Причина" />
+    </div>
+    <div class="mb-2">
+        <input class="ban-user-input" asp-for="ForDays" placeholder="Длительность в днях" />
     </div>
     <div>
-        <label asp-for="ForDays"></label><br />
-        <input asp-for="ForDays" />
-        <span asp-validation-for="ForDays"></span>
-    </div>
-    <div>
-        <p>Тип бана</p>
-        <p>
+        <p class="mb-1 highlited-ban-type">Тип бана</p>
+        
+        <p class="radio-ban-user-container">
             <input type="radio" value="@BanTypeConstants.GeneralBanType" name="banType" /> Общий
         </p>
-        <p>
+        <p class="radio-ban-user-container">
             <input type="radio" value="@BanTypeConstants.CommentBanType" name="banType" /> Комментарий
         </p>
-        <p>
+        <p class="radio-ban-user-container">
             <input type="radio" value="@BanTypeConstants.DiscussionBanType" name="banType" /> Обсуждение
         </p>
-        <p>
+        <p class="radio-ban-user-container">
             <input type="radio" value="@BanTypeConstants.ReportBanType" name="banType" /> Жалоба
         </p>
-        <p>
+        <p class="radio-ban-user-container">
             <input type="radio" value="@BanTypeConstants.TopicBanType" name="banType" /> Тема
         </p>
     </div>
-    <input type="submit" value="отстранить" />
+    <input class="ban-user-submit" type="submit" value="Отстранить" />
 </form>
