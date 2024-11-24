@@ -1,0 +1,126 @@
+﻿.highlited-ban-type {
+    font-weight: 500;
+}
+
+.radio-ban-user-container {
+    display: flex;
+    align-items: center;
+}
+
+.radio-ban-user-container input[type="radio"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid orange;
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    margin-right: 10px;
+}
+
+.radio-ban-user-container input[type="radio"]:checked {
+    background-color: orange;
+    border-color: orange;
+}
+
+.radio-ban-user-container input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.user-is-already-banned-red {
+    color: red;
+}
+
+.ban-user-input {
+    width: 35%;
+    padding: 12px 15px;
+    border: 2px solid black;
+    border-radius: 8px;
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    margin-bottom: 5px;
+    transition: border-color 0.4s, box-shadow 0.4s;
+}
+
+.ban-user-input:focus {
+    border-color: orange;
+    box-shadow: 0 0 9px rgba(0, 0, 0, 0.5);
+    outline: none;
+}
+
+.ban-user-submit {
+    border: none;
+    border-radius: 8px;
+    color: white;
+    background-color: orange;
+    padding: 8px 12px;
+    font-size: 16px;
+    width: 10%;
+    transition: background-color 0.3s;
+}
+
+.ban-user-submit:hover {
+    background-color: darkorange;
+    border: none;
+    color: white;
+}
+
+@media (max-width: 1200px) {
+    .ban-user-input {
+        width: 38%;
+    }
+
+    .ban-user-submit {
+        width: 12%;
+    }
+}
+
+@media (max-width: 992px) {
+    .ban-user-input {
+        width: 41%;
+    }
+
+    .ban-user-submit {
+        width: 14%;
+    }
+}
+
+@media (max-width: 768px) {
+    .ban-user-input {
+        width: 48%;
+    }
+
+    .ban-user-submit {
+        width: 18%;
+    }
+}
+
+@media (max-width: 600px) {
+    .ban-user-input {
+        width: 50%;
+    }
+
+    .ban-user-submit {
+        width: 20%;
+    }
+}
+
+@media (max-width: 520px) {
+    .ban-user-input {
+        width: 55%;
+    }
+
+    .ban-user-submit {
+        width: 23%;
+    }
+}
