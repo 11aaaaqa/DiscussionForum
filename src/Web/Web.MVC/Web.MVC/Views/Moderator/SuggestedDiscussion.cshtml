@@ -4,14 +4,21 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Web.MVC.Constants
 @model Web.MVC.Models.ApiResponses.Discussion.DiscussionResponse
+<link rel="stylesheet" href="~/css/moderator/SuggestedDiscussion.css"/>
 
 <h3>@Model.Title</h3>
 <p>@Model.Content</p>
 
-<form method="post" asp-controller="Moderator" asp-action="AcceptSuggestedDiscussion" asp-route-id="@Model.Id" asp-route-returnUrl="@ViewBag.ReturnUrl"><input type="submit" value="принять" /></form>
-<form method="post" asp-controller="Moderator" asp-action="RejectSuggestedDiscussion" asp-route-id="@Model.Id" asp-route-returnUrl="@ViewBag.ReturnUrl"><input type="submit" value="отклонить" /></form>
-<a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion"
-   asp-route-returnUrl="@ViewBag.ReturnUrl" asp-route-userName="@Model.CreatedBy"
-   asp-route-suggestionDeleteId="@Model.Id" asp-route-suggestionDeleteType="@BanTypeConstants.DiscussionBanType">
-    остранить и отклонить предложение
-</a>
+<div class="suggested-discussion-actions-container">
+    <form method="post" asp-controller="Moderator" asp-action="AcceptSuggestedDiscussion" asp-route-id="@Model.Id" asp-route-returnUrl="@ViewBag.ReturnUrl">
+        <input type="submit" value="Принять"/>
+    </form>
+    <form method="post" asp-controller="Moderator" asp-action="RejectSuggestedDiscussion" asp-route-id="@Model.Id" asp-route-returnUrl="@ViewBag.ReturnUrl">
+        <input type="submit" value="Отклонить"/>
+    </form>
+    <a asp-controller="Moderator" asp-action="BanUserAndDeleteSuggestion"
+       asp-route-returnUrl="@ViewBag.ReturnUrl" asp-route-userName="@Model.CreatedBy"
+       asp-route-suggestionDeleteId="@Model.Id" asp-route-suggestionDeleteType="@BanTypeConstants.DiscussionBanType">
+        Остранить и отклонить предложение
+    </a>
+</div>
