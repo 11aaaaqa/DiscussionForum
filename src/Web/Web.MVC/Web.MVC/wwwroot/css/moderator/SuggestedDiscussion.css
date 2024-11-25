@@ -1,0 +1,32 @@
+﻿.suggested-discussion-actions-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.suggested-discussion-actions-container input[type="submit"] {
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 13px;
+}
+
+.suggested-discussion-actions-container input[type="submit"]:hover {
+    background-color: darkorange;
+    color: white;
+}
+
+.suggested-discussion-actions-container a {
+    text-decoration: none;
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 13px;
+}
+
+.suggested-discussion-actions-container a:hover {
+    background-color: darkorange;
+    color: white;
+}
