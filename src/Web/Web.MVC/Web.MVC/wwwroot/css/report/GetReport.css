@@ -1,0 +1,45 @@
+﻿.report-actions-container {
+    gap: 20px;
+}
+
+.report-actions-container input[type="submit"] {
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 13px;
+}
+
+.report-actions-container input[type="submit"]:hover {
+    background-color: darkorange;
+    color: white;
+}
+
+.report-actions-container a {
+    text-decoration: none;
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 13px;
+}
+
+.report-actions-container a:hover {
+    background-color: darkorange;
+    color: white;
+}
+
+.reported-by-link{
+    text-decoration:none;
+    color: black;
+    background-color: white;
+}
+
+.reported-by-link:hover {
+    color: black;
+    background-color: white;
+}
+
+.highlited-report-content {
+    font-weight: 500;
+}
