@@ -34,47 +34,50 @@
 }
 
 <div class="pagination-link-container">
-    @if (ViewBag.PreviousPageNumber != 0 && Model.Discussions.Count != 0)
+    @if (Model.Discussions.Count != 0)
     {
-        @if (ViewBag.SearchingQuery is null)
+        @if (ViewBag.PreviousPageNumber != 0)
         {
-            <a class="pagination-link-previous" asp-controller="Topic" asp-action="Topic" asp-route-pageNumber="@ViewBag.PreviousPageNumber"
-               asp-route-pageSize="@ViewBag.PageSize"asp-route-topicName="@Model.TopicName">
-                Назад
-            </a>
+            @if (ViewBag.SearchingQuery is null)
+            {
+                <a class="pagination-link-previous" asp-controller="Topic" asp-action="Topic" asp-route-pageNumber="@ViewBag.PreviousPageNumber"
+                   asp-route-pageSize="@ViewBag.PageSize"asp-route-topicName="@Model.TopicName">
+                    Назад
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-previous" asp-controller="Topic" asp-action="Topic" asp-route-pageNumber="@ViewBag.PreviousPageNumber"
+                   asp-route-pageSize="@ViewBag.PageSize" asp-route-searchingQuery="@ViewBag.SearchingQuery" asp-route-topicName="@Model.TopicName">
+                    Назад
+                </a>
+            }
         }
         else
         {
-            <a class="pagination-link-previous" asp-controller="Topic" asp-action="Topic" asp-route-pageNumber="@ViewBag.PreviousPageNumber"
-               asp-route-pageSize="@ViewBag.PageSize" asp-route-searchingQuery="@ViewBag.SearchingQuery" asp-route-topicName="@Model.TopicName">
-                Назад
-            </a>
+            <a class="pagination-link-previous-doesnt-exist">Назад</a>
         }
-    }
-    else
-    {
-        <a class="pagination-link-previous-doesnt-exist">Назад</a>
-    }
-    @if (ViewBag.DoesNextPageExist && Model.Discussions.Count != 0)
-    {
-        @if (ViewBag.SearchingQuery is null)
+        @if (ViewBag.DoesNextPageExist)
         {
-            <a class="pagination-link-next" asp-controller="Topic" asp-action="Topic" asp-route-pageNumber="@ViewBag.NextPageNumber"
-               asp-route-pageSize="@ViewBag.PageSize"asp-route-topicName="@Model.TopicName">
-                Вперед
-            </a>
+            @if (ViewBag.SearchingQuery is null)
+            {
+                <a class="pagination-link-next" asp-controller="Topic" asp-action="Topic" asp-route-pageNumber="@ViewBag.NextPageNumber"
+                   asp-route-pageSize="@ViewBag.PageSize"asp-route-topicName="@Model.TopicName">
+                    Вперед
+                </a>
+            }
+            else
+            {
+                <a class="pagination-link-next" asp-controller="Topic" asp-action="Topic" asp-route-pageNumber="@ViewBag.NextPageNumber"
+                   asp-route-pageSize="@ViewBag.PageSize" asp-route-searchingQuery="@ViewBag.SearchingQuery" asp-route-topicName="@Model.TopicName">
+                    Вперед
+                </a>
+            }
         }
         else
         {
-            <a class="pagination-link-next" asp-controller="Topic" asp-action="Topic" asp-route-pageNumber="@ViewBag.NextPageNumber"
-               asp-route-pageSize="@ViewBag.PageSize" asp-route-searchingQuery="@ViewBag.SearchingQuery" asp-route-topicName="@Model.TopicName">
-                Вперед
-            </a>
+            <a class="pagination-link-next-doesnt-exist">Вперед</a>
         }
-    }
-    else
-    {
-        <a class="pagination-link-next-doesnt-exist">Вперед</a>
     }
 </div>
 <script src="~/js/discussion/RatingColorChanging.js"></script>
