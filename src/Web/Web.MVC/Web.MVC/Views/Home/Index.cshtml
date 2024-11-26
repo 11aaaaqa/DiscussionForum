@@ -20,15 +20,18 @@
     </div>
 }
 <div class="pagination-link-container">
-    <a class="pagination-link-previous-doesnt-exist">Назад</a>
-    @if (Model.DoesNextPageExist && Model.Discussions.Count != 0)
+    @if (Model.Discussions.Count != 0)
     {
-        <a class="pagination-link-next" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForToday"
-           asp-route-pageNumber="@Model.NextPageNumber"asp-route-pageSize="@Model.PageSize">Вперед</a>
-    }
-    else
-    {
-        <a class="pagination-link-next-doesnt-exist">Вперед</a>
+        <a class="pagination-link-previous-doesnt-exist">Назад</a>
+        @if (Model.DoesNextPageExist)
+        {
+            <a class="pagination-link-next" asp-controller="Discussion" asp-action="GetDiscussionsSortedByPopularityForToday"
+               asp-route-pageNumber="@Model.NextPageNumber"asp-route-pageSize="@Model.PageSize">Вперед</a>
+        }
+        else
+        {
+            <a class="pagination-link-next-doesnt-exist">Вперед</a>
+        }
     }
 </div>
 <script src="~/js/discussion/RatingColorChanging.js"></script>
