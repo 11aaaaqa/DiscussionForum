@@ -25,7 +25,10 @@
 
     commentInputs.forEach(commentInput => {
         commentInput.addEventListener('input', function() {
-            this.style.height = 'auto';
+            const inputHeight = commentInput.scrollHeight;
+            if (inputHeight < 350) {
+                this.style.height = 'auto';
+            }
             this.style.height = this.scrollHeight + 'px';
         });
     });
