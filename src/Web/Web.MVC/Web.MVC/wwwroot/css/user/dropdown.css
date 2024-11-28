@@ -38,3 +38,21 @@
 .active-dropdown-content:hover {
     color: orange;
 }
+
+@media (max-width: 768px) {
+    .dropdown-list {
+        right: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .dropdown-list {
+        right: 0;
+    }
+}
+
+@media (max-width: 520px) {
+    .dropdown-list {
+        right: 0;
+    }
+}
