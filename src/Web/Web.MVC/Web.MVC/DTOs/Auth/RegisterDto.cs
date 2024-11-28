@@ -13,6 +13,7 @@ namespace Web.MVC.DTOs.Auth
         [Required(ErrorMessage = "Поле \"Имя пользователя\" обязательно")]
         [StringLength(30, ErrorMessage = "Максимальная длина имени пользователя - 30 символов")]
         [Display(Name = "Имя пользователя")]
+        [RegularExpression("^[a-zA-Z0-9_.]+$", ErrorMessage = "Имя может содержать только буквы английского алфавита, цифры, точки и нижние подчеркивания")]
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Поле \"Пароль\" обязательно")]
