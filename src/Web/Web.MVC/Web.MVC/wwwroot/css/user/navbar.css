@@ -10,6 +10,7 @@
     border: 1px solid transparent;
     border-radius: 4px;
 }
+
 .profile-navbar-link:hover {
     background-color: white;
     color: orange;
@@ -27,4 +28,14 @@
 
 .active-navbar-link:hover {
     color: orange;
+}
+
+@media (max-width: 520px) {
+    .profile-navbar-link {
+        padding: 10px 6px;
+    }
+
+    .active-navbar-link {
+        padding: 10px 6px;
+    }
 }
