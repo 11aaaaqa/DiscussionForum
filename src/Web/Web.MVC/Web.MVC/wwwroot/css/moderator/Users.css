@@ -21,13 +21,11 @@ tr:hover {
 
 .get-user-link {
     text-decoration: none;
-    background-color: white;
     color: black;
 }
 
 .get-user-link:hover {
     color: orange;
-    background-color: white;
 }
 
 th:nth-child(3), td:nth-child(3) {
