@@ -12,7 +12,6 @@ ul.profile-btns {
 }
 li.profile-btns {
     display: inline; 
-    margin: 0 10px; 
 }
 a.profile-btns {
     color: black;
@@ -103,4 +102,9 @@ a.header-items:hover {
 
 header.header {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-toggler {
+    position: static;
+    margin: 0 auto;
 }
