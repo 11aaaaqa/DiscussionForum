@@ -12,8 +12,8 @@
 </head>
 <body>
 <header class="header">
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
+    <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3">
+        <div class="container-fluid">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Web.MVC</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,7 @@
                             <a class="profile-btns" asp-controller="Auth" asp-action="Login" asp-route-returnUrl="@returnUrl">Войти</a>
                         </li>
                         <li class="nav-item profile-btns">
-                            <a class="profile-btns" asp-controller="Auth" asp-action="Register">Зарегистрироваться</a>
+                                <a class="hide-if-navbar-toggler" asp-controller="Auth" asp-action="Register">Зарегистрироваться</a>
                         </li>
                     </ul>
                 }
