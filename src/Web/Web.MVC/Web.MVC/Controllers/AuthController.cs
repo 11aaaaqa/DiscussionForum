@@ -217,12 +217,14 @@ namespace Web.MVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Route("auth/forgot-password")]
         [HttpGet]
         public IActionResult ForgotPassword()
         {
             return View();
         }
 
+        [Route("auth/forgot-password")]
         [ValidateDNTCaptcha(ErrorMessage = "Ошибка в капче")]
         [HttpPost]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordDto model)
