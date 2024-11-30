@@ -16,7 +16,10 @@
         <div>
             <input class="login-input mt-2" asp-for="Password" placeholder="Пароль"/>
         </div>
-        <a class="mb-2" asp-controller="Auth" asp-action="ForgotPassword">Забыли пароль?</a><br/>
+        <div class="login-links-container">
+            <a class="login-first-link" asp-controller="Auth" asp-action="ForgotPassword">Забыли пароль?</a>
+            <a asp-controller="Auth" asp-action="Register">Еще нет аккаунта?</a>
+        </div>
         <input class="login-submit" type="submit" value="Войти"/>
     </form>
 </div>
