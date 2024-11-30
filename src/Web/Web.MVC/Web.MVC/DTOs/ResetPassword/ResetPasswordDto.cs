@@ -4,13 +4,13 @@ namespace Web.MVC.DTOs.ResetPassword
 {
     public class ResetPasswordDto
     {
-        [Required]
+        [Required(ErrorMessage = "Поле \"Новый пароль\" обязательно")]
         [Display(Name = "Новый пароль")]
         [DataType(DataType.Password)]
         [StringLength(40, ErrorMessage = "Пароль должен содержать как минимум 8 символов", MinimumLength = 8)]
         public string Password { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Поле \"Подтвердите пароль\" обязательно")]
         [Display(Name = "Подтвердите пароль")]
         [DataType(DataType.Password)]
         [StringLength(40, ErrorMessage = "Пароль должен содержать как минимум 8 символов", MinimumLength = 8)]

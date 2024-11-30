@@ -4,7 +4,7 @@ namespace Web.MVC.DTOs.ResetPassword
 {
     public class ForgotPasswordDto
     {
-        [Required]
+        [Required(ErrorMessage = "Поле \"Эл. почта\" обязательно")]
         [EmailAddress]
         [Display(Name = "Эл. почта")]
         [StringLength(80, ErrorMessage = "Максимальное количество символов почты превышено")]
