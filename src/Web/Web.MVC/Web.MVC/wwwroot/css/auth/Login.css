@@ -7,6 +7,16 @@ h2 {
     color: #333;
 }
 
+.login-links-container {
+    display: block;
+    margin: 3px 0 5px;
+    text-align: left;
+}
+.login-first-link {
+    margin-left: 5%;
+    margin-right: 1%;
+}
+
 .login-form-container {
     background-color: white;
     border-radius: 10px;
