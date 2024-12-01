@@ -1,0 +1,86 @@
+﻿.confirm-email-prepare-password-page-container {
+    margin: 0 20%;
+}
+
+.confirm-email-prepare-password-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid black;
+    border-radius: 8px;
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    margin-bottom: 5px;
+    transition: border-color 0.4s, box-shadow 0.4s;
+}
+
+.confirm-email-prepare-password-input:focus {
+    border-color: orange;
+    box-shadow: 0 0 9px rgba(0, 0, 0, 0.5);
+    outline: none;
+}
+
+.confirm-email-prepare-password-submit {
+    border: none;
+    border-radius: 8px;
+    color: white;
+    background-color: orange;
+    padding: 12px;
+    font-size: 16px;
+    width: 25%;
+    transition: background-color 0.3s;
+}
+
+.confirm-email-prepare-password-submit:hover {
+    background-color: darkorange;
+    border: none;
+    color: white;
+}
+
+.confirm-email-prepare-password-captcha {
+    display: flex;
+    width: 100%;
+    text-align: left;
+}
+
+@media (max-width: 1200px) {
+    .confirm-email-prepare-password-page-container {
+        margin: 0 15%;
+    }
+}
+
+@media (max-width: 992px) {
+    .confirm-email-prepare-password-page-container {
+        margin: 0 13%;
+    }
+    .confirm-email-prepare-password-submit {
+        width: 35%;
+    }
+}
+
+@media (max-width: 768px) {
+    .confirm-email-prepare-password-page-container {
+        margin: 0 10%;
+    }
+    .confirm-email-prepare-password-submit {
+        width: 40%;
+    }
+}
+
+@media (max-width: 600px) {
+    .confirm-email-prepare-password-page-container {
+        margin: 0 8%;
+    }
+    .confirm-email-prepare-password-submit{
+        width:40%;
+    }
+}
+
+@media (max-width: 520px) {
+    .confirm-email-prepare-password-page-container {
+        margin: 0 5%;
+    }
+    .confirm-email-prepare-password-submit {
+        width: 40%;
+    }
+}
