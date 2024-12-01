@@ -2,19 +2,23 @@
     ViewData["Title"] = "Назначить роль";
 }
 @model List<Web.MVC.DTOs.Moderator.CheckBoxUserRoleDto>
+<link rel="stylesheet" href="~/css/admin/ChangeUserRoles.css"/>
 
-<h3>Назначить роли</h3>
-<form method="post">
-    <div>
-        @for (var index = 0; index < Model.Count; index++)
-        {
-            <input type="checkbox" asp-for="@Model[index].IsChecked" />
-            <label asp-for="@Model[index].IsChecked">
-                @Model[index].RoleName
-            </label>
-            <input type="hidden" asp-for="@Model[index].RoleName" />
-            <br/>
-        }
-    </div>
-    <input type="submit" value="подтвердить"/>
-</form>
+<div class="change-user-roles-page-container">
+    <h3 class="mb-2">Назначить роли</h3>
+    <form method="post">
+        <div class="mb-2">
+            @for (var index = 0; index < Model.Count; index++)
+            {
+                <div class="checkbox-container mb-1">
+                    <input type="checkbox" asp-for="@Model[index].IsChecked" class="checkbox" />
+                    <label asp-for="@Model[index].IsChecked" class="checkbox-label">
+                        @Model[index].RoleName
+                    </label>
+                    <input type="hidden" asp-for="@Model[index].RoleName" />
+                </div>
+            }
+        </div>
+        <input class="submit-roles-changing" type="submit" value="Подтвердить" />
+    </form>
+</div>
