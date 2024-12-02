@@ -2,8 +2,10 @@
     ViewData["Title"] = "Спасибо";
 }
 @model string
+<link rel="stylesheet" href="~/css/Link.css" />
 
-<div class="text-center">
-    <h3>Спасибо за оставленную жалобу, она будет рассмотрена в ближайшее время</h3>
-    <br/><a asp-action="Index" asp-controller="Home">на главную</a>
+<h3>Спасибо за оставленную жалобу, она будет рассмотрена в ближайшее время</h3>
+
+<div class="links-container">
+    <a class="link" asp-action="Index" asp-controller="Home">На главную</a>
 </div>

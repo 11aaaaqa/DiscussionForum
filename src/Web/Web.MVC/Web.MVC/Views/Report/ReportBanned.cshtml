@@ -1,7 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Вы не можете пожаловаться";
 }
-<div class="text-center">
-    <h3>Вы не можете отправить жалобу, так как Вы были отстранены, причину отстранения можно посмотреть в профиле</h3>
-    <a asp-action="Index" asp-controller="Home">на главную</a>
+<link rel="stylesheet" href="~/css/Link.css" />
+
+<h3>Вы не можете отправить жалобу, так как Вы были отстранены, причину отстранения можно посмотреть в профиле</h3>
+
+<div class="links-container">
+    <a class="link" asp-action="Index" asp-controller="Home">На главную</a>
 </div>
