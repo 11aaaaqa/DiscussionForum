@@ -2,9 +2,11 @@
     ViewData["Title"] = "Рейтинг уже уменьшен";
 }
 @model string
+<link rel="stylesheet" href="~/css/Link.css" />
 
-<div class="text-center">
-    <h3>Вы уже уменьшили рейтинг этого обсуждения</h3>
-    <a href="@Model">к обсуждению</a>
-    <a asp-controller="Home" asp-action="Index">на главную</a>
+<h3>Вы уже уменьшили рейтинг этого обсуждения</h3>
+
+<div class="links-container">
+    <a class="link" asp-controller="Home" asp-action="Index">На главную</a>
+    <a class="link" href="@Model">К обсуждению</a>
 </div>
