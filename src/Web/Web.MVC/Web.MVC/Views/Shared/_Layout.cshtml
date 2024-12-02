@@ -19,6 +19,52 @@
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <div class="first-profile-btns">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    string returnUrl;
+                    if (Context.Request.QueryString.HasValue)
+                    {
+                        returnUrl = Context.Request.Path + Context.Request.QueryString;
+                    }
+                    else
+                    {
+                        returnUrl = Context.Request.Path;
+                    }
+
+                    <div class="dropdown-profile">
+                        <button id="dropdownProfileButton" class="open-profile-dropdown-btn">@User.Identity.Name &#x25BC;</button>
+                        <div id="dropdownProfileList" class="dropdown-profile-list">
+                            <a class="dropdown-refs" asp-controller="User" asp-action="GetUser" asp-route-userName="@User.Identity.Name">мой профиль</a>
+                            @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
+                            {
+                                <a class="dropdown-refs" asp-controller="Moderator" asp-action="GetAdminPanel">админ панель</a>
+                            }
+                            <form method="post" asp-controller="Auth" asp-action="Logout" asp-route-returnUrl="@returnUrl">
+                                <input class="logout" type="submit" value="выйти" />
+                            </form>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    string returnUrl;
+                    if (Context.Request.QueryString.HasValue)
+                    {
+                        returnUrl = Context.Request.Path + Context.Request.QueryString;
+                    }
+                    else
+                    {
+                        returnUrl = Context.Request.Path;
+                    }
+
+                    <ul class="first-profile-btns">
+                        <li class="first-profile-btns">
+                            <a class="first-profile-btns" asp-controller="Auth" asp-action="Login" asp-route-returnUrl="@returnUrl">Войти</a>
+                        </li>
+                    </ul>
+                }
+            </div>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
@@ -35,7 +81,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="profile-btns">
+            <div class="second-profile-btns">
                 @if (User.Identity.IsAuthenticated)
                 {
                     string returnUrl;
@@ -47,23 +93,20 @@
                     {
                         returnUrl = Context.Request.Path;
                     }
-                    <ul class="navbar-nav flex-grow-1 profile-btns">
-                        <li class="nav-item profile-btns">
-                            <div class="dropdown-profile">
-                                <button id="dropdownProfileButton" class="open-profile-dropdown-btn">@User.Identity.Name &#x25BC;</button>
-                                <div id="dropdownProfileList" class="dropdown-profile-list">
-                                    <a class="dropdown-refs" asp-controller="User" asp-action="GetUser" asp-route-userName="@User.Identity.Name">мой профиль</a>
-                                    @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
-                                    {
-                                        <a class="dropdown-refs" asp-controller="Moderator" asp-action="GetAdminPanel">админ панель</a>
-                                    }
-                                    <form method="post" asp-controller="Auth" asp-action="Logout" asp-route-returnUrl="@returnUrl">
-                                        <input class="logout" type="submit" value="выйти"/>
-                                    </form>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+
+                    <div class="dropdown-profile">
+                        <button id="secondDropdownProfileButton" class="open-profile-dropdown-btn">@User.Identity.Name &#x25BC;</button>
+                        <div id="secondDropdownProfileList" class="dropdown-profile-list">
+                            <a class="dropdown-refs" asp-controller="User" asp-action="GetUser" asp-route-userName="@User.Identity.Name">мой профиль</a>
+                            @if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
+                            {
+                                <a class="dropdown-refs" asp-controller="Moderator" asp-action="GetAdminPanel">админ панель</a>
+                            }
+                            <form method="post" asp-controller="Auth" asp-action="Logout" asp-route-returnUrl="@returnUrl">
+                                <input class="logout" type="submit" value="выйти"/>
+                            </form>
+                        </div>
+                    </div>
                 }
                 else
                 {
@@ -76,12 +119,13 @@
                     {
                         returnUrl = Context.Request.Path;
                     }
-                    <ul class="navbar-nav flex-grow-1 profile-btns">
-                        <li class="nav-item profile-btns">
-                            <a class="profile-btns" asp-controller="Auth" asp-action="Login" asp-route-returnUrl="@returnUrl">Войти</a>
+
+                    <ul class="navbar-nav flex-grow-1 second-profile-btns">
+                        <li class="nav-item second-profile-btns">
+                            <a class="second-profile-btns" asp-controller="Auth" asp-action="Login" asp-route-returnUrl="@returnUrl">Войти</a>
                         </li>
-                        <li class="nav-item profile-btns">
-                                <a class="hide-if-navbar-toggler" asp-controller="Auth" asp-action="Register">Зарегистрироваться</a>
+                        <li class="nav-item second-profile-btns">
+                            <a class="hide-if-navbar-toggler" asp-controller="Auth" asp-action="Register">Зарегистрироваться</a>
                         </li>
                     </ul>
                 }
