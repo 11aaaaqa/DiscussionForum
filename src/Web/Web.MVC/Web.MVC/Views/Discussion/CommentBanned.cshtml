@@ -2,9 +2,11 @@
     ViewData["Title"] = "Вы не можете оставить комментарий";
 }
 @model Guid
+<link rel="stylesheet" href="~/css/Link.css"/>
 
-<div class="text-center">
-    <h3>Вы не можете прокомментировать, так как Вы были отстранены, причину отстранения можно посмотреть в профиле</h3>
-    <a asp-action="GetDiscussion" asp-controller="Discussion" asp-route-id="@Model" asp-route-pageNumber="1" asp-route-pageSize="20">к обсуждению</a>
-    <br/><a asp-action="Index" asp-controller="Home">на главную</a>
+<h3>Вы не можете прокомментировать, так как Вы были отстранены, причину отстранения можно посмотреть в профиле</h3>
+
+<div class="links-container">
+    <a class="link" asp-action="Index" asp-controller="Home">На главную</a>
+    <a class="link" asp-action="GetDiscussion" asp-controller="Discussion" asp-route-id="@Model" asp-route-pageNumber="1" asp-route-pageSize="20">К обсуждению</a>
 </div>
