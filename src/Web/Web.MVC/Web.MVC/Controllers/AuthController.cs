@@ -165,7 +165,7 @@ namespace Web.MVC.Controllers
 
                     AuthenticateUser(content!.Token);
 
-                    if (!string.IsNullOrEmpty(returnUrl) && !returnUrl.Contains("auth/register"))
+                    if (!string.IsNullOrEmpty(returnUrl) && !returnUrl.Contains("auth/register") && !returnUrl.ToLower().Contains("auth/login"))
                     {
                         return LocalRedirect(returnUrl);
                     }
