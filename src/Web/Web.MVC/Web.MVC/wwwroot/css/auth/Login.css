@@ -2,6 +2,23 @@
     background-color: #f0f0f0;
 }
 
+.password-container {
+    position: relative;
+}
+
+.eye-icon {
+    position: absolute;
+    top: 50%;
+    right: 8%;
+    transform: translateY(-43%);
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    color: black;
+}
+
 h2 {
     margin-bottom: 20px;
     color: #333;
