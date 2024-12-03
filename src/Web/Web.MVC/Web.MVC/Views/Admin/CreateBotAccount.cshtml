@@ -4,6 +4,7 @@
 @model Web.MVC.DTOs.Admin.CreateBotDto
 <link rel="stylesheet" href="~/css/ErrorMessageSpanValidation.css"/>
 <link rel="stylesheet" href="~/css/admin/CreateBotAccount.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <div class="create-bot-container">
     <h3 class="mb-3">Создать бота</h3>
@@ -19,12 +20,20 @@
         <div>
             <input class="create-bot-input-text" asp-for="UserName" placeholder="Имя пользователя" />
         </div>
-        <div>
-            <input class="create-bot-input-text" asp-for="Password" placeholder="Пароль" />
+        <div class="password-container">
+            <input class="create-bot-input-text" id="password" asp-for="Password" placeholder="Пароль" />
+            <button type="button" class="eye-icon" onclick="togglePassword('password')">
+                <i class="fas fa-eye" id="eye-icon-password"></i>
+            </button>
         </div>
-        <div>
-            <input class="create-bot-input-text" asp-for="PasswordConfirm" placeholder="Подтвердите пароль" />
+        <div class="password-container">
+            <input class="create-bot-input-text" id="confirm-password" asp-for="PasswordConfirm" placeholder="Подтвердите пароль" />
+            <button type="button" class="eye-icon" onclick="togglePassword('confirm-password')">
+                <i class="fas fa-eye" id="eye-icon-confirm-password"></i>
+            </button>
         </div>
         <input class="create-bot-submit" type="submit" value="Создать" />
     </form>
 </div>
+
+<script src="~/js/ShowHidePassword.js"></script>
