@@ -2,6 +2,23 @@
     margin: 0 30%;
 }
 
+.password-container {
+    position: relative;
+}
+
+.eye-icon {
+    position: absolute;
+    top: 50%;
+    right: 11%;
+    transform: translateY(-60%);
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    color: black;
+}
+
 .create-bot-input-text {
     width: 90%;
     border: 2px solid black;
