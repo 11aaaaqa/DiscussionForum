@@ -3,6 +3,7 @@
 }
 @model Web.MVC.DTOs.Auth.RegisterDto
 <link rel="stylesheet" href="~/css/auth/Register.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <div class="register-page-container">
     <h2>Зарегистрироваться</h2>
@@ -18,11 +19,17 @@
         <div>
             <input class="register-input" asp-for="UserName" placeholder="Имя пользователя" />
         </div>
-        <div>
-            <input class="register-input" asp-for="Password" placeholder="Пароль" />
+        <div class="password-container">
+            <input class="register-input" id="password" asp-for="Password" placeholder="Пароль" />
+            <button type="button" class="eye-icon" onclick="togglePassword('password')">
+                <i class="fas fa-eye" id="eye-icon-password"></i>
+            </button>
         </div>
-        <div>
-            <input class="register-input mb-3" asp-for="PasswordConfirm" placeholder="Подтвердить пароль" />
+        <div class="password-container">
+            <input class="register-input mb-3" id="confirm-password" asp-for="PasswordConfirm" placeholder="Подтвердить пароль" />
+            <button type="button" class="eye-icon" onclick="togglePassword('confirm-password')">
+                <i class="fas fa-eye" id="eye-icon-confirm-password"></i>
+            </button>
         </div>
         <div class="register-captcha">
             <dnt-captcha asp-captcha-generator-max="99999"
@@ -46,3 +53,5 @@
         <input class="register-submit" type="submit" value="Зарегистрироваться" />
     </form>
 </div>
+
+<script src="~/js/ShowHidePassword.js"></script>
