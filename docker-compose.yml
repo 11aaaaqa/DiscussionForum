@@ -7,11 +7,11 @@ services:
          context: .
          dockerfile: src/Web/Web.MVC/Web.MVC/Dockerfile
        ports:
-         - "1212:8080"
-         - "1213:8081"
+         - "1212:80"
+         - "1213:443"
        environment:
         - ASPNETCORE_ENVIRONMENT=Development
-        - ASPNETCORE_URLS=https://+:8081;http://+:8080
+        - ASPNETCORE_URLS=https://+:443;http://+:80
         - ASPNETCORE_HTTPS_PORT=1213
        depends_on:
          - register-microservice-api
@@ -317,6 +317,17 @@ services:
         - POSTGRES_PASSWORD=postgres
       volumes:
         - postgres-grafana-data:/var/lib/postgresql/data
+
+    nginx: 
+      image: nginx:latest
+      container_name: nginx
+      volumes:
+        - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+        - ./nginx/cert.crt:/etc/nginx/cert.crt
+        - ./nginx/cert.rsa:/etc/nginx/cert.rsa
+      ports:
+        - 7315:80
+        - 7316:443
 
 volumes:
   postgres-bookmark-data: {}
