@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Web;
 using DNTCaptcha.Core;
+using Microsoft.AspNetCore.HttpOverrides;
 using Web.MVC.Middlewares;
 using Web.MVC.Services;
 using Prometheus;
@@ -54,6 +55,11 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 app.UseMetricServer();
 app.UseHttpMetrics();
