@@ -16,6 +16,9 @@ services:
        depends_on:
          - register-microservice-api
          - gateway-api
+         - nginx
+         - grafana
+         - prometheus
        volumes:
          - ${APPDATA}/Microsoft/UserSecrets/:/root/.microsoft/usersecrets
          - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https/
