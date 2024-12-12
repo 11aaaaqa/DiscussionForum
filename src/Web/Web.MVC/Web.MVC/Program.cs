@@ -95,7 +95,12 @@ app.UseStatusCodePages(context =>
     {
         response.Redirect("/info/forbidden");
     }
-    
+
+    if (response.StatusCode == (int)HttpStatusCode.NotFound)
+    {
+        response.Redirect("/not-found");
+    }
+
     return Task.CompletedTask;
 });
 app.UseAuthorization();
