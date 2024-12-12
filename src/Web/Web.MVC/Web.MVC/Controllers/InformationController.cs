@@ -9,5 +9,11 @@ namespace Web.MVC.Controllers
         {
             return View();
         }
+
+        [Route("not-found")]
+        public IActionResult RouteIsNotFound()
+        {
+            return View();
+        }
     }
 }
