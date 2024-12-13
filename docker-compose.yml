@@ -19,6 +19,7 @@ services:
          - nginx
          - grafana
          - prometheus
+         - rabbitmq
        volumes:
          - ${APPDATA}/Microsoft/UserSecrets/:/root/.microsoft/usersecrets
          - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https/
