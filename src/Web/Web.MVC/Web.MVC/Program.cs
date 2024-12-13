@@ -49,11 +49,20 @@ builder.Services.AddTransient<ICheckUserService, CheckUserService>();
 builder.Services.AddHttpClient();
 builder.Services.AddCors();
 
+builder.Services.AddHttpsRedirection(options =>
+{
+    options.HttpsPort = 7316;
+});
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/error");
+}
+else
+{
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
