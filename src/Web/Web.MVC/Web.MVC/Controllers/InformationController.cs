@@ -15,5 +15,11 @@ namespace Web.MVC.Controllers
         {
             return View();
         }
+
+        [Route("error")]
+        public IActionResult ActionError()
+        {
+            return View();
+        }
     }
 }
