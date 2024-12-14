@@ -21,5 +21,11 @@ namespace Web.MVC.Controllers
         {
             return View();
         }
+
+        [Route("privacy")]
+        public IActionResult Privacy()
+        {
+            return View();
+        }
     }
 }
