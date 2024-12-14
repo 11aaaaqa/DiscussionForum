@@ -152,6 +152,16 @@ header.header {
     color: orange;
 }
 
+.privacy-link {
+    text-decoration: none;
+    border: none;
+    color: #6c757d;
+}
+
+.privacy-link:hover {
+    color: darkgray;
+}
+
 @media (max-width: 575.98px) {
     .hide-if-navbar-toggler {
         display: none;
