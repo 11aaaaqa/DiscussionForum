@@ -159,7 +159,7 @@ header.header {
 }
 
 .privacy-link:hover {
-    color: darkgray;
+    color: #6c757d;
 }
 
 @media (max-width: 575.98px) {
