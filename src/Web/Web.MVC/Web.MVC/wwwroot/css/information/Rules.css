@@ -15,7 +15,7 @@
     margin-bottom: 0;
 }
 
-.terms-of-use-page-container {
+.rules-page-container {
     margin: 0 15%;
 }
 
@@ -28,7 +28,7 @@
         margin: 0 0 1% 0;
     }
 
-    .terms-of-use-page-container {
+    .rules-page-container {
         margin: 0 12%;
     }
 }
@@ -42,7 +42,7 @@
         margin: 0 0 2% 0;
     }
 
-    .terms-of-use-page-container {
+    .rules-page-container {
         margin: 0 8%;
     }
 }
@@ -56,7 +56,7 @@
         margin: 0 0 3% 0;
     }
 
-    .terms-of-use-page-container {
+    .rules-page-container {
         margin: 0 5%;
     }
 }
@@ -70,7 +70,7 @@
         margin: 0 0 3% 0;
     }
 
-    .terms-of-use-page-container {
+    .rules-page-container {
         margin: 0 3%;
     }
 }
@@ -84,7 +84,7 @@
         margin: 0 0 3% 0;
     }
 
-    .terms-of-use-page-container {
+    .rules-page-container {
         margin: 0 1%;
     }
 }
