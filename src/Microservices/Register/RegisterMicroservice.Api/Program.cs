@@ -15,17 +15,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(
     builder.Configuration["Database:ConnectionString"]));
 
 builder.Services.AddIdentity<User, IdentityRole>(x =>
-    {
-        x.Password.RequireLowercase = false;
-        x.Password.RequireUppercase = false;
-        x.Password.RequireDigit = false;
-        x.Password.RequireNonAlphanumeric = false;
-        x.Password.RequiredLength = 8;
+{
+    x.Password.RequireLowercase = false;
+    x.Password.RequireUppercase = false;
+    x.Password.RequireDigit = false;
+    x.Password.RequireNonAlphanumeric = false;
+    x.Password.RequiredLength = 8;
 
-        x.User.RequireUniqueEmail = true;
+    x.User.RequireUniqueEmail = true;
 
-        x.SignIn.RequireConfirmedEmail = true;
-    })
+    x.SignIn.RequireConfirmedEmail = true;
+})
     .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 builder.Services.AddHangfire(x =>
 {

@@ -262,7 +262,7 @@ namespace UserMicroservice.UnitTests
             userMock.Setup(x => x.GetUserByIdAsync(userId))
                 .ReturnsAsync(new User { Id = userId, UserName = It.IsAny<string>() });
             changeUserNameMock.Setup(x => x.ChangeUserNameAsync(userId, newUserName)).ReturnsAsync(true);
-            var controller = new UserController(userMock.Object, new Mock<IBanService<User>>().Object, changeUserNameMock.Object, 
+            var controller = new UserController(userMock.Object, new Mock<IBanService<User>>().Object, changeUserNameMock.Object,
                 new Mock<IPublishEndpoint>().Object, new Mock<ICheckForNormalized>().Object);
 
             var result = await controller.ChangeUserNameAsync(model);

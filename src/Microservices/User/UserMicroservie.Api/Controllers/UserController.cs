@@ -50,7 +50,7 @@ namespace UserMicroservice.Api.Controllers
 
         [Route("IsUserBannedByUserName/{userName}")]
         [HttpGet]
-        public async Task<IActionResult> IsUserBannedAsync(string userName, [FromQuery(Name = "banTypes[]")]params string[] banTypes) =>
+        public async Task<IActionResult> IsUserBannedAsync(string userName, [FromQuery(Name = "banTypes[]")] params string[] banTypes) =>
             Ok(await banService.IsUserBannedAsync(userName, banTypes));
 
         [Route("IsUserBannedByUserId/{userId}")]
@@ -103,7 +103,8 @@ namespace UserMicroservice.Api.Controllers
             {
                 await publishEndpoint.Publish<IUserNameChanged>(new
                 {
-                    OldUserName = oldUserName, model.NewUserName
+                    OldUserName = oldUserName,
+                    model.NewUserName
                 });
                 return Ok();
             }
@@ -115,14 +116,18 @@ namespace UserMicroservice.Api.Controllers
         public async Task<IActionResult> UserBanInfoByUserNameAsync(string userName)
         {
             var isBanned = await banService.IsUserBannedAsync(userName);
-            if (!isBanned) return Ok(new UserBanInfoModel{BannedUntil = new DateTime(), IsBanned = false, UserName = userName});
+            if (!isBanned) return Ok(new UserBanInfoModel { BannedUntil = new DateTime(), IsBanned = false, UserName = userName });
 
             var user = await userService.GetUserByUserName(userName);
             if (user is null) return BadRequest();
 
             return Ok(new UserBanInfoModel
             {
-                BanReason = user.BannedFor, UserName = userName, BanType = user.BanType, BannedUntil = user.BannedUntil, IsBanned = true
+                BanReason = user.BannedFor,
+                UserName = userName,
+                BanType = user.BanType,
+                BannedUntil = user.BannedUntil,
+                IsBanned = true
             });
         }
 
