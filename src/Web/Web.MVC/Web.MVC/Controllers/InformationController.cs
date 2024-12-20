@@ -22,18 +22,6 @@ namespace Web.MVC.Controllers
             return View();
         }
 
-        [Route("privacy")]
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [Route("terms-of-use")]
-        public IActionResult TermsOfUse()
-        {
-            return View();
-        }
-
         [Route("rules")]
         public IActionResult Rules()
         {
