@@ -198,7 +198,7 @@ namespace Web.MVC.Controllers
             return View("SomethingWentWrong", id);
         }
 
-        [Authorize]
+        [Authorize(Roles = UserRoleConstants.AdminRole + ", " + UserRoleConstants.ModeratorRole)]
         [HttpPost]
         public async Task<IActionResult> DeleteDiscussion(Guid discussionId, string? returnUrl, string? reportType)
         {
@@ -386,6 +386,21 @@ namespace Web.MVC.Controllers
                 PreviousPageNumber = pageNumber - 1,
                 Discussions = discussions
             });
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> DeleteDiscussionById(Guid discussionId, string userNameCreatedBy)
+        {
+            if (User.Identity.Name != userNameCreatedBy && !User.IsInRole(UserRoleConstants.AdminRole) && !User.IsInRole(UserRoleConstants.ModeratorRole))
+            {
+                return RedirectToAction("AccessIsForbidden", "Information");
+            }
+            using HttpClient httpClient = httpClientFactory.CreateClient();
+            var response = await httpClient.DeleteAsync($"{url}/api/Discussion/DeleteDiscussionById/{discussionId}");
+            if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
