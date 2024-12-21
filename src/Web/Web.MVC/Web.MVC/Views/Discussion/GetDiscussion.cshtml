@@ -3,6 +3,7 @@
 }
 <link rel="stylesheet" href="~/css/discussion/Discussion.css"/>
 <link rel="stylesheet" href="~/css/NextPreviousPaginationBtns.css"/>
+@using Web.MVC.Constants
 @model Web.MVC.DTOs.Comment.SuggestCommentDto
 
 <div class="discussion-page-container">
@@ -57,10 +58,24 @@
                     returnUrl = Context.Request.Path;
                 }
 
+                if (User.IsInRole(UserRoleConstants.AdminRole) || User.IsInRole(UserRoleConstants.ModeratorRole))
+                {
+                    <form method="post" asp-controller="Discussion" asp-action="DeleteDiscussionById" asp-route-discussionId="@ViewBag.DiscussionId"
+                          asp-route-userNameCreatedBy="@ViewBag.CreatedBy">
+                        <input class="add-bookmark m-1" type="submit" value="Удалить" />
+                    </form>
+                } 
                 <a asp-action="AddReport" asp-controller="Report" asp-route-reportedUserName="@ViewBag.CreatedBy" asp-route-reportedDiscussionId="@ViewBag.DiscussionId">Пожаловаться</a>
                 <form method="post" asp-controller="Bookmark" asp-action="AddBookmark" asp-route-returnUrl="@returnUrl" asp-route-discussionId="@ViewBag.DiscussionId"
                       asp-route-discussionTitle="@ViewBag.Title">
                     <input class="add-bookmark" type="submit" value="Добавить в закладки" />
+                </form>
+            }
+            else
+            {
+                <form method="post" asp-controller="Discussion" asp-action="DeleteDiscussionById" asp-route-discussionId="@ViewBag.DiscussionId"
+                      asp-route-userNameCreatedBy="@ViewBag.CreatedBy">
+                    <input class="add-bookmark" type="submit" value="Удалить" />
                 </form>
             }
         </div>
