@@ -113,6 +113,18 @@ namespace Web.MVC.Controllers
             ViewBag.Content = discussion.Content; ViewBag.CreatedAt = discussion.CreatedAt; ViewBag.CreatedBy = discussion.CreatedBy;
             ViewBag.Rating = discussion.Rating; ViewBag.Title = discussion.Title; ViewBag.DiscussionId = id;
 
+            ViewBag.IsInBookmarks = false;
+            if (User.Identity.IsAuthenticated)
+            {
+                var isDiscussionInBookmarksResponse = await httpClient.GetAsync(
+                    $"{url}/api/Bookmark/IsInBookmarks?userName={User.Identity.Name}&discussionId={id}");
+                if (!isDiscussionInBookmarksResponse.IsSuccessStatusCode) return View("ActionError");
+
+                var isInBookmark = await isDiscussionInBookmarksResponse.Content.ReadFromJsonAsync<IsInBookmark>();
+                ViewBag.IsInBookmarks = isInBookmark.IsInBookmarks;
+                ViewBag.BookmarkId = isInBookmark.BookmarkId;
+            }
+
             var getCommentsResponse = await httpClient.GetAsync(
                 $"{url}/api/Comment/GetCommentsByDiscussionId/{id}?pageNumber={pageNumber}&pageSize={pageSize}");
             if (!getCommentsResponse.IsSuccessStatusCode) return View("ActionError");
