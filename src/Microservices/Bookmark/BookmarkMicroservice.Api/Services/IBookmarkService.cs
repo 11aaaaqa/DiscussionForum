@@ -1,4 +1,5 @@
-﻿using BookmarkMicroservice.Api.Models;
+﻿using BookmarkMicroservice.Api.DTOs;
+using BookmarkMicroservice.Api.Models;
 
 namespace BookmarkMicroservice.Api.Services
 {
@@ -10,5 +11,6 @@ namespace BookmarkMicroservice.Api.Services
         Task<List<Bookmark>> FindBookmarksByAntiquity(string userName, string searchingString, BookmarkParameters bookmarkParameters);
         Task<Bookmark> AddBookmark(Bookmark bookmark);
         Task DeleteBookmark(Guid bookmarkId);
+        Task<IsInBookmarksDto> IsInBookmarks(Guid discussionId, string userName);
     }
 }

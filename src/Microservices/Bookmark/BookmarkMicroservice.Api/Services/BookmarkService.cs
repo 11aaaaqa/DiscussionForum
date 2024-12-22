@@ -1,4 +1,5 @@
 ﻿using BookmarkMicroservice.Api.Database;
+using BookmarkMicroservice.Api.DTOs;
 using BookmarkMicroservice.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -61,6 +62,14 @@ namespace BookmarkMicroservice.Api.Services
         {
             context.Bookmarks.Remove(new Bookmark { Id = bookmarkId });
             await context.SaveChangesAsync();
+        }
+
+        public async Task<IsInBookmarksDto> IsInBookmarks(Guid discussionId, string userName)
+        {
+            var bookmark = await context.Bookmarks.Where(x => x.UserName == userName)
+                .SingleOrDefaultAsync(x => x.DiscussionId == discussionId);
+            if(bookmark == null) return new IsInBookmarksDto{BookmarkId = null, IsInBookmarks = false};
+            return new IsInBookmarksDto { BookmarkId = bookmark.Id, IsInBookmarks = true };
         }
     }
 }
