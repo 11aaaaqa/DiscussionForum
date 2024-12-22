@@ -4,6 +4,7 @@ using BookmarkMicroservice.Api.Models;
 using BookmarkMicroservice.Api.Services;
 using BookmarkMicroservice.Api.Services.Pagination;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Moq;
 
 namespace BookmarkMicroservice.UnitTests
@@ -194,6 +195,40 @@ namespace BookmarkMicroservice.UnitTests
             var result = await controller.DeleteBookmarkAsync(id);
 
             Assert.IsType<OkResult>(result);
+            mock.VerifyAll();
+        }
+
+        [Fact]
+        public async Task IsInBookmarksAsync_ReturnsFalse()
+        {
+            string userName = "testUserName";
+            var discussionId = Guid.NewGuid();
+            var isInBookmarks = new IsInBookmarksDto { BookmarkId = null, IsInBookmarks = false };
+            var mock = new Mock<IBookmarkService>();
+            mock.Setup(x => x.IsInBookmarks(discussionId, userName)).ReturnsAsync(isInBookmarks);
+            var controller = new BookmarkController(mock.Object, new Mock<IPaginationService>().Object);
+
+            var result = await controller.IsInBookmarksAsync(discussionId, userName);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(isInBookmarks, methodResult.Value);
+            mock.VerifyAll();
+        }
+
+        [Fact]
+        public async Task IsInBookmarksAsync_ReturnsTrue()
+        {
+            string userName = "testUserName";
+            var discussionId = Guid.NewGuid();
+            var isInBookmarks = new IsInBookmarksDto { BookmarkId = Guid.NewGuid(), IsInBookmarks = true };
+            var mock = new Mock<IBookmarkService>();
+            mock.Setup(x => x.IsInBookmarks(discussionId, userName)).ReturnsAsync(isInBookmarks);
+            var controller = new BookmarkController(mock.Object, new Mock<IPaginationService>().Object);
+
+            var result = await controller.IsInBookmarksAsync(discussionId, userName);
+
+            var methodResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(isInBookmarks, methodResult.Value);
             mock.VerifyAll();
         }
     }
