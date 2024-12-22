@@ -98,5 +98,13 @@ namespace BookmarkMicroservice.Api.Controllers
             await bookmarkService.DeleteBookmark(bookmarkId);
             return Ok();
         }
+
+        [Route("IsInBookmarks")]
+        [HttpGet]
+        public async Task<IActionResult> IsInBookmarksAsync([FromQuery] Guid discussionId, [FromQuery] string userName)
+        {
+            var isInBookmarks = await bookmarkService.IsInBookmarks(discussionId, userName);
+            return Ok(isInBookmarks);
+        }
     }
 }
