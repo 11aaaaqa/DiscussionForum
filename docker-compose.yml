@@ -333,22 +333,22 @@ services:
         - '3000:3000'
       environment:
         - GF_DATABASE_TYPE=postgres
-        - GF_DATABASE_HOST=postgres-grafana:5432
+        - GF_DATABASE_HOST=176.124.212.94
         - GF_DATABASE_NAME=DicussionForumGrafana
-        - GF_DATABASE_USER=postgres
-        - GF_DATABASE_PASSWORD=postgres
+        - GF_DATABASE_USER=gen_user
+        - GF_DATABASE_PASSWORD=GQvo37QnTm61n
       volumes:
         - grafana-data:/var/lib/grafana
 
-    postgres-grafana:
-      image: postgres:latest
-      container_name: postgres-grafana
-      environment:
-        - POSTGRES_DB=DicussionForumGrafana
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=postgres
-      volumes:
-        - postgres-grafana-data:/var/lib/postgresql/data
+    # postgres-grafana:
+    #   image: postgres:latest
+    #   container_name: postgres-grafana
+    #   environment:
+    #     - POSTGRES_DB=DicussionForumGrafana
+    #     - POSTGRES_USER=gen_user
+    #     - POSTGRES_PASSWORD=GQvo37QnTm61n
+    #   volumes:
+    #     - postgres-grafana-data:/var/lib/postgresql/data
 
     nginx: 
       image: nginx:latest
