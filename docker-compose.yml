@@ -6,20 +6,20 @@ services:
          dockerfile: src/Web/Web.MVC/Web.MVC/Dockerfile
        labels:
          - traefik.enable=true
-         - traefik.http.routers.nginx-http.rule=Host(`forumium.site`)
-         - traefik.http.routers.nginx-http.entrypoints=web
-         - traefik.http.routers.nginx-https.tls=true
-         - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
-         - traefik.http.routers.nginx-https.entrypoints=websecure
-         - traefik.http.routers.nginx-https.rule=Host(`forumium.site`)
+         - traefik.http.routers.web-mvc-http.rule=Host(`forumium.site`)
+         - traefik.http.routers.web-mvc-http.entrypoints=web
+         - traefik.http.routers.web-mvc-https.tls=true
+         - traefik.http.routers.web-mvc-https.tls.certresolver=cloudflare
+         - traefik.http.routers.web-mvc-https.entrypoints=websecure
+         - traefik.http.routers.web-mvc-https.rule=Host(`forumium.site`)
        environment:
          - ASPNETCORE_ENVIRONMENT=Production
        depends_on:
          - register-microservice-api
          - gateway-api
-         - nginx
-         - grafana
-         - prometheus
+         # - nginx
+         # - grafana
+         # - prometheus
     
     gateway-api:
       image: ${DOCKER_REGISTRY-}gateway-api
@@ -28,12 +28,12 @@ services:
         dockerfile: src/Gateway/Gateway.Api/Dockerfile
       labels:
         - traefik.enable=true
-        - traefik.http.routers.nginx-http.rule=Host(`gateway.forumium.site`)
-        - traefik.http.routers.nginx-http.entrypoints=web
-        - traefik.http.routers.nginx-https.tls=true
-        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
-        - traefik.http.routers.nginx-https.entrypoints=websecure
-        - traefik.http.routers.nginx-https.rule=Host(`gateway.forumium.site`)
+        - traefik.http.routers.gateway-api-http.rule=Host(`gateway.forumium.site`)
+        - traefik.http.routers.gateway-api-http.entrypoints=web
+        - traefik.http.routers.gateway-api-https.tls=true
+        - traefik.http.routers.gateway-api-https.tls.certresolver=cloudflare
+        - traefik.http.routers.gateway-api-https.entrypoints=websecure
+        - traefik.http.routers.gateway-api-https.rule=Host(`gateway.forumium.site`)
       environment:
         - ASPNETCORE_ENVIRONMENT=Production
 
@@ -44,12 +44,12 @@ services:
         dockerfile: src/Microservices/Register/RegisterMicroservice.Api/Dockerfile
       labels:
         - traefik.enable=true
-        - traefik.http.routers.nginx-http.rule=Host(`register.forumium.site`)
-        - traefik.http.routers.nginx-http.entrypoints=web
-        - traefik.http.routers.nginx-https.tls=true
-        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
-        - traefik.http.routers.nginx-https.entrypoints=websecure
-        - traefik.http.routers.nginx-https.rule=Host(`register.forumium.site`)
+        - traefik.http.routers.register-microservice-api-http.rule=Host(`register.forumium.site`)
+        - traefik.http.routers.register-microservice-api-http.entrypoints=web
+        - traefik.http.routers.register-microservice-api-https.tls=true
+        - traefik.http.routers.register-microservice-api-https.tls.certresolver=cloudflare
+        - traefik.http.routers.register-microservice-api-https.entrypoints=websecure
+        - traefik.http.routers.register-microservice-api-https.rule=Host(`register.forumium.site`)
       environment:
         - ASPNETCORE_ENVIRONMENT=Production
       depends_on:
@@ -64,12 +64,12 @@ services:
         dockerfile: src/Microservices/User/UserMicroservie.Api/Dockerfile
       labels:
         - traefik.enable=true
-        - traefik.http.routers.nginx-http.rule=Host(`user.forumium.site`)
-        - traefik.http.routers.nginx-http.entrypoints=web
-        - traefik.http.routers.nginx-https.tls=true
-        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
-        - traefik.http.routers.nginx-https.entrypoints=websecure
-        - traefik.http.routers.nginx-https.rule=Host(`user.forumium.site`)
+        - traefik.http.routers.user-microservice-api-http.rule=Host(`user.forumium.site`)
+        - traefik.http.routers.user-microservice-api-http.entrypoints=web
+        - traefik.http.routers.user-microservice-api-https.tls=true
+        - traefik.http.routers.user-microservice-api-https.tls.certresolver=cloudflare
+        - traefik.http.routers.user-microservice-api-https.entrypoints=websecure
+        - traefik.http.routers.user-microservice-api-https.rule=Host(`user.forumium.site`)
       environment:
         - ASPNETCORE_ENVIRONMENT=Production
       depends_on:
@@ -84,12 +84,12 @@ services:
         dockerfile: src/Microservices/Topic/TopicMicroservice.Api/Dockerfile
       labels:
         - traefik.enable=true
-        - traefik.http.routers.nginx-http.rule=Host(`topic.forumium.site`)
-        - traefik.http.routers.nginx-http.entrypoints=web
-        - traefik.http.routers.nginx-https.tls=true
-        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
-        - traefik.http.routers.nginx-https.entrypoints=websecure
-        - traefik.http.routers.nginx-https.rule=Host(`topic.forumium.site`)
+        - traefik.http.routers.topic-microservice-api-http.rule=Host(`topic.forumium.site`)
+        - traefik.http.routers.topic-microservice-api-http.entrypoints=web
+        - traefik.http.routers.topic-microservice-api-https.tls=true
+        - traefik.http.routers.topic-microservice-api-https.tls.certresolver=cloudflare
+        - traefik.http.routers.topic-microservice-api-https.entrypoints=websecure
+        - traefik.http.routers.topic-microservice-api-https.rule=Host(`topic.forumium.site`)
       environment:
         - ASPNETCORE_ENVIRONMENT=Production
       depends_on:
@@ -104,12 +104,12 @@ services:
         dockerfile: src/Microservices/Discussion/DiscussionMicroservice.Api/Dockerfile
       labels:
         - traefik.enable=true
-        - traefik.http.routers.nginx-http.rule=Host(`discussion.forumium.site`)
-        - traefik.http.routers.nginx-http.entrypoints=web
-        - traefik.http.routers.nginx-https.tls=true
-        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
-        - traefik.http.routers.nginx-https.entrypoints=websecure
-        - traefik.http.routers.nginx-https.rule=Host(`discussion.forumium.site`)
+        - traefik.http.routers.discussion-microservice-api-http.rule=Host(`discussion.forumium.site`)
+        - traefik.http.routers.discussion-microservice-api-http.entrypoints=web
+        - traefik.http.routers.discussion-microservice-api-https.tls=true
+        - traefik.http.routers.discussion-microservice-api-https.tls.certresolver=cloudflare
+        - traefik.http.routers.discussion-microservice-api-https.entrypoints=websecure
+        - traefik.http.routers.discussion-microservice-api-https.rule=Host(`discussion.forumium.site`)
       environment:
         - ASPNETCORE_ENVIRONMENT=Production
       depends_on:
@@ -124,12 +124,12 @@ services:
         dockerfile: src/Microservices/Comment/CommentMicroservice.Api/Dockerfile
       labels:
         - traefik.enable=true
-        - traefik.http.routers.nginx-http.rule=Host(`comment.forumium.site`)
-        - traefik.http.routers.nginx-http.entrypoints=web
-        - traefik.http.routers.nginx-https.tls=true
-        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
-        - traefik.http.routers.nginx-https.entrypoints=websecure
-        - traefik.http.routers.nginx-https.rule=Host(`comment.forumium.site`)
+        - traefik.http.routers.comment-microservice-api-http.rule=Host(`comment.forumium.site`)
+        - traefik.http.routers.comment-microservice-api-http.entrypoints=web
+        - traefik.http.routers.comment-microservice-api-https.tls=true
+        - traefik.http.routers.comment-microservice-api-https.tls.certresolver=cloudflare
+        - traefik.http.routers.comment-microservice-api-https.entrypoints=websecure
+        - traefik.http.routers.comment-microservice-api-https.rule=Host(`comment.forumium.site`)
       environment:
         - ASPNETCORE_ENVIRONMENT=Production
       depends_on:
@@ -144,12 +144,12 @@ services:
         dockerfile: src/Microservices/Report/ReportMicroservice/Dockerfile
       labels:
         - traefik.enable=true
-        - traefik.http.routers.nginx-http.rule=Host(`report.forumium.site`)
-        - traefik.http.routers.nginx-http.entrypoints=web
-        - traefik.http.routers.nginx-https.tls=true
-        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
-        - traefik.http.routers.nginx-https.entrypoints=websecure
-        - traefik.http.routers.nginx-https.rule=Host(`report.forumium.site`)
+        - traefik.http.routers.report-microservice-api-http.rule=Host(`report.forumium.site`)
+        - traefik.http.routers.report-microservice-api-http.entrypoints=web
+        - traefik.http.routers.report-microservice-api-https.tls=true
+        - traefik.http.routers.report-microservice-api-https.tls.certresolver=cloudflare
+        - traefik.http.routers.report-microservice-api-https.entrypoints=websecure
+        - traefik.http.routers.report-microservice-api-https.rule=Host(`report.forumium.site`)
       environment:
         - ASPNETCORE_ENVIRONMENT=Production
       depends_on:
@@ -164,12 +164,12 @@ services:
         dockerfile: src/Microservices/BanHistory/BanHistoryMicroservice.Api/Dockerfile
       labels:
         - traefik.enable=true
-        - traefik.http.routers.nginx-http.rule=Host(`banhistory.forumium.site`)
-        - traefik.http.routers.nginx-http.entrypoints=web
-        - traefik.http.routers.nginx-https.tls=true
-        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
-        - traefik.http.routers.nginx-https.entrypoints=websecure
-        - traefik.http.routers.nginx-https.rule=Host(`banhistory.forumium.site`)
+        - traefik.http.routers.banhistory-microservice-api-http.rule=Host(`banhistory.forumium.site`)
+        - traefik.http.routers.banhistory-microservice-api-http.entrypoints=web
+        - traefik.http.routers.banhistory-microservice-api-https.tls=true
+        - traefik.http.routers.banhistory-microservice-api-https.tls.certresolver=cloudflare
+        - traefik.http.routers.banhistory-microservice-api-https.entrypoints=websecure
+        - traefik.http.routers.banhistory-microservice-api-https.rule=Host(`banhistory.forumium.site`)
       environment:
         - ASPNETCORE_ENVIRONMENT=Production
       depends_on:
@@ -184,12 +184,12 @@ services:
          dockerfile: src/Microservices/Bookmark/BookmarkMicroservice.Api/Dockerfile
       labels:
         - traefik.enable=true
-        - traefik.http.routers.nginx-http.rule=Host(`bookmark.forumium.site`)
-        - traefik.http.routers.nginx-http.entrypoints=web
-        - traefik.http.routers.nginx-https.tls=true
-        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
-        - traefik.http.routers.nginx-https.entrypoints=websecure
-        - traefik.http.routers.nginx-https.rule=Host(`bookmark.forumium.site`)
+        - traefik.http.routers.bookmark-microservice-api-http.rule=Host(`bookmark.forumium.site`)
+        - traefik.http.routers.bookmark-microservice-api-http.entrypoints=web
+        - traefik.http.routers.bookmark-microservice-api-https.tls=true
+        - traefik.http.routers.bookmark-microservice-api-https.tls.certresolver=cloudflare
+        - traefik.http.routers.bookmark-microservice-api-https.entrypoints=websecure
+        - traefik.http.routers.bookmark-microservice-api-https.rule=Host(`bookmark.forumium.site`)
       environment:
         - ASPNETCORE_ENVIRONMENT=Production
       depends_on:
@@ -405,5 +405,3 @@ volumes:
   postgres-grafana-data: {}
   prometheus-data: {}
   grafana-data: {}
-
-
