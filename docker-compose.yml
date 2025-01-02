@@ -4,22 +4,22 @@ services:
        build: 
          context: .
          dockerfile: src/Web/Web.MVC/Web.MVC/Dockerfile
-       ports:
-         - "1212:80"
-         - "1213:443"
+       labels:
+         - traefik.enable=true
+         - traefik.http.routers.nginx-http.rule=Host(`forumium.site`)
+         - traefik.http.routers.nginx-http.entrypoints=web
+         - traefik.http.routers.nginx-https.tls=true
+         - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
+         - traefik.http.routers.nginx-https.entrypoints=websecure
+         - traefik.http.routers.nginx-https.rule=Host(`forumium.site`)
        environment:
-        - ASPNETCORE_ENVIRONMENT=Development
-        - ASPNETCORE_URLS=https://+:443;http://+:80
-        - ASPNETCORE_HTTPS_PORT=1213
+         - ASPNETCORE_ENVIRONMENT=Production
        depends_on:
          - register-microservice-api
          - gateway-api
          - nginx
          - grafana
          - prometheus
-       volumes:
-         - ${APPDATA}/Microsoft/UserSecrets/:/root/.microsoft/usersecrets
-         - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https/
     
     gateway-api:
       image: ${DOCKER_REGISTRY-}gateway-api
@@ -27,13 +27,15 @@ services:
         context: .
         dockerfile: src/Gateway/Gateway.Api/Dockerfile
       labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.gateway-api.rule=Host(`forumium.site`)"
-        - "traefik.http.routers.gateway-api.entrypoints=websecure"
-        - "traefik.http.routers.gateway-api.tls.certresolver=myresolver"
+        - traefik.enable=true
+        - traefik.http.routers.nginx-http.rule=Host(`gateway.forumium.site`)
+        - traefik.http.routers.nginx-http.entrypoints=web
+        - traefik.http.routers.nginx-https.tls=true
+        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
+        - traefik.http.routers.nginx-https.entrypoints=websecure
+        - traefik.http.routers.nginx-https.rule=Host(`gateway.forumium.site`)
       environment:
-        - ASPNETCORE_ENVIRONMENT=Development
-        - ASPNETCORE_URLS=http://+:8080
+        - ASPNETCORE_ENVIRONMENT=Production
 
     register-microservice-api:
       image: ${DOCKER_REGISTRY-}register-microservice-api
@@ -41,13 +43,15 @@ services:
         context: .
         dockerfile: src/Microservices/Register/RegisterMicroservice.Api/Dockerfile
       labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.gateway-api.rule=Host(`forumium.site`)"
-        - "traefik.http.routers.register-microservice-api.entrypoints=websecure"
-        - "traefik.http.routers.register-microservice-api.tls.certresolver=myresolver"
+        - traefik.enable=true
+        - traefik.http.routers.nginx-http.rule=Host(`register.forumium.site`)
+        - traefik.http.routers.nginx-http.entrypoints=web
+        - traefik.http.routers.nginx-https.tls=true
+        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
+        - traefik.http.routers.nginx-https.entrypoints=websecure
+        - traefik.http.routers.nginx-https.rule=Host(`register.forumium.site`)
       environment:
-        - ASPNETCORE_ENVIRONMENT=Development
-        - ASPNETCORE_URLS=http://+:8080
+        - ASPNETCORE_ENVIRONMENT=Production
       depends_on:
         - postgres-register-microservice
         - rabbitmq
@@ -59,13 +63,15 @@ services:
         context: .
         dockerfile: src/Microservices/User/UserMicroservie.Api/Dockerfile
       labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.gateway-api.rule=Host(`forumium.site`)"
-        - "traefik.http.routers.user-microservice-api.entrypoints=websecure"
-        - "traefik.http.routers.user-microservice-api.tls.certresolver=myresolver"
+        - traefik.enable=true
+        - traefik.http.routers.nginx-http.rule=Host(`user.forumium.site`)
+        - traefik.http.routers.nginx-http.entrypoints=web
+        - traefik.http.routers.nginx-https.tls=true
+        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
+        - traefik.http.routers.nginx-https.entrypoints=websecure
+        - traefik.http.routers.nginx-https.rule=Host(`user.forumium.site`)
       environment:
-        - ASPNETCORE_ENVIRONMENT=Development
-        - ASPNETCORE_URLS=http://+:8080
+        - ASPNETCORE_ENVIRONMENT=Production
       depends_on:
         - postgres-user-microservice
         - rabbitmq
@@ -77,13 +83,15 @@ services:
         context: .
         dockerfile: src/Microservices/Topic/TopicMicroservice.Api/Dockerfile
       labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.gateway-api.rule=Host(`forumium.site`)"
-        - "traefik.http.routers.topic-microservice-api.entrypoints=websecure"
-        - "traefik.http.routers.topic-microservice-api.tls.certresolver=myresolver"
+        - traefik.enable=true
+        - traefik.http.routers.nginx-http.rule=Host(`topic.forumium.site`)
+        - traefik.http.routers.nginx-http.entrypoints=web
+        - traefik.http.routers.nginx-https.tls=true
+        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
+        - traefik.http.routers.nginx-https.entrypoints=websecure
+        - traefik.http.routers.nginx-https.rule=Host(`topic.forumium.site`)
       environment:
-        - ASPNETCORE_ENVIRONMENT=Development
-        - ASPNETCORE_URLS=http://+:8080
+        - ASPNETCORE_ENVIRONMENT=Production
       depends_on:
         - postgres-topic-microservice
         - rabbitmq
@@ -95,13 +103,15 @@ services:
         context: .
         dockerfile: src/Microservices/Discussion/DiscussionMicroservice.Api/Dockerfile
       labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.gateway-api.rule=Host(`forumium.site`)"
-        - "traefik.http.routers.discussion-microservice-api.entrypoints=websecure"
-        - "traefik.http.routers.discussion-microservice-api.tls.certresolver=myresolver"
+        - traefik.enable=true
+        - traefik.http.routers.nginx-http.rule=Host(`discussion.forumium.site`)
+        - traefik.http.routers.nginx-http.entrypoints=web
+        - traefik.http.routers.nginx-https.tls=true
+        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
+        - traefik.http.routers.nginx-https.entrypoints=websecure
+        - traefik.http.routers.nginx-https.rule=Host(`discussion.forumium.site`)
       environment:
-        - ASPNETCORE_ENVIRONMENT=Development
-        - ASPNETCORE_URLS=http://+:8080
+        - ASPNETCORE_ENVIRONMENT=Production
       depends_on:
         - postgres-discussion-microservice
         - rabbitmq
@@ -113,13 +123,15 @@ services:
         context: .
         dockerfile: src/Microservices/Comment/CommentMicroservice.Api/Dockerfile
       labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.gateway-api.rule=Host(`forumium.site`)"
-        - "traefik.http.routers.comment-microservice-api.entrypoints=websecure"
-        - "traefik.http.routers.comment-microservice-api.tls.certresolver=myresolver"
+        - traefik.enable=true
+        - traefik.http.routers.nginx-http.rule=Host(`comment.forumium.site`)
+        - traefik.http.routers.nginx-http.entrypoints=web
+        - traefik.http.routers.nginx-https.tls=true
+        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
+        - traefik.http.routers.nginx-https.entrypoints=websecure
+        - traefik.http.routers.nginx-https.rule=Host(`comment.forumium.site`)
       environment:
-        - ASPNETCORE_ENVIRONMENT=Development
-        - ASPNETCORE_URLS=http://+:8080
+        - ASPNETCORE_ENVIRONMENT=Production
       depends_on:
         - rabbitmq
         - postgres-comment-microservice
@@ -131,13 +143,15 @@ services:
         context: .
         dockerfile: src/Microservices/Report/ReportMicroservice/Dockerfile
       labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.gateway-api.rule=Host(`forumium.site`)"
-        - "traefik.http.routers.report-microservice-api.entrypoints=websecure"
-        - "traefik.http.routers.report-microservice-api.tls.certresolver=myresolver"
+        - traefik.enable=true
+        - traefik.http.routers.nginx-http.rule=Host(`report.forumium.site`)
+        - traefik.http.routers.nginx-http.entrypoints=web
+        - traefik.http.routers.nginx-https.tls=true
+        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
+        - traefik.http.routers.nginx-https.entrypoints=websecure
+        - traefik.http.routers.nginx-https.rule=Host(`report.forumium.site`)
       environment:
-        - ASPNETCORE_ENVIRONMENT=Development
-        - ASPNETCORE_URLS=http://+:8080
+        - ASPNETCORE_ENVIRONMENT=Production
       depends_on:
         - rabbitmq
         - postgres-report-microservice
@@ -149,13 +163,15 @@ services:
         context: .
         dockerfile: src/Microservices/BanHistory/BanHistoryMicroservice.Api/Dockerfile
       labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.gateway-api.rule=Host(`forumium.site`)"
-        - "traefik.http.routers.banhistory-microservice-api.entrypoints=websecure"
-        - "traefik.http.routers.banhistory-microservice-api.tls.certresolver=myresolver"
+        - traefik.enable=true
+        - traefik.http.routers.nginx-http.rule=Host(`banhistory.forumium.site`)
+        - traefik.http.routers.nginx-http.entrypoints=web
+        - traefik.http.routers.nginx-https.tls=true
+        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
+        - traefik.http.routers.nginx-https.entrypoints=websecure
+        - traefik.http.routers.nginx-https.rule=Host(`banhistory.forumium.site`)
       environment:
-        - ASPNETCORE_ENVIRONMENT=Development
-        - ASPNETCORE_URLS=http://+:8080
+        - ASPNETCORE_ENVIRONMENT=Production
       depends_on:
         - rabbitmq
         - postgres-banhistory-microservice
@@ -167,13 +183,15 @@ services:
          context: .
          dockerfile: src/Microservices/Bookmark/BookmarkMicroservice.Api/Dockerfile
       labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.gateway-api.rule=Host(`forumium.site`)"
-        - "traefik.http.routers.bookmark-microservice-api.entrypoints=websecure"
-        - "traefik.http.routers.bookmark-microservice-api.tls.certresolver=myresolver"
+        - traefik.enable=true
+        - traefik.http.routers.nginx-http.rule=Host(`bookmark.forumium.site`)
+        - traefik.http.routers.nginx-http.entrypoints=web
+        - traefik.http.routers.nginx-https.tls=true
+        - traefik.http.routers.nginx-https.tls.certresolver=cloudflare
+        - traefik.http.routers.nginx-https.entrypoints=websecure
+        - traefik.http.routers.nginx-https.rule=Host(`bookmark.forumium.site`)
       environment:
-         - ASPNETCORE_ENVIRONMENT=Development
-         - ASPNETCORE_URLS=http://+:8080
+        - ASPNETCORE_ENVIRONMENT=Production
       depends_on:
          - rabbitmq
          - postgres-bookmark-microservice
@@ -312,31 +330,31 @@ services:
             - 15672:15672
             - 5672:5672
 
-    prometheus:
-      image: prom/prometheus:latest
-      container_name: prometheus
-      ports:
-        - 9090:9090
-      command:
-        - --config.file=/etc/prometheus/prometheus.yml
-      volumes:
-        - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-        - prometheus-data:/prometheus
+    # prometheus:
+    #   image: prom/prometheus:latest
+    #   container_name: prometheus
+    #   ports:
+    #     - 9090:9090
+    #   command:
+    #     - --config.file=/etc/prometheus/prometheus.yml
+    #   volumes:
+    #     - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    #     - prometheus-data:/prometheus
 
-    grafana:
-      image: grafana/grafana-enterprise
-      container_name: grafana
-      restart: unless-stopped
-      ports:
-        - '3000:3000'
-      environment:
-        - GF_DATABASE_TYPE=postgres
-        - GF_DATABASE_HOST=176.124.212.94
-        - GF_DATABASE_NAME=DicussionForumGrafana
-        - GF_DATABASE_USER=gen_user
-        - GF_DATABASE_PASSWORD=GQvo37QnTm61n
-      volumes:
-        - grafana-data:/var/lib/grafana
+    # grafana:
+    #   image: grafana/grafana-enterprise
+    #   container_name: grafana
+    #   restart: unless-stopped
+    #   ports:
+    #     - '3000:3000'
+    #   environment:
+    #     - GF_DATABASE_TYPE=postgres
+    #     - GF_DATABASE_HOST=176.124.212.94
+    #     - GF_DATABASE_NAME=DicussionForumGrafana
+    #     - GF_DATABASE_USER=gen_user
+    #     - GF_DATABASE_PASSWORD=GQvo37QnTm61n
+    #   volumes:
+    #     - grafana-data:/var/lib/grafana
 
     # postgres-grafana:
     #   image: postgres:latest
@@ -348,37 +366,31 @@ services:
     #   volumes:
     #     - postgres-grafana-data:/var/lib/postgresql/data
 
-    nginx: 
-      image: nginx:latest
-      container_name: nginx
-      restart: unless-stopped
-      volumes:
-        - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-        - ./nginx/cert.crt:/etc/nginx/cert.crt
-        - ./nginx/cert.rsa:/etc/nginx/cert.rsa
-      ports:
-        - 7315:80
-        - 7316:443
+    # nginx: 
+    #   image: nginx:latest
+    #   container_name: nginx
+    #   restart: unless-stopped
+    #   volumes:
+    #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    #     - ./nginx/cert.crt:/etc/nginx/cert.crt
+    #     - ./nginx/cert.rsa:/etc/nginx/cert.rsa
+    #   ports:
+    #     - 7315:80
+    #     - 7316:443
       
     traefik:
       image: traefik:latest
       container_name: traefik
-      command:
-        - "--log.level=DEBUG"
-        - "--api.insecure=true"
-        - "--providers.docker=true"
-        - "--providers.docker.exposedbydefault=false"
-        - "--entryPoints.websecure.address=:443"
-        - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-        # - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory" 
-        - "--certificatesresolvers.myresolver.acme.email=11aaaaqa@gmail.com"
-        - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       ports:
-        - 443:443
-        - 8080:8080
+        - "80:80"
+        - "443:443"
+        - "8080:8080"
+      environment:
+        - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
       volumes:
-        - "./letsencrypt:/letsencrypt"
-        - "/var/run/docker.sock:/var/run/docker.sock:ro"
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+        - ./config/traefik.yaml:/etc/traefik/traefik.yaml:ro
+        - ./data/certs/:/var/traefik/certs/:rw
 
 volumes:
   postgres-bookmark-data: {}
