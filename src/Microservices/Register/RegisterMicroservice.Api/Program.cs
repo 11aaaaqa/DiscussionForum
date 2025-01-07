@@ -42,8 +42,13 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<UserNameChangedRegisterConsumer>();
     x.UsingRabbitMq((context, config) =>
     {
-        config.Host(
-            $"amqp://{builder.Configuration["RabbitMQ:User"]}:{builder.Configuration["RabbitMQ:Password"]}@{builder.Configuration["RabbitMQ:HostName"]}");
+        //config.Host(
+        //    $"amqp://{builder.Configuration["RabbitMQ:User"]}:{builder.Configuration["RabbitMQ:Password"]}@{builder.Configuration["RabbitMQ:HostName"]}");
+        config.Host(builder.Configuration["RabbitMQ:HostName"], builder.Configuration["RabbitMQ:VirtualHost"], h =>
+        {
+            h.Username(builder.Configuration["RabbitMQ:User"]!);
+            h.Password(builder.Configuration["RabbitMQ:Password"]!);
+        });
         config.ConfigureEndpoints(context);
     });
 });
