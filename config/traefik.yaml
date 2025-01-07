@@ -1,11 +1,11 @@
 global:
   checkNewVersion: false
   sendAnonymousUsage: false
-log:
-  level: DEBUG
+# log:
+#   level: DEBUG
 api:
-  dashboard: true #false
-  insecure: true #false
+  dashboard: false #true for dashboard (NOT in production)
+  insecure: false #true for dashboard (NOT in production)
 entryPoints:
   web:
     address: :80
