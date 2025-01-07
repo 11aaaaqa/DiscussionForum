@@ -49,10 +49,10 @@ builder.Services.AddTransient<ICheckUserService, CheckUserService>();
 builder.Services.AddHttpClient();
 builder.Services.AddCors();
 
-builder.Services.AddHttpsRedirection(options =>
-{
-    options.HttpsPort = 7316;
-});
+//builder.Services.AddHttpsRedirection(options =>
+//{
+//    options.HttpsPort = 7316;
+//});
 
 var app = builder.Build();
 
@@ -73,15 +73,17 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 app.UseMetricServer();
 app.UseHttpMetrics();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
 app.UseRateLimiter();
 
 app.UseMiddleware<JwtTokenMiddleware>();
 
 app.UseAuthentication();
+
 app.UseStatusCodePages(context =>
 {
     var response = context.HttpContext.Response;
