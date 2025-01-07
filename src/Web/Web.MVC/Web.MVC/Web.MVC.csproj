@@ -1,162 +1,159 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>4a6a64c9-5178-4499-8592-0b5900001638</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerfileContext>..\..\..\..</DockerfileContext>
-    <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileContext>..\..\..\..</DockerfileContext>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="DNTCaptcha.Core" Version="5.2.7" />
-    <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="7.3.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="2.1.3" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
-    <PackageReference Include="prometheus-net" Version="8.2.1" />
-    <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.8" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="DNTCaptcha.Core" Version="5.2.7" />
+		<PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="7.3.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="2.1.3" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
+		<PackageReference Include="prometheus-net" Version="8.2.1" />
+		<PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
+		<PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.8" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Libs\GeneralClassesLib\GeneralClassesLib.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Libs\GeneralClassesLib\GeneralClassesLib.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Topic\Topic.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Topic\Topic.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Admin\CreateBotAccount.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Discussion\GetDiscussionsSortedByPopularityForToday.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Discussion\GetDiscussionsSortedByPopularityForWeek.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Moderator\BanUserAndDeleteSuggestion.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Moderator\ChangeUserRoles.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Moderator\GetAdminPanel.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Moderator\GetReportsByUserName.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Moderator\GetSuggestedCommentsByUserName.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedComments.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedDiscussion.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Moderator\SuggestedDiscussions.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Moderator\Users.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Report\AddReport.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Report\GetReport.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Topic\GetAllTopicsSortedByNovelty.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Topic\GetAllTopicsSortedByPopularity.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Topic\Topic.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\User\ChangePassword.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\User\ChangeUserName.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\User\GetUser.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\User\GetUsersCreatedComments.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\User\GetUsersCreatedDiscussions.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\User\GetUsersSuggestedComments.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\User\GetUsersSuggestedDiscussions.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\User\GetUsersSuggestedTopics.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<_ContentIncludedByDefault Remove="Views\Admin\CreateBotAccount.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Discussion\GetDiscussionsSortedByPopularityForToday.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Discussion\GetDiscussionsSortedByPopularityForWeek.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Moderator\BanUserAndDeleteSuggestion.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Moderator\ChangeUserRoles.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Moderator\GetAdminPanel.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Moderator\GetReportsByUserName.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Moderator\GetSuggestedCommentsByUserName.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Moderator\SuggestedComments.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Moderator\SuggestedDiscussion.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Moderator\SuggestedDiscussions.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Moderator\Users.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Report\AddReport.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Report\GetReport.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Topic\GetAllTopicsSortedByNovelty.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Topic\GetAllTopicsSortedByPopularity.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Topic\Topic.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\User\ChangePassword.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\User\ChangeUserName.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\User\GetUser.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\User\GetUsersCreatedComments.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\User\GetUsersCreatedDiscussions.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\User\GetUsersSuggestedComments.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\User\GetUsersSuggestedDiscussions.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\User\GetUsersSuggestedTopics.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Moderator\SuggestedDiscussions.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Moderator\SuggestedDiscussions.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Moderator\SuggestedDiscussion.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Moderator\SuggestedDiscussion.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Moderator\SuggestedComments.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Moderator\SuggestedComments.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Report\AddReport.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Report\AddReport.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Report\GetReport.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Report\GetReport.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Moderator\BanUserAndDeleteSuggestion.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Moderator\BanUserAndDeleteSuggestion.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\User\GetUser.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\User\GetUser.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Moderator\GetSuggestedCommentsByUserName.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Moderator\GetSuggestedCommentsByUserName.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Moderator\GetReportsByUserName.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Moderator\GetReportsByUserName.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\User\ChangeUserName.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\User\ChangeUserName.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\User\ChangePassword.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\User\ChangePassword.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Moderator\ChangeUserRoles.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Moderator\ChangeUserRoles.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Moderator\Users.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Moderator\Users.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Topic\GetAllTopicsSortedByNovelty.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Topic\GetAllTopicsSortedByNovelty.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Topic\GetAllTopicsSortedByPopularity.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Topic\GetAllTopicsSortedByPopularity.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Discussion\GetDiscussionsSortedByPopularityForToday.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Discussion\GetDiscussionsSortedByPopularityForToday.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Discussion\GetDiscussionsSortedByPopularityForWeek.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Discussion\GetDiscussionsSortedByPopularityForWeek.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\User\GetUsersCreatedDiscussions.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\User\GetUsersCreatedDiscussions.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\User\GetUsersCreatedComments.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\User\GetUsersCreatedComments.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\User\GetUsersSuggestedComments.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\User\GetUsersSuggestedComments.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\User\GetUsersSuggestedDiscussions.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\User\GetUsersSuggestedDiscussions.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\User\GetUsersSuggestedTopics.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\User\GetUsersSuggestedTopics.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Admin\CreateBotAccount.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Admin\CreateBotAccount.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\fonts\" />
-    <Folder Include="wwwroot\images\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="wwwroot\fonts\" />
+		<Folder Include="wwwroot\images\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Moderator\GetAdminPanel.cshtml" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Moderator\GetAdminPanel.cshtml" />
+	</ItemGroup>
 </Project>
