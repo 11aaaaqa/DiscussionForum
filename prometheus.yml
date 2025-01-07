@@ -20,47 +20,23 @@ rule_files:
 # Here it's Prometheus itself.
 scrape_configs:
 
-  - job_name: "microservices"
-    static_configs:
-      - targets: ["host.docker.internal:2211"]
-      - targets: ["host.docker.internal:1122"]
-      - targets: ["host.docker.internal:5365"]
-      - targets: ["host.docker.internal:9054"]
-      - targets: ["host.docker.internal:1045"]
-      - targets: ["host.docker.internal:1218"]
-      - targets: ["host.docker.internal:2058"]
-      - targets: ["host.docker.internal:5592"]
-  
-
-  - job_name: "gateway"
-    static_configs:
-      - targets: ["host.docker.internal:7422"]
-  
-
-  - job_name: "mvc"
-    static_configs:
-      - targets: ["host.docker.internal:1212"]
-  
-
-  - job_name: 'mvcHttps'
+  - job_name: "forumium"
     scheme: https
-    tls_config:
-      insecure_skip_verify: true   
     static_configs:
-      - targets: ["host.docker.internal:1213"]
+      - targets: ["forumium.site"]
+      - targets: ["banhistory.forumium.site"]
+      - targets: ["bookmark.forumium.site"]
+      - targets: ["comment.forumium.site"]
+      - targets: ["discussion.forumium.site"]
+      - targets: ["gateway.forumium.site"]
+      - targets: ["register.forumium.site"]
+      - targets: ["report.forumium.site"]
+      - targets: ["topic.forumium.site"]
+      - targets: ["user.forumium.site"]
   
-
-  - job_name: "prometheus"
-    static_configs:
-      - targets: ["host.docker.internal:9090"]
-  
-  - job_name: "mvc-nginx"
-    static_configs:
-      - targets: ["host.docker.internal:7315"]
-  
-  - job_name: 'mvcHttps-nginx'
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true   
-    static_configs:
-      - targets: ["host.docker.internal:7316"]
+  # - job_name: 'mvcHttps-nginx'
+  #   scheme: https
+  #   tls_config:
+  #     insecure_skip_verify: true   
+  #   static_configs:
+  #     - targets: ["host.docker.internal:7316"]
