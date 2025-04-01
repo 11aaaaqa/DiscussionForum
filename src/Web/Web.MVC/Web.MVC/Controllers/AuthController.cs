@@ -336,6 +336,6 @@ namespace Web.MVC.Controllers
                 SameSite = SameSiteMode.Strict,
                 Secure = true
             });
-        } 
+        }
     }
 }
