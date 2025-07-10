@@ -368,7 +368,7 @@ services:
         - GF_DATABASE_USER=gen_user
         - GF_DATABASE_PASSWORD=GQvo37QnTm61n
         - GF_SECURITY_ADMIN_USER=admin
-        - GF_SECURITY_ADMIN_PASSWORD=7Bhq9Hvu45hM
+        - GF_SECURITY_ADMIN_PASSWORD=changeit
       volumes:
         - grafana-data:/var/lib/grafana
 
