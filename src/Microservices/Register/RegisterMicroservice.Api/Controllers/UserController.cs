@@ -140,6 +140,22 @@ namespace RegisterMicroservice.Api.Controllers
             });
         }
 
+        [Route("LogUserOut")]
+        [HttpGet]
+        public async Task<IActionResult> LogUserOutAsync(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+
+            if (user == null)
+                return NotFound();
+
+            user.RefreshToken = null;
+            user.RefreshTokenExpiryTime = new DateTime();
+            await userManager.UpdateAsync(user);
+
+            return Ok();
+        }
+
         [Route("ChangePassword")]
         [HttpPatch]
         public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordDto model)
