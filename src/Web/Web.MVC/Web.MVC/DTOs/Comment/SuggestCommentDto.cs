@@ -7,7 +7,7 @@ namespace Web.MVC.DTOs.Comment
         public string? CreatedBy { get; set; }
 
         [Required]
-        [StringLength(500, ErrorMessage = "Максимальная длина комментария - 500 символов")]
+        [StringLength(800, ErrorMessage = "Максимальная длина комментария - 500 символов")]
         [Display(Name = "Оставить комментарий")]
         public string Content { get; set; }
     }
