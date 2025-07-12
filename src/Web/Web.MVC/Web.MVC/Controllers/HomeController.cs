@@ -26,7 +26,7 @@ namespace Web.MVC.Controllers
             byte pageSize = 20;
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.GetAsync(
-                $"{url}/api/Discussion/GetAllDiscussionsSortedByPopularityForToday?pageSize={pageSize}&pageNumber=1");
+                $"{url}/api/Discussion/GetAllDiscussionsSortedByPopularityForWeek?pageSize={pageSize}&pageNumber=1");
             if (!response.IsSuccessStatusCode) return View("ActionError");
 
             var discussions = await response.Content.ReadFromJsonAsync<List<DiscussionResponse>>();
