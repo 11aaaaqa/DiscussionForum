@@ -618,11 +618,14 @@ namespace Web.MVC.Controllers
                 selectedUserRoles.Add(selectedUserRoleCheckBox.RoleName);
             }
 
-            using StringContent jsonContent = new(JsonSerializer.Serialize(new { RoleNames = selectedUserRoles, UserId = aspNetUserId}),
+            using StringContent jsonContent = new(JsonSerializer.Serialize(new { RoleNames = selectedUserRoles, UserId = aspNetUserId }),
                 Encoding.UTF8, "application/json");
             using HttpClient httpClient = httpClientFactory.CreateClient();
             var response = await httpClient.PostAsync($"{url}/api/User/AddUserToRoles", jsonContent);
             if (!response.IsSuccessStatusCode) return View("ActionError");
+
+            var resetUserRefreshTokenResponse = await httpClient.GetAsync($"{url}/api/User/LogUserOut?userId={aspNetUserId}");
+            if (!resetUserRefreshTokenResponse.IsSuccessStatusCode) return View("ActionError");
 
             if (!string.IsNullOrEmpty(returnUrl))
                 return LocalRedirect(returnUrl);
