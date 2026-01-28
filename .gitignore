@@ -7,6 +7,8 @@
 /nginx/
 /letsencrypt/
 /data/
+/src/Microservices/Register/RegisterMicroservice.Api/appsettings.Development.json
+/src/Microservices/Register/RegisterMicroservice.Api/appsettings.Production.json
 
 # User-specific files
 *.rsuser
